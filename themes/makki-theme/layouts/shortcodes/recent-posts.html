@@ -1,0 +1,19 @@
+{{/* 最近文章短代码 */}}
+{{ $section := .Get "section" | default "post" }}
+{{ $limit := .Get "limit" | default 5 }}
+
+<div class="recent-posts">
+    {{ range first $limit (where site.RegularPages "Section" $section) }}
+    <div class="recent-post-item">
+        <div class="recent-post-meta">
+            <time>{{ .Date.Format "2006-01-02" }}</time>
+        </div>
+        <h4><a href="{{ .RelPermalink }}">{{ .Title }}</a></h4>
+        {{ if .Description }}
+        <p>{{ .Description | truncate 100 }}</p>
+        {{ else }}
+        <p>{{ .Summary | truncate 100 }}</p>
+        {{ end }}
+    </div>
+    {{ end }}
+</div>

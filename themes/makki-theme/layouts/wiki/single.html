@@ -1,0 +1,49 @@
+{{ define "main" }}
+<div class="content-wrapper fade-in-up">
+    <article class="wiki-article">
+        <header class="wiki-header">
+            <h1>{{ .Title }}</h1>
+            
+            <div class="wiki-meta">
+                <time datetime="{{ .Date.Format "2006-01-02T15:04:05Z07:00" }}">
+                    📅 {{ .Date.Format "2006年01月02日" }}
+                </time>
+                
+                {{ if .Params.weight }}
+                <span class="wiki-weight">权重: {{ .Params.weight }}</span>
+                {{ end }}
+            </div>
+        </header>
+
+        <div class="wiki-content">
+            {{ .Content }}
+        </div>
+
+        <div class="wiki-navigation">
+            {{ with .PrevInSection }}
+            <div class="nav-prev">
+                <a href="{{ .RelPermalink }}" class="btn btn-secondary">
+                    ← {{ .Title }}
+                </a>
+            </div>
+            {{ end }}
+            
+            {{ with .NextInSection }}
+            <div class="nav-next">
+                <a href="{{ .RelPermalink }}" class="btn">
+                    {{ .Title }} →
+                </a>
+            </div>
+            {{ end }}
+        </div>
+
+        <!-- Wiki目录 -->
+        {{ if .Params.toc }}
+        <div class="wiki-toc">
+            <h3>📋 目录</h3>
+            {{ .TableOfContents }}
+        </div>
+        {{ end }}
+    </article>
+</div>
+{{ end }}

@@ -1,0 +1,28 @@
+{{ define "main" }}
+  <article class="enhanced-card glow-effect">
+    {{ with .Title -}}<h1 class="gradient-text">{{- . -}}</h1>{{- end }}
+    {{ with .Content -}}<div class="post-content">{{- . -}}</div>{{- end }}
+    <ul class="posts-list">
+      {{ range where .Paginator.Pages "Type" "!=" "page" }}
+        <li class="posts-list-item enhanced-card">
+          <a class="posts-list-item-title gradient-text" href="{{ .RelPermalink }}">{{ .Title }}</a>
+          <span class="posts-list-item-description">
+            {{ partial "icon.html" (dict "ctx" $ "name" "calendar") }}
+            {{ .PublishDate.Format "Jan 2, 2006" }}
+            <span class="posts-list-item-separator">-</span>
+            {{ partial "icon.html" (dict "ctx" $ "name" "clock") }}
+            {{ .ReadingTime }} min read
+          </span>
+        </li>
+      {{ end }}
+    </ul>
+    {{ partial "pagination.html" $ }}
+    {{ if .Site.Params.busuanzi.enable }}
+    <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <div class="busuanzi-container">
+      <span id="busuanzi_container_site_pv">--本站总访问量<span id="busuanzi_value_site_pv"></span>次--</span>
+      <span id="busuanzi_container_site_uv">--本站总访客数<span id="busuanzi_value_site_uv"></span>人--</span>
+    </div>
+    {{ end }}
+  </article>
+{{ end }}

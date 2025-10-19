@@ -1,0 +1,27 @@
+{{ define "main" }}
+<div class="content-wrapper fade-in-up enhanced-card glow-effect">
+    <article class="single-article">
+        <header class="article-header">
+            <h1 class="gradient-text">{{ .Title }}</h1>
+
+            {{ if .Date }}
+            <div class="article-meta">
+                <time datetime="{{ .Date.Format "2006-01-02T15:04:05Z07:00" }}">
+                    📅 {{ .Date.Format "2006年01月02日" }}
+                </time>
+            </div>
+            {{ end }}
+        </header>
+
+        <div class="article-content">
+            {{ .Content }}
+        </div>
+
+        {{ if .Params.comments }}
+        <div class="comments-section">
+            {{ template "_internal/disqus.html" . }}
+        </div>
+        {{ end }}
+    </article>
+</div>
+{{ end }}

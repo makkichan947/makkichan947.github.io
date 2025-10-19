@@ -1,0 +1,29 @@
+{{ define "main" }}
+<div class="content-wrapper fade-in-up enhanced-card glow-effect">
+    <header class="section-header">
+        <h1 class="gradient-text">{{ .Title }}</h1>
+        <p>{{ .Description }}</p>
+    </header>
+
+    <div class="section-content">
+        {{ range .Pages }}
+        <div class="card enhanced-card">
+            <h3><a href="{{ .RelPermalink }}" class="gradient-text">{{ .Title }}</a></h3>
+            <p>{{ .Summary | truncate 150 }}</p>
+            <div class="meta">
+                <time>{{ .Date.Format "2006-01-02" }}</time>
+                {{ if .Params.tags }}
+                <div class="tags">
+                    {{ range .Params.tags }}
+                    <span class="tag pulse-glow">{{ . }}</span>
+                    {{ end }}
+                </div>
+                {{ end }}
+            </div>
+        </div>
+        {{ end }}
+    </div>
+
+    {{ template "_internal/pagination.html" . }}
+</div>
+{{ end }}

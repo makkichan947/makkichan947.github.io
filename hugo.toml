@@ -1,0 +1,94 @@
+baseURL = 'https://makkichan947.github.io/'
+languageCode = 'zh'
+title = 'Yaku Makki'
+theme = "hugo-theme-m10c"
+
+sectionPagesMenu = 'main'
+
+[markup.goldmark.renderer]
+  unsafe = true
+
+[menu]
+  [[menu.main]]
+    identifier = "home"
+    name = "首页"
+    url = "/"
+    weight = 1
+  [[menu.main]]
+    identifier = "post"
+    name = "博客"
+    url = "/post/"
+    weight = 2
+  [[menu.main]]
+    identifier = "wiki"
+    name = "维基"
+    url = "/wiki/"
+    weight = 3
+  [[menu.main]]
+    identifier = "tags"
+    name = "标签"
+    url = "/tags/"
+    weight = 4
+  [[menu.main]]
+    identifier = "about"
+    name = "关于"
+    url = "/about/"
+    weight = 5
+
+[params]
+  author = "Yaku Makki"
+  description = "个人小巢"
+  avatar = './assets/avatar/avatar.jpg'
+  favicon = './assets/avatar/avatar.jpg'
+  enableEmoji = true
+  menu_item_separator = " | "
+  showReadingTime = true
+  showWordCount = true
+  
+  [[params.social]]
+    icon = "brand-github"
+    name = "Github"
+    url = "https://github.com/makkichan947"
+  [[params.social]]
+    icon = "mail"
+    name = "Email"
+    url = "mailto:yakumakki947@hotmail.com"
+  [[params.social]]
+    icon = "Twitter"
+    name = "Twitter"
+    url = "https://x.com/Makki_Yaku947"
+  [[params.social]]
+    icon = "brand-twitch"
+    name = "Twitch"
+    url = "https://www.twitch.tv/u/makkichan947"
+
+[params.utteranc]
+  enable = true
+  repo = "makkichan947/makkichan947.github.io"
+  issueTerm = "pathname"
+  theme = "github-dark"
+
+[params.busuanzi]
+  enable = true
+  site_pv = true
+  site_uv = true
+  page_pv = true
+
+# 搜索功能配置
+[outputs]
+  home = ["HTML", "RSS", "JSON"]
+
+[params.search]
+  enable = true
+  type = "lunr"
+  maxResultLength = 10
+  snippetLength = 30
+  highlightTag = "em"
+  absoluteURLs = false
+
+[params.style]
+  darkestColor = "#0a0a0f"
+  darkColor = "#1a1a2e"
+  lightColor = "#b0b0c0"
+  lightestColor = "#ffffff"
+  primaryColor = "#00d4ff"

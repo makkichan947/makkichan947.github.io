@@ -1,0 +1,313 @@
+<!doctype html>
+<html lang="zh">
+  <head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+    <title>AES算法详解 // Yaku Makki</title>
+    <link rel="shortcut icon" href="./assets/avatar/avatar.jpg" />
+    <meta charset="utf-8" />
+    <meta name="generator" content="Hugo 0.151.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="author" content="Yaku Makki" />
+    <meta name="description" content="" />
+    <link rel="stylesheet" href="/css/main.min.422840b4454cb211f5b3dab61f082cdff508e88825173c31806835cb75529734.css" />
+    
+
+    
+    
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="AES算法详解">
+  <meta name="twitter:description" content="AES算法详解 AES (Advanced Encryption Standard) 是美国国家标准与技术研究院 (NIST) 在2001年确立的加密标准，是目前最广泛使用的对称加密算法之一。
+算法概述 AES是一种迭代分组密码算法，具有以下特性：
+分组长度：128位 密钥长度：128、192或256位 迭代轮数：10轮（128位密钥）、12轮（192位密钥）、14轮（256位密钥） 结构：SPN (Substitution-Permutation Network) 结构 数学基础 有限域运算 AES在有限域 $GF(2^8)$ 上进行运算。定义字节的加法和乘法：
+加法（异或）：$a \oplus b$ 乘法：基于生成多项式 $x^8 &#43; x^4 &#43; x^3 &#43; x &#43; 1$
+S盒 (Substitution Box) S盒是AES的核心非线性组件，通过有限域求逆和仿射变换构造：
+def aes_sbox(byte): # 有限域求逆 if byte == 0: return 0 inverse = galois_inverse(byte) # 仿射变换 return affine_transform(inverse) def galois_inverse(byte): # 使用扩展欧几里得算法求逆 # 模多项式 x^8 &#43; x^4 &#43; x^3 &#43; x &#43; 1 pass 加密过程 AES加密包含以下步骤：">
+
+    <meta property="og:url" content="http://localhost:1313/wiki/cryptography/aes/">
+  <meta property="og:site_name" content="Yaku Makki">
+  <meta property="og:title" content="AES算法详解">
+  <meta property="og:description" content="AES算法详解 AES (Advanced Encryption Standard) 是美国国家标准与技术研究院 (NIST) 在2001年确立的加密标准，是目前最广泛使用的对称加密算法之一。
+算法概述 AES是一种迭代分组密码算法，具有以下特性：
+分组长度：128位 密钥长度：128、192或256位 迭代轮数：10轮（128位密钥）、12轮（192位密钥）、14轮（256位密钥） 结构：SPN (Substitution-Permutation Network) 结构 数学基础 有限域运算 AES在有限域 $GF(2^8)$ 上进行运算。定义字节的加法和乘法：
+加法（异或）：$a \oplus b$ 乘法：基于生成多项式 $x^8 &#43; x^4 &#43; x^3 &#43; x &#43; 1$
+S盒 (Substitution Box) S盒是AES的核心非线性组件，通过有限域求逆和仿射变换构造：
+def aes_sbox(byte): # 有限域求逆 if byte == 0: return 0 inverse = galois_inverse(byte) # 仿射变换 return affine_transform(inverse) def galois_inverse(byte): # 使用扩展欧几里得算法求逆 # 模多项式 x^8 &#43; x^4 &#43; x^3 &#43; x &#43; 1 pass 加密过程 AES加密包含以下步骤：">
+  <meta property="og:locale" content="zh">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="wiki">
+    <meta property="article:published_time" content="2025-10-12T11:42:47+08:00">
+    <meta property="article:modified_time" content="2025-10-12T11:42:47+08:00">
+
+
+  </head>
+  <body class="synthwave-bg">
+    <header class="app-header glass-morphism neon-border">
+      <a href="/"><img class="app-header-avatar" src="/assets/avatar/avatar.jpg" alt="Yaku Makki" /></a>
+      <span class="app-header-title gradient-text">Yaku Makki</span>
+      <nav class="app-header-menu">
+          <a class="app-header-menu-item" href="/">首页</a>
+             | 
+          
+          <a class="app-header-menu-item" href="/post/">博客</a>
+             | 
+          
+          <a class="app-header-menu-item" href="/wiki/">维基</a>
+             | 
+          
+          <a class="app-header-menu-item" href="/tags/">标签</a>
+             | 
+          
+          <a class="app-header-menu-item" href="/about/">关于</a>
+      </nav>
+      <p>个人小巢</p>
+      <div class="app-header-social">
+        
+          <a href="https://github.com/makkichan947" target="_blank" rel="noreferrer noopener me" class="pulse-glow">
+            <svg class="icon icon-brand-github" viewBox="0 0 24 24" fill="currentColor"><title>GitHub</title><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg>
+          </a>
+        
+          <a href="mailto:yakumakki947@hotmail.com" target="_blank" rel="noreferrer noopener me" class="pulse-glow">
+            <svg class="icon icon-mail" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><title>mail</title><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
+          </a>
+        
+          <a href="https://x.com/Makki_Yaku947" target="_blank" rel="noreferrer noopener me" class="pulse-glow">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-link">
+  <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path>
+  <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path>
+</svg>
+          </a>
+        
+          <a href="https://www.twitch.tv/u/makkichan947" target="_blank" rel="noreferrer noopener me" class="pulse-glow">
+            <svg class="icon icon-brand-twitch" viewBox="0 0 24 24" fill="currentColor"><title>Twitch</title><path d="M11.571 4.714h1.715v5.143H11.57zm4.715 0H18v5.143h-1.714zM6 0L1.714 4.286v15.428h5.143V24l4.286-4.286h3.428L22.286 12V0zm14.571 11.143l-3.428 3.428h-3.429l-3 3v-3H6.857V1.714h13.714Z"/></svg>
+          </a>
+        
+      </div>
+    </header>
+    <main class="app-container glass-morphism glow-effect">
+      <div class="floating-particles">
+        <div class="particle" style="left: 10%; animation-delay: 0s;"></div>
+        <div class="particle" style="left: 20%; animation-delay: 1s;"></div>
+        <div class="particle" style="left: 30%; animation-delay: 2s;"></div>
+        <div class="particle" style="left: 40%; animation-delay: 3s;"></div>
+        <div class="particle" style="left: 50%; animation-delay: 4s;"></div>
+        <div class="particle" style="left: 60%; animation-delay: 5s;"></div>
+        <div class="particle" style="left: 70%; animation-delay: 6s;"></div>
+        <div class="particle" style="left: 80%; animation-delay: 7s;"></div>
+        <div class="particle" style="left: 90%; animation-delay: 8s;"></div>
+      </div>
+      
+  <article class="post enhanced-card glow-effect">
+    <header class="post-header">
+      <h1 class ="post-title gradient-text">AES算法详解</h1>
+      <div class="post-meta">
+        <div>
+          <svg class="icon icon-calendar" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><title>calendar</title><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+          Oct 12, 2025
+        </div>
+        <div>
+          <svg class="icon icon-clock" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><title>clock</title><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+          2 min read
+        </div>
+      </div>
+    </header>
+    <div class="post-content">
+      <h1 id="aes算法详解">AES算法详解</h1>
+<p>AES (Advanced Encryption Standard) 是美国国家标准与技术研究院 (NIST) 在2001年确立的加密标准，是目前最广泛使用的对称加密算法之一。</p>
+<h2 id="算法概述">算法概述</h2>
+<p>AES是一种迭代分组密码算法，具有以下特性：</p>
+<ul>
+<li><strong>分组长度</strong>：128位</li>
+<li><strong>密钥长度</strong>：128、192或256位</li>
+<li><strong>迭代轮数</strong>：10轮（128位密钥）、12轮（192位密钥）、14轮（256位密钥）</li>
+<li><strong>结构</strong>：SPN (Substitution-Permutation Network) 结构</li>
+</ul>
+<h2 id="数学基础">数学基础</h2>
+<h3 id="有限域运算">有限域运算</h3>
+<p>AES在有限域 $GF(2^8)$ 上进行运算。定义字节的加法和乘法：</p>
+<p><strong>加法（异或）</strong>：$a \oplus b$
+<strong>乘法</strong>：基于生成多项式 $x^8 + x^4 + x^3 + x + 1$</p>
+<h3 id="s盒-substitution-box">S盒 (Substitution Box)</h3>
+<p>S盒是AES的核心非线性组件，通过有限域求逆和仿射变换构造：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">aes_sbox</span>(byte):
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># 有限域求逆</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> byte <span style="color:#f92672">==</span> <span style="color:#ae81ff">0</span>:
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> <span style="color:#ae81ff">0</span>
+</span></span><span style="display:flex;"><span>    inverse <span style="color:#f92672">=</span> galois_inverse(byte)
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># 仿射变换</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> affine_transform(inverse)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">galois_inverse</span>(byte):
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># 使用扩展欧几里得算法求逆</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># 模多项式 x^8 + x^4 + x^3 + x + 1</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">pass</span>
+</span></span></code></pre></div><h2 id="加密过程">加密过程</h2>
+<p>AES加密包含以下步骤：</p>
+<h3 id="1-初始密钥加法-addroundkey">1. 初始密钥加法 (AddRoundKey)</h3>
+<p>明文与初始密钥进行异或运算。</p>
+<h3 id="2-轮函数-round-function">2. 轮函数 (Round Function)</h3>
+<p>每一轮包含四个操作：</p>
+<p><strong>SubBytes</strong>：字节替换，使用S盒
+<strong>ShiftRows</strong>：行移位，提供扩散效果
+<strong>MixColumns</strong>：列混合，线性变换
+<strong>AddRoundKey</strong>：轮密钥加法</p>
+<h3 id="3-最终轮">3. 最终轮</h3>
+<p>最后一轮不进行MixColumns操作。</p>
+<h2 id="密钥扩展">密钥扩展</h2>
+<p>AES使用密钥扩展算法从初始密钥生成轮密钥：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">key_expansion</span>(key, nk, nr):
+</span></span><span style="display:flex;"><span>    w <span style="color:#f92672">=</span> [<span style="color:#ae81ff">0</span>] <span style="color:#f92672">*</span> (<span style="color:#ae81ff">4</span> <span style="color:#f92672">*</span> (nr <span style="color:#f92672">+</span> <span style="color:#ae81ff">1</span>))
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># 初始密钥复制</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">for</span> i <span style="color:#f92672">in</span> range(<span style="color:#ae81ff">4</span> <span style="color:#f92672">*</span> nk):
+</span></span><span style="display:flex;"><span>        w[i] <span style="color:#f92672">=</span> key[i]
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># 生成后续密钥</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">for</span> i <span style="color:#f92672">in</span> range(<span style="color:#ae81ff">4</span> <span style="color:#f92672">*</span> nk, <span style="color:#ae81ff">4</span> <span style="color:#f92672">*</span> (nr <span style="color:#f92672">+</span> <span style="color:#ae81ff">1</span>)):
+</span></span><span style="display:flex;"><span>        temp <span style="color:#f92672">=</span> w[i<span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>]
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> i <span style="color:#f92672">%</span> (<span style="color:#ae81ff">4</span> <span style="color:#f92672">*</span> nk) <span style="color:#f92672">==</span> <span style="color:#ae81ff">0</span>:
+</span></span><span style="display:flex;"><span>            temp <span style="color:#f92672">=</span> sub_word(rot_word(temp)) <span style="color:#f92672">^</span> rcon[i <span style="color:#f92672">//</span> (<span style="color:#ae81ff">4</span> <span style="color:#f92672">*</span> nk)]
+</span></span><span style="display:flex;"><span>        w[i] <span style="color:#f92672">=</span> w[i <span style="color:#f92672">-</span> <span style="color:#ae81ff">4</span> <span style="color:#f92672">*</span> nk] <span style="color:#f92672">^</span> temp
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> w
+</span></span></code></pre></div><h2 id="安全性分析">安全性分析</h2>
+<h3 id="抗攻击能力">抗攻击能力</h3>
+<p>AES能够抵抗以下攻击：</p>
+<ul>
+<li><strong>差分密码分析</strong>：通过多轮扩散抵抗</li>
+<li><strong>线性密码分析</strong>：S盒的非线性特性</li>
+<li><strong>相关密钥攻击</strong>：密钥扩展算法的安全性</li>
+</ul>
+<h3 id="密钥长度选择">密钥长度选择</h3>
+<ul>
+<li><strong>AES-128</strong>：密钥长度128位，抗暴力攻击安全</li>
+<li><strong>AES-192</strong>：密钥长度192位，更高安全性</li>
+<li><strong>AES-256</strong>：密钥长度256位，最高安全性等级</li>
+</ul>
+<h2 id="编程实现">编程实现</h2>
+<h3 id="python简化实现">Python简化实现</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#f92672">import</span> numpy <span style="color:#66d9ef">as</span> np
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">AES</span>:
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">__init__</span>(self, key):
+</span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>key <span style="color:#f92672">=</span> key
+</span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>round_keys <span style="color:#f92672">=</span> self<span style="color:#f92672">.</span>key_expansion()
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">encrypt</span>(self, plaintext):
+</span></span><span style="display:flex;"><span>        state <span style="color:#f92672">=</span> self<span style="color:#f92672">.</span>bytes_to_state(plaintext)
+</span></span><span style="display:flex;"><span>        
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e"># 初始轮密钥加法</span>
+</span></span><span style="display:flex;"><span>        state <span style="color:#f92672">=</span> self<span style="color:#f92672">.</span>add_round_key(state, self<span style="color:#f92672">.</span>round_keys[:<span style="color:#ae81ff">4</span>])
+</span></span><span style="display:flex;"><span>        
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e"># 9轮普通轮函数</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">for</span> round <span style="color:#f92672">in</span> range(<span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">10</span>):
+</span></span><span style="display:flex;"><span>            state <span style="color:#f92672">=</span> self<span style="color:#f92672">.</span>sub_bytes(state)
+</span></span><span style="display:flex;"><span>            state <span style="color:#f92672">=</span> self<span style="color:#f92672">.</span>shift_rows(state)
+</span></span><span style="display:flex;"><span>            state <span style="color:#f92672">=</span> self<span style="color:#f92672">.</span>mix_columns(state)
+</span></span><span style="display:flex;"><span>            state <span style="color:#f92672">=</span> self<span style="color:#f92672">.</span>add_round_key(state, self<span style="color:#f92672">.</span>round_keys[round<span style="color:#f92672">*</span><span style="color:#ae81ff">4</span>:(round<span style="color:#f92672">+</span><span style="color:#ae81ff">1</span>)<span style="color:#f92672">*</span><span style="color:#ae81ff">4</span>])
+</span></span><span style="display:flex;"><span>        
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e"># 最终轮</span>
+</span></span><span style="display:flex;"><span>        state <span style="color:#f92672">=</span> self<span style="color:#f92672">.</span>sub_bytes(state)
+</span></span><span style="display:flex;"><span>        state <span style="color:#f92672">=</span> self<span style="color:#f92672">.</span>shift_rows(state)
+</span></span><span style="display:flex;"><span>        state <span style="color:#f92672">=</span> self<span style="color:#f92672">.</span>add_round_key(state, self<span style="color:#f92672">.</span>round_keys[<span style="color:#ae81ff">40</span>:])
+</span></span><span style="display:flex;"><span>        
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> self<span style="color:#f92672">.</span>state_to_bytes(state)
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">sub_bytes</span>(self, state):
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e"># S盒替换</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">for</span> i <span style="color:#f92672">in</span> range(<span style="color:#ae81ff">4</span>):
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">for</span> j <span style="color:#f92672">in</span> range(<span style="color:#ae81ff">4</span>):
+</span></span><span style="display:flex;"><span>                state[i][j] <span style="color:#f92672">=</span> S_BOX[state[i][j]]
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> state
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">shift_rows</span>(self, state):
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e"># 行移位</span>
+</span></span><span style="display:flex;"><span>        state[<span style="color:#ae81ff">1</span>] <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>roll(state[<span style="color:#ae81ff">1</span>], <span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>)
+</span></span><span style="display:flex;"><span>        state[<span style="color:#ae81ff">2</span>] <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>roll(state[<span style="color:#ae81ff">2</span>], <span style="color:#f92672">-</span><span style="color:#ae81ff">2</span>)
+</span></span><span style="display:flex;"><span>        state[<span style="color:#ae81ff">3</span>] <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>roll(state[<span style="color:#ae81ff">3</span>], <span style="color:#f92672">-</span><span style="color:#ae81ff">3</span>)
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> state
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">mix_columns</span>(self, state):
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e"># 列混合</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">for</span> i <span style="color:#f92672">in</span> range(<span style="color:#ae81ff">4</span>):
+</span></span><span style="display:flex;"><span>            column <span style="color:#f92672">=</span> state[:, i]
+</span></span><span style="display:flex;"><span>            state[:, i] <span style="color:#f92672">=</span> self<span style="color:#f92672">.</span>mix_column(column)
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> state
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">mix_column</span>(self, column):
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e"># 列混合矩阵乘法</span>
+</span></span><span style="display:flex;"><span>        result <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>zeros(<span style="color:#ae81ff">4</span>, dtype<span style="color:#f92672">=</span>int)
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">for</span> i <span style="color:#f92672">in</span> range(<span style="color:#ae81ff">4</span>):
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">for</span> j <span style="color:#f92672">in</span> range(<span style="color:#ae81ff">4</span>):
+</span></span><span style="display:flex;"><span>                result[i] <span style="color:#f92672">^=</span> self<span style="color:#f92672">.</span>galois_multiply(MIX_COLUMNS_MATRIX[i][j], column[j])
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> result
+</span></span></code></pre></div><h2 id="应用场景">应用场景</h2>
+<h3 id="安全通信">安全通信</h3>
+<ul>
+<li>HTTPS/TLS协议</li>
+<li>VPN加密隧道</li>
+<li>无线网络安全 (WPA2/WPA3)</li>
+</ul>
+<h3 id="数据存储">数据存储</h3>
+<ul>
+<li>全盘加密 (BitLocker, FileVault)</li>
+<li>数据库加密</li>
+<li>移动设备加密</li>
+</ul>
+<h3 id="工业应用">工业应用</h3>
+<ul>
+<li>智能卡和安全芯片</li>
+<li>数字签名和认证</li>
+<li>区块链和数字货币</li>
+</ul>
+<h2 id="性能优化">性能优化</h2>
+<h3 id="查表法实现">查表法实现</h3>
+<p>使用预计算的查表提高加密速度：</p>
+<ul>
+<li>S盒查表</li>
+<li>列混合查表</li>
+<li>密钥扩展查表</li>
+</ul>
+<h3 id="硬件加速">硬件加速</h3>
+<p>现代CPU提供AES指令集：</p>
+<ul>
+<li>Intel AES-NI</li>
+<li>ARM CE (Cryptographic Extensions)</li>
+</ul>
+<h2 id="未来发展">未来发展</h2>
+<p>虽然AES目前非常安全，但密码学研究仍在继续：</p>
+<ul>
+<li><strong>轻量级AES</strong>：适用于物联网设备</li>
+<li><strong>白盒AES</strong>：抵抗白盒攻击环境</li>
+<li><strong>阈值AES</strong>：分布式计算环境</li>
+</ul>
+<h2 id="学习资源">学习资源</h2>
+<ul>
+<li><a href="https://nvlpubs.nist.gov/nistpubs/FIPS/NIST.FIPS.197.pdf">AES官方标准</a></li>
+<li>《密码学原理与实践》</li>
+<li><a href="https://www.formaestudio.com/rijndaelinspector/">AES动画演示</a></li>
+</ul>
+
+      
+      <div class="post-separator">------------------------------------------------------------------------</div>
+      
+    </div>
+    <div class="post-footer">
+      
+      <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+      <div class="busuanzi-container">
+        <span id="busuanzi_container_page_pv">--本文总阅读量<span id="busuanzi_value_page_pv"></span>次--</span>
+      </div>
+      
+      
+      <script src="https://utteranc.es/client.js"
+        repo="makkichan947/makkichan947.github.io"
+        issue-term="pathname"
+        label="Utterances"
+        theme="github-dark"
+        crossorigin="anonymous"
+        async>
+      </script>
+    </div>
+  </article>
+
+    </main>
+  </body>
+</html>

@@ -1,0 +1,164 @@
+<!doctype html>
+<html lang="zh">
+  <head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+    <title>Linux From Scratch (LFS) // Yaku Makki</title>
+    <link rel="shortcut icon" href="./assets/avatar/avatar.jpg" />
+    <meta charset="utf-8" />
+    <meta name="generator" content="Hugo 0.151.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="author" content="Yaku Makki" />
+    <meta name="description" content="从零开始构建自己的Linux系统" />
+    <link rel="stylesheet" href="/css/main.min.422840b4454cb211f5b3dab61f082cdff508e88825173c31806835cb75529734.css" />
+    <link rel="alternate" type="application/rss+xml" href="http://localhost:1313/wiki/lfs/index.xml" title="Yaku Makki">
+    
+
+    
+    
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="Linux From Scratch (LFS)">
+  <meta name="twitter:description" content="从零开始构建自己的Linux系统">
+
+    <meta property="og:url" content="http://localhost:1313/wiki/lfs/">
+  <meta property="og:site_name" content="Yaku Makki">
+  <meta property="og:title" content="Linux From Scratch (LFS)">
+  <meta property="og:description" content="从零开始构建自己的Linux系统">
+  <meta property="og:locale" content="zh">
+  <meta property="og:type" content="website">
+
+
+  </head>
+  <body class="synthwave-bg">
+    <header class="app-header glass-morphism neon-border">
+      <a href="/"><img class="app-header-avatar" src="/assets/avatar/avatar.jpg" alt="Yaku Makki" /></a>
+      <span class="app-header-title gradient-text">Yaku Makki</span>
+      <nav class="app-header-menu">
+          <a class="app-header-menu-item" href="/">首页</a>
+             | 
+          
+          <a class="app-header-menu-item" href="/post/">博客</a>
+             | 
+          
+          <a class="app-header-menu-item" href="/wiki/">维基</a>
+             | 
+          
+          <a class="app-header-menu-item" href="/tags/">标签</a>
+             | 
+          
+          <a class="app-header-menu-item" href="/about/">关于</a>
+      </nav>
+      <p>个人小巢</p>
+      <div class="app-header-social">
+        
+          <a href="https://github.com/makkichan947" target="_blank" rel="noreferrer noopener me" class="pulse-glow">
+            <svg class="icon icon-brand-github" viewBox="0 0 24 24" fill="currentColor"><title>GitHub</title><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg>
+          </a>
+        
+          <a href="mailto:yakumakki947@hotmail.com" target="_blank" rel="noreferrer noopener me" class="pulse-glow">
+            <svg class="icon icon-mail" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><title>mail</title><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
+          </a>
+        
+          <a href="https://x.com/Makki_Yaku947" target="_blank" rel="noreferrer noopener me" class="pulse-glow">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-link">
+  <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path>
+  <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path>
+</svg>
+          </a>
+        
+          <a href="https://www.twitch.tv/u/makkichan947" target="_blank" rel="noreferrer noopener me" class="pulse-glow">
+            <svg class="icon icon-brand-twitch" viewBox="0 0 24 24" fill="currentColor"><title>Twitch</title><path d="M11.571 4.714h1.715v5.143H11.57zm4.715 0H18v5.143h-1.714zM6 0L1.714 4.286v15.428h5.143V24l4.286-4.286h3.428L22.286 12V0zm14.571 11.143l-3.428 3.428h-3.429l-3 3v-3H6.857V1.714h13.714Z"/></svg>
+          </a>
+        
+      </div>
+    </header>
+    <main class="app-container glass-morphism glow-effect">
+      <div class="floating-particles">
+        <div class="particle" style="left: 10%; animation-delay: 0s;"></div>
+        <div class="particle" style="left: 20%; animation-delay: 1s;"></div>
+        <div class="particle" style="left: 30%; animation-delay: 2s;"></div>
+        <div class="particle" style="left: 40%; animation-delay: 3s;"></div>
+        <div class="particle" style="left: 50%; animation-delay: 4s;"></div>
+        <div class="particle" style="left: 60%; animation-delay: 5s;"></div>
+        <div class="particle" style="left: 70%; animation-delay: 6s;"></div>
+        <div class="particle" style="left: 80%; animation-delay: 7s;"></div>
+        <div class="particle" style="left: 90%; animation-delay: 8s;"></div>
+      </div>
+      
+  <article class="enhanced-card glow-effect">
+    <h1 class="gradient-text">Linux From Scratch (LFS)</h1>
+    <div class="post-content"><h1 id="linux-from-scratch-lfs">Linux From Scratch (LFS)</h1>
+<p>Linux From Scratch (LFS) 是一个项目，教你如何从零开始构建自己的Linux系统。这不仅仅是安装软件，更是一场深入操作系统底层的学习之旅。</p>
+<h2 id="-学习目标">🎯 学习目标</h2>
+<p>通过LFS，你将学会：</p>
+<ul>
+<li>系统如何从无到有构建</li>
+<li>每个组件的作用和依赖关系</li>
+<li>软件编译和安装的原理</li>
+<li>系统配置和优化的方法</li>
+</ul>
+<h2 id="-前置知识">📋 前置知识</h2>
+<p>在开始LFS之前，你需要了解：</p>
+<ul>
+<li>基本命令行操作</li>
+<li>C/C++编译过程</li>
+<li>文件系统概念</li>
+<li>软件包管理基础</li>
+</ul>
+<h2 id="-环境准备">🛠️ 环境准备</h2>
+<h3 id="宿主系统要求">宿主系统要求</h3>
+<ul>
+<li>Linux发行版（推荐Arch Linux或Ubuntu）</li>
+<li>至少10GB可用磁盘空间</li>
+<li>2GB以上内存</li>
+<li>互联网连接</li>
+</ul>
+<h3 id="必要工具">必要工具</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># Arch Linux</span>
+</span></span><span style="display:flex;"><span>sudo pacman -S base-devel
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Ubuntu/Debian</span>
+</span></span><span style="display:flex;"><span>sudo apt-get install build-essential
+</span></span></code></pre></div><h2 id="-lfs版本选择">📖 LFS版本选择</h2>
+<p>推荐从最新稳定版开始：</p>
+<ul>
+<li>LFS版本：11.3（最新稳定版）</li>
+<li>预计用时：20-40小时</li>
+<li>难度：中高级</li>
+</ul>
+<h2 id="-构建步骤概览">🚀 构建步骤概览</h2>
+<ol>
+<li><strong>准备宿主系统</strong></li>
+<li><strong>下载源码包</strong></li>
+<li><strong>构建临时工具链</strong></li>
+<li><strong>构建基本系统</strong></li>
+<li><strong>配置引导和内核</strong></li>
+<li><strong>系统配置和优化</strong></li>
+</ol>
+<h2 id="-学习建议">💡 学习建议</h2>
+<blockquote>
+<p>LFS不是一蹴而就的项目，建议分阶段进行。遇到问题时，多查阅文档和社区资源。</p></blockquote>
+<h2 id="-相关资源">📚 相关资源</h2>
+<ul>
+<li><a href="http://www.linuxfromscratch.org/lfs/">LFS官方文档</a></li>
+<li><a href="https://lfs.linuxsir.org/">LFS中文社区</a></li>
+<li><a href="http://www.linuxfromscratch.org/blfs/">BLFS（Beyond LFS）</a></li>
+</ul>
+</div>
+    <ul class="posts-list">
+      
+    </ul>
+    
+
+
+
+    
+    <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+    <div class="busuanzi-container">
+      <span id="busuanzi_container_site_pv">--本站总访问量<span id="busuanzi_value_site_pv"></span>次--</span>
+      <span id="busuanzi_container_site_uv">--本站总访客数<span id="busuanzi_value_site_uv"></span>人--</span>
+    </div>
+    
+  </article>
+
+    </main>
+  </body>
+</html>

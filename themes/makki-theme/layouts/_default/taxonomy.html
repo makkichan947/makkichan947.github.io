@@ -1,0 +1,23 @@
+{{ define "main" }}
+<div class="content-wrapper fade-in-up">
+    <header class="taxonomy-header">
+        <h1>{{ .Title }}</h1>
+        <p>{{ .Description }}</p>
+    </header>
+
+    <div class="taxonomy-content">
+        {{ range .Pages }}
+        <div class="card">
+            <h3><a href="{{ .RelPermalink }}">{{ .Title }}</a></h3>
+            <p>{{ .Summary | truncate 150 }}</p>
+            <div class="meta">
+                <time>{{ .Date.Format "2006-01-02" }}</time>
+                <span class="section">{{ .Section }}</span>
+            </div>
+        </div>
+        {{ end }}
+    </div>
+
+    {{ template "_internal/pagination.html" . }}
+</div>
+{{ end }}

@@ -1,0 +1,52 @@
+{{ define "main" }}
+  <article class="post enhanced-card glow-effect">
+    <header class="post-header">
+      <h1 class ="post-title gradient-text">{{ .Title }}</h1>
+      {{- if ne .Type "page" }}
+      <div class="post-meta">
+        <div>
+          {{ partial "icon.html" (dict "ctx" $ "name" "calendar") }}
+          {{ .PublishDate.Format "Jan 2, 2006" }}
+        </div>
+        <div>
+          {{ partial "icon.html" (dict "ctx" $ "name" "clock") }}
+          {{ .ReadingTime }} min read
+        </div>
+        {{- with .Params.tags }}
+        <div>
+          {{ partial "icon.html" (dict "ctx" $ "name" "tag") }}
+          {{- range . -}}
+            {{ with $.Site.GetPage (printf "/%s/%s" "tags" . ) }}
+              <a class="tag pulse-glow" href="{{ .RelPermalink }}">{{ .Title }}</a>
+            {{- end }}
+          {{- end }}
+        </div>
+        {{- end }}
+      </div>
+      {{- end }}
+    </header>
+    <div class="post-content">
+      {{ .Content }}
+      {{ if .Site.Params.busuanzi.enable }}
+      <div class="post-separator">------------------------------------------------------------------------</div>
+      {{ end }}
+    </div>
+    <div class="post-footer">
+      {{ if .Site.Params.busuanzi.enable }}
+      <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+      <div class="busuanzi-container">
+        <span id="busuanzi_container_page_pv">--本文总阅读量<span id="busuanzi_value_page_pv"></span>次--</span>
+      </div>
+      {{ end }}
+      {{ template "_internal/disqus.html" . }}
+      <script src="https://utteranc.es/client.js"
+        repo="makkichan947/makkichan947.github.io"
+        issue-term="pathname"
+        label="Utterances"
+        theme="github-dark"
+        crossorigin="anonymous"
+        async>
+      </script>
+    </div>
+  </article>
+{{ end }}

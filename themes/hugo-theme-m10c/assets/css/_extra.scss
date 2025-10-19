@@ -1,0 +1,384 @@
+// 颜色变量
+:root {
+  --bg-primary: #0a0a0f;
+  --bg-secondary: #1a1a2e;
+  --bg-tertiary: #16213e;
+  --bg-glass: rgba(26, 26, 46, 0.8);
+
+  --accent-blue: #00d4ff;
+  --accent-red: #ff073a;
+  --accent-magenta: #ff1493;
+
+  --text-primary: #ffffff;
+  --text-secondary: #b0b0c0;
+  --text-muted: #808090;
+
+  --border-primary: rgba(0, 212, 255, 0.3);
+  --border-secondary: rgba(255, 215, 0, 0.2);
+
+  --shadow-blue: 0 0 20px rgba(0, 212, 255, 0.3);
+  --shadow-yellow: 0 0 20px rgba(255, 215, 0, 0.2);
+}
+
+// Synthwave背景
+body {
+  background: var(--bg-primary) !important;
+  background-image:
+    radial-gradient(circle at 20% 80%, rgba(0, 212, 255, 0.15) 0%, transparent 50%),
+    radial-gradient(circle at 80% 20%, rgba(255, 7, 58, 0.15) 0%, transparent 50%),
+    radial-gradient(circle at 50% 50%, rgba(255, 20, 147, 0.1) 0%, transparent 70%),
+    linear-gradient(135deg, transparent 0%, rgba(0, 212, 255, 0.05) 50%, transparent 100%) !important;
+  position: relative;
+}
+
+// 网格背景
+body::after {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-image:
+    linear-gradient(rgba(0, 212, 255, 0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(0, 212, 255, 0.03) 1px, transparent 1px);
+  background-size: 100px 100px;
+  pointer-events: none;
+  z-index: -1;
+  opacity: 0.5;
+}
+
+// 毛玻璃容器
+.glass-container {
+  background: var(--bg-glass) !important;
+  backdrop-filter: blur(20px) !important;
+  border: 1px solid var(--border-primary) !important;
+  border-radius: 16px !important;
+  box-shadow: var(--shadow-blue) !important;
+  position: relative !important;
+  overflow: hidden !important;
+}
+
+.glass-container::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--accent-blue), transparent);
+  z-index: 1;
+}
+
+// 增强毛玻璃效果
+.glass-morphism {
+  background: rgba(26, 26, 46, 0.7) !important;
+  backdrop-filter: blur(25px) saturate(180%) !important;
+  border: 1px solid rgba(0, 212, 255, 0.2) !important;
+  border-radius: 20px !important;
+  box-shadow:
+    0 8px 32px rgba(0, 0, 0, 0.3),
+    0 0 0 1px rgba(255, 255, 255, 0.05),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1) !important;
+}
+
+// 霓虹发光边框
+.neon-border {
+  position: relative !important;
+  border: 2px solid transparent !important;
+  background: linear-gradient(45deg, var(--bg-secondary), var(--bg-tertiary)) padding-box,
+              linear-gradient(45deg, var(--accent-blue), var(--accent-red), var(--accent-magenta)) border-box !important;
+  border-radius: 16px !important;
+}
+
+.neon-border::before {
+  content: '' !important;
+  position: absolute !important;
+  top: -2px !important;
+  left: -2px !important;
+  right: -2px !important;
+  bottom: -2px !important;
+  background: linear-gradient(45deg, var(--accent-blue), var(--accent-red), var(--accent-magenta)) !important;
+  border-radius: 18px !important;
+  z-index: -1 !important;
+  opacity: 0.7 !important;
+  filter: blur(8px) !important;
+}
+
+// 渐变文字效果
+.gradient-text {
+  background: linear-gradient(135deg, var(--accent-blue), var(--accent-red), var(--accent-magenta)) !important;
+  -webkit-background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+  background-clip: text !important;
+  background-size: 200% 200% !important;
+  animation: gradientShift 3s ease-in-out infinite !important;
+}
+
+@keyframes gradientShift {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+}
+
+// 脉冲发光动画
+.pulse-glow {
+  animation: pulseGlow 2s ease-in-out infinite alternate !important;
+}
+
+@keyframes pulseGlow {
+  0% {
+    box-shadow: 0 0 20px rgba(0, 212, 255, 0.3);
+  }
+  100% {
+    box-shadow: 0 0 40px rgba(0, 212, 255, 0.6);
+  }
+}
+
+// 增强卡片效果
+.enhanced-card {
+  background: rgba(26, 26, 46, 0.8) !important;
+  backdrop-filter: blur(15px) saturate(150%) !important;
+  border: 1px solid rgba(0, 212, 255, 0.3) !important;
+  border-radius: 20px !important;
+  box-shadow:
+    0 12px 40px rgba(0, 0, 0, 0.4),
+    0 0 0 1px rgba(255, 255, 255, 0.05),
+    inset 0 1px 0 rgba(255, 255, 255, 0.1) !important;
+  position: relative !important;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1) !important;
+}
+
+.enhanced-card:hover {
+  transform: translateY(-8px) scale(1.02) !important;
+  box-shadow:
+    0 20px 60px rgba(0, 0, 0, 0.6),
+    0 0 0 1px rgba(0, 212, 255, 0.4),
+    inset 0 1px 0 rgba(255, 255, 255, 0.2) !important;
+  border-color: var(--accent-blue) !important;
+}
+
+// 导航栏样式增强
+.app-header {
+  background: rgba(10, 10, 15, 0.95) !important;
+  backdrop-filter: blur(20px) !important;
+  border-bottom: 1px solid var(--border-primary) !important;
+  box-shadow: var(--shadow-blue) !important;
+}
+
+.app-header-menu-item {
+  color: var(--text-secondary) !important;
+  transition: all 0.3s ease !important;
+  position: relative !important;
+  overflow: hidden !important;
+}
+
+.app-header-menu-item::before {
+  content: '' !important;
+  position: absolute !important;
+  top: 0 !important;
+  left: -100% !important;
+  width: 100% !important;
+  height: 100% !important;
+  background: linear-gradient(90deg, transparent, rgba(0, 212, 255, 0.2), transparent) !important;
+  transition: left 0.5s !important;
+}
+
+.app-header-menu-item:hover::before {
+  left: 100% !important;
+}
+
+.app-header-menu-item:hover {
+  color: var(--accent-blue) !important;
+  box-shadow: 0 0 15px rgba(0, 212, 255, 0.3) !important;
+}
+
+// 主要内容区域增强
+.app-container {
+  background: var(--bg-glass) !important;
+  backdrop-filter: blur(20px) !important;
+  border: 1px solid var(--border-primary) !important;
+  border-radius: 16px !important;
+  padding: 3rem !important;
+  margin: 2rem 0 !important;
+  box-shadow: var(--shadow-blue) !important;
+  position: relative !important;
+}
+
+// 标题样式增强
+h1, h2, h3, h4, h5, h6 {
+  color: var(--accent-blue) !important;
+  text-shadow: 0 0 10px rgba(0, 212, 255, 0.5) !important;
+}
+
+h1 {
+  background: linear-gradient(135deg, var(--accent-blue), var(--accent-red)) !important;
+  -webkit-background-clip: text !important;
+  -webkit-text-fill-color: transparent !important;
+  background-clip: text !important;
+  text-align: center !important;
+  margin: 3rem 0 2rem 0 !important;
+}
+
+// 段落和文字增强
+p {
+  color: var(--text-secondary) !important;
+  line-height: 1.8 !important;
+}
+
+// 链接样式增强
+a {
+  color: var(--accent-blue) !important;
+  transition: all 0.3s ease !important;
+  position: relative !important;
+}
+
+a:hover {
+  color: var(--accent-yellow) !important;
+  text-shadow: 0 0 10px var(--accent-blue) !important;
+}
+
+// 按钮样式增强
+.app-header-social a {
+  transition: all 0.3s ease !important;
+}
+
+.app-header-social a:hover {
+  transform: translateY(-2px) !important;
+  box-shadow: 0 4px 15px rgba(0, 212, 255, 0.3) !important;
+}
+
+// 搜索功能增强
+.search-container {
+  position: relative !important;
+  margin: 2rem 0 !important;
+}
+
+.search-input {
+  width: 100% !important;
+  padding: 1rem 3rem 1rem 1rem !important;
+  background: var(--bg-glass) !important;
+  border: 2px solid var(--border-primary) !important;
+  border-radius: 12px !important;
+  color: var(--text-primary) !important;
+  font-size: 1rem !important;
+  backdrop-filter: blur(10px) !important;
+  transition: all 0.3s ease !important;
+}
+
+.search-input:focus {
+  outline: none !important;
+  border-color: var(--accent-blue) !important;
+  box-shadow: 0 0 20px rgba(0, 212, 255, 0.3) !important;
+}
+
+.search-icon {
+  position: absolute !important;
+  right: 1rem !important;
+  top: 50% !important;
+  transform: translateY(-50%) !important;
+  color: var(--text-muted) !important;
+  font-size: 1.2rem !important;
+}
+
+// 代码块样式增强
+.highlight {
+  background: var(--bg-secondary) !important;
+  border-radius: 12px !important;
+  border: 1px solid var(--border-primary) !important;
+  margin: 1.5rem 0 !important;
+  overflow: hidden !important;
+}
+
+.highlight pre {
+  padding: 1.5rem !important;
+  background: transparent !important;
+}
+
+// 数学公式样式增强
+.katex {
+  font-size: 1.1em !important;
+}
+
+.katex-display {
+  background: var(--bg-glass) !important;
+  padding: 1rem !important;
+  border-radius: 8px !important;
+  border: 1px solid var(--border-secondary) !important;
+  margin: 1rem 0 !important;
+}
+
+// 页脚样式增强
+.app-header-social {
+  margin-top: 1rem !important;
+}
+
+// Busuanzi统计样式
+.busuanzi-container {
+  text-align: center !important;
+  margin: 2rem 0 !important;
+  padding: 1rem !important;
+  background: rgba(0, 212, 255, 0.1) !important;
+  border-radius: 12px !important;
+  border: 1px solid rgba(0, 212, 255, 0.3) !important;
+  font-size: 0.9rem !important;
+  color: var(--text-secondary) !important;
+}
+
+.busuanzi-container span {
+  margin: 0 1rem !important;
+  display: inline-block !important;
+}
+
+// 文章分割线样式
+.post-separator {
+  text-align: center !important;
+  margin: 3rem 0 !important;
+  color: var(--text-muted) !important;
+  font-size: 0.8rem !important;
+  letter-spacing: 2px !important;
+}
+
+// 响应式设计增强
+@media (max-width: 768px) {
+  .app-container {
+    padding: 1.5rem !important;
+  }
+
+  h1 {
+    font-size: 2rem !important;
+  }
+
+  h2 {
+    font-size: 1.5rem !important;
+  }
+}
+
+// 滚动条样式
+::-webkit-scrollbar {
+  width: 8px !important;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--bg-secondary) !important;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--accent-blue) !important;
+  border-radius: 4px !important;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--accent-red) !important;
+}
+
+// 选择文本样式
+::selection {
+  background: rgba(0, 212, 255, 0.3) !important;
+  color: var(--text-primary) !important;
+}
+
+// 焦点样式
+*:focus {
+  outline: 2px solid var(--accent-blue) !important;
+  outline-offset: 2px !important;
+}

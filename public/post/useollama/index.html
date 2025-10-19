@@ -1,0 +1,279 @@
+<!doctype html>
+<html lang="zh">
+  <head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+    <title>使用Ollama本地部署大语言模型 // Yaku Makki</title>
+    <link rel="shortcut icon" href="./assets/avatar/avatar.jpg" />
+    <meta charset="utf-8" />
+    <meta name="generator" content="Hugo 0.151.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="author" content="Yaku Makki" />
+    <meta name="description" content="" />
+    <link rel="stylesheet" href="/css/main.min.422840b4454cb211f5b3dab61f082cdff508e88825173c31806835cb75529734.css" />
+    
+
+    
+    
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="使用Ollama本地部署大语言模型">
+  <meta name="twitter:description" content="使用Ollama本地部署大语言模型 最近开始研究大语言模型，发现Ollama是一个非常好用的本地部署工具。
+什么是Ollama？ Ollama是一个开源的大语言模型运行时，支持多种主流的开源模型。本地化部署的优势在于：
+隐私保护：数据完全在本地处理 无网络依赖：离线环境下也能使用 免费使用：不需要API费用 自定义配置：可以根据硬件调整参数 安装Ollama Linux安装 我的发行版是Arch Linux，所以我使用pacman安装：
+# 安装Ollama sudo pacman -S ollama 对于基于Debian的发行版，你可以使用apt安装：
+# 安装Ollama sudo apt install ollama 而像Fedora这样的发行版，你可以使用dnf安装：
+# 安装Ollama sudo dnf install ollama 并且我们可以使用官方脚本安装Ollama：
+# 使用官方脚本安装 curl -fsSL https://ollama.ai/install.sh | sh Docker安装 # 运行Ollama服务 docker run -d -v ollama:/root/.ollama -p 11434:11434 --name ollama ollama/ollama # 进入容器 docker exec -it ollama ollama 常用模型 Llama 2系列 # 下载7B参数版本 ollama pull llama2 # 下载13B参数版本 ollama pull llama2:13b # 下载70B参数版本（需要足够内存） ollama pull llama2:70b Code Llama # 专门用于代码的模型 ollama pull codellama # 不同参数版本 ollama pull codellama:7b ollama pull codellama:13b ollama pull codellama:34b 其他模型 # Vicuna模型 ollama pull vicuna # Orca Mini模型 ollama pull orca-mini 基本使用 命令行交互 # 启动交互式对话 ollama run llama2 # 或者指定具体模型 ollama run codellama:7b REST API调用 # 生成文本 curl http://localhost:11434/api/generate -d &#39;{ &#34;model&#34;: &#34;llama2&#34;, &#34;prompt&#34;: &#34;写一个Python函数计算斐波那契数列&#34; }&#39; # 创建模型实例 curl http://localhost:11434/api/create -d &#39;{ &#34;model&#34;: &#34;my-model&#34;, &#34;modelfile&#34;: &#34;FROM llama2\nPARAMETER temperature 0.8&#34; }&#39; 模型微调 创建自定义模型 # 基于现有模型创建新模型 ollama create my-llama -f ./Modelfile # Modelfile示例 echo &#34;FROM llama2 PARAMETER temperature 0.7 PARAMETER top_p 0.9 SYSTEM 你是一个专业的编程助手。&#34; &gt; Modelfile ollama create dev-assistant -f Modelfile 模型量化 # 使用更小的量化版本节省内存 ollama pull llama2:7b-chat-q4_0 ollama pull codellama:13b-code-q4_0 性能优化 内存管理 # 查看模型状态 ollama ps # 停止运行中的模型 ollama stop model-name # 删除模型释放空间 ollama rm model-name GPU加速 # 如果有CUDA支持的GPU OLLAMA_USE_CUDA=1 ollama run llama2 # 查看GPU使用情况 nvidia-smi 实际应用案例 代码编写助手 # 启动专用编程助手 ollama run codellama:7b &#34;帮我写一个Python函数，接收一个列表，返回所有元素的平均值&#34; 文档生成 # 生成项目文档 ollama run llama2 &#34;为这个Python项目生成README文档&#34; 学习助手 # 解释技术概念 ollama run llama2 &#34;解释什么是递归算法，并给出一个Python示例&#34; 最佳实践 选择合适的模型：根据硬件配置选择模型大小 合理使用参数：调整temperature和top_p获得最佳效果 定期更新：关注新模型发布，及时更新 备份模型：重要模型建议备份模型文件 监控资源：注意内存和磁盘使用情况 相关资源 Ollama官网 GitHub仓库 模型库">
+
+    <meta property="og:url" content="http://localhost:1313/post/useollama/">
+  <meta property="og:site_name" content="Yaku Makki">
+  <meta property="og:title" content="使用Ollama本地部署大语言模型">
+  <meta property="og:description" content="使用Ollama本地部署大语言模型 最近开始研究大语言模型，发现Ollama是一个非常好用的本地部署工具。
+什么是Ollama？ Ollama是一个开源的大语言模型运行时，支持多种主流的开源模型。本地化部署的优势在于：
+隐私保护：数据完全在本地处理 无网络依赖：离线环境下也能使用 免费使用：不需要API费用 自定义配置：可以根据硬件调整参数 安装Ollama Linux安装 我的发行版是Arch Linux，所以我使用pacman安装：
+# 安装Ollama sudo pacman -S ollama 对于基于Debian的发行版，你可以使用apt安装：
+# 安装Ollama sudo apt install ollama 而像Fedora这样的发行版，你可以使用dnf安装：
+# 安装Ollama sudo dnf install ollama 并且我们可以使用官方脚本安装Ollama：
+# 使用官方脚本安装 curl -fsSL https://ollama.ai/install.sh | sh Docker安装 # 运行Ollama服务 docker run -d -v ollama:/root/.ollama -p 11434:11434 --name ollama ollama/ollama # 进入容器 docker exec -it ollama ollama 常用模型 Llama 2系列 # 下载7B参数版本 ollama pull llama2 # 下载13B参数版本 ollama pull llama2:13b # 下载70B参数版本（需要足够内存） ollama pull llama2:70b Code Llama # 专门用于代码的模型 ollama pull codellama # 不同参数版本 ollama pull codellama:7b ollama pull codellama:13b ollama pull codellama:34b 其他模型 # Vicuna模型 ollama pull vicuna # Orca Mini模型 ollama pull orca-mini 基本使用 命令行交互 # 启动交互式对话 ollama run llama2 # 或者指定具体模型 ollama run codellama:7b REST API调用 # 生成文本 curl http://localhost:11434/api/generate -d &#39;{ &#34;model&#34;: &#34;llama2&#34;, &#34;prompt&#34;: &#34;写一个Python函数计算斐波那契数列&#34; }&#39; # 创建模型实例 curl http://localhost:11434/api/create -d &#39;{ &#34;model&#34;: &#34;my-model&#34;, &#34;modelfile&#34;: &#34;FROM llama2\nPARAMETER temperature 0.8&#34; }&#39; 模型微调 创建自定义模型 # 基于现有模型创建新模型 ollama create my-llama -f ./Modelfile # Modelfile示例 echo &#34;FROM llama2 PARAMETER temperature 0.7 PARAMETER top_p 0.9 SYSTEM 你是一个专业的编程助手。&#34; &gt; Modelfile ollama create dev-assistant -f Modelfile 模型量化 # 使用更小的量化版本节省内存 ollama pull llama2:7b-chat-q4_0 ollama pull codellama:13b-code-q4_0 性能优化 内存管理 # 查看模型状态 ollama ps # 停止运行中的模型 ollama stop model-name # 删除模型释放空间 ollama rm model-name GPU加速 # 如果有CUDA支持的GPU OLLAMA_USE_CUDA=1 ollama run llama2 # 查看GPU使用情况 nvidia-smi 实际应用案例 代码编写助手 # 启动专用编程助手 ollama run codellama:7b &#34;帮我写一个Python函数，接收一个列表，返回所有元素的平均值&#34; 文档生成 # 生成项目文档 ollama run llama2 &#34;为这个Python项目生成README文档&#34; 学习助手 # 解释技术概念 ollama run llama2 &#34;解释什么是递归算法，并给出一个Python示例&#34; 最佳实践 选择合适的模型：根据硬件配置选择模型大小 合理使用参数：调整temperature和top_p获得最佳效果 定期更新：关注新模型发布，及时更新 备份模型：重要模型建议备份模型文件 监控资源：注意内存和磁盘使用情况 相关资源 Ollama官网 GitHub仓库 模型库">
+  <meta property="og:locale" content="zh">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="post">
+    <meta property="article:published_time" content="2025-10-10T11:42:47+08:00">
+    <meta property="article:modified_time" content="2025-10-10T11:42:47+08:00">
+    <meta property="article:tag" content="AI">
+    <meta property="article:tag" content="工具">
+    <meta property="article:tag" content="教程">
+
+
+  </head>
+  <body class="synthwave-bg">
+    <header class="app-header glass-morphism neon-border">
+      <a href="/"><img class="app-header-avatar" src="/assets/avatar/avatar.jpg" alt="Yaku Makki" /></a>
+      <span class="app-header-title gradient-text">Yaku Makki</span>
+      <nav class="app-header-menu">
+          <a class="app-header-menu-item" href="/">首页</a>
+             | 
+          
+          <a class="app-header-menu-item" href="/post/">博客</a>
+             | 
+          
+          <a class="app-header-menu-item" href="/wiki/">维基</a>
+             | 
+          
+          <a class="app-header-menu-item" href="/tags/">标签</a>
+             | 
+          
+          <a class="app-header-menu-item" href="/about/">关于</a>
+      </nav>
+      <p>个人小巢</p>
+      <div class="app-header-social">
+        
+          <a href="https://github.com/makkichan947" target="_blank" rel="noreferrer noopener me" class="pulse-glow">
+            <svg class="icon icon-brand-github" viewBox="0 0 24 24" fill="currentColor"><title>GitHub</title><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg>
+          </a>
+        
+          <a href="mailto:yakumakki947@hotmail.com" target="_blank" rel="noreferrer noopener me" class="pulse-glow">
+            <svg class="icon icon-mail" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><title>mail</title><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
+          </a>
+        
+          <a href="https://x.com/Makki_Yaku947" target="_blank" rel="noreferrer noopener me" class="pulse-glow">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-link">
+  <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path>
+  <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path>
+</svg>
+          </a>
+        
+          <a href="https://www.twitch.tv/u/makkichan947" target="_blank" rel="noreferrer noopener me" class="pulse-glow">
+            <svg class="icon icon-brand-twitch" viewBox="0 0 24 24" fill="currentColor"><title>Twitch</title><path d="M11.571 4.714h1.715v5.143H11.57zm4.715 0H18v5.143h-1.714zM6 0L1.714 4.286v15.428h5.143V24l4.286-4.286h3.428L22.286 12V0zm14.571 11.143l-3.428 3.428h-3.429l-3 3v-3H6.857V1.714h13.714Z"/></svg>
+          </a>
+        
+      </div>
+    </header>
+    <main class="app-container glass-morphism glow-effect">
+      <div class="floating-particles">
+        <div class="particle" style="left: 10%; animation-delay: 0s;"></div>
+        <div class="particle" style="left: 20%; animation-delay: 1s;"></div>
+        <div class="particle" style="left: 30%; animation-delay: 2s;"></div>
+        <div class="particle" style="left: 40%; animation-delay: 3s;"></div>
+        <div class="particle" style="left: 50%; animation-delay: 4s;"></div>
+        <div class="particle" style="left: 60%; animation-delay: 5s;"></div>
+        <div class="particle" style="left: 70%; animation-delay: 6s;"></div>
+        <div class="particle" style="left: 80%; animation-delay: 7s;"></div>
+        <div class="particle" style="left: 90%; animation-delay: 8s;"></div>
+      </div>
+      
+  <article class="post enhanced-card glow-effect">
+    <header class="post-header">
+      <h1 class ="post-title gradient-text">使用Ollama本地部署大语言模型</h1>
+      <div class="post-meta">
+        <div>
+          <svg class="icon icon-calendar" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><title>calendar</title><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+          Oct 10, 2025
+        </div>
+        <div>
+          <svg class="icon icon-clock" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><title>clock</title><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+          2 min read
+        </div>
+        <div>
+          <svg class="icon icon-tag" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><title>tag</title><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"></path><line x1="7" y1="7" x2="7.01" y2="7"></line></svg>
+              <a class="tag pulse-glow" href="/tags/ai/">AI</a>
+              <a class="tag pulse-glow" href="/tags/%E5%B7%A5%E5%85%B7/">工具</a>
+              <a class="tag pulse-glow" href="/tags/%E6%95%99%E7%A8%8B/">教程</a>
+        </div>
+      </div>
+    </header>
+    <div class="post-content">
+      <h1 id="使用ollama本地部署大语言模型">使用Ollama本地部署大语言模型</h1>
+<p>最近开始研究大语言模型，发现Ollama是一个非常好用的本地部署工具。</p>
+<h2 id="什么是ollama">什么是Ollama？</h2>
+<p>Ollama是一个开源的大语言模型运行时，支持多种主流的开源模型。本地化部署的优势在于：</p>
+<ul>
+<li><strong>隐私保护</strong>：数据完全在本地处理</li>
+<li><strong>无网络依赖</strong>：离线环境下也能使用</li>
+<li><strong>免费使用</strong>：不需要API费用</li>
+<li><strong>自定义配置</strong>：可以根据硬件调整参数</li>
+</ul>
+<h2 id="安装ollama">安装Ollama</h2>
+<h3 id="linux安装">Linux安装</h3>
+<p>我的发行版是Arch Linux，所以我使用pacman安装：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># 安装Ollama</span>
+</span></span><span style="display:flex;"><span>sudo pacman -S ollama
+</span></span></code></pre></div><p>对于基于Debian的发行版，你可以使用apt安装：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># 安装Ollama</span>
+</span></span><span style="display:flex;"><span>sudo apt install ollama
+</span></span></code></pre></div><p>而像Fedora这样的发行版，你可以使用dnf安装：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># 安装Ollama</span>
+</span></span><span style="display:flex;"><span>sudo dnf install ollama
+</span></span></code></pre></div><p>并且我们可以使用官方脚本安装Ollama：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># 使用官方脚本安装</span>
+</span></span><span style="display:flex;"><span>curl -fsSL https://ollama.ai/install.sh | sh
+</span></span></code></pre></div><h3 id="docker安装">Docker安装</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># 运行Ollama服务</span>
+</span></span><span style="display:flex;"><span>docker run -d -v ollama:/root/.ollama -p 11434:11434 --name ollama ollama/ollama
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 进入容器</span>
+</span></span><span style="display:flex;"><span>docker exec -it ollama ollama
+</span></span></code></pre></div><h2 id="常用模型">常用模型</h2>
+<h3 id="llama-2系列">Llama 2系列</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># 下载7B参数版本</span>
+</span></span><span style="display:flex;"><span>ollama pull llama2
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 下载13B参数版本</span>
+</span></span><span style="display:flex;"><span>ollama pull llama2:13b
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 下载70B参数版本（需要足够内存）</span>
+</span></span><span style="display:flex;"><span>ollama pull llama2:70b
+</span></span></code></pre></div><h3 id="code-llama">Code Llama</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># 专门用于代码的模型</span>
+</span></span><span style="display:flex;"><span>ollama pull codellama
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 不同参数版本</span>
+</span></span><span style="display:flex;"><span>ollama pull codellama:7b
+</span></span><span style="display:flex;"><span>ollama pull codellama:13b
+</span></span><span style="display:flex;"><span>ollama pull codellama:34b
+</span></span></code></pre></div><h3 id="其他模型">其他模型</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># Vicuna模型</span>
+</span></span><span style="display:flex;"><span>ollama pull vicuna
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Orca Mini模型</span>
+</span></span><span style="display:flex;"><span>ollama pull orca-mini
+</span></span></code></pre></div><h2 id="基本使用">基本使用</h2>
+<h3 id="命令行交互">命令行交互</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># 启动交互式对话</span>
+</span></span><span style="display:flex;"><span>ollama run llama2
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 或者指定具体模型</span>
+</span></span><span style="display:flex;"><span>ollama run codellama:7b
+</span></span></code></pre></div><h3 id="rest-api调用">REST API调用</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># 生成文本</span>
+</span></span><span style="display:flex;"><span>curl http://localhost:11434/api/generate -d <span style="color:#e6db74">&#39;{
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">  &#34;model&#34;: &#34;llama2&#34;,
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">  &#34;prompt&#34;: &#34;写一个Python函数计算斐波那契数列&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">}&#39;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 创建模型实例</span>
+</span></span><span style="display:flex;"><span>curl http://localhost:11434/api/create -d <span style="color:#e6db74">&#39;{
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">  &#34;model&#34;: &#34;my-model&#34;,
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">  &#34;modelfile&#34;: &#34;FROM llama2\nPARAMETER temperature 0.8&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">}&#39;</span>
+</span></span></code></pre></div><h2 id="模型微调">模型微调</h2>
+<h3 id="创建自定义模型">创建自定义模型</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># 基于现有模型创建新模型</span>
+</span></span><span style="display:flex;"><span>ollama create my-llama -f ./Modelfile
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Modelfile示例</span>
+</span></span><span style="display:flex;"><span>echo <span style="color:#e6db74">&#34;FROM llama2
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">PARAMETER temperature 0.7
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">PARAMETER top_p 0.9
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">SYSTEM 你是一个专业的编程助手。&#34;</span> &gt; Modelfile
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>ollama create dev-assistant -f Modelfile
+</span></span></code></pre></div><h3 id="模型量化">模型量化</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># 使用更小的量化版本节省内存</span>
+</span></span><span style="display:flex;"><span>ollama pull llama2:7b-chat-q4_0
+</span></span><span style="display:flex;"><span>ollama pull codellama:13b-code-q4_0
+</span></span></code></pre></div><h2 id="性能优化">性能优化</h2>
+<h3 id="内存管理">内存管理</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># 查看模型状态</span>
+</span></span><span style="display:flex;"><span>ollama ps
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 停止运行中的模型</span>
+</span></span><span style="display:flex;"><span>ollama stop model-name
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 删除模型释放空间</span>
+</span></span><span style="display:flex;"><span>ollama rm model-name
+</span></span></code></pre></div><h3 id="gpu加速">GPU加速</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># 如果有CUDA支持的GPU</span>
+</span></span><span style="display:flex;"><span>OLLAMA_USE_CUDA<span style="color:#f92672">=</span><span style="color:#ae81ff">1</span> ollama run llama2
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 查看GPU使用情况</span>
+</span></span><span style="display:flex;"><span>nvidia-smi
+</span></span></code></pre></div><h2 id="实际应用案例">实际应用案例</h2>
+<h3 id="代码编写助手">代码编写助手</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># 启动专用编程助手</span>
+</span></span><span style="display:flex;"><span>ollama run codellama:7b <span style="color:#e6db74">&#34;帮我写一个Python函数，接收一个列表，返回所有元素的平均值&#34;</span>
+</span></span></code></pre></div><h3 id="文档生成">文档生成</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># 生成项目文档</span>
+</span></span><span style="display:flex;"><span>ollama run llama2 <span style="color:#e6db74">&#34;为这个Python项目生成README文档&#34;</span>
+</span></span></code></pre></div><h3 id="学习助手">学习助手</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># 解释技术概念</span>
+</span></span><span style="display:flex;"><span>ollama run llama2 <span style="color:#e6db74">&#34;解释什么是递归算法，并给出一个Python示例&#34;</span>
+</span></span></code></pre></div><h2 id="最佳实践">最佳实践</h2>
+<ol>
+<li><strong>选择合适的模型</strong>：根据硬件配置选择模型大小</li>
+<li><strong>合理使用参数</strong>：调整<code>temperature</code>和<code>top_p</code>获得最佳效果</li>
+<li><strong>定期更新</strong>：关注新模型发布，及时更新</li>
+<li><strong>备份模型</strong>：重要模型建议备份模型文件</li>
+<li><strong>监控资源</strong>：注意内存和磁盘使用情况</li>
+</ol>
+<h2 id="相关资源">相关资源</h2>
+<ul>
+<li><a href="https://ollama.ai">Ollama官网</a></li>
+<li><a href="https://github.com/jmorganca/ollama">GitHub仓库</a></li>
+<li><a href="https://ollama.ai/library">模型库</a></li>
+</ul>
+
+      
+      <div class="post-separator">------------------------------------------------------------------------</div>
+      
+    </div>
+    <div class="post-footer">
+      
+      <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+      <div class="busuanzi-container">
+        <span id="busuanzi_container_page_pv">--本文总阅读量<span id="busuanzi_value_page_pv"></span>次--</span>
+      </div>
+      
+      
+      <script src="https://utteranc.es/client.js"
+        repo="makkichan947/makkichan947.github.io"
+        issue-term="pathname"
+        label="Utterances"
+        theme="github-dark"
+        crossorigin="anonymous"
+        async>
+      </script>
+    </div>
+  </article>
+
+    </main>
+  </body>
+</html>
