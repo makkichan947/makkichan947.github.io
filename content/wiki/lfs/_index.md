@@ -1,6 +1,6 @@
 +++
 title = "Linux From Scratch (LFS)"
-date = "2025-10-19"
+date = "2025-10-10"
 description = "从零开始构建自己的Linux系统"
 weight = 1
 +++
