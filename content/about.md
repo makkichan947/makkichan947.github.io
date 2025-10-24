@@ -18,9 +18,8 @@ comments = true
 
 # 你好
 我是Yaku Makki，你可以管我叫喵帕
-一个普通的初三生，以及5年编程经验（自认为）的全栈开发者（对，对吗？）
 
-（这么写的话还是上个LinkedIn链接吧）
+一个普通的初三生，以及5年编程经验（自认为）的全栈开发者（对，对吗？）
 
 # 成分
 成分非常地复杂，多到连自己也认不出是个什么东西了：
@@ -41,7 +40,7 @@ BA牢玩家，MC生电人；40K牢兵，安东星超人；罪大恶极的P社战
 
 # 联系方式
 - QQ: 3521866332
-- Email: yakumakki947@hotmail.com/nekosparry0727@outlook.com
+- Email: [yakumakki947@hotmail.com](mailto:yakumakki947@hotmail.com)/[nekosparry0727@outlook.com](mailto:nekosparry0727@outlook.com)
 - GitHub: [RealMakkichan](https://github.com/makkichan947)
 - Twitter: [Makki_Yaku947](https://x.com/Makki_Yaku947)
 
@@ -52,12 +51,12 @@ BA牢玩家，MC生电人；40K牢兵，安东星超人；罪大恶极的P社战
 # 关于本站
 本站本来计划使用Hugo M10C，因为想自己写所以自己整了一个
 
-曾使用HTML+CSS+JS来搭建，详情见[/post/starthistory.md](/post/starthistory.md)
+曾使用HTML+CSS+JS来搭建，详情见[/post/starthistory.md](./post/starthistory.md)
 
 你可以通过输入密码来解锁下面的隐藏区域:)
 
 <!-- ===== 动态解锁开始 ===== -->
-<!-- ===== PWD:270711 ===== -->
+<!-- ===== PASSWD:270711 ===== -->
 <div id="hidden" style="display:none;"></div>
 
 <div id="locker" style="margin-top:2em;">
