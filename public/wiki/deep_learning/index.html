@@ -16,12 +16,16 @@
     
   <meta name="twitter:card" content="summary">
   <meta name="twitter:title" content="深度学习">
-  <meta name="twitter:description" content="个人小巢">
+  <meta name="twitter:description" content="深度学习 深度学习（Deep Learning）是机器学习的一个子集，使用多层神经网络来模拟人脑的学习过程。本章基于吴恩达的深度学习课程，系统地介绍深度学习的核心概念和实践方法。
+🎯 学习目标 通过本章学习，你将掌握：
+神经网络的基础原理 深度学习的核心概念 各种网络架构的设计思路 实际项目的开发经验 📚 课程结构 神经网络基础 神经元模型与感知机 前向传播与反向传播 激活函数与损失函数 梯度下降优化算法 卷积神经网络 卷积层与池化层 经典CNN架构（AlexNet、VGG、ResNet） 图像分类与目标检测 计算机视觉应用 循环神经网络 序列数据处理 LSTM与GRU机制 自然语言处理应用 时间序列预测 Transformer架构 自注意力机制 Transformer模型详解 BERT与GPT系列 大语言模型应用 实践框架 PyTorch深度学习实践 TensorFlow/Keras应用 模型训练与部署 性能优化技巧 🧮 数学基础 线性代数 向量与矩阵运算 特征值与奇异值分解 主成分分析（PCA） 概率统计 最大似然估计 贝叶斯推理 信息论基础 优化理论 梯度下降算法 动量与自适应优化 正则化技术 💻 实践项目 图像分类 MNIST手写数字识别 CIFAR-10/100图像分类 迁移学习应用 自然语言处理 文本分类与情感分析 机器翻译系统 问答系统开发 强化学习 Q-Learning算法 策略梯度方法 游戏AI开发 🔧 开发环境 推荐配置 Python 3.8&#43; PyTorch 1.12&#43; / TensorFlow 2.8&#43; CUDA 11.6&#43; (GPU加速) Jupyter Notebook/Lab 环境搭建 # 创建虚拟环境 conda create -n deeplearning python=3.9 conda activate deeplearning # 安装PyTorch pip install torch torchvision torchaudio # 或 conda install pytorch torchvision torchaudio -c pytorch # 安装其他依赖 pip install numpy pandas matplotlib scikit-learn jupyter 📖 学习资源 吴恩达深度学习课程 网易云课堂：深度学习工程师 Coursera: Deep Learning Specialization 经典教材 《深度学习》（Goodfellow, Bengio, Courville） 《神经网络与深度学习》（邱锡鹏） 《动手学深度学习》（李沐等） 在线资源 PyTorch官方文档 TensorFlow官方文档 Papers with Code 🚀 快速开始 第一个神经网络 import torch import torch.nn as nn class SimpleNet(nn.Module): def __init__(self): super(SimpleNet, self).__init__() self.fc1 = nn.Linear(784, 128) self.fc2 = nn.Linear(128, 10) self.relu = nn.ReLU() def forward(self, x): x = self.relu(self.fc1(x)) x = self.fc2(x) return x 模型训练 # 损失函数和优化器 criterion = nn.CrossEntropyLoss() optimizer = torch.optim.Adam(model.parameters(), lr=0.001) # 训练循环 for epoch in range(num_epochs): for data, target in dataloader: optimizer.zero_grad() output = model(data) loss = criterion(output, target) loss.backward() optimizer.step() 🎨 应用领域 计算机视觉 图像分类与识别 目标检测与跟踪 图像生成与风格迁移 医学图像分析 自然语言处理 机器翻译 文本生成 情感分析 问答系统 语音识别 语音转文本 语音合成 声纹识别 多语言语音处理 强化学习 游戏AI 机器人控制 自动驾驶 推荐系统 💡 学习建议 深度学习是一门理论与实践并重的学科，多动手实践才能真正掌握。">
 
     <meta property="og:url" content="http://localhost:1313/wiki/deep_learning/">
   <meta property="og:site_name" content="Yaku Makki">
   <meta property="og:title" content="深度学习">
-  <meta property="og:description" content="个人小巢">
+  <meta property="og:description" content="深度学习 深度学习（Deep Learning）是机器学习的一个子集，使用多层神经网络来模拟人脑的学习过程。本章基于吴恩达的深度学习课程，系统地介绍深度学习的核心概念和实践方法。
+🎯 学习目标 通过本章学习，你将掌握：
+神经网络的基础原理 深度学习的核心概念 各种网络架构的设计思路 实际项目的开发经验 📚 课程结构 神经网络基础 神经元模型与感知机 前向传播与反向传播 激活函数与损失函数 梯度下降优化算法 卷积神经网络 卷积层与池化层 经典CNN架构（AlexNet、VGG、ResNet） 图像分类与目标检测 计算机视觉应用 循环神经网络 序列数据处理 LSTM与GRU机制 自然语言处理应用 时间序列预测 Transformer架构 自注意力机制 Transformer模型详解 BERT与GPT系列 大语言模型应用 实践框架 PyTorch深度学习实践 TensorFlow/Keras应用 模型训练与部署 性能优化技巧 🧮 数学基础 线性代数 向量与矩阵运算 特征值与奇异值分解 主成分分析（PCA） 概率统计 最大似然估计 贝叶斯推理 信息论基础 优化理论 梯度下降算法 动量与自适应优化 正则化技术 💻 实践项目 图像分类 MNIST手写数字识别 CIFAR-10/100图像分类 迁移学习应用 自然语言处理 文本分类与情感分析 机器翻译系统 问答系统开发 强化学习 Q-Learning算法 策略梯度方法 游戏AI开发 🔧 开发环境 推荐配置 Python 3.8&#43; PyTorch 1.12&#43; / TensorFlow 2.8&#43; CUDA 11.6&#43; (GPU加速) Jupyter Notebook/Lab 环境搭建 # 创建虚拟环境 conda create -n deeplearning python=3.9 conda activate deeplearning # 安装PyTorch pip install torch torchvision torchaudio # 或 conda install pytorch torchvision torchaudio -c pytorch # 安装其他依赖 pip install numpy pandas matplotlib scikit-learn jupyter 📖 学习资源 吴恩达深度学习课程 网易云课堂：深度学习工程师 Coursera: Deep Learning Specialization 经典教材 《深度学习》（Goodfellow, Bengio, Courville） 《神经网络与深度学习》（邱锡鹏） 《动手学深度学习》（李沐等） 在线资源 PyTorch官方文档 TensorFlow官方文档 Papers with Code 🚀 快速开始 第一个神经网络 import torch import torch.nn as nn class SimpleNet(nn.Module): def __init__(self): super(SimpleNet, self).__init__() self.fc1 = nn.Linear(784, 128) self.fc2 = nn.Linear(128, 10) self.relu = nn.ReLU() def forward(self, x): x = self.relu(self.fc1(x)) x = self.fc2(x) return x 模型训练 # 损失函数和优化器 criterion = nn.CrossEntropyLoss() optimizer = torch.optim.Adam(model.parameters(), lr=0.001) # 训练循环 for epoch in range(num_epochs): for data, target in dataloader: optimizer.zero_grad() output = model(data) loss = criterion(output, target) loss.backward() optimizer.step() 🎨 应用领域 计算机视觉 图像分类与识别 目标检测与跟踪 图像生成与风格迁移 医学图像分析 自然语言处理 机器翻译 文本生成 情感分析 问答系统 语音识别 语音转文本 语音合成 声纹识别 多语言语音处理 强化学习 游戏AI 机器人控制 自动驾驶 推荐系统 💡 学习建议 深度学习是一门理论与实践并重的学科，多动手实践才能真正掌握。">
   <meta property="og:locale" content="zh">
   <meta property="og:type" content="website">
 
@@ -85,7 +89,206 @@
       
   <article class="enhanced-card glow-effect">
     <h1 class="gradient-text">深度学习</h1>
-    
+    <div class="post-content"><h1 id="深度学习">深度学习</h1>
+<p>深度学习（Deep Learning）是机器学习的一个子集，使用多层神经网络来模拟人脑的学习过程。本章基于吴恩达的深度学习课程，系统地介绍深度学习的核心概念和实践方法。</p>
+<h2 id="-学习目标">🎯 学习目标</h2>
+<p>通过本章学习，你将掌握：</p>
+<ul>
+<li>神经网络的基础原理</li>
+<li>深度学习的核心概念</li>
+<li>各种网络架构的设计思路</li>
+<li>实际项目的开发经验</li>
+</ul>
+<h2 id="-课程结构">📚 课程结构</h2>
+<h3 id="神经网络基础"><a href="./neural-networks/">神经网络基础</a></h3>
+<ul>
+<li>神经元模型与感知机</li>
+<li>前向传播与反向传播</li>
+<li>激活函数与损失函数</li>
+<li>梯度下降优化算法</li>
+</ul>
+<h3 id="卷积神经网络"><a href="./cnn/">卷积神经网络</a></h3>
+<ul>
+<li>卷积层与池化层</li>
+<li>经典CNN架构（AlexNet、VGG、ResNet）</li>
+<li>图像分类与目标检测</li>
+<li>计算机视觉应用</li>
+</ul>
+<h3 id="循环神经网络"><a href="./rnn/">循环神经网络</a></h3>
+<ul>
+<li>序列数据处理</li>
+<li>LSTM与GRU机制</li>
+<li>自然语言处理应用</li>
+<li>时间序列预测</li>
+</ul>
+<h3 id="transformer架构"><a href="./transformer/">Transformer架构</a></h3>
+<ul>
+<li>自注意力机制</li>
+<li>Transformer模型详解</li>
+<li>BERT与GPT系列</li>
+<li>大语言模型应用</li>
+</ul>
+<h3 id="实践框架"><a href="./frameworks/">实践框架</a></h3>
+<ul>
+<li>PyTorch深度学习实践</li>
+<li>TensorFlow/Keras应用</li>
+<li>模型训练与部署</li>
+<li>性能优化技巧</li>
+</ul>
+<h2 id="-数学基础">🧮 数学基础</h2>
+<h3 id="线性代数">线性代数</h3>
+<ul>
+<li>向量与矩阵运算</li>
+<li>特征值与奇异值分解</li>
+<li>主成分分析（PCA）</li>
+</ul>
+<h3 id="概率统计">概率统计</h3>
+<ul>
+<li>最大似然估计</li>
+<li>贝叶斯推理</li>
+<li>信息论基础</li>
+</ul>
+<h3 id="优化理论">优化理论</h3>
+<ul>
+<li>梯度下降算法</li>
+<li>动量与自适应优化</li>
+<li>正则化技术</li>
+</ul>
+<h2 id="-实践项目">💻 实践项目</h2>
+<h3 id="图像分类">图像分类</h3>
+<ul>
+<li>MNIST手写数字识别</li>
+<li>CIFAR-10/100图像分类</li>
+<li>迁移学习应用</li>
+</ul>
+<h3 id="自然语言处理">自然语言处理</h3>
+<ul>
+<li>文本分类与情感分析</li>
+<li>机器翻译系统</li>
+<li>问答系统开发</li>
+</ul>
+<h3 id="强化学习">强化学习</h3>
+<ul>
+<li>Q-Learning算法</li>
+<li>策略梯度方法</li>
+<li>游戏AI开发</li>
+</ul>
+<h2 id="-开发环境">🔧 开发环境</h2>
+<h3 id="推荐配置">推荐配置</h3>
+<ul>
+<li>Python 3.8+</li>
+<li>PyTorch 1.12+ / TensorFlow 2.8+</li>
+<li>CUDA 11.6+ (GPU加速)</li>
+<li>Jupyter Notebook/Lab</li>
+</ul>
+<h3 id="环境搭建">环境搭建</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># 创建虚拟环境</span>
+</span></span><span style="display:flex;"><span>conda create -n deeplearning python<span style="color:#f92672">=</span>3.9
+</span></span><span style="display:flex;"><span>conda activate deeplearning
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 安装PyTorch</span>
+</span></span><span style="display:flex;"><span>pip install torch torchvision torchaudio
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 或 conda install pytorch torchvision torchaudio -c pytorch</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 安装其他依赖</span>
+</span></span><span style="display:flex;"><span>pip install numpy pandas matplotlib scikit-learn jupyter
+</span></span></code></pre></div><h2 id="-学习资源">📖 学习资源</h2>
+<h3 id="吴恩达深度学习课程">吴恩达深度学习课程</h3>
+<ul>
+<li><a href="https://mooc.study.163.com/university/deeplearning">网易云课堂：深度学习工程师</a></li>
+<li><a href="https://www.coursera.org/specializations/deep-learning">Coursera: Deep Learning Specialization</a></li>
+</ul>
+<h3 id="经典教材">经典教材</h3>
+<ul>
+<li>《深度学习》（Goodfellow, Bengio, Courville）</li>
+<li>《神经网络与深度学习》（邱锡鹏）</li>
+<li>《动手学深度学习》（李沐等）</li>
+</ul>
+<h3 id="在线资源">在线资源</h3>
+<ul>
+<li><a href="https://pytorch.org/docs/">PyTorch官方文档</a></li>
+<li><a href="https://www.tensorflow.org/api_docs">TensorFlow官方文档</a></li>
+<li><a href="https://paperswithcode.com/">Papers with Code</a></li>
+</ul>
+<h2 id="-快速开始">🚀 快速开始</h2>
+<h3 id="第一个神经网络">第一个神经网络</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#f92672">import</span> torch
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> torch.nn <span style="color:#66d9ef">as</span> nn
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">SimpleNet</span>(nn<span style="color:#f92672">.</span>Module):
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">__init__</span>(self):
+</span></span><span style="display:flex;"><span>        super(SimpleNet, self)<span style="color:#f92672">.</span><span style="color:#a6e22e">__init__</span>()
+</span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>fc1 <span style="color:#f92672">=</span> nn<span style="color:#f92672">.</span>Linear(<span style="color:#ae81ff">784</span>, <span style="color:#ae81ff">128</span>)
+</span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>fc2 <span style="color:#f92672">=</span> nn<span style="color:#f92672">.</span>Linear(<span style="color:#ae81ff">128</span>, <span style="color:#ae81ff">10</span>)
+</span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>relu <span style="color:#f92672">=</span> nn<span style="color:#f92672">.</span>ReLU()
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">forward</span>(self, x):
+</span></span><span style="display:flex;"><span>        x <span style="color:#f92672">=</span> self<span style="color:#f92672">.</span>relu(self<span style="color:#f92672">.</span>fc1(x))
+</span></span><span style="display:flex;"><span>        x <span style="color:#f92672">=</span> self<span style="color:#f92672">.</span>fc2(x)
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> x
+</span></span></code></pre></div><h3 id="模型训练">模型训练</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#75715e"># 损失函数和优化器</span>
+</span></span><span style="display:flex;"><span>criterion <span style="color:#f92672">=</span> nn<span style="color:#f92672">.</span>CrossEntropyLoss()
+</span></span><span style="display:flex;"><span>optimizer <span style="color:#f92672">=</span> torch<span style="color:#f92672">.</span>optim<span style="color:#f92672">.</span>Adam(model<span style="color:#f92672">.</span>parameters(), lr<span style="color:#f92672">=</span><span style="color:#ae81ff">0.001</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 训练循环</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">for</span> epoch <span style="color:#f92672">in</span> range(num_epochs):
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">for</span> data, target <span style="color:#f92672">in</span> dataloader:
+</span></span><span style="display:flex;"><span>        optimizer<span style="color:#f92672">.</span>zero_grad()
+</span></span><span style="display:flex;"><span>        output <span style="color:#f92672">=</span> model(data)
+</span></span><span style="display:flex;"><span>        loss <span style="color:#f92672">=</span> criterion(output, target)
+</span></span><span style="display:flex;"><span>        loss<span style="color:#f92672">.</span>backward()
+</span></span><span style="display:flex;"><span>        optimizer<span style="color:#f92672">.</span>step()
+</span></span></code></pre></div><h2 id="-应用领域">🎨 应用领域</h2>
+<h3 id="计算机视觉">计算机视觉</h3>
+<ul>
+<li>图像分类与识别</li>
+<li>目标检测与跟踪</li>
+<li>图像生成与风格迁移</li>
+<li>医学图像分析</li>
+</ul>
+<h3 id="自然语言处理-1">自然语言处理</h3>
+<ul>
+<li>机器翻译</li>
+<li>文本生成</li>
+<li>情感分析</li>
+<li>问答系统</li>
+</ul>
+<h3 id="语音识别">语音识别</h3>
+<ul>
+<li>语音转文本</li>
+<li>语音合成</li>
+<li>声纹识别</li>
+<li>多语言语音处理</li>
+</ul>
+<h3 id="强化学习-1">强化学习</h3>
+<ul>
+<li>游戏AI</li>
+<li>机器人控制</li>
+<li>自动驾驶</li>
+<li>推荐系统</li>
+</ul>
+<h2 id="-学习建议">💡 学习建议</h2>
+<blockquote>
+<p>深度学习是一门理论与实践并重的学科，多动手实践才能真正掌握。</p></blockquote>
+<h3 id="学习路径">学习路径</h3>
+<ol>
+<li><strong>数学基础</strong>：线性代数、概率统计、优化理论</li>
+<li><strong>编程基础</strong>：Python、NumPy、Pandas</li>
+<li><strong>框架学习</strong>：PyTorch或TensorFlow</li>
+<li><strong>项目实践</strong>：从简单分类开始，逐步深入</li>
+<li><strong>论文阅读</strong>：关注最新研究进展</li>
+</ol>
+<h3 id="实践技巧">实践技巧</h3>
+<ul>
+<li>从经典数据集开始（MNIST、CIFAR-10）</li>
+<li>理解模型的输入输出</li>
+<li>学会调试和可视化</li>
+<li>关注模型的泛化能力</li>
+</ul>
+<hr>
+<p><em>最近更新: {{ .Lastmod.Format &ldquo;2006-01-02&rdquo; }}</em></p>
+</div>
     <ul class="posts-list">
       
     </ul>
