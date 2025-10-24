@@ -1,5 +1,5 @@
 +++
-date = '2025-10-24T20:10:09+08:00'
+date = '2025-10-19T20:10:09+08:00'
 draft = false
 title = '神经网络基础'
 comments = true
