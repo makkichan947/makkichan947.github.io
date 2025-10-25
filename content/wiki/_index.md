@@ -1,6 +1,6 @@
 +++
 title = "维基"
-date = "2025-10-18"
+date = "2025-10-04T18:15:00+08:00"
 description = "技术维基，包含操作系统、工具使用等内容"
 +++
 
@@ -10,14 +10,18 @@ description = "技术维基，包含操作系统、工具使用等内容"
 
 ## 📚 分类
 
-### [操作系统开发 (OSDev)](./osdev/)
-- **M4KK1操作系统**：我的个人操作系统项目
-- **Linux From Scratch (LFS)**：从零构建Linux系统
+### 操作系统开发 (OSDev)
+- **[M4KK1操作系统](./m4kk1/)**：我的个人操作系统项目
+- **[Linux From Scratch (LFS)](./lfs/)**：从零构建Linux系统
 
 ### [密码学 (Cryptography)](./cryptography/)
 - 从凯撒密码到现代加密算法
 - 密码学数学原理详解
 - 加密算法实现与分析
+
+### [深度学习 (Deep Learning)](./deep_learning/)
+- 深度学习基础概念
+- 常用深度学习框架介绍
 
 ### [技术博客](/post/)
 - 个人技术分享

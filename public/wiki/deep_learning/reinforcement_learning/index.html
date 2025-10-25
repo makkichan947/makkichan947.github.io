@@ -1,0 +1,935 @@
+<!doctype html>
+<html lang="zh">
+  <head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+    <title>强化学习 // Yaku Makki</title>
+    <link rel="shortcut icon" href="./assets/avatar/avatar.jpg" />
+    <meta charset="utf-8" />
+    <meta name="generator" content="Hugo 0.151.2">
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="author" content="Yaku Makki" />
+    <meta name="description" content="" />
+    <link rel="stylesheet" href="/css/main.min.422840b4454cb211f5b3dab61f082cdff508e88825173c31806835cb75529734.css" />
+    
+
+    
+    
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="强化学习">
+  <meta name="twitter:description" content="强化学习 强化学习（Reinforcement Learning, RL）是机器学习的一个重要分支，通过智能体与环境的交互来学习最优策略，在游戏AI、机器人控制、自动驾驶等领域取得了显著成就。
+🎯 强化学习基础 马尔可夫决策过程 (MDP) 强化学习的核心框架是马尔可夫决策过程：
+MDP包含的元素：
+状态空间 S：环境可能的所有状态 动作空间 A：智能体可以执行的所有动作 奖励函数 R(s,a)：从状态s执行动作a后获得的奖励 状态转移概率 P(s’|s,a)：从状态s执行动作a后转移到状态s’的概率 折扣因子 γ：未来奖励的衰减因子 MDP的目标： 找到一个策略π(a|s)，使得从初始状态开始的累积折扣奖励最大化： $$\pi^* = \arg\max_\pi \mathbb{E}[\sum_{t=0}^\infty \gamma^t R(s_t, a_t)]$$
+强化学习组成 智能体 (Agent)：
+观察环境状态 选择和执行动作 接收奖励信号 学习最优策略 环境 (Environment)：
+接收智能体的动作 转移到新状态 提供奖励信号 提供状态观察 🏗️ 强化学习算法 Q-Learning算法 Q-Learning是最经典的基于值函数的强化学习算法：
+import numpy as np import random class QLearningAgent: def __init__(self, state_size, action_size, learning_rate=0.1, gamma=0.95, epsilon=1.0): self.state_size = state_size self.action_size = action_size self.learning_rate = learning_rate self.gamma = gamma # 折扣因子 self.epsilon = epsilon # 探索率 self.epsilon_min = 0.01 self.epsilon_decay = 0.995 # Q表：状态-动作值函数 self.q_table = np.zeros((state_size, action_size)) def choose_action(self, state): &#34;&#34;&#34;ε-贪心策略选择动作&#34;&#34;&#34; if random.uniform(0, 1) &lt; self.epsilon: return random.randint(0, self.action_size - 1) # 探索 else: return np.argmax(self.q_table[state]) # 利用 def learn(self, state, action, reward, next_state, done): &#34;&#34;&#34;Q-Learning更新&#34;&#34;&#34; # 当前Q值 current_q = self.q_table[state, action] # 目标Q值 if done: target_q = reward else: target_q = reward &#43; self.gamma * np.max(self.q_table[next_state]) # Q值更新 self.q_table[state, action] &#43;= self.learning_rate * (target_q - current_q) # 衰减探索率 if self.epsilon &gt; self.epsilon_min: self.epsilon *= self.epsilon_decay # 使用Q-Learning env = gym.make(&#39;FrozenLake-v1&#39;) state_size = env.observation_space.n action_size = env.action_space.n agent = QLearningAgent(state_size, action_size) # 训练 episodes = 1000 for episode in range(episodes): state = env.reset() done = False total_reward = 0 while not done: action = agent.choose_action(state) next_state, reward, done, _ = env.step(action) agent.learn(state, action, reward, next_state, done) state = next_state total_reward &#43;= reward if episode % 100 == 0: print(f&#34;Episode: {episode}, Total Reward: {total_reward}&#34;) 深度Q网络 (DQN) DQN使用深度神经网络来近似Q函数：">
+
+    <meta property="og:url" content="http://localhost:1313/wiki/deep_learning/reinforcement_learning/">
+  <meta property="og:site_name" content="Yaku Makki">
+  <meta property="og:title" content="强化学习">
+  <meta property="og:description" content="强化学习 强化学习（Reinforcement Learning, RL）是机器学习的一个重要分支，通过智能体与环境的交互来学习最优策略，在游戏AI、机器人控制、自动驾驶等领域取得了显著成就。
+🎯 强化学习基础 马尔可夫决策过程 (MDP) 强化学习的核心框架是马尔可夫决策过程：
+MDP包含的元素：
+状态空间 S：环境可能的所有状态 动作空间 A：智能体可以执行的所有动作 奖励函数 R(s,a)：从状态s执行动作a后获得的奖励 状态转移概率 P(s’|s,a)：从状态s执行动作a后转移到状态s’的概率 折扣因子 γ：未来奖励的衰减因子 MDP的目标： 找到一个策略π(a|s)，使得从初始状态开始的累积折扣奖励最大化： $$\pi^* = \arg\max_\pi \mathbb{E}[\sum_{t=0}^\infty \gamma^t R(s_t, a_t)]$$
+强化学习组成 智能体 (Agent)：
+观察环境状态 选择和执行动作 接收奖励信号 学习最优策略 环境 (Environment)：
+接收智能体的动作 转移到新状态 提供奖励信号 提供状态观察 🏗️ 强化学习算法 Q-Learning算法 Q-Learning是最经典的基于值函数的强化学习算法：
+import numpy as np import random class QLearningAgent: def __init__(self, state_size, action_size, learning_rate=0.1, gamma=0.95, epsilon=1.0): self.state_size = state_size self.action_size = action_size self.learning_rate = learning_rate self.gamma = gamma # 折扣因子 self.epsilon = epsilon # 探索率 self.epsilon_min = 0.01 self.epsilon_decay = 0.995 # Q表：状态-动作值函数 self.q_table = np.zeros((state_size, action_size)) def choose_action(self, state): &#34;&#34;&#34;ε-贪心策略选择动作&#34;&#34;&#34; if random.uniform(0, 1) &lt; self.epsilon: return random.randint(0, self.action_size - 1) # 探索 else: return np.argmax(self.q_table[state]) # 利用 def learn(self, state, action, reward, next_state, done): &#34;&#34;&#34;Q-Learning更新&#34;&#34;&#34; # 当前Q值 current_q = self.q_table[state, action] # 目标Q值 if done: target_q = reward else: target_q = reward &#43; self.gamma * np.max(self.q_table[next_state]) # Q值更新 self.q_table[state, action] &#43;= self.learning_rate * (target_q - current_q) # 衰减探索率 if self.epsilon &gt; self.epsilon_min: self.epsilon *= self.epsilon_decay # 使用Q-Learning env = gym.make(&#39;FrozenLake-v1&#39;) state_size = env.observation_space.n action_size = env.action_space.n agent = QLearningAgent(state_size, action_size) # 训练 episodes = 1000 for episode in range(episodes): state = env.reset() done = False total_reward = 0 while not done: action = agent.choose_action(state) next_state, reward, done, _ = env.step(action) agent.learn(state, action, reward, next_state, done) state = next_state total_reward &#43;= reward if episode % 100 == 0: print(f&#34;Episode: {episode}, Total Reward: {total_reward}&#34;) 深度Q网络 (DQN) DQN使用深度神经网络来近似Q函数：">
+  <meta property="og:locale" content="zh">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="wiki">
+    <meta property="article:published_time" content="2025-10-25T10:00:00+08:00">
+    <meta property="article:modified_time" content="2025-10-25T10:00:00+08:00">
+
+
+  </head>
+  <body class="synthwave-bg">
+    <header class="app-header glass-morphism neon-border">
+      <a href="/"><img class="app-header-avatar" src="/assets/avatar/avatar.jpg" alt="Yaku Makki" /></a>
+      <span class="app-header-title gradient-text">Yaku Makki</span>
+      <nav class="app-header-menu">
+          <a class="app-header-menu-item" href="/">首页</a>
+             | 
+          
+          <a class="app-header-menu-item" href="/post/">博客</a>
+             | 
+          
+          <a class="app-header-menu-item" href="/wiki/">维基</a>
+             | 
+          
+          <a class="app-header-menu-item" href="/tags/">标签</a>
+             | 
+          
+          <a class="app-header-menu-item" href="/about/">关于</a>
+      </nav>
+      <p>个人小巢</p>
+      <div class="app-header-social">
+        
+          <a href="https://github.com/makkichan947" target="_blank" rel="noreferrer noopener me" class="pulse-glow">
+            <svg class="icon icon-brand-github" viewBox="0 0 24 24" fill="currentColor"><title>GitHub</title><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg>
+          </a>
+        
+          <a href="mailto:yakumakki947@hotmail.com" target="_blank" rel="noreferrer noopener me" class="pulse-glow">
+            <svg class="icon icon-mail" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><title>mail</title><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
+          </a>
+        
+          <a href="https://x.com/Makki_Yaku947" target="_blank" rel="noreferrer noopener me" class="pulse-glow">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-link">
+  <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path>
+  <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path>
+</svg>
+          </a>
+        
+          <a href="https://www.twitch.tv/u/makkichan947" target="_blank" rel="noreferrer noopener me" class="pulse-glow">
+            <svg class="icon icon-brand-twitch" viewBox="0 0 24 24" fill="currentColor"><title>Twitch</title><path d="M11.571 4.714h1.715v5.143H11.57zm4.715 0H18v5.143h-1.714zM6 0L1.714 4.286v15.428h5.143V24l4.286-4.286h3.428L22.286 12V0zm14.571 11.143l-3.428 3.428h-3.429l-3 3v-3H6.857V1.714h13.714Z"/></svg>
+          </a>
+        
+      </div>
+    </header>
+    <main class="app-container glass-morphism glow-effect">
+      <div class="floating-particles">
+        <div class="particle" style="left: 10%; animation-delay: 0s;"></div>
+        <div class="particle" style="left: 20%; animation-delay: 1s;"></div>
+        <div class="particle" style="left: 30%; animation-delay: 2s;"></div>
+        <div class="particle" style="left: 40%; animation-delay: 3s;"></div>
+        <div class="particle" style="left: 50%; animation-delay: 4s;"></div>
+        <div class="particle" style="left: 60%; animation-delay: 5s;"></div>
+        <div class="particle" style="left: 70%; animation-delay: 6s;"></div>
+        <div class="particle" style="left: 80%; animation-delay: 7s;"></div>
+        <div class="particle" style="left: 90%; animation-delay: 8s;"></div>
+      </div>
+      
+  <article class="post enhanced-card glow-effect">
+    <header class="post-header">
+      <h1 class ="post-title gradient-text">强化学习</h1>
+      <div class="post-meta">
+        <div>
+          <svg class="icon icon-calendar" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><title>calendar</title><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+          Oct 25, 2025
+        </div>
+        <div>
+          <svg class="icon icon-clock" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><title>clock</title><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+          9 min read
+        </div>
+      </div>
+    </header>
+    <div class="post-content">
+      <h1 id="强化学习">强化学习</h1>
+<p>强化学习（Reinforcement Learning, RL）是机器学习的一个重要分支，通过智能体与环境的交互来学习最优策略，在游戏AI、机器人控制、自动驾驶等领域取得了显著成就。</p>
+<h2 id="-强化学习基础">🎯 强化学习基础</h2>
+<h3 id="马尔可夫决策过程-mdp">马尔可夫决策过程 (MDP)</h3>
+<p>强化学习的核心框架是马尔可夫决策过程：</p>
+<p><strong>MDP包含的元素</strong>：</p>
+<ul>
+<li><strong>状态空间 S</strong>：环境可能的所有状态</li>
+<li><strong>动作空间 A</strong>：智能体可以执行的所有动作</li>
+<li><strong>奖励函数 R(s,a)</strong>：从状态s执行动作a后获得的奖励</li>
+<li><strong>状态转移概率 P(s&rsquo;|s,a)</strong>：从状态s执行动作a后转移到状态s&rsquo;的概率</li>
+<li><strong>折扣因子 γ</strong>：未来奖励的衰减因子</li>
+</ul>
+<p><strong>MDP的目标</strong>：
+找到一个策略π(a|s)，使得从初始状态开始的累积折扣奖励最大化：
+$$\pi^* = \arg\max_\pi \mathbb{E}[\sum_{t=0}^\infty \gamma^t R(s_t, a_t)]$$</p>
+<h3 id="强化学习组成">强化学习组成</h3>
+<p><strong>智能体 (Agent)</strong>：</p>
+<ul>
+<li>观察环境状态</li>
+<li>选择和执行动作</li>
+<li>接收奖励信号</li>
+<li>学习最优策略</li>
+</ul>
+<p><strong>环境 (Environment)</strong>：</p>
+<ul>
+<li>接收智能体的动作</li>
+<li>转移到新状态</li>
+<li>提供奖励信号</li>
+<li>提供状态观察</li>
+</ul>
+<h2 id="-强化学习算法">🏗️ 强化学习算法</h2>
+<h3 id="q-learning算法">Q-Learning算法</h3>
+<p><strong>Q-Learning</strong>是最经典的基于值函数的强化学习算法：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#f92672">import</span> numpy <span style="color:#66d9ef">as</span> np
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> random
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">QLearningAgent</span>:
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">__init__</span>(self, state_size, action_size, learning_rate<span style="color:#f92672">=</span><span style="color:#ae81ff">0.1</span>, gamma<span style="color:#f92672">=</span><span style="color:#ae81ff">0.95</span>, epsilon<span style="color:#f92672">=</span><span style="color:#ae81ff">1.0</span>):
+</span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>state_size <span style="color:#f92672">=</span> state_size
+</span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>action_size <span style="color:#f92672">=</span> action_size
+</span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>learning_rate <span style="color:#f92672">=</span> learning_rate
+</span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>gamma <span style="color:#f92672">=</span> gamma  <span style="color:#75715e"># 折扣因子</span>
+</span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>epsilon <span style="color:#f92672">=</span> epsilon  <span style="color:#75715e"># 探索率</span>
+</span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>epsilon_min <span style="color:#f92672">=</span> <span style="color:#ae81ff">0.01</span>
+</span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>epsilon_decay <span style="color:#f92672">=</span> <span style="color:#ae81ff">0.995</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e"># Q表：状态-动作值函数</span>
+</span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>q_table <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>zeros((state_size, action_size))
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">choose_action</span>(self, state):
+</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#34;&#34;&#34;ε-贪心策略选择动作&#34;&#34;&#34;</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> random<span style="color:#f92672">.</span>uniform(<span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">1</span>) <span style="color:#f92672">&lt;</span> self<span style="color:#f92672">.</span>epsilon:
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">return</span> random<span style="color:#f92672">.</span>randint(<span style="color:#ae81ff">0</span>, self<span style="color:#f92672">.</span>action_size <span style="color:#f92672">-</span> <span style="color:#ae81ff">1</span>)  <span style="color:#75715e"># 探索</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">else</span>:
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">return</span> np<span style="color:#f92672">.</span>argmax(self<span style="color:#f92672">.</span>q_table[state])  <span style="color:#75715e"># 利用</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">learn</span>(self, state, action, reward, next_state, done):
+</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#34;&#34;&#34;Q-Learning更新&#34;&#34;&#34;</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e"># 当前Q值</span>
+</span></span><span style="display:flex;"><span>        current_q <span style="color:#f92672">=</span> self<span style="color:#f92672">.</span>q_table[state, action]
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e"># 目标Q值</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> done:
+</span></span><span style="display:flex;"><span>            target_q <span style="color:#f92672">=</span> reward
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">else</span>:
+</span></span><span style="display:flex;"><span>            target_q <span style="color:#f92672">=</span> reward <span style="color:#f92672">+</span> self<span style="color:#f92672">.</span>gamma <span style="color:#f92672">*</span> np<span style="color:#f92672">.</span>max(self<span style="color:#f92672">.</span>q_table[next_state])
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e"># Q值更新</span>
+</span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>q_table[state, action] <span style="color:#f92672">+=</span> self<span style="color:#f92672">.</span>learning_rate <span style="color:#f92672">*</span> (target_q <span style="color:#f92672">-</span> current_q)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e"># 衰减探索率</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> self<span style="color:#f92672">.</span>epsilon <span style="color:#f92672">&gt;</span> self<span style="color:#f92672">.</span>epsilon_min:
+</span></span><span style="display:flex;"><span>            self<span style="color:#f92672">.</span>epsilon <span style="color:#f92672">*=</span> self<span style="color:#f92672">.</span>epsilon_decay
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 使用Q-Learning</span>
+</span></span><span style="display:flex;"><span>env <span style="color:#f92672">=</span> gym<span style="color:#f92672">.</span>make(<span style="color:#e6db74">&#39;FrozenLake-v1&#39;</span>)
+</span></span><span style="display:flex;"><span>state_size <span style="color:#f92672">=</span> env<span style="color:#f92672">.</span>observation_space<span style="color:#f92672">.</span>n
+</span></span><span style="display:flex;"><span>action_size <span style="color:#f92672">=</span> env<span style="color:#f92672">.</span>action_space<span style="color:#f92672">.</span>n
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>agent <span style="color:#f92672">=</span> QLearningAgent(state_size, action_size)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 训练</span>
+</span></span><span style="display:flex;"><span>episodes <span style="color:#f92672">=</span> <span style="color:#ae81ff">1000</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">for</span> episode <span style="color:#f92672">in</span> range(episodes):
+</span></span><span style="display:flex;"><span>    state <span style="color:#f92672">=</span> env<span style="color:#f92672">.</span>reset()
+</span></span><span style="display:flex;"><span>    done <span style="color:#f92672">=</span> <span style="color:#66d9ef">False</span>
+</span></span><span style="display:flex;"><span>    total_reward <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">while</span> <span style="color:#f92672">not</span> done:
+</span></span><span style="display:flex;"><span>        action <span style="color:#f92672">=</span> agent<span style="color:#f92672">.</span>choose_action(state)
+</span></span><span style="display:flex;"><span>        next_state, reward, done, _ <span style="color:#f92672">=</span> env<span style="color:#f92672">.</span>step(action)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        agent<span style="color:#f92672">.</span>learn(state, action, reward, next_state, done)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        state <span style="color:#f92672">=</span> next_state
+</span></span><span style="display:flex;"><span>        total_reward <span style="color:#f92672">+=</span> reward
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> episode <span style="color:#f92672">%</span> <span style="color:#ae81ff">100</span> <span style="color:#f92672">==</span> <span style="color:#ae81ff">0</span>:
+</span></span><span style="display:flex;"><span>        print(<span style="color:#e6db74">f</span><span style="color:#e6db74">&#34;Episode: </span><span style="color:#e6db74">{</span>episode<span style="color:#e6db74">}</span><span style="color:#e6db74">, Total Reward: </span><span style="color:#e6db74">{</span>total_reward<span style="color:#e6db74">}</span><span style="color:#e6db74">&#34;</span>)
+</span></span></code></pre></div><h3 id="深度q网络-dqn">深度Q网络 (DQN)</h3>
+<p><strong>DQN</strong>使用深度神经网络来近似Q函数：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#f92672">import</span> tensorflow <span style="color:#66d9ef">as</span> tf
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> numpy <span style="color:#66d9ef">as</span> np
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> random
+</span></span><span style="display:flex;"><span><span style="color:#f92672">from</span> collections <span style="color:#f92672">import</span> deque
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">DQNAgent</span>:
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">__init__</span>(self, state_size, action_size):
+</span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>state_size <span style="color:#f92672">=</span> state_size
+</span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>action_size <span style="color:#f92672">=</span> action_size
+</span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>memory <span style="color:#f92672">=</span> deque(maxlen<span style="color:#f92672">=</span><span style="color:#ae81ff">2000</span>)
+</span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>gamma <span style="color:#f92672">=</span> <span style="color:#ae81ff">0.95</span>
+</span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>epsilon <span style="color:#f92672">=</span> <span style="color:#ae81ff">1.0</span>
+</span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>epsilon_min <span style="color:#f92672">=</span> <span style="color:#ae81ff">0.01</span>
+</span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>epsilon_decay <span style="color:#f92672">=</span> <span style="color:#ae81ff">0.995</span>
+</span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>learning_rate <span style="color:#f92672">=</span> <span style="color:#ae81ff">0.001</span>
+</span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>batch_size <span style="color:#f92672">=</span> <span style="color:#ae81ff">32</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>model <span style="color:#f92672">=</span> self<span style="color:#f92672">.</span>_build_model()
+</span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>target_model <span style="color:#f92672">=</span> self<span style="color:#f92672">.</span>_build_model()
+</span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>update_target_model()
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">_build_model</span>(self):
+</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#34;&#34;&#34;构建DQN网络&#34;&#34;&#34;</span>
+</span></span><span style="display:flex;"><span>        model <span style="color:#f92672">=</span> tf<span style="color:#f92672">.</span>keras<span style="color:#f92672">.</span>Sequential([
+</span></span><span style="display:flex;"><span>            tf<span style="color:#f92672">.</span>keras<span style="color:#f92672">.</span>layers<span style="color:#f92672">.</span>Dense(<span style="color:#ae81ff">24</span>, input_dim<span style="color:#f92672">=</span>self<span style="color:#f92672">.</span>state_size, activation<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;relu&#39;</span>),
+</span></span><span style="display:flex;"><span>            tf<span style="color:#f92672">.</span>keras<span style="color:#f92672">.</span>layers<span style="color:#f92672">.</span>Dense(<span style="color:#ae81ff">24</span>, activation<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;relu&#39;</span>),
+</span></span><span style="display:flex;"><span>            tf<span style="color:#f92672">.</span>keras<span style="color:#f92672">.</span>layers<span style="color:#f92672">.</span>Dense(self<span style="color:#f92672">.</span>action_size, activation<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;linear&#39;</span>)
+</span></span><span style="display:flex;"><span>        ])
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        model<span style="color:#f92672">.</span>compile(
+</span></span><span style="display:flex;"><span>            optimizer<span style="color:#f92672">=</span>tf<span style="color:#f92672">.</span>keras<span style="color:#f92672">.</span>optimizers<span style="color:#f92672">.</span>Adam(learning_rate<span style="color:#f92672">=</span>self<span style="color:#f92672">.</span>learning_rate),
+</span></span><span style="display:flex;"><span>            loss<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;mse&#39;</span>
+</span></span><span style="display:flex;"><span>        )
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> model
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">update_target_model</span>(self):
+</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#34;&#34;&#34;更新目标网络&#34;&#34;&#34;</span>
+</span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>target_model<span style="color:#f92672">.</span>set_weights(self<span style="color:#f92672">.</span>model<span style="color:#f92672">.</span>get_weights())
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">remember</span>(self, state, action, reward, next_state, done):
+</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#34;&#34;&#34;存储经验&#34;&#34;&#34;</span>
+</span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>memory<span style="color:#f92672">.</span>append((state, action, reward, next_state, done))
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">choose_action</span>(self, state):
+</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#34;&#34;&#34;ε-贪心策略&#34;&#34;&#34;</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> np<span style="color:#f92672">.</span>random<span style="color:#f92672">.</span>rand() <span style="color:#f92672">&lt;=</span> self<span style="color:#f92672">.</span>epsilon:
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">return</span> random<span style="color:#f92672">.</span>randrange(self<span style="color:#f92672">.</span>action_size)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        act_values <span style="color:#f92672">=</span> self<span style="color:#f92672">.</span>model<span style="color:#f92672">.</span>predict(state, verbose<span style="color:#f92672">=</span><span style="color:#ae81ff">0</span>)
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> np<span style="color:#f92672">.</span>argmax(act_values[<span style="color:#ae81ff">0</span>])
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">replay</span>(self):
+</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#34;&#34;&#34;经验回放&#34;&#34;&#34;</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> len(self<span style="color:#f92672">.</span>memory) <span style="color:#f92672">&lt;</span> self<span style="color:#f92672">.</span>batch_size:
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">return</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        minibatch <span style="color:#f92672">=</span> random<span style="color:#f92672">.</span>sample(self<span style="color:#f92672">.</span>memory, self<span style="color:#f92672">.</span>batch_size)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">for</span> state, action, reward, next_state, done <span style="color:#f92672">in</span> minibatch:
+</span></span><span style="display:flex;"><span>            target <span style="color:#f92672">=</span> self<span style="color:#f92672">.</span>model<span style="color:#f92672">.</span>predict(state, verbose<span style="color:#f92672">=</span><span style="color:#ae81ff">0</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">if</span> done:
+</span></span><span style="display:flex;"><span>                target[<span style="color:#ae81ff">0</span>][action] <span style="color:#f92672">=</span> reward
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">else</span>:
+</span></span><span style="display:flex;"><span>                t <span style="color:#f92672">=</span> self<span style="color:#f92672">.</span>target_model<span style="color:#f92672">.</span>predict(next_state, verbose<span style="color:#f92672">=</span><span style="color:#ae81ff">0</span>)
+</span></span><span style="display:flex;"><span>                target[<span style="color:#ae81ff">0</span>][action] <span style="color:#f92672">=</span> reward <span style="color:#f92672">+</span> self<span style="color:#f92672">.</span>gamma <span style="color:#f92672">*</span> np<span style="color:#f92672">.</span>amax(t[<span style="color:#ae81ff">0</span>])
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>            self<span style="color:#f92672">.</span>model<span style="color:#f92672">.</span>fit(state, target, epochs<span style="color:#f92672">=</span><span style="color:#ae81ff">1</span>, verbose<span style="color:#f92672">=</span><span style="color:#ae81ff">0</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> self<span style="color:#f92672">.</span>epsilon <span style="color:#f92672">&gt;</span> self<span style="color:#f92672">.</span>epsilon_min:
+</span></span><span style="display:flex;"><span>            self<span style="color:#f92672">.</span>epsilon <span style="color:#f92672">*=</span> self<span style="color:#f92672">.</span>epsilon_decay
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 使用DQN</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> gym
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>env <span style="color:#f92672">=</span> gym<span style="color:#f92672">.</span>make(<span style="color:#e6db74">&#39;CartPole-v1&#39;</span>)
+</span></span><span style="display:flex;"><span>state_size <span style="color:#f92672">=</span> env<span style="color:#f92672">.</span>observation_space<span style="color:#f92672">.</span>shape[<span style="color:#ae81ff">0</span>]
+</span></span><span style="display:flex;"><span>action_size <span style="color:#f92672">=</span> env<span style="color:#f92672">.</span>action_space<span style="color:#f92672">.</span>n
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>agent <span style="color:#f92672">=</span> DQNAgent(state_size, action_size)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 训练</span>
+</span></span><span style="display:flex;"><span>episodes <span style="color:#f92672">=</span> <span style="color:#ae81ff">1000</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">for</span> e <span style="color:#f92672">in</span> range(episodes):
+</span></span><span style="display:flex;"><span>    state <span style="color:#f92672">=</span> env<span style="color:#f92672">.</span>reset()
+</span></span><span style="display:flex;"><span>    state <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>reshape(state, [<span style="color:#ae81ff">1</span>, state_size])
+</span></span><span style="display:flex;"><span>    total_reward <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">for</span> time <span style="color:#f92672">in</span> range(<span style="color:#ae81ff">500</span>):
+</span></span><span style="display:flex;"><span>        action <span style="color:#f92672">=</span> agent<span style="color:#f92672">.</span>choose_action(state)
+</span></span><span style="display:flex;"><span>        next_state, reward, done, _ <span style="color:#f92672">=</span> env<span style="color:#f92672">.</span>step(action)
+</span></span><span style="display:flex;"><span>        next_state <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>reshape(next_state, [<span style="color:#ae81ff">1</span>, state_size])
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        agent<span style="color:#f92672">.</span>remember(state, action, reward, next_state, done)
+</span></span><span style="display:flex;"><span>        agent<span style="color:#f92672">.</span>replay()
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        state <span style="color:#f92672">=</span> next_state
+</span></span><span style="display:flex;"><span>        total_reward <span style="color:#f92672">+=</span> reward
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> done:
+</span></span><span style="display:flex;"><span>            agent<span style="color:#f92672">.</span>update_target_model()
+</span></span><span style="display:flex;"><span>            print(<span style="color:#e6db74">f</span><span style="color:#e6db74">&#34;Episode: </span><span style="color:#e6db74">{</span>e<span style="color:#e6db74">}</span><span style="color:#e6db74">, Score: </span><span style="color:#e6db74">{</span>total_reward<span style="color:#e6db74">}</span><span style="color:#e6db74">&#34;</span>)
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">break</span>
+</span></span></code></pre></div><h3 id="策略梯度方法">策略梯度方法</h3>
+<p><strong>REINFORCE算法</strong>：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">REINFORCEAgent</span>:
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">__init__</span>(self, state_size, action_size, learning_rate<span style="color:#f92672">=</span><span style="color:#ae81ff">0.01</span>, gamma<span style="color:#f92672">=</span><span style="color:#ae81ff">0.99</span>):
+</span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>state_size <span style="color:#f92672">=</span> state_size
+</span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>action_size <span style="color:#f92672">=</span> action_size
+</span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>learning_rate <span style="color:#f92672">=</span> learning_rate
+</span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>gamma <span style="color:#f92672">=</span> gamma
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>model <span style="color:#f92672">=</span> self<span style="color:#f92672">.</span>_build_model()
+</span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>optimizer <span style="color:#f92672">=</span> tf<span style="color:#f92672">.</span>keras<span style="color:#f92672">.</span>optimizers<span style="color:#f92672">.</span>Adam(learning_rate<span style="color:#f92672">=</span>self<span style="color:#f92672">.</span>learning_rate)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">_build_model</span>(self):
+</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#34;&#34;&#34;构建策略网络&#34;&#34;&#34;</span>
+</span></span><span style="display:flex;"><span>        model <span style="color:#f92672">=</span> tf<span style="color:#f92672">.</span>keras<span style="color:#f92672">.</span>Sequential([
+</span></span><span style="display:flex;"><span>            tf<span style="color:#f92672">.</span>keras<span style="color:#f92672">.</span>layers<span style="color:#f92672">.</span>Dense(<span style="color:#ae81ff">24</span>, input_dim<span style="color:#f92672">=</span>self<span style="color:#f92672">.</span>state_size, activation<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;relu&#39;</span>),
+</span></span><span style="display:flex;"><span>            tf<span style="color:#f92672">.</span>keras<span style="color:#f92672">.</span>layers<span style="color:#f92672">.</span>Dense(<span style="color:#ae81ff">24</span>, activation<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;relu&#39;</span>),
+</span></span><span style="display:flex;"><span>            tf<span style="color:#f92672">.</span>keras<span style="color:#f92672">.</span>layers<span style="color:#f92672">.</span>Dense(self<span style="color:#f92672">.</span>action_size, activation<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;softmax&#39;</span>)
+</span></span><span style="display:flex;"><span>        ])
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> model
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">choose_action</span>(self, state):
+</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#34;&#34;&#34;根据策略选择动作&#34;&#34;&#34;</span>
+</span></span><span style="display:flex;"><span>        state <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>reshape(state, [<span style="color:#ae81ff">1</span>, self<span style="color:#f92672">.</span>state_size])
+</span></span><span style="display:flex;"><span>        probs <span style="color:#f92672">=</span> self<span style="color:#f92672">.</span>model<span style="color:#f92672">.</span>predict(state, verbose<span style="color:#f92672">=</span><span style="color:#ae81ff">0</span>)[<span style="color:#ae81ff">0</span>]
+</span></span><span style="display:flex;"><span>        action <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>random<span style="color:#f92672">.</span>choice(self<span style="color:#f92672">.</span>action_size, p<span style="color:#f92672">=</span>probs)
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> action, probs
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">learn</span>(self, states, actions, rewards):
+</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#34;&#34;&#34;REINFORCE学习&#34;&#34;&#34;</span>
+</span></span><span style="display:flex;"><span>        discounted_rewards <span style="color:#f92672">=</span> self<span style="color:#f92672">.</span>_discount_rewards(rewards)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">with</span> tf<span style="color:#f92672">.</span>GradientTape() <span style="color:#66d9ef">as</span> tape:
+</span></span><span style="display:flex;"><span>            <span style="color:#75715e"># 计算策略概率</span>
+</span></span><span style="display:flex;"><span>            states <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>array(states)
+</span></span><span style="display:flex;"><span>            probs <span style="color:#f92672">=</span> self<span style="color:#f92672">.</span>model(states)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>            <span style="color:#75715e"># 选择对应动作的概率</span>
+</span></span><span style="display:flex;"><span>            action_probs <span style="color:#f92672">=</span> tf<span style="color:#f92672">.</span>gather(probs, actions, axis<span style="color:#f92672">=</span><span style="color:#ae81ff">1</span>, batch_dims<span style="color:#f92672">=</span><span style="color:#ae81ff">1</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>            <span style="color:#75715e"># 计算损失（负对数似然）</span>
+</span></span><span style="display:flex;"><span>            loss <span style="color:#f92672">=</span> <span style="color:#f92672">-</span>tf<span style="color:#f92672">.</span>reduce_mean(tf<span style="color:#f92672">.</span>math<span style="color:#f92672">.</span>log(action_probs) <span style="color:#f92672">*</span> discounted_rewards)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e"># 计算梯度并更新</span>
+</span></span><span style="display:flex;"><span>        gradients <span style="color:#f92672">=</span> tape<span style="color:#f92672">.</span>gradient(loss, self<span style="color:#f92672">.</span>model<span style="color:#f92672">.</span>trainable_variables)
+</span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>optimizer<span style="color:#f92672">.</span>apply_gradients(zip(gradients, self<span style="color:#f92672">.</span>model<span style="color:#f92672">.</span>trainable_variables))
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> loss<span style="color:#f92672">.</span>numpy()
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">_discount_rewards</span>(self, rewards):
+</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#34;&#34;&#34;计算折扣奖励&#34;&#34;&#34;</span>
+</span></span><span style="display:flex;"><span>        discounted_rewards <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>zeros_like(rewards, dtype<span style="color:#f92672">=</span>np<span style="color:#f92672">.</span>float32)
+</span></span><span style="display:flex;"><span>        running_sum <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">for</span> i <span style="color:#f92672">in</span> reversed(range(len(rewards))):
+</span></span><span style="display:flex;"><span>            running_sum <span style="color:#f92672">=</span> running_sum <span style="color:#f92672">*</span> self<span style="color:#f92672">.</span>gamma <span style="color:#f92672">+</span> rewards[i]
+</span></span><span style="display:flex;"><span>            discounted_rewards[i] <span style="color:#f92672">=</span> running_sum
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e"># 标准化</span>
+</span></span><span style="display:flex;"><span>        discounted_rewards <span style="color:#f92672">-=</span> np<span style="color:#f92672">.</span>mean(discounted_rewards)
+</span></span><span style="display:flex;"><span>        discounted_rewards <span style="color:#f92672">/=</span> np<span style="color:#f92672">.</span>std(discounted_rewards) <span style="color:#f92672">+</span> <span style="color:#ae81ff">1e-8</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> discounted_rewards
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 使用REINFORCE</span>
+</span></span><span style="display:flex;"><span>agent <span style="color:#f92672">=</span> REINFORCEAgent(state_size, action_size)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 训练</span>
+</span></span><span style="display:flex;"><span>episodes <span style="color:#f92672">=</span> <span style="color:#ae81ff">1000</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">for</span> episode <span style="color:#f92672">in</span> range(episodes):
+</span></span><span style="display:flex;"><span>    states <span style="color:#f92672">=</span> []
+</span></span><span style="display:flex;"><span>    actions <span style="color:#f92672">=</span> []
+</span></span><span style="display:flex;"><span>    rewards <span style="color:#f92672">=</span> []
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    state <span style="color:#f92672">=</span> env<span style="color:#f92672">.</span>reset()
+</span></span><span style="display:flex;"><span>    done <span style="color:#f92672">=</span> <span style="color:#66d9ef">False</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">while</span> <span style="color:#f92672">not</span> done:
+</span></span><span style="display:flex;"><span>        action, prob <span style="color:#f92672">=</span> agent<span style="color:#f92672">.</span>choose_action(state)
+</span></span><span style="display:flex;"><span>        next_state, reward, done, _ <span style="color:#f92672">=</span> env<span style="color:#f92672">.</span>step(action)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        states<span style="color:#f92672">.</span>append(state)
+</span></span><span style="display:flex;"><span>        actions<span style="color:#f92672">.</span>append(action)
+</span></span><span style="display:flex;"><span>        rewards<span style="color:#f92672">.</span>append(reward)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        state <span style="color:#f92672">=</span> next_state
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    loss <span style="color:#f92672">=</span> agent<span style="color:#f92672">.</span>learn(states, actions, rewards)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> episode <span style="color:#f92672">%</span> <span style="color:#ae81ff">100</span> <span style="color:#f92672">==</span> <span style="color:#ae81ff">0</span>:
+</span></span><span style="display:flex;"><span>        print(<span style="color:#e6db74">f</span><span style="color:#e6db74">&#34;Episode: </span><span style="color:#e6db74">{</span>episode<span style="color:#e6db74">}</span><span style="color:#e6db74">, Loss: </span><span style="color:#e6db74">{</span>loss<span style="color:#e6db74">:</span><span style="color:#e6db74">.4f</span><span style="color:#e6db74">}</span><span style="color:#e6db74">&#34;</span>)
+</span></span></code></pre></div><h2 id="-高级强化学习算法">🎮 高级强化学习算法</h2>
+<h3 id="actor-critic方法">Actor-Critic方法</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">ActorCriticAgent</span>:
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">__init__</span>(self, state_size, action_size, learning_rate<span style="color:#f92672">=</span><span style="color:#ae81ff">0.001</span>):
+</span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>state_size <span style="color:#f92672">=</span> state_size
+</span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>action_size <span style="color:#f92672">=</span> action_size
+</span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>learning_rate <span style="color:#f92672">=</span> learning_rate
+</span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>gamma <span style="color:#f92672">=</span> <span style="color:#ae81ff">0.99</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e"># Actor网络（策略）</span>
+</span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>actor <span style="color:#f92672">=</span> self<span style="color:#f92672">.</span>_build_actor()
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e"># Critic网络（价值）</span>
+</span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>critic <span style="color:#f92672">=</span> self<span style="color:#f92672">.</span>_build_critic()
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>actor_optimizer <span style="color:#f92672">=</span> tf<span style="color:#f92672">.</span>keras<span style="color:#f92672">.</span>optimizers<span style="color:#f92672">.</span>Adam(learning_rate<span style="color:#f92672">=</span>self<span style="color:#f92672">.</span>learning_rate)
+</span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>critic_optimizer <span style="color:#f92672">=</span> tf<span style="color:#f92672">.</span>keras<span style="color:#f92672">.</span>optimizers<span style="color:#f92672">.</span>Adam(learning_rate<span style="color:#f92672">=</span>self<span style="color:#f92672">.</span>learning_rate)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">_build_actor</span>(self):
+</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#34;&#34;&#34;构建Actor网络&#34;&#34;&#34;</span>
+</span></span><span style="display:flex;"><span>        inputs <span style="color:#f92672">=</span> tf<span style="color:#f92672">.</span>keras<span style="color:#f92672">.</span>Input(shape<span style="color:#f92672">=</span>(self<span style="color:#f92672">.</span>state_size,))
+</span></span><span style="display:flex;"><span>        x <span style="color:#f92672">=</span> tf<span style="color:#f92672">.</span>keras<span style="color:#f92672">.</span>layers<span style="color:#f92672">.</span>Dense(<span style="color:#ae81ff">24</span>, activation<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;relu&#39;</span>)(inputs)
+</span></span><span style="display:flex;"><span>        x <span style="color:#f92672">=</span> tf<span style="color:#f92672">.</span>keras<span style="color:#f92672">.</span>layers<span style="color:#f92672">.</span>Dense(<span style="color:#ae81ff">24</span>, activation<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;relu&#39;</span>)(x)
+</span></span><span style="display:flex;"><span>        outputs <span style="color:#f92672">=</span> tf<span style="color:#f92672">.</span>keras<span style="color:#f92672">.</span>layers<span style="color:#f92672">.</span>Dense(self<span style="color:#f92672">.</span>action_size, activation<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;softmax&#39;</span>)(x)
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> tf<span style="color:#f92672">.</span>keras<span style="color:#f92672">.</span>Model(inputs<span style="color:#f92672">=</span>inputs, outputs<span style="color:#f92672">=</span>outputs)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">_build_critic</span>(self):
+</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#34;&#34;&#34;构建Critic网络&#34;&#34;&#34;</span>
+</span></span><span style="display:flex;"><span>        inputs <span style="color:#f92672">=</span> tf<span style="color:#f92672">.</span>keras<span style="color:#f92672">.</span>Input(shape<span style="color:#f92672">=</span>(self<span style="color:#f92672">.</span>state_size,))
+</span></span><span style="display:flex;"><span>        x <span style="color:#f92672">=</span> tf<span style="color:#f92672">.</span>keras<span style="color:#f92672">.</span>layers<span style="color:#f92672">.</span>Dense(<span style="color:#ae81ff">24</span>, activation<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;relu&#39;</span>)(inputs)
+</span></span><span style="display:flex;"><span>        x <span style="color:#f92672">=</span> tf<span style="color:#f92672">.</span>keras<span style="color:#f92672">.</span>layers<span style="color:#f92672">.</span>Dense(<span style="color:#ae81ff">24</span>, activation<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;relu&#39;</span>)(x)
+</span></span><span style="display:flex;"><span>        outputs <span style="color:#f92672">=</span> tf<span style="color:#f92672">.</span>keras<span style="color:#f92672">.</span>layers<span style="color:#f92672">.</span>Dense(<span style="color:#ae81ff">1</span>)(x)
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> tf<span style="color:#f92672">.</span>keras<span style="color:#f92672">.</span>Model(inputs<span style="color:#f92672">=</span>inputs, outputs<span style="color:#f92672">=</span>outputs)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">choose_action</span>(self, state):
+</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#34;&#34;&#34;选择动作&#34;&#34;&#34;</span>
+</span></span><span style="display:flex;"><span>        state <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>reshape(state, [<span style="color:#ae81ff">1</span>, self<span style="color:#f92672">.</span>state_size])
+</span></span><span style="display:flex;"><span>        probs <span style="color:#f92672">=</span> self<span style="color:#f92672">.</span>actor<span style="color:#f92672">.</span>predict(state, verbose<span style="color:#f92672">=</span><span style="color:#ae81ff">0</span>)[<span style="color:#ae81ff">0</span>]
+</span></span><span style="display:flex;"><span>        action <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>random<span style="color:#f92672">.</span>choice(self<span style="color:#f92672">.</span>action_size, p<span style="color:#f92672">=</span>probs)
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> action, probs
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">learn</span>(self, state, action, reward, next_state, done):
+</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#34;&#34;&#34;Actor-Critic学习&#34;&#34;&#34;</span>
+</span></span><span style="display:flex;"><span>        state <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>reshape(state, [<span style="color:#ae81ff">1</span>, self<span style="color:#f92672">.</span>state_size])
+</span></span><span style="display:flex;"><span>        next_state <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>reshape(next_state, [<span style="color:#ae81ff">1</span>, self<span style="color:#f92672">.</span>state_size])
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e"># Critic更新</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">with</span> tf<span style="color:#f92672">.</span>GradientTape() <span style="color:#66d9ef">as</span> tape:
+</span></span><span style="display:flex;"><span>            value <span style="color:#f92672">=</span> self<span style="color:#f92672">.</span>critic(state)
+</span></span><span style="display:flex;"><span>            next_value <span style="color:#f92672">=</span> self<span style="color:#f92672">.</span>critic(next_state) <span style="color:#66d9ef">if</span> <span style="color:#f92672">not</span> done <span style="color:#66d9ef">else</span> <span style="color:#ae81ff">0</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>            target <span style="color:#f92672">=</span> reward <span style="color:#f92672">+</span> self<span style="color:#f92672">.</span>gamma <span style="color:#f92672">*</span> next_value
+</span></span><span style="display:flex;"><span>            critic_loss <span style="color:#f92672">=</span> tf<span style="color:#f92672">.</span>reduce_mean(tf<span style="color:#f92672">.</span>square(target <span style="color:#f92672">-</span> value))
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        critic_grads <span style="color:#f92672">=</span> tape<span style="color:#f92672">.</span>gradient(critic_loss, self<span style="color:#f92672">.</span>critic<span style="color:#f92672">.</span>trainable_variables)
+</span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>critic_optimizer<span style="color:#f92672">.</span>apply_gradients(zip(critic_grads, self<span style="color:#f92672">.</span>critic<span style="color:#f92672">.</span>trainable_variables))
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e"># Actor更新</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">with</span> tf<span style="color:#f92672">.</span>GradientTape() <span style="color:#66d9ef">as</span> tape:
+</span></span><span style="display:flex;"><span>            probs <span style="color:#f92672">=</span> self<span style="color:#f92672">.</span>actor(state)
+</span></span><span style="display:flex;"><span>            action_prob <span style="color:#f92672">=</span> probs[<span style="color:#ae81ff">0</span>][action]
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>            advantage <span style="color:#f92672">=</span> target <span style="color:#f92672">-</span> value
+</span></span><span style="display:flex;"><span>            actor_loss <span style="color:#f92672">=</span> <span style="color:#f92672">-</span>tf<span style="color:#f92672">.</span>math<span style="color:#f92672">.</span>log(action_prob) <span style="color:#f92672">*</span> advantage
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        actor_grads <span style="color:#f92672">=</span> tape<span style="color:#f92672">.</span>gradient(actor_loss, self<span style="color:#f92672">.</span>actor<span style="color:#f92672">.</span>trainable_variables)
+</span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>actor_optimizer<span style="color:#f92672">.</span>apply_gradients(zip(actor_grads, self<span style="color:#f92672">.</span>actor<span style="color:#f92672">.</span>trainable_variables))
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> critic_loss<span style="color:#f92672">.</span>numpy(), actor_loss<span style="color:#f92672">.</span>numpy()
+</span></span></code></pre></div><h3 id="近端策略优化-ppo">近端策略优化 (PPO)</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">PPOAgent</span>:
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">__init__</span>(self, state_size, action_size, clip_ratio<span style="color:#f92672">=</span><span style="color:#ae81ff">0.2</span>):
+</span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>state_size <span style="color:#f92672">=</span> state_size
+</span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>action_size <span style="color:#f92672">=</span> action_size
+</span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>clip_ratio <span style="color:#f92672">=</span> clip_ratio
+</span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>gamma <span style="color:#f92672">=</span> <span style="color:#ae81ff">0.99</span>
+</span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>learning_rate <span style="color:#f92672">=</span> <span style="color:#ae81ff">0.0003</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>actor <span style="color:#f92672">=</span> self<span style="color:#f92672">.</span>_build_actor()
+</span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>critic <span style="color:#f92672">=</span> self<span style="color:#f92672">.</span>_build_critic()
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>actor_optimizer <span style="color:#f92672">=</span> tf<span style="color:#f92672">.</span>keras<span style="color:#f92672">.</span>optimizers<span style="color:#f92672">.</span>Adam(learning_rate<span style="color:#f92672">=</span>self<span style="color:#f92672">.</span>learning_rate)
+</span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>critic_optimizer <span style="color:#f92672">=</span> tf<span style="color:#f92672">.</span>keras<span style="color:#f92672">.</span>optimizers<span style="color:#f92672">.</span>Adam(learning_rate<span style="color:#f92672">=</span>self<span style="color:#f92672">.</span>learning_rate)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">_build_actor</span>(self):
+</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#34;&#34;&#34;构建Actor网络&#34;&#34;&#34;</span>
+</span></span><span style="display:flex;"><span>        inputs <span style="color:#f92672">=</span> tf<span style="color:#f92672">.</span>keras<span style="color:#f92672">.</span>Input(shape<span style="color:#f92672">=</span>(self<span style="color:#f92672">.</span>state_size,))
+</span></span><span style="display:flex;"><span>        x <span style="color:#f92672">=</span> tf<span style="color:#f92672">.</span>keras<span style="color:#f92672">.</span>layers<span style="color:#f92672">.</span>Dense(<span style="color:#ae81ff">64</span>, activation<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;relu&#39;</span>)(inputs)
+</span></span><span style="display:flex;"><span>        x <span style="color:#f92672">=</span> tf<span style="color:#f92672">.</span>keras<span style="color:#f92672">.</span>layers<span style="color:#f92672">.</span>Dense(<span style="color:#ae81ff">64</span>, activation<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;relu&#39;</span>)(x)
+</span></span><span style="display:flex;"><span>        outputs <span style="color:#f92672">=</span> tf<span style="color:#f92672">.</span>keras<span style="color:#f92672">.</span>layers<span style="color:#f92672">.</span>Dense(self<span style="color:#f92672">.</span>action_size, activation<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;softmax&#39;</span>)(x)
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> tf<span style="color:#f92672">.</span>keras<span style="color:#f92672">.</span>Model(inputs<span style="color:#f92672">=</span>inputs, outputs<span style="color:#f92672">=</span>outputs)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">_build_critic</span>(self):
+</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#34;&#34;&#34;构建Critic网络&#34;&#34;&#34;</span>
+</span></span><span style="display:flex;"><span>        inputs <span style="color:#f92672">=</span> tf<span style="color:#f92672">.</span>keras<span style="color:#f92672">.</span>Input(shape<span style="color:#f92672">=</span>(self<span style="color:#f92672">.</span>state_size,))
+</span></span><span style="display:flex;"><span>        x <span style="color:#f92672">=</span> tf<span style="color:#f92672">.</span>keras<span style="color:#f92672">.</span>layers<span style="color:#f92672">.</span>Dense(<span style="color:#ae81ff">64</span>, activation<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;relu&#39;</span>)(inputs)
+</span></span><span style="display:flex;"><span>        x <span style="color:#f92672">=</span> tf<span style="color:#f92672">.</span>keras<span style="color:#f92672">.</span>layers<span style="color:#f92672">.</span>Dense(<span style="color:#ae81ff">64</span>, activation<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;relu&#39;</span>)(x)
+</span></span><span style="display:flex;"><span>        outputs <span style="color:#f92672">=</span> tf<span style="color:#f92672">.</span>keras<span style="color:#f92672">.</span>layers<span style="color:#f92672">.</span>Dense(<span style="color:#ae81ff">1</span>)(x)
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> tf<span style="color:#f92672">.</span>keras<span style="color:#f92672">.</span>Model(inputs<span style="color:#f92672">=</span>inputs, outputs<span style="color:#f92672">=</span>outputs)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">get_action</span>(self, state):
+</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#34;&#34;&#34;获取动作和概率&#34;&#34;&#34;</span>
+</span></span><span style="display:flex;"><span>        state <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>reshape(state, [<span style="color:#ae81ff">1</span>, self<span style="color:#f92672">.</span>state_size])
+</span></span><span style="display:flex;"><span>        probs <span style="color:#f92672">=</span> self<span style="color:#f92672">.</span>actor<span style="color:#f92672">.</span>predict(state, verbose<span style="color:#f92672">=</span><span style="color:#ae81ff">0</span>)[<span style="color:#ae81ff">0</span>]
+</span></span><span style="display:flex;"><span>        action <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>random<span style="color:#f92672">.</span>choice(self<span style="color:#f92672">.</span>action_size, p<span style="color:#f92672">=</span>probs)
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> action, probs[action]
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">compute_advantages</span>(self, rewards, values, next_values, dones):
+</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#34;&#34;&#34;计算优势函数&#34;&#34;&#34;</span>
+</span></span><span style="display:flex;"><span>        advantages <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>zeros_like(rewards)
+</span></span><span style="display:flex;"><span>        last_gae_lam <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">for</span> t <span style="color:#f92672">in</span> reversed(range(len(rewards))):
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">if</span> t <span style="color:#f92672">==</span> len(rewards) <span style="color:#f92672">-</span> <span style="color:#ae81ff">1</span>:
+</span></span><span style="display:flex;"><span>                next_non_terminal <span style="color:#f92672">=</span> <span style="color:#ae81ff">1.0</span> <span style="color:#f92672">-</span> dones[t]
+</span></span><span style="display:flex;"><span>                next_values <span style="color:#f92672">=</span> next_values[t]
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">else</span>:
+</span></span><span style="display:flex;"><span>                next_non_terminal <span style="color:#f92672">=</span> <span style="color:#ae81ff">1.0</span> <span style="color:#f92672">-</span> dones[t]
+</span></span><span style="display:flex;"><span>                next_values <span style="color:#f92672">=</span> values[t <span style="color:#f92672">+</span> <span style="color:#ae81ff">1</span>]
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>            delta <span style="color:#f92672">=</span> rewards[t] <span style="color:#f92672">+</span> self<span style="color:#f92672">.</span>gamma <span style="color:#f92672">*</span> next_values <span style="color:#f92672">*</span> next_non_terminal <span style="color:#f92672">-</span> values[t]
+</span></span><span style="display:flex;"><span>            advantages[t] <span style="color:#f92672">=</span> last_gae_lam <span style="color:#f92672">=</span> delta <span style="color:#f92672">+</span> self<span style="color:#f92672">.</span>gamma <span style="color:#f92672">*</span> <span style="color:#ae81ff">0.95</span> <span style="color:#f92672">*</span> next_non_terminal <span style="color:#f92672">*</span> last_gae_lam
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> advantages
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">train</span>(self, states, actions, old_probs, advantages, returns):
+</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#34;&#34;&#34;PPO训练&#34;&#34;&#34;</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">with</span> tf<span style="color:#f92672">.</span>GradientTape() <span style="color:#66d9ef">as</span> tape:
+</span></span><span style="display:flex;"><span>            probs <span style="color:#f92672">=</span> self<span style="color:#f92672">.</span>actor(states)
+</span></span><span style="display:flex;"><span>            values <span style="color:#f92672">=</span> self<span style="color:#f92672">.</span>critic(states)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>            <span style="color:#75715e"># 计算策略损失</span>
+</span></span><span style="display:flex;"><span>            new_probs <span style="color:#f92672">=</span> tf<span style="color:#f92672">.</span>gather(probs, actions, axis<span style="color:#f92672">=</span><span style="color:#ae81ff">1</span>, batch_dims<span style="color:#f92672">=</span><span style="color:#ae81ff">1</span>)
+</span></span><span style="display:flex;"><span>            ratio <span style="color:#f92672">=</span> new_probs <span style="color:#f92672">/</span> old_probs
+</span></span><span style="display:flex;"><span>            clipped_ratio <span style="color:#f92672">=</span> tf<span style="color:#f92672">.</span>clip_by_value(ratio, <span style="color:#ae81ff">1</span> <span style="color:#f92672">-</span> self<span style="color:#f92672">.</span>clip_ratio, <span style="color:#ae81ff">1</span> <span style="color:#f92672">+</span> self<span style="color:#f92672">.</span>clip_ratio)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>            policy_loss <span style="color:#f92672">=</span> <span style="color:#f92672">-</span>tf<span style="color:#f92672">.</span>reduce_mean(tf<span style="color:#f92672">.</span>minimum(ratio <span style="color:#f92672">*</span> advantages, clipped_ratio <span style="color:#f92672">*</span> advantages))
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>            <span style="color:#75715e"># 计算价值损失</span>
+</span></span><span style="display:flex;"><span>            value_loss <span style="color:#f92672">=</span> tf<span style="color:#f92672">.</span>reduce_mean(tf<span style="color:#f92672">.</span>square(returns <span style="color:#f92672">-</span> values))
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>            <span style="color:#75715e"># 总损失</span>
+</span></span><span style="display:flex;"><span>            loss <span style="color:#f92672">=</span> policy_loss <span style="color:#f92672">+</span> <span style="color:#ae81ff">0.5</span> <span style="color:#f92672">*</span> value_loss
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e"># 更新Actor</span>
+</span></span><span style="display:flex;"><span>        actor_grads <span style="color:#f92672">=</span> tape<span style="color:#f92672">.</span>gradient(policy_loss, self<span style="color:#f92672">.</span>actor<span style="color:#f92672">.</span>trainable_variables)
+</span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>actor_optimizer<span style="color:#f92672">.</span>apply_gradients(zip(actor_grads, self<span style="color:#f92672">.</span>actor<span style="color:#f92672">.</span>trainable_variables))
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e"># 更新Critic</span>
+</span></span><span style="display:flex;"><span>        critic_grads <span style="color:#f92672">=</span> tape<span style="color:#f92672">.</span>gradient(value_loss, self<span style="color:#f92672">.</span>critic<span style="color:#f92672">.</span>trainable_variables)
+</span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>critic_optimizer<span style="color:#f92672">.</span>apply_gradients(zip(critic_grads, self<span style="color:#f92672">.</span>critic<span style="color:#f92672">.</span>trainable_variables))
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> loss<span style="color:#f92672">.</span>numpy()
+</span></span></code></pre></div><h2 id="-应用领域">🎯 应用领域</h2>
+<h3 id="游戏ai">游戏AI</h3>
+<p><strong>AlphaGo的启发</strong>：</p>
+<ul>
+<li><strong>蒙特卡洛树搜索 (MCTS)</strong>：结合深度学习和搜索</li>
+<li><strong>自我对弈</strong>：通过自我对弈提升策略</li>
+<li><strong>策略网络和价值网络</strong>：分别预测走法和局面价值</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#75715e"># 简化版AlphaGo策略</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">SimpleAlphaGo</span>:
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">__init__</span>(self, board_size<span style="color:#f92672">=</span><span style="color:#ae81ff">9</span>):
+</span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>board_size <span style="color:#f92672">=</span> board_size
+</span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>policy_network <span style="color:#f92672">=</span> self<span style="color:#f92672">.</span>_build_policy_network()
+</span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>value_network <span style="color:#f92672">=</span> self<span style="color:#f92672">.</span>_build_value_network()
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">_build_policy_network</span>(self):
+</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#34;&#34;&#34;策略网络&#34;&#34;&#34;</span>
+</span></span><span style="display:flex;"><span>        inputs <span style="color:#f92672">=</span> tf<span style="color:#f92672">.</span>keras<span style="color:#f92672">.</span>Input(shape<span style="color:#f92672">=</span>(self<span style="color:#f92672">.</span>board_size, self<span style="color:#f92672">.</span>board_size, <span style="color:#ae81ff">1</span>))
+</span></span><span style="display:flex;"><span>        x <span style="color:#f92672">=</span> tf<span style="color:#f92672">.</span>keras<span style="color:#f92672">.</span>layers<span style="color:#f92672">.</span>Conv2D(<span style="color:#ae81ff">32</span>, <span style="color:#ae81ff">3</span>, padding<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;same&#39;</span>, activation<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;relu&#39;</span>)(inputs)
+</span></span><span style="display:flex;"><span>        x <span style="color:#f92672">=</span> tf<span style="color:#f92672">.</span>keras<span style="color:#f92672">.</span>layers<span style="color:#f92672">.</span>Conv2D(<span style="color:#ae81ff">64</span>, <span style="color:#ae81ff">3</span>, padding<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;same&#39;</span>, activation<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;relu&#39;</span>)(x)
+</span></span><span style="display:flex;"><span>        x <span style="color:#f92672">=</span> tf<span style="color:#f92672">.</span>keras<span style="color:#f92672">.</span>layers<span style="color:#f92672">.</span>Flatten()(x)
+</span></span><span style="display:flex;"><span>        outputs <span style="color:#f92672">=</span> tf<span style="color:#f92672">.</span>keras<span style="color:#f92672">.</span>layers<span style="color:#f92672">.</span>Dense(self<span style="color:#f92672">.</span>board_size <span style="color:#f92672">*</span> self<span style="color:#f92672">.</span>board_size, activation<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;softmax&#39;</span>)(x)
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> tf<span style="color:#f92672">.</span>keras<span style="color:#f92672">.</span>Model(inputs<span style="color:#f92672">=</span>inputs, outputs<span style="color:#f92672">=</span>outputs)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">_build_value_network</span>(self):
+</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#34;&#34;&#34;价值网络&#34;&#34;&#34;</span>
+</span></span><span style="display:flex;"><span>        inputs <span style="color:#f92672">=</span> tf<span style="color:#f92672">.</span>keras<span style="color:#f92672">.</span>Input(shape<span style="color:#f92672">=</span>(self<span style="color:#f92672">.</span>board_size, self<span style="color:#f92672">.</span>board_size, <span style="color:#ae81ff">1</span>))
+</span></span><span style="display:flex;"><span>        x <span style="color:#f92672">=</span> tf<span style="color:#f92672">.</span>keras<span style="color:#f92672">.</span>layers<span style="color:#f92672">.</span>Conv2D(<span style="color:#ae81ff">32</span>, <span style="color:#ae81ff">3</span>, padding<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;same&#39;</span>, activation<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;relu&#39;</span>)(inputs)
+</span></span><span style="display:flex;"><span>        x <span style="color:#f92672">=</span> tf<span style="color:#f92672">.</span>keras<span style="color:#f92672">.</span>layers<span style="color:#f92672">.</span>Conv2D(<span style="color:#ae81ff">64</span>, <span style="color:#ae81ff">3</span>, padding<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;same&#39;</span>, activation<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;relu&#39;</span>)(x)
+</span></span><span style="display:flex;"><span>        x <span style="color:#f92672">=</span> tf<span style="color:#f92672">.</span>keras<span style="color:#f92672">.</span>layers<span style="color:#f92672">.</span>Flatten()(x)
+</span></span><span style="display:flex;"><span>        x <span style="color:#f92672">=</span> tf<span style="color:#f92672">.</span>keras<span style="color:#f92672">.</span>layers<span style="color:#f92672">.</span>Dense(<span style="color:#ae81ff">128</span>, activation<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;relu&#39;</span>)(x)
+</span></span><span style="display:flex;"><span>        outputs <span style="color:#f92672">=</span> tf<span style="color:#f92672">.</span>keras<span style="color:#f92672">.</span>layers<span style="color:#f92672">.</span>Dense(<span style="color:#ae81ff">1</span>, activation<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;tanh&#39;</span>)(x)
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> tf<span style="color:#f92672">.</span>keras<span style="color:#f92672">.</span>Model(inputs<span style="color:#f92672">=</span>inputs, outputs<span style="color:#f92672">=</span>outputs)
+</span></span></code></pre></div><h3 id="机器人控制">机器人控制</h3>
+<p><strong>连续控制任务</strong>：</p>
+<ul>
+<li><strong>DDPG (Deep Deterministic Policy Gradient)</strong>：处理连续动作空间</li>
+<li><strong>TD3 (Twin Delayed DDPG)</strong>：改进的DDPG算法</li>
+<li><strong>SAC (Soft Actor-Critic)</strong>：最大化熵的强化学习</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">DDPGAgent</span>:
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">__init__</span>(self, state_size, action_size, action_low, action_high):
+</span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>state_size <span style="color:#f92672">=</span> state_size
+</span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>action_size <span style="color:#f92672">=</span> action_size
+</span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>action_low <span style="color:#f92672">=</span> action_low
+</span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>action_high <span style="color:#f92672">=</span> action_high
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e"># Actor网络（确定性策略）</span>
+</span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>actor <span style="color:#f92672">=</span> self<span style="color:#f92672">.</span>_build_actor()
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e"># Critic网络（Q函数）</span>
+</span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>critic <span style="color:#f92672">=</span> self<span style="color:#f92672">.</span>_build_critic()
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e"># 目标网络</span>
+</span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>target_actor <span style="color:#f92672">=</span> self<span style="color:#f92672">.</span>_build_actor()
+</span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>target_critic <span style="color:#f92672">=</span> self<span style="color:#f92672">.</span>_build_critic()
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e"># 复制权重到目标网络</span>
+</span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>update_target_networks(<span style="color:#ae81ff">1.0</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">_build_actor</span>(self):
+</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#34;&#34;&#34;构建Actor网络&#34;&#34;&#34;</span>
+</span></span><span style="display:flex;"><span>        inputs <span style="color:#f92672">=</span> tf<span style="color:#f92672">.</span>keras<span style="color:#f92672">.</span>Input(shape<span style="color:#f92672">=</span>(self<span style="color:#f92672">.</span>state_size,))
+</span></span><span style="display:flex;"><span>        x <span style="color:#f92672">=</span> tf<span style="color:#f92672">.</span>keras<span style="color:#f92672">.</span>layers<span style="color:#f92672">.</span>Dense(<span style="color:#ae81ff">400</span>, activation<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;relu&#39;</span>)(inputs)
+</span></span><span style="display:flex;"><span>        x <span style="color:#f92672">=</span> tf<span style="color:#f92672">.</span>keras<span style="color:#f92672">.</span>layers<span style="color:#f92672">.</span>Dense(<span style="color:#ae81ff">300</span>, activation<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;relu&#39;</span>)(x)
+</span></span><span style="display:flex;"><span>        outputs <span style="color:#f92672">=</span> tf<span style="color:#f92672">.</span>keras<span style="color:#f92672">.</span>layers<span style="color:#f92672">.</span>Dense(self<span style="color:#f92672">.</span>action_size, activation<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;tanh&#39;</span>)(x)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e"># 缩放到动作范围</span>
+</span></span><span style="display:flex;"><span>        model <span style="color:#f92672">=</span> tf<span style="color:#f92672">.</span>keras<span style="color:#f92672">.</span>Model(inputs<span style="color:#f92672">=</span>inputs, outputs<span style="color:#f92672">=</span>outputs)
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> model
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">_build_critic</span>(self):
+</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#34;&#34;&#34;构建Critic网络&#34;&#34;&#34;</span>
+</span></span><span style="display:flex;"><span>        state_inputs <span style="color:#f92672">=</span> tf<span style="color:#f92672">.</span>keras<span style="color:#f92672">.</span>Input(shape<span style="color:#f92672">=</span>(self<span style="color:#f92672">.</span>state_size,))
+</span></span><span style="display:flex;"><span>        action_inputs <span style="color:#f92672">=</span> tf<span style="color:#f92672">.</span>keras<span style="color:#f92672">.</span>Input(shape<span style="color:#f92672">=</span>(self<span style="color:#f92672">.</span>action_size,))
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e"># 状态路径</span>
+</span></span><span style="display:flex;"><span>        state_out <span style="color:#f92672">=</span> tf<span style="color:#f92672">.</span>keras<span style="color:#f92672">.</span>layers<span style="color:#f92672">.</span>Dense(<span style="color:#ae81ff">400</span>, activation<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;relu&#39;</span>)(state_inputs)
+</span></span><span style="display:flex;"><span>        state_out <span style="color:#f92672">=</span> tf<span style="color:#f92672">.</span>keras<span style="color:#f92672">.</span>layers<span style="color:#f92672">.</span>Dense(<span style="color:#ae81ff">300</span>, activation<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;relu&#39;</span>)(state_out)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e"># 动作路径</span>
+</span></span><span style="display:flex;"><span>        action_out <span style="color:#f92672">=</span> tf<span style="color:#f92672">.</span>keras<span style="color:#f92672">.</span>layers<span style="color:#f92672">.</span>Dense(<span style="color:#ae81ff">300</span>, activation<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;relu&#39;</span>)(action_inputs)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e"># 合并</span>
+</span></span><span style="display:flex;"><span>        merged <span style="color:#f92672">=</span> tf<span style="color:#f92672">.</span>keras<span style="color:#f92672">.</span>layers<span style="color:#f92672">.</span>Add()([state_out, action_out])
+</span></span><span style="display:flex;"><span>        outputs <span style="color:#f92672">=</span> tf<span style="color:#f92672">.</span>keras<span style="color:#f92672">.</span>layers<span style="color:#f92672">.</span>Dense(<span style="color:#ae81ff">1</span>)(merged)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> tf<span style="color:#f92672">.</span>keras<span style="color:#f92672">.</span>Model(inputs<span style="color:#f92672">=</span>[state_inputs, action_inputs], outputs<span style="color:#f92672">=</span>outputs)
+</span></span></code></pre></div><h3 id="自动驾驶">自动驾驶</h3>
+<p><strong>自动驾驶中的强化学习</strong>：</p>
+<ul>
+<li><strong>路径规划</strong>：学习最优驾驶路径</li>
+<li><strong>行为决策</strong>：在复杂交通环境中决策</li>
+<li><strong>控制优化</strong>：优化车辆控制参数</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">AutonomousDrivingAgent</span>:
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">__init__</span>(self, state_size, action_size):
+</span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>state_size <span style="color:#f92672">=</span> state_size
+</span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>action_size <span style="color:#f92672">=</span> action_size
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e"># 感知模块</span>
+</span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>perception_model <span style="color:#f92672">=</span> self<span style="color:#f92672">.</span>_build_perception_model()
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e"># 决策模块</span>
+</span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>decision_model <span style="color:#f92672">=</span> self<span style="color:#f92672">.</span>_build_decision_model()
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e"># 控制模块</span>
+</span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>control_model <span style="color:#f92672">=</span> self<span style="color:#f92672">.</span>_build_control_model()
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">_build_perception_model</span>(self):
+</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#34;&#34;&#34;感知模块：处理传感器数据&#34;&#34;&#34;</span>
+</span></span><span style="display:flex;"><span>        inputs <span style="color:#f92672">=</span> tf<span style="color:#f92672">.</span>keras<span style="color:#f92672">.</span>Input(shape<span style="color:#f92672">=</span>(self<span style="color:#f92672">.</span>state_size,))
+</span></span><span style="display:flex;"><span>        x <span style="color:#f92672">=</span> tf<span style="color:#f92672">.</span>keras<span style="color:#f92672">.</span>layers<span style="color:#f92672">.</span>Dense(<span style="color:#ae81ff">256</span>, activation<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;relu&#39;</span>)(inputs)
+</span></span><span style="display:flex;"><span>        x <span style="color:#f92672">=</span> tf<span style="color:#f92672">.</span>keras<span style="color:#f92672">.</span>layers<span style="color:#f92672">.</span>Dense(<span style="color:#ae81ff">128</span>, activation<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;relu&#39;</span>)(x)
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e"># 检测其他车辆、行人、交通标志等</span>
+</span></span><span style="display:flex;"><span>        outputs <span style="color:#f92672">=</span> {
+</span></span><span style="display:flex;"><span>            <span style="color:#e6db74">&#39;vehicles&#39;</span>: tf<span style="color:#f92672">.</span>keras<span style="color:#f92672">.</span>layers<span style="color:#f92672">.</span>Dense(<span style="color:#ae81ff">10</span>, activation<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;sigmoid&#39;</span>)(x),
+</span></span><span style="display:flex;"><span>            <span style="color:#e6db74">&#39;pedestrians&#39;</span>: tf<span style="color:#f92672">.</span>keras<span style="color:#f92672">.</span>layers<span style="color:#f92672">.</span>Dense(<span style="color:#ae81ff">5</span>, activation<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;sigmoid&#39;</span>)(x),
+</span></span><span style="display:flex;"><span>            <span style="color:#e6db74">&#39;traffic_lights&#39;</span>: tf<span style="color:#f92672">.</span>keras<span style="color:#f92672">.</span>layers<span style="color:#f92672">.</span>Dense(<span style="color:#ae81ff">3</span>, activation<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;softmax&#39;</span>)(x)
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> tf<span style="color:#f92672">.</span>keras<span style="color:#f92672">.</span>Model(inputs<span style="color:#f92672">=</span>inputs, outputs<span style="color:#f92672">=</span>outputs)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">_build_decision_model</span>(self):
+</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#34;&#34;&#34;决策模块：做出驾驶决策&#34;&#34;&#34;</span>
+</span></span><span style="display:flex;"><span>        inputs <span style="color:#f92672">=</span> tf<span style="color:#f92672">.</span>keras<span style="color:#f92672">.</span>Input(shape<span style="color:#f92672">=</span>(<span style="color:#ae81ff">128</span>,))
+</span></span><span style="display:flex;"><span>        x <span style="color:#f92672">=</span> tf<span style="color:#f92672">.</span>keras<span style="color:#f92672">.</span>layers<span style="color:#f92672">.</span>Dense(<span style="color:#ae81ff">64</span>, activation<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;relu&#39;</span>)(inputs)
+</span></span><span style="display:flex;"><span>        x <span style="color:#f92672">=</span> tf<span style="color:#f92672">.</span>keras<span style="color:#f92672">.</span>layers<span style="color:#f92672">.</span>Dense(<span style="color:#ae81ff">32</span>, activation<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;relu&#39;</span>)(x)
+</span></span><span style="display:flex;"><span>        outputs <span style="color:#f92672">=</span> tf<span style="color:#f92672">.</span>keras<span style="color:#f92672">.</span>layers<span style="color:#f92672">.</span>Dense(self<span style="color:#f92672">.</span>action_size, activation<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;softmax&#39;</span>)(x)
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> tf<span style="color:#f92672">.</span>keras<span style="color:#f92672">.</span>Model(inputs<span style="color:#f92672">=</span>inputs, outputs<span style="color:#f92672">=</span>outputs)
+</span></span></code></pre></div><h2 id="-评估和调试">📊 评估和调试</h2>
+<h3 id="评估指标">评估指标</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">evaluate_agent</span>(agent, env, episodes<span style="color:#f92672">=</span><span style="color:#ae81ff">100</span>):
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#34;&#34;&#34;评估智能体性能&#34;&#34;&#34;</span>
+</span></span><span style="display:flex;"><span>    total_rewards <span style="color:#f92672">=</span> []
+</span></span><span style="display:flex;"><span>    episode_lengths <span style="color:#f92672">=</span> []
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">for</span> episode <span style="color:#f92672">in</span> range(episodes):
+</span></span><span style="display:flex;"><span>        state <span style="color:#f92672">=</span> env<span style="color:#f92672">.</span>reset()
+</span></span><span style="display:flex;"><span>        total_reward <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>
+</span></span><span style="display:flex;"><span>        steps <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">while</span> <span style="color:#66d9ef">True</span>:
+</span></span><span style="display:flex;"><span>            action <span style="color:#f92672">=</span> agent<span style="color:#f92672">.</span>choose_action(state)
+</span></span><span style="display:flex;"><span>            next_state, reward, done, _ <span style="color:#f92672">=</span> env<span style="color:#f92672">.</span>step(action)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>            total_reward <span style="color:#f92672">+=</span> reward
+</span></span><span style="display:flex;"><span>            steps <span style="color:#f92672">+=</span> <span style="color:#ae81ff">1</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">if</span> done:
+</span></span><span style="display:flex;"><span>                <span style="color:#66d9ef">break</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>            state <span style="color:#f92672">=</span> next_state
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        total_rewards<span style="color:#f92672">.</span>append(total_reward)
+</span></span><span style="display:flex;"><span>        episode_lengths<span style="color:#f92672">.</span>append(steps)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> {
+</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#39;mean_reward&#39;</span>: np<span style="color:#f92672">.</span>mean(total_rewards),
+</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#39;std_reward&#39;</span>: np<span style="color:#f92672">.</span>std(total_rewards),
+</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#39;mean_length&#39;</span>: np<span style="color:#f92672">.</span>mean(episode_lengths),
+</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#39;success_rate&#39;</span>: np<span style="color:#f92672">.</span>mean([r <span style="color:#f92672">&gt;</span> threshold <span style="color:#66d9ef">for</span> r <span style="color:#f92672">in</span> total_rewards])
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 使用评估函数</span>
+</span></span><span style="display:flex;"><span>results <span style="color:#f92672">=</span> evaluate_agent(agent, env, episodes<span style="color:#f92672">=</span><span style="color:#ae81ff">100</span>)
+</span></span><span style="display:flex;"><span>print(<span style="color:#e6db74">f</span><span style="color:#e6db74">&#34;平均奖励: </span><span style="color:#e6db74">{</span>results[<span style="color:#e6db74">&#39;mean_reward&#39;</span>]<span style="color:#e6db74">:</span><span style="color:#e6db74">.2f</span><span style="color:#e6db74">}</span><span style="color:#e6db74"> ± </span><span style="color:#e6db74">{</span>results[<span style="color:#e6db74">&#39;std_reward&#39;</span>]<span style="color:#e6db74">:</span><span style="color:#e6db74">.2f</span><span style="color:#e6db74">}</span><span style="color:#e6db74">&#34;</span>)
+</span></span><span style="display:flex;"><span>print(<span style="color:#e6db74">f</span><span style="color:#e6db74">&#34;成功率: </span><span style="color:#e6db74">{</span>results[<span style="color:#e6db74">&#39;success_rate&#39;</span>]<span style="color:#e6db74">:</span><span style="color:#e6db74">.2%</span><span style="color:#e6db74">}</span><span style="color:#e6db74">&#34;</span>)
+</span></span></code></pre></div><h3 id="调试技巧">调试技巧</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">DebuggingAgent</span>:
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">__init__</span>(self, agent):
+</span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>agent <span style="color:#f92672">=</span> agent
+</span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>episode_rewards <span style="color:#f92672">=</span> []
+</span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>q_values <span style="color:#f92672">=</span> []
+</span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>gradients <span style="color:#f92672">=</span> []
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">debug_episode</span>(self, env):
+</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#34;&#34;&#34;调试单个episode&#34;&#34;&#34;</span>
+</span></span><span style="display:flex;"><span>        state <span style="color:#f92672">=</span> env<span style="color:#f92672">.</span>reset()
+</span></span><span style="display:flex;"><span>        episode_reward <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>
+</span></span><span style="display:flex;"><span>        episode_q_values <span style="color:#f92672">=</span> []
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">while</span> <span style="color:#66d9ef">True</span>:
+</span></span><span style="display:flex;"><span>            <span style="color:#75715e"># 记录Q值</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">if</span> hasattr(self<span style="color:#f92672">.</span>agent, <span style="color:#e6db74">&#39;model&#39;</span>):
+</span></span><span style="display:flex;"><span>                q_values <span style="color:#f92672">=</span> self<span style="color:#f92672">.</span>agent<span style="color:#f92672">.</span>model<span style="color:#f92672">.</span>predict(np<span style="color:#f92672">.</span>reshape(state, [<span style="color:#ae81ff">1</span>, <span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>]), verbose<span style="color:#f92672">=</span><span style="color:#ae81ff">0</span>)[<span style="color:#ae81ff">0</span>]
+</span></span><span style="display:flex;"><span>                episode_q_values<span style="color:#f92672">.</span>append(np<span style="color:#f92672">.</span>max(q_values))
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>            action <span style="color:#f92672">=</span> self<span style="color:#f92672">.</span>agent<span style="color:#f92672">.</span>choose_action(state)
+</span></span><span style="display:flex;"><span>            next_state, reward, done, _ <span style="color:#f92672">=</span> env<span style="color:#f92672">.</span>step(action)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>            episode_reward <span style="color:#f92672">+=</span> reward
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">if</span> done:
+</span></span><span style="display:flex;"><span>                <span style="color:#66d9ef">break</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>            state <span style="color:#f92672">=</span> next_state
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>episode_rewards<span style="color:#f92672">.</span>append(episode_reward)
+</span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>q_values<span style="color:#f92672">.</span>append(episode_q_values)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> episode_reward
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">plot_debugging_info</span>(self):
+</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#34;&#34;&#34;绘制调试信息&#34;&#34;&#34;</span>
+</span></span><span style="display:flex;"><span>        plt<span style="color:#f92672">.</span>figure(figsize<span style="color:#f92672">=</span>(<span style="color:#ae81ff">12</span>, <span style="color:#ae81ff">4</span>))
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e"># 奖励曲线</span>
+</span></span><span style="display:flex;"><span>        plt<span style="color:#f92672">.</span>subplot(<span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">3</span>, <span style="color:#ae81ff">1</span>)
+</span></span><span style="display:flex;"><span>        plt<span style="color:#f92672">.</span>plot(self<span style="color:#f92672">.</span>episode_rewards)
+</span></span><span style="display:flex;"><span>        plt<span style="color:#f92672">.</span>xlabel(<span style="color:#e6db74">&#39;Episode&#39;</span>)
+</span></span><span style="display:flex;"><span>        plt<span style="color:#f92672">.</span>ylabel(<span style="color:#e6db74">&#39;Reward&#39;</span>)
+</span></span><span style="display:flex;"><span>        plt<span style="color:#f92672">.</span>title(<span style="color:#e6db74">&#39;Episode Rewards&#39;</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e"># Q值曲线</span>
+</span></span><span style="display:flex;"><span>        plt<span style="color:#f92672">.</span>subplot(<span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">3</span>, <span style="color:#ae81ff">2</span>)
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">for</span> i, q_values <span style="color:#f92672">in</span> enumerate(self<span style="color:#f92672">.</span>q_values[<span style="color:#f92672">-</span><span style="color:#ae81ff">10</span>:]):  <span style="color:#75715e"># 最近10个episode</span>
+</span></span><span style="display:flex;"><span>            plt<span style="color:#f92672">.</span>plot(q_values, alpha<span style="color:#f92672">=</span><span style="color:#ae81ff">0.3</span>, label<span style="color:#f92672">=</span><span style="color:#e6db74">f</span><span style="color:#e6db74">&#39;Episode </span><span style="color:#e6db74">{</span>len(self<span style="color:#f92672">.</span>episode_rewards)<span style="color:#f92672">-</span><span style="color:#ae81ff">10</span><span style="color:#f92672">+</span>i<span style="color:#e6db74">}</span><span style="color:#e6db74">&#39;</span>)
+</span></span><span style="display:flex;"><span>        plt<span style="color:#f92672">.</span>xlabel(<span style="color:#e6db74">&#39;Step&#39;</span>)
+</span></span><span style="display:flex;"><span>        plt<span style="color:#f92672">.</span>ylabel(<span style="color:#e6db74">&#39;Max Q-value&#39;</span>)
+</span></span><span style="display:flex;"><span>        plt<span style="color:#f92672">.</span>title(<span style="color:#e6db74">&#39;Q-values&#39;</span>)
+</span></span><span style="display:flex;"><span>        plt<span style="color:#f92672">.</span>legend()
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e"># 奖励分布</span>
+</span></span><span style="display:flex;"><span>        plt<span style="color:#f92672">.</span>subplot(<span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">3</span>, <span style="color:#ae81ff">3</span>)
+</span></span><span style="display:flex;"><span>        plt<span style="color:#f92672">.</span>hist(self<span style="color:#f92672">.</span>episode_rewards, bins<span style="color:#f92672">=</span><span style="color:#ae81ff">20</span>)
+</span></span><span style="display:flex;"><span>        plt<span style="color:#f92672">.</span>xlabel(<span style="color:#e6db74">&#39;Reward&#39;</span>)
+</span></span><span style="display:flex;"><span>        plt<span style="color:#f92672">.</span>ylabel(<span style="color:#e6db74">&#39;Frequency&#39;</span>)
+</span></span><span style="display:flex;"><span>        plt<span style="color:#f92672">.</span>title(<span style="color:#e6db74">&#39;Reward Distribution&#39;</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        plt<span style="color:#f92672">.</span>tight_layout()
+</span></span><span style="display:flex;"><span>        plt<span style="color:#f92672">.</span>show()
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 使用调试工具</span>
+</span></span><span style="display:flex;"><span>debug_agent <span style="color:#f92672">=</span> DebuggingAgent(agent)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">for</span> episode <span style="color:#f92672">in</span> range(<span style="color:#ae81ff">100</span>):
+</span></span><span style="display:flex;"><span>    reward <span style="color:#f92672">=</span> debug_agent<span style="color:#f92672">.</span>debug_episode(env)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>debug_agent<span style="color:#f92672">.</span>plot_debugging_info()
+</span></span></code></pre></div><h2 id="-学习资源">📚 学习资源</h2>
+<h3 id="经典论文">经典论文</h3>
+<ul>
+<li><a href="https://arxiv.org/abs/1312.5602">Playing Atari with Deep Reinforcement Learning</a> - DQN</li>
+<li><a href="https://www.nature.com/articles/nature14236">Human-level control through deep reinforcement learning</a> - DQN Nature</li>
+<li><a href="https://www.nature.com/articles/nature16961">Mastering the game of Go with deep neural networks</a> - AlphaGo</li>
+<li><a href="https://arxiv.org/abs/1707.06347">Proximal Policy Optimization Algorithms</a> - PPO</li>
+</ul>
+<h3 id="在线资源">在线资源</h3>
+<ul>
+<li><a href="https://gym.openai.com/">OpenAI Gym</a> - 强化学习环境</li>
+<li><a href="https://stable-baselines.readthedocs.io/">Stable Baselines</a> - 强化学习算法库</li>
+<li><a href="https://ray.readthedocs.io/en/latest/rllib.html">RLlib</a> - Ray中的强化学习库</li>
+</ul>
+<h3 id="吴恩达课程">吴恩达课程</h3>
+<ul>
+<li>深度学习课程中关于强化学习的部分</li>
+</ul>
+<h2 id="-实际项目">🎯 实际项目</h2>
+<h3 id="智能体训练框架">智能体训练框架</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">RLTrainingFramework</span>:
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">__init__</span>(self, env_name, agent_class, config):
+</span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>env_name <span style="color:#f92672">=</span> env_name
+</span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>agent_class <span style="color:#f92672">=</span> agent_class
+</span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>config <span style="color:#f92672">=</span> config
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>env <span style="color:#f92672">=</span> gym<span style="color:#f92672">.</span>make(env_name)
+</span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>agent <span style="color:#f92672">=</span> agent_class(self<span style="color:#f92672">.</span>env<span style="color:#f92672">.</span>observation_space<span style="color:#f92672">.</span>shape[<span style="color:#ae81ff">0</span>],
+</span></span><span style="display:flex;"><span>                                self<span style="color:#f92672">.</span>env<span style="color:#f92672">.</span>action_space<span style="color:#f92672">.</span>n, <span style="color:#f92672">**</span>config)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">train</span>(self, num_episodes, eval_interval<span style="color:#f92672">=</span><span style="color:#ae81ff">100</span>):
+</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#34;&#34;&#34;训练智能体&#34;&#34;&#34;</span>
+</span></span><span style="display:flex;"><span>        best_reward <span style="color:#f92672">=</span> <span style="color:#f92672">-</span>np<span style="color:#f92672">.</span>inf
+</span></span><span style="display:flex;"><span>        rewards_history <span style="color:#f92672">=</span> []
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">for</span> episode <span style="color:#f92672">in</span> range(num_episodes):
+</span></span><span style="display:flex;"><span>            <span style="color:#75715e"># 训练episode</span>
+</span></span><span style="display:flex;"><span>            episode_reward <span style="color:#f92672">=</span> self<span style="color:#f92672">.</span>_train_episode()
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>            rewards_history<span style="color:#f92672">.</span>append(episode_reward)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>            <span style="color:#75715e"># 定期评估</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">if</span> episode <span style="color:#f92672">%</span> eval_interval <span style="color:#f92672">==</span> <span style="color:#ae81ff">0</span>:
+</span></span><span style="display:flex;"><span>                eval_reward <span style="color:#f92672">=</span> self<span style="color:#f92672">.</span>_evaluate_agent()
+</span></span><span style="display:flex;"><span>                print(<span style="color:#e6db74">f</span><span style="color:#e6db74">&#34;Episode </span><span style="color:#e6db74">{</span>episode<span style="color:#e6db74">}</span><span style="color:#e6db74">: Train Reward = </span><span style="color:#e6db74">{</span>episode_reward<span style="color:#e6db74">:</span><span style="color:#e6db74">.2f</span><span style="color:#e6db74">}</span><span style="color:#e6db74">, &#34;</span>
+</span></span><span style="display:flex;"><span>                      <span style="color:#e6db74">f</span><span style="color:#e6db74">&#34;Eval Reward = </span><span style="color:#e6db74">{</span>eval_reward<span style="color:#e6db74">:</span><span style="color:#e6db74">.2f</span><span style="color:#e6db74">}</span><span style="color:#e6db74">&#34;</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>                <span style="color:#75715e"># 保存最佳模型</span>
+</span></span><span style="display:flex;"><span>                <span style="color:#66d9ef">if</span> eval_reward <span style="color:#f92672">&gt;</span> best_reward:
+</span></span><span style="display:flex;"><span>                    best_reward <span style="color:#f92672">=</span> eval_reward
+</span></span><span style="display:flex;"><span>                    self<span style="color:#f92672">.</span>_save_model(<span style="color:#e6db74">f</span><span style="color:#e6db74">&#34;best_model_</span><span style="color:#e6db74">{</span>episode<span style="color:#e6db74">}</span><span style="color:#e6db74">&#34;</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> rewards_history
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">_train_episode</span>(self):
+</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#34;&#34;&#34;训练单个episode&#34;&#34;&#34;</span>
+</span></span><span style="display:flex;"><span>        state <span style="color:#f92672">=</span> self<span style="color:#f92672">.</span>env<span style="color:#f92672">.</span>reset()
+</span></span><span style="display:flex;"><span>        total_reward <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>
+</span></span><span style="display:flex;"><span>        done <span style="color:#f92672">=</span> <span style="color:#66d9ef">False</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">while</span> <span style="color:#f92672">not</span> done:
+</span></span><span style="display:flex;"><span>            action <span style="color:#f92672">=</span> self<span style="color:#f92672">.</span>agent<span style="color:#f92672">.</span>choose_action(state)
+</span></span><span style="display:flex;"><span>            next_state, reward, done, _ <span style="color:#f92672">=</span> self<span style="color:#f92672">.</span>env<span style="color:#f92672">.</span>step(action)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>            self<span style="color:#f92672">.</span>agent<span style="color:#f92672">.</span>learn(state, action, reward, next_state, done)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>            state <span style="color:#f92672">=</span> next_state
+</span></span><span style="display:flex;"><span>            total_reward <span style="color:#f92672">+=</span> reward
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> total_reward
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">_evaluate_agent</span>(self, episodes<span style="color:#f92672">=</span><span style="color:#ae81ff">10</span>):
+</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#34;&#34;&#34;评估智能体&#34;&#34;&#34;</span>
+</span></span><span style="display:flex;"><span>        total_reward <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">for</span> _ <span style="color:#f92672">in</span> range(episodes):
+</span></span><span style="display:flex;"><span>            state <span style="color:#f92672">=</span> self<span style="color:#f92672">.</span>env<span style="color:#f92672">.</span>reset()
+</span></span><span style="display:flex;"><span>            episode_reward <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>
+</span></span><span style="display:flex;"><span>            done <span style="color:#f92672">=</span> <span style="color:#66d9ef">False</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">while</span> <span style="color:#f92672">not</span> done:
+</span></span><span style="display:flex;"><span>                action <span style="color:#f92672">=</span> self<span style="color:#f92672">.</span>agent<span style="color:#f92672">.</span>choose_action(state)
+</span></span><span style="display:flex;"><span>                next_state, reward, done, _ <span style="color:#f92672">=</span> self<span style="color:#f92672">.</span>env<span style="color:#f92672">.</span>step(action)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>                state <span style="color:#f92672">=</span> next_state
+</span></span><span style="display:flex;"><span>                episode_reward <span style="color:#f92672">+=</span> reward
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>            total_reward <span style="color:#f92672">+=</span> episode_reward
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> total_reward <span style="color:#f92672">/</span> episodes
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">_save_model</span>(self, filename):
+</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#34;&#34;&#34;保存模型&#34;&#34;&#34;</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e"># 实现模型保存逻辑</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">pass</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 使用训练框架</span>
+</span></span><span style="display:flex;"><span>config <span style="color:#f92672">=</span> {
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#39;learning_rate&#39;</span>: <span style="color:#ae81ff">0.001</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#39;gamma&#39;</span>: <span style="color:#ae81ff">0.99</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#39;epsilon&#39;</span>: <span style="color:#ae81ff">1.0</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#39;epsilon_decay&#39;</span>: <span style="color:#ae81ff">0.995</span>
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>framework <span style="color:#f92672">=</span> RLTrainingFramework(<span style="color:#e6db74">&#39;CartPole-v1&#39;</span>, DQNAgent, config)
+</span></span><span style="display:flex;"><span>rewards <span style="color:#f92672">=</span> framework<span style="color:#f92672">.</span>train(num_episodes<span style="color:#f92672">=</span><span style="color:#ae81ff">1000</span>)
+</span></span></code></pre></div><hr>
+<p><em>最近更新: {{ .Lastmod.Format &ldquo;2006-01-02&rdquo; }}</em></p>
+
+      
+      <div class="post-separator">------------------------------------------------------------------------</div>
+      
+    </div>
+    <div class="post-footer">
+      
+      <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+      <div class="busuanzi-container">
+        <span id="busuanzi_container_page_pv">--本文总阅读量<span id="busuanzi_value_page_pv"></span>次--</span>
+      </div>
+      
+      
+      <script src="https://utteranc.es/client.js"
+        repo="makkichan947/makkichan947.github.io"
+        issue-term="pathname"
+        label="Utterances"
+        theme="github-dark"
+        crossorigin="anonymous"
+        async>
+      </script>
+    </div>
+  </article>
+
+    </main>
+  </body>
+</html>

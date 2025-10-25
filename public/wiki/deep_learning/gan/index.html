@@ -1,10 +1,10 @@
 <!doctype html>
 <html lang="zh">
   <head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
-    <title>Gan // Yaku Makki</title>
+    <title>生成对抗网络 // Yaku Makki</title>
     <link rel="shortcut icon" href="./assets/avatar/avatar.jpg" />
     <meta charset="utf-8" />
-    <meta name="generator" content="Hugo 0.151.0">
+    <meta name="generator" content="Hugo 0.151.2">
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="author" content="Yaku Makki" />
     <meta name="description" content="" />
@@ -14,13 +14,23 @@
     
     
   <meta name="twitter:card" content="summary">
-  <meta name="twitter:title" content="Gan">
-  <meta name="twitter:description" content="个人小巢">
+  <meta name="twitter:title" content="生成对抗网络">
+  <meta name="twitter:description" content="生成对抗网络 生成对抗网络（Generative Adversarial Networks, GAN）是由Ian Goodfellow在2014年提出的深度学习架构，通过对抗训练的方式生成高质量的合成数据，在图像生成、风格迁移等领域取得了巨大成功。
+🎯 GAN基本原理 对抗训练思想 GAN的核心思想是通过生成器（Generator）和判别器（Discriminator）之间的对抗训练来学习数据分布：
+生成器G：学习真实数据分布，生成逼真的假样本 判别器D：区分真实样本和生成样本 对抗过程：生成器试图欺骗判别器，判别器试图正确识别 数学基础 生成器目标： $$\min_G \max_D V(D,G) = \mathbb{E}{x \sim p{data}}[\log D(x)] &#43; \mathbb{E}_{z \sim p_z}[\log (1 - D(G(z)))]$$
+最优判别器： $$D^*(x) = \frac{p_{data}(x)}{p_{data}(x) &#43; p_g(x)}$$
+🏗️ GAN架构详解 生成器结构 生成器通常采用解码器式的架构：
+class Generator(nn.Module): def __init__(self, latent_dim, img_shape): super(Generator, self).__init__() self.model = nn.Sequential( # 第一个全连接层 nn.Linear(latent_dim, 128), nn.BatchNorm1d(128), nn.ReLU(), # 第二个全连接层 nn.Linear(128, 256), nn.BatchNorm1d(256), nn.ReLU(), # 第三个全连接层 nn.Linear(256, 512), nn.BatchNorm1d(512), nn.ReLU(), # 输出层 nn.Linear(512, int(np.prod(img_shape))), nn.Tanh() ) def forward(self, z): img = self.model(z) img = img.view(img.size(0), *img_shape) return img 判别器结构 判别器采用分类器架构：">
 
     <meta property="og:url" content="http://localhost:1313/wiki/deep_learning/gan/">
   <meta property="og:site_name" content="Yaku Makki">
-  <meta property="og:title" content="Gan">
-  <meta property="og:description" content="个人小巢">
+  <meta property="og:title" content="生成对抗网络">
+  <meta property="og:description" content="生成对抗网络 生成对抗网络（Generative Adversarial Networks, GAN）是由Ian Goodfellow在2014年提出的深度学习架构，通过对抗训练的方式生成高质量的合成数据，在图像生成、风格迁移等领域取得了巨大成功。
+🎯 GAN基本原理 对抗训练思想 GAN的核心思想是通过生成器（Generator）和判别器（Discriminator）之间的对抗训练来学习数据分布：
+生成器G：学习真实数据分布，生成逼真的假样本 判别器D：区分真实样本和生成样本 对抗过程：生成器试图欺骗判别器，判别器试图正确识别 数学基础 生成器目标： $$\min_G \max_D V(D,G) = \mathbb{E}{x \sim p{data}}[\log D(x)] &#43; \mathbb{E}_{z \sim p_z}[\log (1 - D(G(z)))]$$
+最优判别器： $$D^*(x) = \frac{p_{data}(x)}{p_{data}(x) &#43; p_g(x)}$$
+🏗️ GAN架构详解 生成器结构 生成器通常采用解码器式的架构：
+class Generator(nn.Module): def __init__(self, latent_dim, img_shape): super(Generator, self).__init__() self.model = nn.Sequential( # 第一个全连接层 nn.Linear(latent_dim, 128), nn.BatchNorm1d(128), nn.ReLU(), # 第二个全连接层 nn.Linear(128, 256), nn.BatchNorm1d(256), nn.ReLU(), # 第三个全连接层 nn.Linear(256, 512), nn.BatchNorm1d(512), nn.ReLU(), # 输出层 nn.Linear(512, int(np.prod(img_shape))), nn.Tanh() ) def forward(self, z): img = self.model(z) img = img.view(img.size(0), *img_shape) return img 判别器结构 判别器采用分类器架构：">
   <meta property="og:locale" content="zh">
   <meta property="og:type" content="article">
     <meta property="article:section" content="wiki">
@@ -87,7 +97,7 @@
       
   <article class="post enhanced-card glow-effect">
     <header class="post-header">
-      <h1 class ="post-title gradient-text">Gan</h1>
+      <h1 class ="post-title gradient-text">生成对抗网络</h1>
       <div class="post-meta">
         <div>
           <svg class="icon icon-calendar" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><title>calendar</title><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
@@ -95,12 +105,404 @@
         </div>
         <div>
           <svg class="icon icon-clock" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><title>clock</title><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
-          0 min read
+          4 min read
         </div>
       </div>
     </header>
     <div class="post-content">
-      
+      <h1 id="生成对抗网络">生成对抗网络</h1>
+<p>生成对抗网络（Generative Adversarial Networks, GAN）是由Ian Goodfellow在2014年提出的深度学习架构，通过对抗训练的方式生成高质量的合成数据，在图像生成、风格迁移等领域取得了巨大成功。</p>
+<h2 id="-gan基本原理">🎯 GAN基本原理</h2>
+<h3 id="对抗训练思想">对抗训练思想</h3>
+<p>GAN的核心思想是通过生成器（Generator）和判别器（Discriminator）之间的对抗训练来学习数据分布：</p>
+<ul>
+<li><strong>生成器G</strong>：学习真实数据分布，生成逼真的假样本</li>
+<li><strong>判别器D</strong>：区分真实样本和生成样本</li>
+<li><strong>对抗过程</strong>：生成器试图欺骗判别器，判别器试图正确识别</li>
+</ul>
+<h3 id="数学基础">数学基础</h3>
+<p><strong>生成器目标</strong>：
+$$\min_G \max_D V(D,G) = \mathbb{E}<em>{x \sim p</em>{data}}[\log D(x)] + \mathbb{E}_{z \sim p_z}[\log (1 - D(G(z)))]$$</p>
+<p><strong>最优判别器</strong>：
+$$D^*(x) = \frac{p_{data}(x)}{p_{data}(x) + p_g(x)}$$</p>
+<h2 id="-gan架构详解">🏗️ GAN架构详解</h2>
+<h3 id="生成器结构">生成器结构</h3>
+<p>生成器通常采用解码器式的架构：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">Generator</span>(nn<span style="color:#f92672">.</span>Module):
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">__init__</span>(self, latent_dim, img_shape):
+</span></span><span style="display:flex;"><span>        super(Generator, self)<span style="color:#f92672">.</span><span style="color:#a6e22e">__init__</span>()
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>model <span style="color:#f92672">=</span> nn<span style="color:#f92672">.</span>Sequential(
+</span></span><span style="display:flex;"><span>            <span style="color:#75715e"># 第一个全连接层</span>
+</span></span><span style="display:flex;"><span>            nn<span style="color:#f92672">.</span>Linear(latent_dim, <span style="color:#ae81ff">128</span>),
+</span></span><span style="display:flex;"><span>            nn<span style="color:#f92672">.</span>BatchNorm1d(<span style="color:#ae81ff">128</span>),
+</span></span><span style="display:flex;"><span>            nn<span style="color:#f92672">.</span>ReLU(),
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>            <span style="color:#75715e"># 第二个全连接层</span>
+</span></span><span style="display:flex;"><span>            nn<span style="color:#f92672">.</span>Linear(<span style="color:#ae81ff">128</span>, <span style="color:#ae81ff">256</span>),
+</span></span><span style="display:flex;"><span>            nn<span style="color:#f92672">.</span>BatchNorm1d(<span style="color:#ae81ff">256</span>),
+</span></span><span style="display:flex;"><span>            nn<span style="color:#f92672">.</span>ReLU(),
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>            <span style="color:#75715e"># 第三个全连接层</span>
+</span></span><span style="display:flex;"><span>            nn<span style="color:#f92672">.</span>Linear(<span style="color:#ae81ff">256</span>, <span style="color:#ae81ff">512</span>),
+</span></span><span style="display:flex;"><span>            nn<span style="color:#f92672">.</span>BatchNorm1d(<span style="color:#ae81ff">512</span>),
+</span></span><span style="display:flex;"><span>            nn<span style="color:#f92672">.</span>ReLU(),
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>            <span style="color:#75715e"># 输出层</span>
+</span></span><span style="display:flex;"><span>            nn<span style="color:#f92672">.</span>Linear(<span style="color:#ae81ff">512</span>, int(np<span style="color:#f92672">.</span>prod(img_shape))),
+</span></span><span style="display:flex;"><span>            nn<span style="color:#f92672">.</span>Tanh()
+</span></span><span style="display:flex;"><span>        )
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">forward</span>(self, z):
+</span></span><span style="display:flex;"><span>        img <span style="color:#f92672">=</span> self<span style="color:#f92672">.</span>model(z)
+</span></span><span style="display:flex;"><span>        img <span style="color:#f92672">=</span> img<span style="color:#f92672">.</span>view(img<span style="color:#f92672">.</span>size(<span style="color:#ae81ff">0</span>), <span style="color:#f92672">*</span>img_shape)
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> img
+</span></span></code></pre></div><h3 id="判别器结构">判别器结构</h3>
+<p>判别器采用分类器架构：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">Discriminator</span>(nn<span style="color:#f92672">.</span>Module):
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">__init__</span>(self, img_shape):
+</span></span><span style="display:flex;"><span>        super(Discriminator, self)<span style="color:#f92672">.</span><span style="color:#a6e22e">__init__</span>()
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>model <span style="color:#f92672">=</span> nn<span style="color:#f92672">.</span>Sequential(
+</span></span><span style="display:flex;"><span>            <span style="color:#75715e"># 第一个卷积层</span>
+</span></span><span style="display:flex;"><span>            nn<span style="color:#f92672">.</span>Conv2d(<span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">64</span>, kernel_size<span style="color:#f92672">=</span><span style="color:#ae81ff">3</span>, stride<span style="color:#f92672">=</span><span style="color:#ae81ff">2</span>, padding<span style="color:#f92672">=</span><span style="color:#ae81ff">1</span>),
+</span></span><span style="display:flex;"><span>            nn<span style="color:#f92672">.</span>BatchNorm2d(<span style="color:#ae81ff">64</span>),
+</span></span><span style="display:flex;"><span>            nn<span style="color:#f92672">.</span>LeakyReLU(<span style="color:#ae81ff">0.2</span>),
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>            <span style="color:#75715e"># 第二个卷积层</span>
+</span></span><span style="display:flex;"><span>            nn<span style="color:#f92672">.</span>Conv2d(<span style="color:#ae81ff">64</span>, <span style="color:#ae81ff">128</span>, kernel_size<span style="color:#f92672">=</span><span style="color:#ae81ff">3</span>, stride<span style="color:#f92672">=</span><span style="color:#ae81ff">2</span>, padding<span style="color:#f92672">=</span><span style="color:#ae81ff">1</span>),
+</span></span><span style="display:flex;"><span>            nn<span style="color:#f92672">.</span>BatchNorm2d(<span style="color:#ae81ff">128</span>),
+</span></span><span style="display:flex;"><span>            nn<span style="color:#f92672">.</span>LeakyReLU(<span style="color:#ae81ff">0.2</span>),
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>            <span style="color:#75715e"># 全局平均池化</span>
+</span></span><span style="display:flex;"><span>            nn<span style="color:#f92672">.</span>AdaptiveAvgPool2d(<span style="color:#ae81ff">1</span>),
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>            <span style="color:#75715e"># 全连接层</span>
+</span></span><span style="display:flex;"><span>            nn<span style="color:#f92672">.</span>Linear(<span style="color:#ae81ff">128</span>, <span style="color:#ae81ff">1</span>),
+</span></span><span style="display:flex;"><span>            nn<span style="color:#f92672">.</span>Sigmoid()
+</span></span><span style="display:flex;"><span>        )
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">forward</span>(self, img):
+</span></span><span style="display:flex;"><span>        validity <span style="color:#f92672">=</span> self<span style="color:#f92672">.</span>model(img)
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> validity
+</span></span></code></pre></div><h2 id="-训练算法">🚀 训练算法</h2>
+<h3 id="标准gan训练">标准GAN训练</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">train_gan</span>(generator, discriminator, dataloader, num_epochs, latent_dim):
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># 损失函数</span>
+</span></span><span style="display:flex;"><span>    adversarial_loss <span style="color:#f92672">=</span> nn<span style="color:#f92672">.</span>BCELoss()
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># 优化器</span>
+</span></span><span style="display:flex;"><span>    optimizer_G <span style="color:#f92672">=</span> torch<span style="color:#f92672">.</span>optim<span style="color:#f92672">.</span>Adam(generator<span style="color:#f92672">.</span>parameters(), lr<span style="color:#f92672">=</span><span style="color:#ae81ff">0.0002</span>, betas<span style="color:#f92672">=</span>(<span style="color:#ae81ff">0.5</span>, <span style="color:#ae81ff">0.999</span>))
+</span></span><span style="display:flex;"><span>    optimizer_D <span style="color:#f92672">=</span> torch<span style="color:#f92672">.</span>optim<span style="color:#f92672">.</span>Adam(discriminator<span style="color:#f92672">.</span>parameters(), lr<span style="color:#f92672">=</span><span style="color:#ae81ff">0.0002</span>, betas<span style="color:#f92672">=</span>(<span style="color:#ae81ff">0.5</span>, <span style="color:#ae81ff">0.999</span>))
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">for</span> epoch <span style="color:#f92672">in</span> range(num_epochs):
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">for</span> i, (real_imgs, _) <span style="color:#f92672">in</span> enumerate(dataloader):
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>            <span style="color:#75715e"># 真实图像标签</span>
+</span></span><span style="display:flex;"><span>            valid <span style="color:#f92672">=</span> torch<span style="color:#f92672">.</span>ones(real_imgs<span style="color:#f92672">.</span>size(<span style="color:#ae81ff">0</span>), <span style="color:#ae81ff">1</span>, requires_grad<span style="color:#f92672">=</span><span style="color:#66d9ef">False</span>)
+</span></span><span style="display:flex;"><span>            fake <span style="color:#f92672">=</span> torch<span style="color:#f92672">.</span>zeros(real_imgs<span style="color:#f92672">.</span>size(<span style="color:#ae81ff">0</span>), <span style="color:#ae81ff">1</span>, requires_grad<span style="color:#f92672">=</span><span style="color:#66d9ef">False</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>            <span style="color:#75715e"># 训练判别器</span>
+</span></span><span style="display:flex;"><span>            optimizer_D<span style="color:#f92672">.</span>zero_grad()
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>            <span style="color:#75715e"># 判别器对真实图像的预测</span>
+</span></span><span style="display:flex;"><span>            real_loss <span style="color:#f92672">=</span> adversarial_loss(discriminator(real_imgs), valid)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>            <span style="color:#75715e"># 生成假图像</span>
+</span></span><span style="display:flex;"><span>            z <span style="color:#f92672">=</span> torch<span style="color:#f92672">.</span>randn(real_imgs<span style="color:#f92672">.</span>size(<span style="color:#ae81ff">0</span>), latent_dim)
+</span></span><span style="display:flex;"><span>            fake_imgs <span style="color:#f92672">=</span> generator(z)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>            <span style="color:#75715e"># 判别器对假图像的预测</span>
+</span></span><span style="display:flex;"><span>            fake_loss <span style="color:#f92672">=</span> adversarial_loss(discriminator(fake_imgs<span style="color:#f92672">.</span>detach()), fake)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>            <span style="color:#75715e"># 判别器总损失</span>
+</span></span><span style="display:flex;"><span>            d_loss <span style="color:#f92672">=</span> (real_loss <span style="color:#f92672">+</span> fake_loss) <span style="color:#f92672">/</span> <span style="color:#ae81ff">2</span>
+</span></span><span style="display:flex;"><span>            d_loss<span style="color:#f92672">.</span>backward()
+</span></span><span style="display:flex;"><span>            optimizer_D<span style="color:#f92672">.</span>step()
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>            <span style="color:#75715e"># 训练生成器</span>
+</span></span><span style="display:flex;"><span>            optimizer_G<span style="color:#f92672">.</span>zero_grad()
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>            <span style="color:#75715e"># 生成器试图欺骗判别器</span>
+</span></span><span style="display:flex;"><span>            g_loss <span style="color:#f92672">=</span> adversarial_loss(discriminator(fake_imgs), valid)
+</span></span><span style="display:flex;"><span>            g_loss<span style="color:#f92672">.</span>backward()
+</span></span><span style="display:flex;"><span>            optimizer_G<span style="color:#f92672">.</span>step()
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        print(<span style="color:#e6db74">f</span><span style="color:#e6db74">&#34;Epoch </span><span style="color:#e6db74">{</span>epoch<span style="color:#e6db74">}</span><span style="color:#e6db74">: D_loss: </span><span style="color:#e6db74">{</span>d_loss<span style="color:#f92672">.</span>item()<span style="color:#e6db74">:</span><span style="color:#e6db74">.4f</span><span style="color:#e6db74">}</span><span style="color:#e6db74">, G_loss: </span><span style="color:#e6db74">{</span>g_loss<span style="color:#f92672">.</span>item()<span style="color:#e6db74">:</span><span style="color:#e6db74">.4f</span><span style="color:#e6db74">}</span><span style="color:#e6db74">&#34;</span>)
+</span></span></code></pre></div><h2 id="-gan变种">🎨 GAN变种</h2>
+<h3 id="dcgan-deep-convolutional-gan">DCGAN (Deep Convolutional GAN)</h3>
+<ul>
+<li><strong>卷积架构</strong>：使用卷积层替代全连接层</li>
+<li><strong>批归一化</strong>：稳定训练过程</li>
+<li><strong>改进激活</strong>：生成器使用ReLU，判别器使用LeakyReLU</li>
+</ul>
+<h3 id="wgan-wasserstein-gan">WGAN (Wasserstein GAN)</h3>
+<ul>
+<li><strong>Wasserstein距离</strong>：更稳定的训练目标</li>
+<li><strong>权重裁剪</strong>：限制判别器权重范围</li>
+<li><strong>理论保证</strong>：避免模式崩溃</li>
+</ul>
+<h3 id="cyclegan">CycleGAN</h3>
+<ul>
+<li><strong>无配对数据</strong>：学习不同域之间的映射</li>
+<li><strong>循环一致性</strong>：确保转换的可逆性</li>
+<li><strong>应用</strong>：图像风格迁移</li>
+</ul>
+<h3 id="stylegan">StyleGAN</h3>
+<ul>
+<li><strong>风格控制</strong>：通过AdaIN控制生成图像的风格</li>
+<li><strong>渐进式增长</strong>：从低分辨率到高分辨率训练</li>
+<li><strong>高质量生成</strong>：生成高分辨率逼真图像</li>
+</ul>
+<h2 id="-损失函数">🎯 损失函数</h2>
+<h3 id="标准gan损失">标准GAN损失</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#75715e"># 判别器损失</span>
+</span></span><span style="display:flex;"><span>d_real_loss <span style="color:#f92672">=</span> <span style="color:#f92672">-</span>torch<span style="color:#f92672">.</span>log(discriminator(real_imgs))
+</span></span><span style="display:flex;"><span>d_fake_loss <span style="color:#f92672">=</span> <span style="color:#f92672">-</span>torch<span style="color:#f92672">.</span>log(<span style="color:#ae81ff">1</span> <span style="color:#f92672">-</span> discriminator(fake_imgs))
+</span></span><span style="display:flex;"><span>d_loss <span style="color:#f92672">=</span> (d_real_loss <span style="color:#f92672">+</span> d_fake_loss) <span style="color:#f92672">/</span> <span style="color:#ae81ff">2</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 生成器损失</span>
+</span></span><span style="display:flex;"><span>g_loss <span style="color:#f92672">=</span> <span style="color:#f92672">-</span>torch<span style="color:#f92672">.</span>log(discriminator(fake_imgs))
+</span></span></code></pre></div><h3 id="wgan损失">WGAN损失</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#75715e"># WGAN使用Wasserstein距离</span>
+</span></span><span style="display:flex;"><span>d_loss <span style="color:#f92672">=</span> <span style="color:#f92672">-</span>torch<span style="color:#f92672">.</span>mean(discriminator(real_imgs)) <span style="color:#f92672">+</span> torch<span style="color:#f92672">.</span>mean(discriminator(fake_imgs))
+</span></span><span style="display:flex;"><span>g_loss <span style="color:#f92672">=</span> <span style="color:#f92672">-</span>torch<span style="color:#f92672">.</span>mean(discriminator(fake_imgs))
+</span></span></code></pre></div><h3 id="lsgan损失">LSGAN损失</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#75715e"># 最小二乘GAN</span>
+</span></span><span style="display:flex;"><span>d_real_loss <span style="color:#f92672">=</span> torch<span style="color:#f92672">.</span>mean((discriminator(real_imgs) <span style="color:#f92672">-</span> <span style="color:#ae81ff">1</span>)<span style="color:#f92672">**</span><span style="color:#ae81ff">2</span>)
+</span></span><span style="display:flex;"><span>d_fake_loss <span style="color:#f92672">=</span> torch<span style="color:#f92672">.</span>mean(discriminator(fake_imgs)<span style="color:#f92672">**</span><span style="color:#ae81ff">2</span>)
+</span></span><span style="display:flex;"><span>d_loss <span style="color:#f92672">=</span> (d_real_loss <span style="color:#f92672">+</span> d_fake_loss) <span style="color:#f92672">/</span> <span style="color:#ae81ff">2</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>g_loss <span style="color:#f92672">=</span> torch<span style="color:#f92672">.</span>mean((discriminator(fake_imgs) <span style="color:#f92672">-</span> <span style="color:#ae81ff">1</span>)<span style="color:#f92672">**</span><span style="color:#ae81ff">2</span>)
+</span></span></code></pre></div><h2 id="-训练技巧">🔧 训练技巧</h2>
+<h3 id="模式崩溃问题">模式崩溃问题</h3>
+<p><strong>问题</strong>：生成器只生成有限的样本模式</p>
+<p><strong>解决方案</strong>：</p>
+<ul>
+<li><strong>Mini-batch判别</strong>：判别器使用多个假样本</li>
+<li><strong>特征匹配</strong>：匹配真实和生成数据的中间特征</li>
+<li><strong>谱归一化</strong>：稳定判别器训练</li>
+</ul>
+<h3 id="梯度消失问题">梯度消失问题</h3>
+<p><strong>问题</strong>：判别器过强导致生成器梯度消失</p>
+<p><strong>解决方案</strong>：</p>
+<ul>
+<li><strong>标签平滑</strong>：使用0.9代替1.0作为真实标签</li>
+<li><strong>历史平均</strong>：保存判别器的历史版本</li>
+<li><strong>频率分离</strong>：分离高频和低频信息</li>
+</ul>
+<h2 id="-应用领域">🎨 应用领域</h2>
+<h3 id="图像生成">图像生成</h3>
+<ul>
+<li><strong>人脸生成</strong>：StyleGAN生成逼真的人脸图像</li>
+<li><strong>艺术创作</strong>：生成各种风格的艺术作品</li>
+<li><strong>数据增强</strong>：为训练数据生成更多样本</li>
+</ul>
+<h3 id="图像到图像转换">图像到图像转换</h3>
+<ul>
+<li><strong>风格迁移</strong>：将图像转换为不同艺术风格</li>
+<li><strong>超分辨率</strong>：将低分辨率图像转换为高分辨率</li>
+<li><strong>图像修复</strong>：修复损坏或缺失的图像部分</li>
+</ul>
+<h3 id="文本到图像生成">文本到图像生成</h3>
+<ul>
+<li><strong>DALL-E</strong>：根据文本描述生成图像</li>
+<li><strong>Stable Diffusion</strong>：高效的文本到图像模型</li>
+<li><strong>Midjourney</strong>：商业级图像生成服务</li>
+</ul>
+<h3 id="视频生成">视频生成</h3>
+<ul>
+<li><strong>视频预测</strong>：预测视频序列的下一帧</li>
+<li><strong>视频合成</strong>：生成新的视频内容</li>
+<li><strong>动作迁移</strong>：将动作从一个视频迁移到另一个</li>
+</ul>
+<h2 id="-评估指标">📊 评估指标</h2>
+<h3 id="定量评估">定量评估</h3>
+<ul>
+<li><strong>Inception Score (IS)</strong>：评估生成图像的质量和多样性</li>
+<li><strong>Fréchet Inception Distance (FID)</strong>：计算生成数据与真实数据的距离</li>
+<li><strong>Kernel Inception Distance (KID)</strong>：改进的FID指标</li>
+</ul>
+<h3 id="定性评估">定性评估</h3>
+<ul>
+<li><strong>用户研究</strong>：人类评估生成图像的质量</li>
+<li><strong>多样性分析</strong>：分析生成样本的多样性</li>
+<li><strong>插值实验</strong>：测试潜在空间的连续性</li>
+</ul>
+<h2 id="-编程实现">🚀 编程实现</h2>
+<h3 id="完整gan训练代码">完整GAN训练代码</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#f92672">import</span> torch
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> torch.nn <span style="color:#66d9ef">as</span> nn
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> torch.optim <span style="color:#66d9ef">as</span> optim
+</span></span><span style="display:flex;"><span><span style="color:#f92672">from</span> torchvision <span style="color:#f92672">import</span> datasets, transforms
+</span></span><span style="display:flex;"><span><span style="color:#f92672">from</span> torch.utils.data <span style="color:#f92672">import</span> DataLoader
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> matplotlib.pyplot <span style="color:#66d9ef">as</span> plt
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 数据预处理</span>
+</span></span><span style="display:flex;"><span>transform <span style="color:#f92672">=</span> transforms<span style="color:#f92672">.</span>Compose([
+</span></span><span style="display:flex;"><span>    transforms<span style="color:#f92672">.</span>ToTensor(),
+</span></span><span style="display:flex;"><span>    transforms<span style="color:#f92672">.</span>Normalize([<span style="color:#ae81ff">0.5</span>], [<span style="color:#ae81ff">0.5</span>])
+</span></span><span style="display:flex;"><span>])
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 加载MNIST数据集</span>
+</span></span><span style="display:flex;"><span>dataset <span style="color:#f92672">=</span> datasets<span style="color:#f92672">.</span>MNIST(root<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;./data&#39;</span>, train<span style="color:#f92672">=</span><span style="color:#66d9ef">True</span>, transform<span style="color:#f92672">=</span>transform, download<span style="color:#f92672">=</span><span style="color:#66d9ef">True</span>)
+</span></span><span style="display:flex;"><span>dataloader <span style="color:#f92672">=</span> DataLoader(dataset, batch_size<span style="color:#f92672">=</span><span style="color:#ae81ff">64</span>, shuffle<span style="color:#f92672">=</span><span style="color:#66d9ef">True</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 超参数</span>
+</span></span><span style="display:flex;"><span>latent_dim <span style="color:#f92672">=</span> <span style="color:#ae81ff">100</span>
+</span></span><span style="display:flex;"><span>img_shape <span style="color:#f92672">=</span> (<span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">28</span>, <span style="color:#ae81ff">28</span>)
+</span></span><span style="display:flex;"><span>num_epochs <span style="color:#f92672">=</span> <span style="color:#ae81ff">100</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 生成器</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">Generator</span>(nn<span style="color:#f92672">.</span>Module):
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">__init__</span>(self):
+</span></span><span style="display:flex;"><span>        super(Generator, self)<span style="color:#f92672">.</span><span style="color:#a6e22e">__init__</span>()
+</span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>model <span style="color:#f92672">=</span> nn<span style="color:#f92672">.</span>Sequential(
+</span></span><span style="display:flex;"><span>            nn<span style="color:#f92672">.</span>Linear(latent_dim, <span style="color:#ae81ff">128</span>),
+</span></span><span style="display:flex;"><span>            nn<span style="color:#f92672">.</span>BatchNorm1d(<span style="color:#ae81ff">128</span>),
+</span></span><span style="display:flex;"><span>            nn<span style="color:#f92672">.</span>ReLU(),
+</span></span><span style="display:flex;"><span>            nn<span style="color:#f92672">.</span>Linear(<span style="color:#ae81ff">128</span>, <span style="color:#ae81ff">256</span>),
+</span></span><span style="display:flex;"><span>            nn<span style="color:#f92672">.</span>BatchNorm1d(<span style="color:#ae81ff">256</span>),
+</span></span><span style="display:flex;"><span>            nn<span style="color:#f92672">.</span>ReLU(),
+</span></span><span style="display:flex;"><span>            nn<span style="color:#f92672">.</span>Linear(<span style="color:#ae81ff">256</span>, <span style="color:#ae81ff">512</span>),
+</span></span><span style="display:flex;"><span>            nn<span style="color:#f92672">.</span>BatchNorm1d(<span style="color:#ae81ff">512</span>),
+</span></span><span style="display:flex;"><span>            nn<span style="color:#f92672">.</span>ReLU(),
+</span></span><span style="display:flex;"><span>            nn<span style="color:#f92672">.</span>Linear(<span style="color:#ae81ff">512</span>, int(torch<span style="color:#f92672">.</span>prod(torch<span style="color:#f92672">.</span>tensor(img_shape)))),
+</span></span><span style="display:flex;"><span>            nn<span style="color:#f92672">.</span>Tanh()
+</span></span><span style="display:flex;"><span>        )
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">forward</span>(self, z):
+</span></span><span style="display:flex;"><span>        img <span style="color:#f92672">=</span> self<span style="color:#f92672">.</span>model(z)
+</span></span><span style="display:flex;"><span>        img <span style="color:#f92672">=</span> img<span style="color:#f92672">.</span>view(img<span style="color:#f92672">.</span>size(<span style="color:#ae81ff">0</span>), <span style="color:#f92672">*</span>img_shape)
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> img
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 判别器</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">Discriminator</span>(nn<span style="color:#f92672">.</span>Module):
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">__init__</span>(self):
+</span></span><span style="display:flex;"><span>        super(Discriminator, self)<span style="color:#f92672">.</span><span style="color:#a6e22e">__init__</span>()
+</span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>model <span style="color:#f92672">=</span> nn<span style="color:#f92672">.</span>Sequential(
+</span></span><span style="display:flex;"><span>            nn<span style="color:#f92672">.</span>Linear(int(torch<span style="color:#f92672">.</span>prod(torch<span style="color:#f92672">.</span>tensor(img_shape))), <span style="color:#ae81ff">512</span>),
+</span></span><span style="display:flex;"><span>            nn<span style="color:#f92672">.</span>LeakyReLU(<span style="color:#ae81ff">0.2</span>),
+</span></span><span style="display:flex;"><span>            nn<span style="color:#f92672">.</span>Linear(<span style="color:#ae81ff">512</span>, <span style="color:#ae81ff">256</span>),
+</span></span><span style="display:flex;"><span>            nn<span style="color:#f92672">.</span>LeakyReLU(<span style="color:#ae81ff">0.2</span>),
+</span></span><span style="display:flex;"><span>            nn<span style="color:#f92672">.</span>Linear(<span style="color:#ae81ff">256</span>, <span style="color:#ae81ff">1</span>),
+</span></span><span style="display:flex;"><span>            nn<span style="color:#f92672">.</span>Sigmoid()
+</span></span><span style="display:flex;"><span>        )
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">forward</span>(self, img):
+</span></span><span style="display:flex;"><span>        img_flat <span style="color:#f92672">=</span> img<span style="color:#f92672">.</span>view(img<span style="color:#f92672">.</span>size(<span style="color:#ae81ff">0</span>), <span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>)
+</span></span><span style="display:flex;"><span>        validity <span style="color:#f92672">=</span> self<span style="color:#f92672">.</span>model(img_flat)
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> validity
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 初始化模型</span>
+</span></span><span style="display:flex;"><span>generator <span style="color:#f92672">=</span> Generator()
+</span></span><span style="display:flex;"><span>discriminator <span style="color:#f92672">=</span> Discriminator()
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 损失函数和优化器</span>
+</span></span><span style="display:flex;"><span>adversarial_loss <span style="color:#f92672">=</span> nn<span style="color:#f92672">.</span>BCELoss()
+</span></span><span style="display:flex;"><span>optimizer_G <span style="color:#f92672">=</span> optim<span style="color:#f92672">.</span>Adam(generator<span style="color:#f92672">.</span>parameters(), lr<span style="color:#f92672">=</span><span style="color:#ae81ff">0.0002</span>, betas<span style="color:#f92672">=</span>(<span style="color:#ae81ff">0.5</span>, <span style="color:#ae81ff">0.999</span>))
+</span></span><span style="display:flex;"><span>optimizer_D <span style="color:#f92672">=</span> optim<span style="color:#f92672">.</span>Adam(discriminator<span style="color:#f92672">.</span>parameters(), lr<span style="color:#f92672">=</span><span style="color:#ae81ff">0.0002</span>, betas<span style="color:#f92672">=</span>(<span style="color:#ae81ff">0.5</span>, <span style="color:#ae81ff">0.999</span>))
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 训练循环</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">for</span> epoch <span style="color:#f92672">in</span> range(num_epochs):
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">for</span> i, (real_imgs, _) <span style="color:#f92672">in</span> enumerate(dataloader):
+</span></span><span style="display:flex;"><span>        batch_size <span style="color:#f92672">=</span> real_imgs<span style="color:#f92672">.</span>size(<span style="color:#ae81ff">0</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e"># 真实和假标签</span>
+</span></span><span style="display:flex;"><span>        valid <span style="color:#f92672">=</span> torch<span style="color:#f92672">.</span>ones(batch_size, <span style="color:#ae81ff">1</span>, requires_grad<span style="color:#f92672">=</span><span style="color:#66d9ef">False</span>)
+</span></span><span style="display:flex;"><span>        fake <span style="color:#f92672">=</span> torch<span style="color:#f92672">.</span>zeros(batch_size, <span style="color:#ae81ff">1</span>, requires_grad<span style="color:#f92672">=</span><span style="color:#66d9ef">False</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e"># 训练判别器</span>
+</span></span><span style="display:flex;"><span>        optimizer_D<span style="color:#f92672">.</span>zero_grad()
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e"># 判别器对真实图像的预测</span>
+</span></span><span style="display:flex;"><span>        real_loss <span style="color:#f92672">=</span> adversarial_loss(discriminator(real_imgs), valid)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e"># 生成假图像</span>
+</span></span><span style="display:flex;"><span>        z <span style="color:#f92672">=</span> torch<span style="color:#f92672">.</span>randn(batch_size, latent_dim)
+</span></span><span style="display:flex;"><span>        fake_imgs <span style="color:#f92672">=</span> generator(z)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e"># 判别器对假图像的预测</span>
+</span></span><span style="display:flex;"><span>        fake_loss <span style="color:#f92672">=</span> adversarial_loss(discriminator(fake_imgs<span style="color:#f92672">.</span>detach()), fake)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e"># 判别器总损失</span>
+</span></span><span style="display:flex;"><span>        d_loss <span style="color:#f92672">=</span> (real_loss <span style="color:#f92672">+</span> fake_loss) <span style="color:#f92672">/</span> <span style="color:#ae81ff">2</span>
+</span></span><span style="display:flex;"><span>        d_loss<span style="color:#f92672">.</span>backward()
+</span></span><span style="display:flex;"><span>        optimizer_D<span style="color:#f92672">.</span>step()
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e"># 训练生成器</span>
+</span></span><span style="display:flex;"><span>        optimizer_G<span style="color:#f92672">.</span>zero_grad()
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e"># 生成器试图欺骗判别器</span>
+</span></span><span style="display:flex;"><span>        g_loss <span style="color:#f92672">=</span> adversarial_loss(discriminator(fake_imgs), valid)
+</span></span><span style="display:flex;"><span>        g_loss<span style="color:#f92672">.</span>backward()
+</span></span><span style="display:flex;"><span>        optimizer_G<span style="color:#f92672">.</span>step()
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    print(<span style="color:#e6db74">f</span><span style="color:#e6db74">&#34;Epoch </span><span style="color:#e6db74">{</span>epoch<span style="color:#e6db74">}</span><span style="color:#e6db74">: D_loss: </span><span style="color:#e6db74">{</span>d_loss<span style="color:#f92672">.</span>item()<span style="color:#e6db74">:</span><span style="color:#e6db74">.4f</span><span style="color:#e6db74">}</span><span style="color:#e6db74">, G_loss: </span><span style="color:#e6db74">{</span>g_loss<span style="color:#f92672">.</span>item()<span style="color:#e6db74">:</span><span style="color:#e6db74">.4f</span><span style="color:#e6db74">}</span><span style="color:#e6db74">&#34;</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>print(<span style="color:#e6db74">&#34;训练完成！&#34;</span>)
+</span></span></code></pre></div><h2 id="-生成样本可视化">🎯 生成样本可视化</h2>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">generate_samples</span>(generator, num_samples<span style="color:#f92672">=</span><span style="color:#ae81ff">16</span>):
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#34;&#34;&#34;生成并可视化样本&#34;&#34;&#34;</span>
+</span></span><span style="display:flex;"><span>    generator<span style="color:#f92672">.</span>eval()
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">with</span> torch<span style="color:#f92672">.</span>no_grad():
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e"># 生成随机噪声</span>
+</span></span><span style="display:flex;"><span>        z <span style="color:#f92672">=</span> torch<span style="color:#f92672">.</span>randn(num_samples, latent_dim)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e"># 生成图像</span>
+</span></span><span style="display:flex;"><span>        fake_imgs <span style="color:#f92672">=</span> generator(z)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e"># 转换为numpy数组用于显示</span>
+</span></span><span style="display:flex;"><span>        fake_imgs <span style="color:#f92672">=</span> fake_imgs<span style="color:#f92672">.</span>detach()<span style="color:#f92672">.</span>numpy()
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e"># 创建图像网格</span>
+</span></span><span style="display:flex;"><span>        fig, axes <span style="color:#f92672">=</span> plt<span style="color:#f92672">.</span>subplots(<span style="color:#ae81ff">4</span>, <span style="color:#ae81ff">4</span>, figsize<span style="color:#f92672">=</span>(<span style="color:#ae81ff">8</span>, <span style="color:#ae81ff">8</span>))
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">for</span> i, ax <span style="color:#f92672">in</span> enumerate(axes<span style="color:#f92672">.</span>flat):
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">if</span> i <span style="color:#f92672">&lt;</span> num_samples:
+</span></span><span style="display:flex;"><span>                ax<span style="color:#f92672">.</span>imshow(fake_imgs[i, <span style="color:#ae81ff">0</span>], cmap<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;gray&#39;</span>)
+</span></span><span style="display:flex;"><span>                ax<span style="color:#f92672">.</span>axis(<span style="color:#e6db74">&#39;off&#39;</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        plt<span style="color:#f92672">.</span>tight_layout()
+</span></span><span style="display:flex;"><span>        plt<span style="color:#f92672">.</span>show()
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 生成样本</span>
+</span></span><span style="display:flex;"><span>generate_samples(generator)
+</span></span></code></pre></div><h2 id="-学习资源">📚 学习资源</h2>
+<h3 id="经典论文">经典论文</h3>
+<ul>
+<li><a href="https://arxiv.org/abs/1406.2661">Generative Adversarial Nets</a> - Ian Goodfellow (2014)</li>
+<li><a href="https://arxiv.org/abs/1511.06434">Unsupervised Representation Learning with Deep Convolutional Generative Adversarial Networks</a> - DCGAN</li>
+<li><a href="https://arxiv.org/abs/1701.07875">Wasserstein GAN</a> - WGAN</li>
+<li><a href="https://arxiv.org/abs/1703.10593">CycleGAN</a> - CycleGAN</li>
+</ul>
+<h3 id="在线资源">在线资源</h3>
+<ul>
+<li><a href="https://www.tensorflow.org/tutorials/generative/dcgan">GAN教程</a></li>
+<li><a href="https://pytorch.org/tutorials/beginner/dcgan_faces_tutorial.html">PyTorch GAN实现</a></li>
+<li><a href="https://github.com/hindupuravinash/the-gan-zoo">GAN Zoo</a> - 各种GAN变种的实现</li>
+</ul>
+<h3 id="吴恩达课程">吴恩达课程</h3>
+<ul>
+<li>深度学习课程中关于生成模型的部分</li>
+</ul>
+<h2 id="-实用技巧">🔧 实用技巧</h2>
+<h3 id="超参数调优">超参数调优</h3>
+<ul>
+<li><strong>学习率</strong>：生成器和判别器通常使用相同或相近的学习率</li>
+<li><strong>批大小</strong>：影响训练稳定性和生成质量</li>
+<li><strong>潜在维度</strong>：影响生成样本的多样性</li>
+</ul>
+<h3 id="模型调试">模型调试</h3>
+<ul>
+<li><strong>监控损失</strong>：判别器和生成器损失应该在合理范围内波动</li>
+<li><strong>样本质量</strong>：定期检查生成样本的质量</li>
+<li><strong>模式崩溃检测</strong>：确保生成样本具有足够的多样性</li>
+</ul>
+<hr>
+<p><em>最近更新: {{ .Lastmod.Format &ldquo;2006-01-02&rdquo; }}</em></p>
+
       
       <div class="post-separator">------------------------------------------------------------------------</div>
       
