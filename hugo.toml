@@ -38,8 +38,8 @@ sectionPagesMenu = 'main'
 [params]
   author = "Yaku Makki"
   description = "个人小巢"
-  avatar = './assets/avatar/avatar.jpg'
-  favicon = './assets/avatar/avatar.jpg'
+  avatar = './avatar.jpg'
+  favicon = './avatar.jpg'
   enableEmoji = true
   menu_item_separator = " | "
   showReadingTime = true
