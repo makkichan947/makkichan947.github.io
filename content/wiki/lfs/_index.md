@@ -49,14 +49,58 @@ sudo apt-get install build-essential
 - 预计用时：20-40小时
 - 难度：中高级
 
+## 📚 课程结构
+
+### [第一部分：准备工作](./preparation/)
+- [宿主系统配置](./preparation/host-system/)
+- [分区和文件系统](./preparation/partitions/)
+- [软件包下载](./preparation/packages/)
+- [目录结构规划](./preparation/directory-layout/)
+- [环境变量设置](./preparation/environment/)
+
+### [第二部分：临时工具链](./toolchain/)
+- [交叉编译器构建](./toolchain/cross-compiler/)
+- [临时C库](./toolchain/temporary-c-library/)
+- [Binutils工具链](./toolchain/binutils/)
+- [GCC编译器](./toolchain/gcc/)
+- [临时工具链测试](./toolchain/testing/)
+
+### [第三部分：基本系统构建](./basic-system/)
+- [基础工具安装](./basic-system/base-tools/)
+- [核心系统组件](./basic-system/core-components/)
+- [系统库构建](./basic-system/system-libraries/)
+- [基本命令行工具](./basic-system/basic-utilities/)
+- [系统配置工具](./basic-system/system-tools/)
+
+### [第四部分：引导和内核](./bootloader-kernel/)
+- [GRUB引导加载器](./bootloader-kernel/grub/)
+- [Linux内核编译](./bootloader-kernel/linux-kernel/)
+- [系统引导配置](./bootloader-kernel/boot-configuration/)
+- [内核模块管理](./bootloader-kernel/kernel-modules/)
+- [设备文件系统](./bootloader-kernel/device-filesystem/)
+
+### [第五部分：系统配置](./system-configuration/)
+- [网络配置](./system-configuration/network/)
+- [系统服务](./system-configuration/systemd/)
+- [用户管理](./system-configuration/users/)
+- [安全配置](./system-configuration/security/)
+- [系统优化](./system-configuration/optimization/)
+
+### [第六部分：最终系统](./final-system/)
+- [桌面环境](./final-system/desktop-environment/)
+- [开发工具](./final-system/development-tools/)
+- [应用程序](./final-system/applications/)
+- [系统维护](./final-system/maintenance/)
+- [故障排除](./final-system/troubleshooting/)
+
 ## 🚀 构建步骤概览
 
-1. **准备宿主系统**
-2. **下载源码包**
-3. **构建临时工具链**
-4. **构建基本系统**
-5. **配置引导和内核**
-6. **系统配置和优化**
+1. **准备工作**：配置宿主系统，创建分区，下载源码
+2. **临时工具链**：构建交叉编译环境和基础工具
+3. **基本系统**：安装核心系统组件和库
+4. **引导和内核**：配置GRUB和编译Linux内核
+5. **系统配置**：网络、用户、服务等系统配置
+6. **最终系统**：桌面环境、开发工具、应用软件
 
 ## 💡 学习建议
 
@@ -67,4 +111,5 @@ sudo apt-get install build-essential
 - [LFS官方文档](http://www.linuxfromscratch.org/lfs/)
 - [LFS中文社区](https://lfs.linuxsir.org/)
 - [BLFS（Beyond LFS）](http://www.linuxfromscratch.org/blfs/)
+- [LFS Hints](http://www.linuxfromscratch.org/hints/)
 
