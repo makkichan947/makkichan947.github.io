@@ -1,0 +1,409 @@
+<!doctype html>
+<html lang="zh">
+  <head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+    <title>分区和文件系统 // Yaku Makki</title>
+    <link rel="shortcut icon" href="./avatar.jpg" />
+    <meta charset="utf-8" />
+    <meta name="generator" content="Hugo 0.151.2">
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="author" content="Yaku Makki" />
+    <meta name="description" content="LFS系统的磁盘分区和文件系统创建" />
+    <link rel="stylesheet" href="/css/main.min.422840b4454cb211f5b3dab61f082cdff508e88825173c31806835cb75529734.css" />
+    
+
+    
+    
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="分区和文件系统">
+  <meta name="twitter:description" content="LFS系统的磁盘分区和文件系统创建">
+
+    <meta property="og:url" content="http://localhost:1313/wiki/lfs/preparation/partitions/">
+  <meta property="og:site_name" content="Yaku Makki">
+  <meta property="og:title" content="分区和文件系统">
+  <meta property="og:description" content="LFS系统的磁盘分区和文件系统创建">
+  <meta property="og:locale" content="zh">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="wiki">
+    <meta property="article:published_time" content="2025-10-28T00:00:00+00:00">
+    <meta property="article:modified_time" content="2025-10-28T00:00:00+00:00">
+
+
+  </head>
+  <body class="synthwave-bg">
+    <header class="app-header glass-morphism neon-border">
+      <a href="/"><img class="app-header-avatar" src="/avatar.jpg" alt="Yaku Makki" /></a>
+      <span class="app-header-title gradient-text">Yaku Makki</span>
+      <nav class="app-header-menu">
+          <a class="app-header-menu-item" href="/">首页</a>
+             | 
+          
+          <a class="app-header-menu-item" href="/post/">博客</a>
+             | 
+          
+          <a class="app-header-menu-item" href="/wiki/">维基</a>
+             | 
+          
+          <a class="app-header-menu-item" href="/tags/">标签</a>
+             | 
+          
+          <a class="app-header-menu-item" href="/about/">关于</a>
+      </nav>
+      <p>个人小巢</p>
+      <div class="app-header-social">
+        
+          <a href="https://github.com/makkichan947" target="_blank" rel="noreferrer noopener me" class="pulse-glow">
+            <svg class="icon icon-brand-github" viewBox="0 0 24 24" fill="currentColor"><title>GitHub</title><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg>
+          </a>
+        
+          <a href="mailto:yakumakki947@hotmail.com" target="_blank" rel="noreferrer noopener me" class="pulse-glow">
+            <svg class="icon icon-mail" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><title>mail</title><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
+          </a>
+        
+          <a href="https://x.com/Makki_Yaku947" target="_blank" rel="noreferrer noopener me" class="pulse-glow">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-link">
+  <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path>
+  <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path>
+</svg>
+          </a>
+        
+          <a href="https://www.twitch.tv/u/makkichan947" target="_blank" rel="noreferrer noopener me" class="pulse-glow">
+            <svg class="icon icon-brand-twitch" viewBox="0 0 24 24" fill="currentColor"><title>Twitch</title><path d="M11.571 4.714h1.715v5.143H11.57zm4.715 0H18v5.143h-1.714zM6 0L1.714 4.286v15.428h5.143V24l4.286-4.286h3.428L22.286 12V0zm14.571 11.143l-3.428 3.428h-3.429l-3 3v-3H6.857V1.714h13.714Z"/></svg>
+          </a>
+        
+      </div>
+    </header>
+    <main class="app-container glass-morphism glow-effect">
+      <div class="floating-particles">
+        <div class="particle" style="left: 10%; animation-delay: 0s;"></div>
+        <div class="particle" style="left: 20%; animation-delay: 1s;"></div>
+        <div class="particle" style="left: 30%; animation-delay: 2s;"></div>
+        <div class="particle" style="left: 40%; animation-delay: 3s;"></div>
+        <div class="particle" style="left: 50%; animation-delay: 4s;"></div>
+        <div class="particle" style="left: 60%; animation-delay: 5s;"></div>
+        <div class="particle" style="left: 70%; animation-delay: 6s;"></div>
+        <div class="particle" style="left: 80%; animation-delay: 7s;"></div>
+        <div class="particle" style="left: 90%; animation-delay: 8s;"></div>
+      </div>
+      
+  <article class="post enhanced-card glow-effect">
+    <header class="post-header">
+      <h1 class ="post-title gradient-text">分区和文件系统</h1>
+      <div class="post-meta">
+        <div>
+          <svg class="icon icon-calendar" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><title>calendar</title><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+          Oct 28, 2025
+        </div>
+        <div>
+          <svg class="icon icon-clock" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><title>clock</title><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+          4 min read
+        </div>
+      </div>
+    </header>
+    <div class="post-content">
+      <h1 id="分区和文件系统">分区和文件系统</h1>
+<p>LFS系统需要独立的磁盘分区来确保构建过程的隔离性和安全性。本章将详细介绍如何为LFS创建分区、格式化文件系统以及挂载分区。</p>
+<h2 id="-分区规划">💾 分区规划</h2>
+<h3 id="分区方案">分区方案</h3>
+<p>LFS推荐使用以下分区方案：</p>
+<table>
+  <thead>
+      <tr>
+          <th>分区</th>
+          <th>挂载点</th>
+          <th>文件系统</th>
+          <th>大小</th>
+          <th>用途</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><code>/dev/sda1</code></td>
+          <td><code>/boot</code></td>
+          <td>ext2/ext4</td>
+          <td>100MB</td>
+          <td>引导分区</td>
+      </tr>
+      <tr>
+          <td><code>/dev/sda2</code></td>
+          <td><code>/</code></td>
+          <td>ext4</td>
+          <td>10GB+</td>
+          <td>根分区</td>
+      </tr>
+      <tr>
+          <td><code>/dev/sda3</code></td>
+          <td><code>/home</code></td>
+          <td>ext4</td>
+          <td>5GB+</td>
+          <td>用户主目录</td>
+      </tr>
+      <tr>
+          <td><code>/dev/sda4</code></td>
+          <td>swap</td>
+          <td>swap</td>
+          <td>RAM*2</td>
+          <td>交换分区</td>
+      </tr>
+  </tbody>
+</table>
+<h3 id="分区大小建议">分区大小建议</h3>
+<ul>
+<li><strong>根分区</strong>：至少8GB，推荐10GB以上</li>
+<li><strong>引导分区</strong>：100-200MB（如果需要单独引导分区）</li>
+<li><strong>交换分区</strong>：等于或大于物理内存大小</li>
+<li><strong>用户分区</strong>：根据需要，5GB以上</li>
+</ul>
+<h2 id="-创建分区">🛠️ 创建分区</h2>
+<h3 id="使用fdisk创建分区">使用fdisk创建分区</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># 查看当前磁盘</span>
+</span></span><span style="display:flex;"><span>sudo fdisk -l
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 启动fdisk进行分区</span>
+</span></span><span style="display:flex;"><span>sudo fdisk /dev/sda
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># fdisk命令序列：</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># n (新建分区)</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># p (主分区)</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 1 (分区号)</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 默认 (起始扇区)</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># +100M (分区大小)</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># n, p, 2, 默认, +10G</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># n, p, 3, 默认, +5G</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># n, p, 4, 默认, 默认 (剩余空间)</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># t, 4, 82 (设置交换分区类型)</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># w (写入并退出)</span>
+</span></span></code></pre></div><h3 id="使用parted创建分区推荐">使用parted创建分区（推荐）</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># 使用parted创建分区</span>
+</span></span><span style="display:flex;"><span>sudo parted /dev/sda
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># parted命令：</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># mklabel gpt  # 创建GPT分区表</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># mkpart primary ext4 1MiB 101MiB  # /boot分区</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># mkpart primary ext4 101MiB 10.1GiB  # 根分区</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># mkpart primary ext4 10.1GiB 15.1GiB  # /home分区</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># mkpart primary linux-swap 15.1GiB 100%  # 交换分区</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># quit</span>
+</span></span></code></pre></div><h3 id="验证分区">验证分区</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># 查看分区表</span>
+</span></span><span style="display:flex;"><span>sudo fdisk -l /dev/sda
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 或者使用parted</span>
+</span></span><span style="display:flex;"><span>sudo parted /dev/sda print
+</span></span></code></pre></div><h2 id="-格式化文件系统">📁 格式化文件系统</h2>
+<h3 id="格式化ext4文件系统">格式化ext4文件系统</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># 格式化根分区</span>
+</span></span><span style="display:flex;"><span>sudo mkfs.ext4 /dev/sda2
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 格式化引导分区</span>
+</span></span><span style="display:flex;"><span>sudo mkfs.ext4 /dev/sda1
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 格式化用户分区</span>
+</span></span><span style="display:flex;"><span>sudo mkfs.ext4 /dev/sda3
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 格式化交换分区</span>
+</span></span><span style="display:flex;"><span>sudo mkswap /dev/sda4
+</span></span></code></pre></div><h3 id="设置文件系统标签">设置文件系统标签</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># 设置分区标签（可选但推荐）</span>
+</span></span><span style="display:flex;"><span>sudo e2label /dev/sda1 LFS_BOOT
+</span></span><span style="display:flex;"><span>sudo e2label /dev/sda2 LFS_ROOT
+</span></span><span style="display:flex;"><span>sudo e2label /dev/sda3 LFS_HOME
+</span></span><span style="display:flex;"><span>sudo swaplabel /dev/sda4 LFS_SWAP
+</span></span></code></pre></div><h3 id="检查文件系统">检查文件系统</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># 检查ext4文件系统</span>
+</span></span><span style="display:flex;"><span>sudo tune2fs -l /dev/sda2
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 检查交换分区</span>
+</span></span><span style="display:flex;"><span>sudo blkid /dev/sda4
+</span></span></code></pre></div><h2 id="-挂载分区">🔗 挂载分区</h2>
+<h3 id="创建挂载点">创建挂载点</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># 创建LFS根目录</span>
+</span></span><span style="display:flex;"><span>sudo mkdir -pv $LFS
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 创建其他挂载点</span>
+</span></span><span style="display:flex;"><span>sudo mkdir -pv $LFS/boot
+</span></span><span style="display:flex;"><span>sudo mkdir -pv $LFS/home
+</span></span></code></pre></div><h3 id="挂载分区">挂载分区</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># 挂载根分区</span>
+</span></span><span style="display:flex;"><span>sudo mount -v -t ext4 /dev/sda2 $LFS
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 挂载引导分区</span>
+</span></span><span style="display:flex;"><span>sudo mount -v -t ext4 /dev/sda1 $LFS/boot
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 挂载用户分区</span>
+</span></span><span style="display:flex;"><span>sudo mount -v -t ext4 /dev/sda3 $LFS/home
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 启用交换分区</span>
+</span></span><span style="display:flex;"><span>sudo swapon /dev/sda4
+</span></span></code></pre></div><h3 id="验证挂载">验证挂载</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># 检查挂载状态</span>
+</span></span><span style="display:flex;"><span>mount | grep $LFS
+</span></span><span style="display:flex;"><span>df -h $LFS
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 检查交换空间</span>
+</span></span><span style="display:flex;"><span>swapon -s
+</span></span><span style="display:flex;"><span>free -h
+</span></span></code></pre></div><h2 id="-创建fstab文件">📋 创建fstab文件</h2>
+<h3 id="生成fstab条目">生成fstab条目</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># 获取UUID</span>
+</span></span><span style="display:flex;"><span>blkid /dev/sda1  <span style="color:#75715e"># 引导分区UUID</span>
+</span></span><span style="display:flex;"><span>blkid /dev/sda2  <span style="color:#75715e"># 根分区UUID</span>
+</span></span><span style="display:flex;"><span>blkid /dev/sda3  <span style="color:#75715e"># 用户分区UUID</span>
+</span></span><span style="display:flex;"><span>blkid /dev/sda4  <span style="color:#75715e"># 交换分区UUID</span>
+</span></span></code></pre></div><h3 id="创建fstab文件">创建fstab文件</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># 创建fstab文件</span>
+</span></span><span style="display:flex;"><span>cat &gt; $LFS/etc/fstab &lt;&lt; <span style="color:#e6db74">&#34;EOF&#34;</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Begin /etc/fstab</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># file system  mount-point  type     options             dump  fsck</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#                                                              order</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>UUID<span style="color:#f92672">=</span>XXXX-XXXX-XXXX-XXXX   /            ext4    defaults            <span style="color:#ae81ff">1</span>     <span style="color:#ae81ff">1</span>
+</span></span><span style="display:flex;"><span>UUID<span style="color:#f92672">=</span>YYYY-YYYY-YYYY-YYYY   /boot        ext4    defaults            <span style="color:#ae81ff">1</span>     <span style="color:#ae81ff">2</span>
+</span></span><span style="display:flex;"><span>UUID<span style="color:#f92672">=</span>ZZZZ-ZZZZ-ZZZZ-ZZZZ   /home        ext4    defaults            <span style="color:#ae81ff">1</span>     <span style="color:#ae81ff">2</span>
+</span></span><span style="display:flex;"><span>UUID<span style="color:#f92672">=</span>WWWW-WWWW-WWWW-WWWW   swap         swap    pri<span style="color:#f92672">=</span><span style="color:#ae81ff">1</span>               <span style="color:#ae81ff">0</span>     <span style="color:#ae81ff">0</span>
+</span></span><span style="display:flex;"><span>proc                                       /proc        proc     nosuid,noexec,nodev <span style="color:#ae81ff">0</span>     <span style="color:#ae81ff">0</span>
+</span></span><span style="display:flex;"><span>sysfs                                      /sys         sysfs    nosuid,noexec,nodev <span style="color:#ae81ff">0</span>     <span style="color:#ae81ff">0</span>
+</span></span><span style="display:flex;"><span>devpts                                     /dev/pts     devpts   gid<span style="color:#f92672">=</span>5,mode<span style="color:#f92672">=</span><span style="color:#ae81ff">620</span>      <span style="color:#ae81ff">0</span>     <span style="color:#ae81ff">0</span>
+</span></span><span style="display:flex;"><span>tmpfs                                      /run         tmpfs    defaults            <span style="color:#ae81ff">0</span>     <span style="color:#ae81ff">0</span>
+</span></span><span style="display:flex;"><span>devtmpfs                                   /dev         devtmpfs  mode<span style="color:#f92672">=</span>0755,nosuid    <span style="color:#ae81ff">0</span>     <span style="color:#ae81ff">0</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># End /etc/fstab</span>
+</span></span><span style="display:flex;"><span>EOF
+</span></span></code></pre></div><h3 id="更新fstab中的uuid">更新fstab中的UUID</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># 使用实际的UUID替换占位符</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 例如：</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># UUID=550e8400-e29b-41d4-a716-446655440000   /            ext4    defaults            1     1</span>
+</span></span></code></pre></div><h2 id="-高级分区方案">💾 高级分区方案</h2>
+<h3 id="lvm逻辑卷管理">LVM逻辑卷管理</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># 创建物理卷</span>
+</span></span><span style="display:flex;"><span>sudo pvcreate /dev/sda2
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 创建卷组</span>
+</span></span><span style="display:flex;"><span>sudo vgcreate lfs_vg /dev/sda2
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 创建逻辑卷</span>
+</span></span><span style="display:flex;"><span>sudo lvcreate -L 8G -n lfs_root lfs_vg
+</span></span><span style="display:flex;"><span>sudo lvcreate -L 2G -n lfs_home lfs_vg
+</span></span><span style="display:flex;"><span>sudo lvcreate -L 1G -n lfs_swap lfs_vg
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 格式化和挂载逻辑卷</span>
+</span></span><span style="display:flex;"><span>sudo mkfs.ext4 /dev/lfs_vg/lfs_root
+</span></span><span style="display:flex;"><span>sudo mkfs.ext4 /dev/lfs_vg/lfs_home
+</span></span><span style="display:flex;"><span>sudo mkswap /dev/lfs_vg/lfs_swap
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>sudo mount /dev/lfs_vg/lfs_root $LFS
+</span></span><span style="display:flex;"><span>sudo mkdir $LFS/home
+</span></span><span style="display:flex;"><span>sudo mount /dev/lfs_vg/lfs_home $LFS/home
+</span></span><span style="display:flex;"><span>sudo swapon /dev/lfs_vg/lfs_swap
+</span></span></code></pre></div><h3 id="btrfs文件系统">Btrfs文件系统</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># 创建Btrfs文件系统</span>
+</span></span><span style="display:flex;"><span>sudo mkfs.btrfs /dev/sda2
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 挂载Btrfs</span>
+</span></span><span style="display:flex;"><span>sudo mount -t btrfs /dev/sda2 $LFS
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 创建子卷</span>
+</span></span><span style="display:flex;"><span>sudo btrfs subvolume create $LFS/@
+</span></span><span style="display:flex;"><span>sudo btrfs subvolume create $LFS/@home
+</span></span><span style="display:flex;"><span>sudo btrfs subvolume create $LFS/@snapshots
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 重新挂载子卷</span>
+</span></span><span style="display:flex;"><span>sudo umount $LFS
+</span></span><span style="display:flex;"><span>sudo mount -t btrfs -o subvol<span style="color:#f92672">=</span>@ /dev/sda2 $LFS
+</span></span><span style="display:flex;"><span>sudo mkdir -p $LFS/home
+</span></span><span style="display:flex;"><span>sudo mount -t btrfs -o subvol<span style="color:#f92672">=</span>@home /dev/sda2 $LFS/home
+</span></span></code></pre></div><h2 id="-备份和恢复">🔄 备份和恢复</h2>
+<h3 id="备份分区表">备份分区表</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># 备份MBR分区表</span>
+</span></span><span style="display:flex;"><span>sudo dd <span style="color:#66d9ef">if</span><span style="color:#f92672">=</span>/dev/sda of<span style="color:#f92672">=</span>$LFS/backup/mbr_backup.img bs<span style="color:#f92672">=</span><span style="color:#ae81ff">512</span> count<span style="color:#f92672">=</span><span style="color:#ae81ff">1</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 备份GPT分区表</span>
+</span></span><span style="display:flex;"><span>sudo sgdisk --backup<span style="color:#f92672">=</span>$LFS/backup/gpt_backup.bak /dev/sda
+</span></span></code></pre></div><h3 id="分区表恢复">分区表恢复</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># 恢复MBR分区表</span>
+</span></span><span style="display:flex;"><span>sudo dd <span style="color:#66d9ef">if</span><span style="color:#f92672">=</span>$LFS/backup/mbr_backup.img of<span style="color:#f92672">=</span>/dev/sda bs<span style="color:#f92672">=</span><span style="color:#ae81ff">512</span> count<span style="color:#f92672">=</span><span style="color:#ae81ff">1</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 恢复GPT分区表</span>
+</span></span><span style="display:flex;"><span>sudo sgdisk --load-backup<span style="color:#f92672">=</span>$LFS/backup/gpt_backup.bak /dev/sda
+</span></span></code></pre></div><h2 id="-测试和验证">🧪 测试和验证</h2>
+<h3 id="文件系统完整性检查">文件系统完整性检查</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># 检查ext4文件系统</span>
+</span></span><span style="display:flex;"><span>sudo e2fsck -f /dev/sda2
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 检查Btrfs文件系统</span>
+</span></span><span style="display:flex;"><span>sudo btrfs check /dev/sda2
+</span></span></code></pre></div><h3 id="性能测试">性能测试</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># 磁盘I/O性能测试</span>
+</span></span><span style="display:flex;"><span>sudo hdparm -tT /dev/sda
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 文件系统性能测试</span>
+</span></span><span style="display:flex;"><span>dd <span style="color:#66d9ef">if</span><span style="color:#f92672">=</span>/dev/zero of<span style="color:#f92672">=</span>$LFS/test_file bs<span style="color:#f92672">=</span>1M count<span style="color:#f92672">=</span><span style="color:#ae81ff">100</span>
+</span></span><span style="display:flex;"><span>rm $LFS/test_file
+</span></span></code></pre></div><h3 id="空间使用情况">空间使用情况</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># 查看分区使用情况</span>
+</span></span><span style="display:flex;"><span>df -h $LFS
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 查看inode使用情况</span>
+</span></span><span style="display:flex;"><span>df -i $LFS
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 查看大文件</span>
+</span></span><span style="display:flex;"><span>du -sh $LFS/*
+</span></span></code></pre></div><h2 id="-常见问题">🚨 常见问题</h2>
+<h3 id="分区无法挂载">分区无法挂载</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># 检查分区是否存在</span>
+</span></span><span style="display:flex;"><span>lsblk
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 检查文件系统类型</span>
+</span></span><span style="display:flex;"><span>sudo blkid /dev/sda2
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 强制检查文件系统</span>
+</span></span><span style="display:flex;"><span>sudo fsck -y /dev/sda2
+</span></span></code></pre></div><h3 id="空间不足">空间不足</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># 扩展分区（使用parted）</span>
+</span></span><span style="display:flex;"><span>sudo parted /dev/sda
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># resizepart 2 20G  # 扩展第二个分区到20G</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 扩展文件系统</span>
+</span></span><span style="display:flex;"><span>sudo resize2fs /dev/sda2
+</span></span></code></pre></div><h3 id="引导问题">引导问题</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># 检查引导分区</span>
+</span></span><span style="display:flex;"><span>ls $LFS/boot
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 验证GRUB配置</span>
+</span></span><span style="display:flex;"><span>cat $LFS/boot/grub/grub.cfg
+</span></span></code></pre></div><h2 id="-相关资源">📚 相关资源</h2>
+<ul>
+<li><a href="http://www.linuxfromscratch.org/lfs/view/stable/chapter02/creatingpartition.html">LFS官方文档 - 分区</a></li>
+<li><a href="http://www.linuxfromscratch.org/lfs/view/stable/chapter02/mounting.html">LFS官方文档 - 挂载</a></li>
+<li><a href="https://wiki.archlinux.org/title/Partitioning">Arch Wiki - 分区</a></li>
+<li><a href="https://refspecs.linuxfoundation.org/FHS_3.0/fhs/index.html">Linux文件系统层次标准</a></li>
+</ul>
+<hr>
+<p><em>最近更新: {{ .Lastmod.Format &ldquo;2006-01-02&rdquo; }}</em></p>
+
+      
+      <div class="post-separator">------------------------------------------------------------------------</div>
+      
+    </div>
+    <div class="post-footer">
+      
+      <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+      <div class="busuanzi-container">
+        <span id="busuanzi_container_page_pv">--本文总阅读量<span id="busuanzi_value_page_pv"></span>次--</span>
+      </div>
+      
+      
+      <script src="https://utteranc.es/client.js"
+        repo="makkichan947/makkichan947.github.io"
+        issue-term="pathname"
+        label="Utterances"
+        theme="github-dark"
+        crossorigin="anonymous"
+        async>
+      </script>
+    </div>
+  </article>
+
+    </main>
+  </body>
+</html>

@@ -1,27 +1,27 @@
 <!doctype html>
 <html lang="zh">
   <head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
-    <title>Yaku Makki</title>
+    <title>第一部分：准备工作 // Yaku Makki</title>
     <link rel="shortcut icon" href="./avatar.jpg" />
     <meta charset="utf-8" />
     <meta name="generator" content="Hugo 0.151.2">
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="author" content="Yaku Makki" />
-    <meta name="description" content="个人小巢" />
+    <meta name="description" content="LFS构建前的准备工作" />
     <link rel="stylesheet" href="/css/main.min.422840b4454cb211f5b3dab61f082cdff508e88825173c31806835cb75529734.css" />
-    <link rel="alternate" type="application/rss+xml" href="http://localhost:1313/index.xml" title="Yaku Makki">
+    <link rel="alternate" type="application/rss+xml" href="http://localhost:1313/wiki/lfs/preparation/index.xml" title="Yaku Makki">
     
 
     
     
   <meta name="twitter:card" content="summary">
-  <meta name="twitter:title" content="Yaku Makki">
-  <meta name="twitter:description" content="个人小巢">
+  <meta name="twitter:title" content="第一部分：准备工作">
+  <meta name="twitter:description" content="LFS构建前的准备工作">
 
-    <meta property="og:url" content="http://localhost:1313/">
+    <meta property="og:url" content="http://localhost:1313/wiki/lfs/preparation/">
   <meta property="og:site_name" content="Yaku Makki">
-  <meta property="og:title" content="Yaku Makki">
-  <meta property="og:description" content="个人小巢">
+  <meta property="og:title" content="第一部分：准备工作">
+  <meta property="og:description" content="LFS构建前的准备工作">
   <meta property="og:locale" content="zh">
   <meta property="og:type" content="website">
 
@@ -84,40 +84,50 @@
       </div>
       
   <article class="enhanced-card glow-effect">
-    <h1 class="gradient-text">Yaku Makki</h1>
-    
+    <h1 class="gradient-text">第一部分：准备工作</h1>
+    <div class="post-content"><h1 id="第一部分准备工作">第一部分：准备工作</h1>
+<p>在开始构建LFS系统之前，需要进行充分的准备工作，包括宿主系统配置、分区规划、源码下载等。本部分将详细介绍这些准备步骤。</p>
+<h2 id="-章节内容">📋 章节内容</h2>
+<ul>
+<li><a href="./host-system/">宿主系统配置</a> - 配置构建环境</li>
+<li><a href="./partitions/">分区和文件系统</a> - 磁盘分区和文件系统创建</li>
+<li><a href="./packages/">软件包下载</a> - 下载LFS所需的所有源码包</li>
+<li><a href="./directory-layout/">目录结构规划</a> - LFS目录结构设计</li>
+<li><a href="./environment/">环境变量设置</a> - 环境变量和构建脚本配置</li>
+</ul>
+<h2 id="-学习目标">🎯 学习目标</h2>
+<p>完成本部分后，你将能够：</p>
+<ul>
+<li>正确配置宿主系统环境</li>
+<li>创建合适的磁盘分区</li>
+<li>下载和管理LFS源码包</li>
+<li>设置LFS构建环境变量</li>
+<li>理解LFS目录结构设计</li>
+</ul>
+<h2 id="-预计时间">⏱️ 预计时间</h2>
+<p>本部分需要大约2-4小时完成，具体时间取决于网络速度和磁盘性能。</p>
+</div>
     <ul class="posts-list">
       
         <li class="posts-list-item enhanced-card">
-          <a class="posts-list-item-title gradient-text" href="/wiki/cryptography/aes/">AES算法详解</a>
-          <span class="posts-list-item-description">
-            <svg class="icon icon-calendar" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><title>calendar</title><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
-            Oct 12, 2025
-            <span class="posts-list-item-separator">-</span>
-            <svg class="icon icon-clock" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><title>clock</title><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
-            2 min read
-          </span>
-        </li>
-      
-        <li class="posts-list-item enhanced-card">
-          <a class="posts-list-item-title gradient-text" href="/wiki/lfs/toolchain/binutils/">Binutils工具链</a>
+          <a class="posts-list-item-title gradient-text" href="/wiki/lfs/preparation/host-system/">宿主系统配置</a>
           <span class="posts-list-item-description">
             <svg class="icon icon-calendar" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><title>calendar</title><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
             Oct 28, 2025
             <span class="posts-list-item-separator">-</span>
             <svg class="icon icon-clock" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><title>clock</title><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
-            5 min read
+            4 min read
           </span>
         </li>
       
         <li class="posts-list-item enhanced-card">
-          <a class="posts-list-item-title gradient-text" href="/wiki/lfs/basic-system/core-components/">核心系统组件</a>
+          <a class="posts-list-item-title gradient-text" href="/wiki/lfs/preparation/partitions/">分区和文件系统</a>
           <span class="posts-list-item-description">
             <svg class="icon icon-calendar" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><title>calendar</title><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
             Oct 28, 2025
             <span class="posts-list-item-separator">-</span>
             <svg class="icon icon-clock" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><title>clock</title><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
-            6 min read
+            4 min read
           </span>
         </li>
       
@@ -133,50 +143,6 @@
         </li>
       
         <li class="posts-list-item enhanced-card">
-          <a class="posts-list-item-title gradient-text" href="/wiki/deep_learning/tensorflow/advanced_2/">TensorFlow高级应用</a>
-          <span class="posts-list-item-description">
-            <svg class="icon icon-calendar" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><title>calendar</title><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
-            Oct 24, 2025
-            <span class="posts-list-item-separator">-</span>
-            <svg class="icon icon-clock" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><title>clock</title><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
-            10 min read
-          </span>
-        </li>
-      
-        <li class="posts-list-item enhanced-card">
-          <a class="posts-list-item-title gradient-text" href="/wiki/deep_learning/rnn/">循环神经网络</a>
-          <span class="posts-list-item-description">
-            <svg class="icon icon-calendar" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><title>calendar</title><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
-            Oct 20, 2025
-            <span class="posts-list-item-separator">-</span>
-            <svg class="icon icon-clock" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><title>clock</title><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
-            3 min read
-          </span>
-        </li>
-      
-        <li class="posts-list-item enhanced-card">
-          <a class="posts-list-item-title gradient-text" href="/wiki/lfs/toolchain/gcc/">GCC编译器</a>
-          <span class="posts-list-item-description">
-            <svg class="icon icon-calendar" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><title>calendar</title><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
-            Oct 28, 2025
-            <span class="posts-list-item-separator">-</span>
-            <svg class="icon icon-clock" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><title>clock</title><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
-            6 min read
-          </span>
-        </li>
-      
-        <li class="posts-list-item enhanced-card">
-          <a class="posts-list-item-title gradient-text" href="/wiki/lfs/basic-system/basic-utilities/">基本命令行工具</a>
-          <span class="posts-list-item-description">
-            <svg class="icon icon-calendar" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><title>calendar</title><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
-            Oct 28, 2025
-            <span class="posts-list-item-separator">-</span>
-            <svg class="icon icon-clock" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><title>clock</title><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
-            6 min read
-          </span>
-        </li>
-      
-        <li class="posts-list-item enhanced-card">
           <a class="posts-list-item-title gradient-text" href="/wiki/lfs/preparation/directory-layout/">目录结构规划</a>
           <span class="posts-list-item-description">
             <svg class="icon icon-calendar" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><title>calendar</title><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
@@ -188,60 +154,18 @@
         </li>
       
         <li class="posts-list-item enhanced-card">
-          <a class="posts-list-item-title gradient-text" href="/wiki/deep_learning/transformer/">Transformer架构</a>
+          <a class="posts-list-item-title gradient-text" href="/wiki/lfs/preparation/environment/">环境变量设置</a>
           <span class="posts-list-item-description">
             <svg class="icon icon-calendar" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><title>calendar</title><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
-            Oct 25, 2025
+            Oct 28, 2025
             <span class="posts-list-item-separator">-</span>
             <svg class="icon icon-clock" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><title>clock</title><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
-            4 min read
+            8 min read
           </span>
         </li>
       
     </ul>
     
-
-<ul class="pagination">
-  
-  <li class="page-item">
-    <a class="page-link" href="/">
-      <svg class="icon icon-arrow-left" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><title>arrow-left</title><line x1="19" y1="12" x2="5" y2="12"></line><polyline points="12 19 5 12 12 5"></polyline></svg>
-    </a>
-  </li>
-  
-  
-  <li class="page-item">
-    <a class="page-link" href="/">
-      1
-    </a>
-  </li>
-  
-  <li class="page-item active">
-    <a class="page-link" href="/page/2/">
-      2
-    </a>
-  </li>
-  
-  <li class="page-item">
-    <a class="page-link" href="/page/3/">
-      3
-    </a>
-  </li>
-  
-  <li class="page-item">
-    <a class="page-link" href="/page/4/">
-      4
-    </a>
-  </li>
-  
-  
-  <li class="page-item">
-    <a class="page-link" href="/page/3/">
-      <svg class="icon icon-arrow-right" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><title>arrow-right</title><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
-    </a>
-  </li>
-  
-</ul>
 
 
 

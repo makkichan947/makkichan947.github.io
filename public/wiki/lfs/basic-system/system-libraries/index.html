@@ -1,0 +1,603 @@
+<!doctype html>
+<html lang="zh">
+  <head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+    <title>系统库构建 // Yaku Makki</title>
+    <link rel="shortcut icon" href="./avatar.jpg" />
+    <meta charset="utf-8" />
+    <meta name="generator" content="Hugo 0.151.2">
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="author" content="Yaku Makki" />
+    <meta name="description" content="构建LFS系统库" />
+    <link rel="stylesheet" href="/css/main.min.422840b4454cb211f5b3dab61f082cdff508e88825173c31806835cb75529734.css" />
+    
+
+    
+    
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="系统库构建">
+  <meta name="twitter:description" content="构建LFS系统库">
+
+    <meta property="og:url" content="http://localhost:1313/wiki/lfs/basic-system/system-libraries/">
+  <meta property="og:site_name" content="Yaku Makki">
+  <meta property="og:title" content="系统库构建">
+  <meta property="og:description" content="构建LFS系统库">
+  <meta property="og:locale" content="zh">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="wiki">
+    <meta property="article:published_time" content="2025-10-28T00:00:00+00:00">
+    <meta property="article:modified_time" content="2025-10-28T00:00:00+00:00">
+
+
+  </head>
+  <body class="synthwave-bg">
+    <header class="app-header glass-morphism neon-border">
+      <a href="/"><img class="app-header-avatar" src="/avatar.jpg" alt="Yaku Makki" /></a>
+      <span class="app-header-title gradient-text">Yaku Makki</span>
+      <nav class="app-header-menu">
+          <a class="app-header-menu-item" href="/">首页</a>
+             | 
+          
+          <a class="app-header-menu-item" href="/post/">博客</a>
+             | 
+          
+          <a class="app-header-menu-item" href="/wiki/">维基</a>
+             | 
+          
+          <a class="app-header-menu-item" href="/tags/">标签</a>
+             | 
+          
+          <a class="app-header-menu-item" href="/about/">关于</a>
+      </nav>
+      <p>个人小巢</p>
+      <div class="app-header-social">
+        
+          <a href="https://github.com/makkichan947" target="_blank" rel="noreferrer noopener me" class="pulse-glow">
+            <svg class="icon icon-brand-github" viewBox="0 0 24 24" fill="currentColor"><title>GitHub</title><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg>
+          </a>
+        
+          <a href="mailto:yakumakki947@hotmail.com" target="_blank" rel="noreferrer noopener me" class="pulse-glow">
+            <svg class="icon icon-mail" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><title>mail</title><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
+          </a>
+        
+          <a href="https://x.com/Makki_Yaku947" target="_blank" rel="noreferrer noopener me" class="pulse-glow">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-link">
+  <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path>
+  <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path>
+</svg>
+          </a>
+        
+          <a href="https://www.twitch.tv/u/makkichan947" target="_blank" rel="noreferrer noopener me" class="pulse-glow">
+            <svg class="icon icon-brand-twitch" viewBox="0 0 24 24" fill="currentColor"><title>Twitch</title><path d="M11.571 4.714h1.715v5.143H11.57zm4.715 0H18v5.143h-1.714zM6 0L1.714 4.286v15.428h5.143V24l4.286-4.286h3.428L22.286 12V0zm14.571 11.143l-3.428 3.428h-3.429l-3 3v-3H6.857V1.714h13.714Z"/></svg>
+          </a>
+        
+      </div>
+    </header>
+    <main class="app-container glass-morphism glow-effect">
+      <div class="floating-particles">
+        <div class="particle" style="left: 10%; animation-delay: 0s;"></div>
+        <div class="particle" style="left: 20%; animation-delay: 1s;"></div>
+        <div class="particle" style="left: 30%; animation-delay: 2s;"></div>
+        <div class="particle" style="left: 40%; animation-delay: 3s;"></div>
+        <div class="particle" style="left: 50%; animation-delay: 4s;"></div>
+        <div class="particle" style="left: 60%; animation-delay: 5s;"></div>
+        <div class="particle" style="left: 70%; animation-delay: 6s;"></div>
+        <div class="particle" style="left: 80%; animation-delay: 7s;"></div>
+        <div class="particle" style="left: 90%; animation-delay: 8s;"></div>
+      </div>
+      
+  <article class="post enhanced-card glow-effect">
+    <header class="post-header">
+      <h1 class ="post-title gradient-text">系统库构建</h1>
+      <div class="post-meta">
+        <div>
+          <svg class="icon icon-calendar" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><title>calendar</title><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+          Oct 28, 2025
+        </div>
+        <div>
+          <svg class="icon icon-clock" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><title>clock</title><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+          6 min read
+        </div>
+      </div>
+    </header>
+    <div class="post-content">
+      <h1 id="系统库构建">系统库构建</h1>
+<p>系统库是Linux系统运行的基础，提供核心功能和API。本章将详细介绍如何编译和安装各种系统库，包括压缩库、加密库、网络库等。</p>
+<h2 id="-系统库概述">🎯 系统库概述</h2>
+<h3 id="库分类">库分类</h3>
+<p>LFS系统库主要包括：</p>
+<ul>
+<li><strong>压缩库</strong>：zlib, bzip2, xz</li>
+<li><strong>加密库</strong>：OpenSSL, libgpg-error</li>
+<li><strong>文本处理库</strong>：libxml2, libxslt</li>
+<li><strong>图像处理库</strong>：libpng, libjpeg</li>
+<li><strong>数据库库</strong>：SQLite</li>
+<li><strong>其他工具库</strong>：libffi, libtasn1</li>
+</ul>
+<h2 id="-zlib库">🗜️ Zlib库</h2>
+<h3 id="编译zlib">编译Zlib</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># 切换到lfs用户</span>
+</span></span><span style="display:flex;"><span>su - lfs
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 创建构建目录</span>
+</span></span><span style="display:flex;"><span>mkdir -pv $LFS/sources/system_libs
+</span></span><span style="display:flex;"><span>cd $LFS/sources/system_libs
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 解压Zlib源码</span>
+</span></span><span style="display:flex;"><span>tar -xf $LFS/sources/zlib-1.2.13.tar.xz
+</span></span><span style="display:flex;"><span>cd zlib-1.2.13
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 配置Zlib</span>
+</span></span><span style="display:flex;"><span>./configure --prefix<span style="color:#f92672">=</span>/usr
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 编译</span>
+</span></span><span style="display:flex;"><span>make $LFS_MAKEFLAGS
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 安装</span>
+</span></span><span style="display:flex;"><span>make install
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 移动库文件到正确位置</span>
+</span></span><span style="display:flex;"><span>mv -v /usr/lib/libz.so.* /lib
+</span></span><span style="display:flex;"><span>ln -sfv ../../lib/<span style="color:#66d9ef">$(</span>readlink /usr/lib/libz.so<span style="color:#66d9ef">)</span> /usr/lib/libz.so
+</span></span></code></pre></div><h2 id="-bzip2库">📦 Bzip2库</h2>
+<h3 id="编译bzip2">编译Bzip2</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># 返回源码目录</span>
+</span></span><span style="display:flex;"><span>cd $LFS/sources/system_libs
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 解压Bzip2源码</span>
+</span></span><span style="display:flex;"><span>tar -xf $LFS/sources/bzip2-1.0.8.tar.gz
+</span></span><span style="display:flex;"><span>cd bzip2-1.0.8
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 应用补丁（如果有）</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># patch -Np1 -i ../bzip2-1.0.8-install_docs-1.patch</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 编译共享库</span>
+</span></span><span style="display:flex;"><span>make -f Makefile-libbz2_so $LFS_MAKEFLAGS
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 编译静态库和工具</span>
+</span></span><span style="display:flex;"><span>make $LFS_MAKEFLAGS
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 安装</span>
+</span></span><span style="display:flex;"><span>make PREFIX<span style="color:#f92672">=</span>/usr install
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 移动库文件</span>
+</span></span><span style="display:flex;"><span>cp -av libbz2.so.* /usr/lib
+</span></span><span style="display:flex;"><span>ln -sv libbz2.so.1.0.8 /usr/lib/libbz2.so
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 安装文档</span>
+</span></span><span style="display:flex;"><span>cp -v bzip2-shared /usr/bin/bzip2
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">for</span> i in /usr/bin/<span style="color:#f92672">{</span>bzcat,bunzip2<span style="color:#f92672">}</span>; <span style="color:#66d9ef">do</span>
+</span></span><span style="display:flex;"><span>  ln -sfv bzip2 $i
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">done</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 清理</span>
+</span></span><span style="display:flex;"><span>rm -fv /usr/lib/libbz2.a
+</span></span></code></pre></div><h2 id="-xz库">🔧 Xz库</h2>
+<h3 id="编译xz">编译Xz</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># 返回源码目录</span>
+</span></span><span style="display:flex;"><span>cd $LFS/sources/system_libs
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 解压Xz源码</span>
+</span></span><span style="display:flex;"><span>tar -xf $LFS/sources/xz-5.4.1.tar.xz
+</span></span><span style="display:flex;"><span>cd xz-5.4.1
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 配置Xz</span>
+</span></span><span style="display:flex;"><span>./configure --prefix<span style="color:#f92672">=</span>/usr <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>            --disable-static <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>            --docdir<span style="color:#f92672">=</span>/usr/share/doc/xz-5.4.1
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 编译</span>
+</span></span><span style="display:flex;"><span>make $LFS_MAKEFLAGS
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 安装</span>
+</span></span><span style="display:flex;"><span>make install
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 清理不必要的文件</span>
+</span></span><span style="display:flex;"><span>rm -v /usr/lib/liblzma.la
+</span></span></code></pre></div><h2 id="-openssl库">🔐 OpenSSL库</h2>
+<h3 id="编译openssl">编译OpenSSL</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># 返回源码目录</span>
+</span></span><span style="display:flex;"><span>cd $LFS/sources/system_libs
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 解压OpenSSL源码</span>
+</span></span><span style="display:flex;"><span>tar -xf $LFS/sources/openssl-3.1.0.tar.gz
+</span></span><span style="display:flex;"><span>cd openssl-3.1.0
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 配置OpenSSL</span>
+</span></span><span style="display:flex;"><span>./config --prefix<span style="color:#f92672">=</span>/usr <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>         --openssldir<span style="color:#f92672">=</span>/etc/ssl <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>         --libdir<span style="color:#f92672">=</span>lib <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>         shared <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>         zlib-dynamic
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 编译</span>
+</span></span><span style="display:flex;"><span>make $LFS_MAKEFLAGS
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 安装</span>
+</span></span><span style="display:flex;"><span>sed -i <span style="color:#e6db74">&#39;/INSTALL_LIBS/s/libcrypto.a libssl.a//&#39;</span> Makefile
+</span></span><span style="display:flex;"><span>make MANSUFFIX<span style="color:#f92672">=</span>ssl install
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 移动库文件</span>
+</span></span><span style="display:flex;"><span>mv -v /usr/share/doc/openssl /usr/share/doc/openssl-3.1.0
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 配置运行时链接</span>
+</span></span><span style="display:flex;"><span>echo <span style="color:#e6db74">&#34;/usr/lib&#34;</span> &gt; /etc/ld-musl-x86_64.path
+</span></span></code></pre></div><h2 id="-libxml2库">📄 Libxml2库</h2>
+<h3 id="编译libxml2">编译Libxml2</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># 返回源码目录</span>
+</span></span><span style="display:flex;"><span>cd $LFS/sources/system_libs
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 解压Libxml2源码</span>
+</span></span><span style="display:flex;"><span>tar -xf $LFS/sources/libxml2-2.10.3.tar.xz
+</span></span><span style="display:flex;"><span>cd libxml2-2.10.3
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 配置Libxml2</span>
+</span></span><span style="display:flex;"><span>./configure --prefix<span style="color:#f92672">=</span>/usr <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>            --disable-static <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>            --with-history <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>            --with-python<span style="color:#f92672">=</span>/usr/bin/python3 <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>            PYTHON_CPPFLAGS<span style="color:#f92672">=</span>-I/usr/include/python3.11
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 编译</span>
+</span></span><span style="display:flex;"><span>make $LFS_MAKEFLAGS
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 安装</span>
+</span></span><span style="display:flex;"><span>make install
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 清理</span>
+</span></span><span style="display:flex;"><span>rm -rf /usr/lib/libxml2.la
+</span></span></code></pre></div><h2 id="-libpng库">🖼️ Libpng库</h2>
+<h3 id="编译libpng">编译Libpng</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># 返回源码目录</span>
+</span></span><span style="display:flex;"><span>cd $LFS/sources/system_libs
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 解压Libpng源码</span>
+</span></span><span style="display:flex;"><span>tar -xf $LFS/sources/libpng-1.6.39.tar.xz
+</span></span><span style="display:flex;"><span>cd libpng-1.6.39
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 配置Libpng</span>
+</span></span><span style="display:flex;"><span>./configure --prefix<span style="color:#f92672">=</span>/usr --disable-static
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 编译</span>
+</span></span><span style="display:flex;"><span>make $LFS_MAKEFLAGS
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 安装</span>
+</span></span><span style="display:flex;"><span>make install
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 清理</span>
+</span></span><span style="display:flex;"><span>rm -fv /usr/lib/libpng.la
+</span></span></code></pre></div><h2 id="-sqlite库">📊 SQLite库</h2>
+<h3 id="编译sqlite">编译SQLite</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># 返回源码目录</span>
+</span></span><span style="display:flex;"><span>cd $LFS/sources/system_libs
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 解压SQLite源码</span>
+</span></span><span style="display:flex;"><span>tar -xf $LFS/sources/sqlite-autoconf-3410000.tar.gz
+</span></span><span style="display:flex;"><span>cd sqlite-autoconf-3410000
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 配置SQLite</span>
+</span></span><span style="display:flex;"><span>./configure --prefix<span style="color:#f92672">=</span>/usr <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>            --disable-static <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>            --enable-fts5 <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>            CFLAGS<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;-g -O2 -DSQLITE_ENABLE_FTS4=1 \
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">                    -DSQLITE_ENABLE_FTS5=1 \
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">                    -DSQLITE_ENABLE_COLUMN_METADATA=1 \
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">                    -DSQLITE_ENABLE_UNLOCK_NOTIFY=1 \
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">                    -DSQLITE_ENABLE_DBSTAT_VTAB=1 \
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">                    -DSQLITE_SECURE_DELETE=1 \
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">                    -DSQLITE_ENABLE_JSON1=1&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 编译</span>
+</span></span><span style="display:flex;"><span>make $LFS_MAKEFLAGS
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 安装</span>
+</span></span><span style="display:flex;"><span>make install
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 清理</span>
+</span></span><span style="display:flex;"><span>rm -f /usr/lib/libsqlite3.la
+</span></span></code></pre></div><h2 id="-其他重要库">🔧 其他重要库</h2>
+<h3 id="libffi库">Libffi库</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># 解压Libffi源码</span>
+</span></span><span style="display:flex;"><span>cd $LFS/sources/system_libs
+</span></span><span style="display:flex;"><span>tar -xf $LFS/sources/libffi-3.4.4.tar.gz
+</span></span><span style="display:flex;"><span>cd libffi-3.4.4
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 配置Libffi</span>
+</span></span><span style="display:flex;"><span>./configure --prefix<span style="color:#f92672">=</span>/usr --disable-static --with-gcc-arch<span style="color:#f92672">=</span>native
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 编译和安装</span>
+</span></span><span style="display:flex;"><span>make $LFS_MAKEFLAGS <span style="color:#f92672">&amp;&amp;</span> make install
+</span></span></code></pre></div><h3 id="libtasn1库">Libtasn1库</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># 解压Libtasn1源码</span>
+</span></span><span style="display:flex;"><span>cd $LFS/sources/system_libs
+</span></span><span style="display:flex;"><span>tar -xf $LFS/sources/libtasn1-4.19.0.tar.gz
+</span></span><span style="display:flex;"><span>cd libtasn1-4.19.0
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 配置Libtasn1</span>
+</span></span><span style="display:flex;"><span>./configure --prefix<span style="color:#f92672">=</span>/usr --disable-static
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 编译和安装</span>
+</span></span><span style="display:flex;"><span>make $LFS_MAKEFLAGS <span style="color:#f92672">&amp;&amp;</span> make install
+</span></span></code></pre></div><h2 id="-构建脚本">📋 构建脚本</h2>
+<h3 id="自动化构建脚本">自动化构建脚本</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># 创建系统库构建脚本</span>
+</span></span><span style="display:flex;"><span>cat &gt; $LFS/build_system_libs.sh <span style="color:#e6db74">&lt;&lt; &#39;EOF&#39;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">#!/bin/bash
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74"># LFS系统库构建脚本
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">set -e
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74"># 库列表和配置
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">libraries=(
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    &#34;zlib-1.2.13:zlib:--prefix=/usr&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    &#34;bzip2-1.0.8:bzip2:&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    &#34;xz-5.4.1:xz:--prefix=/usr --disable-static --docdir=/usr/share/doc/xz-5.4.1&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    &#34;openssl-3.1.0:openssl:&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    &#34;libxml2-2.10.3:libxml2:--prefix=/usr --disable-static --with-history --with-python=/usr/bin/python3 PYTHON_CPPFLAGS=-I/usr/include/python3.11&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    &#34;libpng-1.6.39:libpng:--prefix=/usr --disable-static&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    &#34;sqlite-autoconf-3410000:sqlite:--prefix=/usr --disable-static --enable-fts5 CFLAGS=&#39;-g -O2 -DSQLITE_ENABLE_FTS4=1 -DSQLITE_ENABLE_FTS5=1 -DSQLITE_ENABLE_COLUMN_METADATA=1 -DSQLITE_ENABLE_UNLOCK_NOTIFY=1 -DSQLITE_ENABLE_DBSTAT_VTAB=1 -DSQLITE_SECURE_DELETE=1 -DSQLITE_ENABLE_JSON1=1&#39;&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    &#34;libffi-3.4.4:libffi:--prefix=/usr --disable-static --with-gcc-arch=native&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    &#34;libtasn1-4.19.0:libtasn1:--prefix=/usr --disable-static&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">)
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">total_libs=${#libraries[@]}
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">completed=0
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">for lib_info in &#34;${libraries[@]}&#34;; do
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    IFS=&#39;:&#39; read -r package_name lib_name configure_options &lt;&lt;&lt; &#34;$lib_info&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    echo &#34;=== 构建 $lib_name ($((completed + 1))/$total_libs) ===&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    # 检查源码
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    if [ ! -f &#34;$LFS/sources/$package_name.tar.xz&#34; ] &amp;&amp; [ ! -f &#34;$LFS/sources/$package_name.tar.gz&#34; ]; then
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        echo &#34;错误: $package_name 源码不存在&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        exit 1
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    fi
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    cd $LFS/sources/system_libs
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    # 解压源码
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    if [ -f &#34;$LFS/sources/$package_name.tar.xz&#34; ]; then
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        tar -xf &#34;$LFS/sources/$package_name.tar.xz&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    else
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        tar -xf &#34;$LFS/sources/$package_name.tar.gz&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    fi
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    cd $package_name
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    # 特殊处理某些库
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    case $lib_name in
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        zlib)
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            ./configure $configure_options
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            make $LFS_MAKEFLAGS
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            make install
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            mv -v /usr/lib/libz.so.* /lib
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            ln -sfv ../../lib/$(readlink /usr/lib/libz.so) /usr/lib/libz.so
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            ;;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        bzip2)
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            make -f Makefile-libbz2_so $LFS_MAKEFLAGS
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            make $LFS_MAKEFLAGS
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            make PREFIX=/usr install
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            cp -av libbz2.so.* /usr/lib
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            ln -sv libbz2.so.1.0.8 /usr/lib/libbz2.so
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            cp -v bzip2-shared /usr/bin/bzip2
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            for i in /usr/bin/{bzcat,bunzip2}; do ln -sfv bzip2 $i; done
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            rm -fv /usr/lib/libbz2.a
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            ;;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        openssl)
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            ./config --prefix=/usr --openssldir=/etc/ssl --libdir=lib shared zlib-dynamic
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            make $LFS_MAKEFLAGS
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            sed -i &#39;/INSTALL_LIBS/s/libcrypto.a libssl.a//&#39; Makefile
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            make MANSUFFIX=ssl install
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            mv -v /usr/share/doc/openssl /usr/share/doc/openssl-3.1.0
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            echo &#34;/usr/lib&#34; &gt; /etc/ld-musl-x86_64.path
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            ;;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        *)
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            # 标准构建流程
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            ./configure $configure_options
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            make $LFS_MAKEFLAGS
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            make install
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            # 清理.la文件
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            [ -f /usr/lib/lib${lib_name}.la ] &amp;&amp; rm -fv /usr/lib/lib${lib_name}.la
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            ;;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    esac
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    # 验证安装
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    echo &#34;验证 $lib_name 安装...&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    case $lib_name in
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        zlib)
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            [ -f /usr/lib/libz.so ] &amp;&amp; echo &#34;✓ zlib 安装成功&#34; || echo &#34;✗ zlib 安装失败&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            ;;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        bzip2)
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            [ -f /usr/lib/libbz2.so ] &amp;&amp; echo &#34;✓ bzip2 安装成功&#34; || echo &#34;✗ bzip2 安装失败&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            ;;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        xz)
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            [ -f /usr/lib/liblzma.so ] &amp;&amp; echo &#34;✓ xz 安装成功&#34; || echo &#34;✗ xz 安装失败&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            ;;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        openssl)
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            [ -f /usr/lib/libssl.so ] &amp;&amp; echo &#34;✓ openssl 安装成功&#34; || echo &#34;✗ openssl 安装失败&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            ;;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        libxml2)
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            [ -f /usr/lib/libxml2.so ] &amp;&amp; echo &#34;✓ libxml2 安装成功&#34; || echo &#34;✗ libxml2 安装失败&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            ;;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        libpng)
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            [ -f /usr/lib/libpng.so ] &amp;&amp; echo &#34;✓ libpng 安装成功&#34; || echo &#34;✗ libpng 安装失败&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            ;;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        sqlite)
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            [ -f /usr/lib/libsqlite3.so ] &amp;&amp; echo &#34;✓ sqlite 安装成功&#34; || echo &#34;✗ sqlite 安装失败&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            ;;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        libffi)
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            [ -f /usr/lib/libffi.so ] &amp;&amp; echo &#34;✓ libffi 安装成功&#34; || echo &#34;✗ libffi 安装失败&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            ;;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        libtasn1)
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            [ -f /usr/lib/libtasn1.so ] &amp;&amp; echo &#34;✓ libtasn1 安装成功&#34; || echo &#34;✗ libtasn1 安装失败&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            ;;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    esac
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    completed=$((completed + 1))
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    echo &#34;进度: $completed/$total_libs 完成&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    echo &#34;&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    # 清理构建目录
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    cd $LFS/sources/system_libs
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    rm -rf $package_name
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">done
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">echo &#34;=== 所有系统库构建完成 ===&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">EOF</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>chmod +x $LFS/build_system_libs.sh
+</span></span></code></pre></div><h2 id="-功能验证">🧪 功能验证</h2>
+<h3 id="库可用性测试">库可用性测试</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># 创建验证脚本</span>
+</span></span><span style="display:flex;"><span>cat &gt; $LFS/verify_system_libs.sh <span style="color:#e6db74">&lt;&lt; &#39;EOF&#39;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">#!/bin/bash
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74"># 系统库验证脚本
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">echo &#34;=== LFS系统库验证 ===&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74"># 定义要验证的库
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">libraries=(
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    &#34;libz.so:zlib&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    &#34;libbz2.so:bzip2&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    &#34;liblzma.so:xz&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    &#34;libssl.so:openssl&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    &#34;libxml2.so:libxml2&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    &#34;libpng.so:libpng&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    &#34;libsqlite3.so:sqlite&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    &#34;libffi.so:libffi&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    &#34;libtasn1.so:libtasn1&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">)
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">passed=0
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">total=${#libraries[@]}
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">for lib_info in &#34;${libraries[@]}&#34;; do
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    IFS=&#39;:&#39; read -r lib_file lib_name &lt;&lt;&lt; &#34;$lib_info&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    echo -n &#34;检查 $lib_name ($lib_file)... &#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    if [ -f &#34;/usr/lib/$lib_file&#34; ]; then
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        echo &#34;✓ 存在&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        # 检查符号链接
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        if [ -L &#34;/usr/lib/$lib_file&#34; ]; then
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            target=$(readlink &#34;/usr/lib/$lib_file&#34;)
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            echo &#34;  符号链接指向: $target&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        fi
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        # 检查是否可执行
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        if file &#34;/usr/lib/$lib_file&#34; | grep -q &#34;shared object&#34;; then
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            echo &#34;  类型: 共享库 ✓&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        else
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            echo &#34;  类型: $(file &#34;/usr/lib/$lib_file&#34; | cut -d: -f2)&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        fi
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        passed=$((passed + 1))
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    else
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        echo &#34;✗ 不存在&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    fi
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">done
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">echo &#34;&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">echo &#34;=== 验证结果 ===&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">echo &#34;通过: $passed/$total&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">if [ $passed -eq $total ]; then
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    echo &#34;✓ 所有系统库都已正确安装&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    exit 0
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">else
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    echo &#34;✗ 部分库安装失败&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    exit 1
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">fi
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">EOF</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>chmod +x $LFS/verify_system_libs.sh
+</span></span></code></pre></div><h2 id="-常见问题">🚨 常见问题</h2>
+<h3 id="依赖关系问题">依赖关系问题</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># 检查库依赖</span>
+</span></span><span style="display:flex;"><span>echo <span style="color:#e6db74">&#34;检查库依赖关系...&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">for</span> lib in libz.so libbz2.so libssl.so libxml2.so; <span style="color:#66d9ef">do</span>
+</span></span><span style="display:flex;"><span>    echo <span style="color:#e6db74">&#34;=== </span>$lib<span style="color:#e6db74"> 依赖 ===&#34;</span>
+</span></span><span style="display:flex;"><span>    ldd /usr/lib/$lib 2&gt;/dev/null <span style="color:#f92672">||</span> echo <span style="color:#e6db74">&#34;无法分析依赖&#34;</span>
+</span></span><span style="display:flex;"><span>    echo <span style="color:#e6db74">&#34;&#34;</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">done</span>
+</span></span></code></pre></div><h3 id="版本兼容性">版本兼容性</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># 检查库版本</span>
+</span></span><span style="display:flex;"><span>echo <span style="color:#e6db74">&#34;检查库版本信息...&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Zlib版本</span>
+</span></span><span style="display:flex;"><span>echo <span style="color:#e6db74">&#34;Zlib: </span><span style="color:#66d9ef">$(</span>grep -E <span style="color:#e6db74">&#39;^#define ZLIB_VERSION&#39;</span> /usr/include/zlib.h | cut -d<span style="color:#e6db74">&#39;&#34;&#39;</span> -f2<span style="color:#66d9ef">)</span><span style="color:#e6db74">&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># OpenSSL版本</span>
+</span></span><span style="display:flex;"><span>openssl version 2&gt;/dev/null <span style="color:#f92672">||</span> echo <span style="color:#e6db74">&#34;OpenSSL版本检查失败&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># SQLite版本</span>
+</span></span><span style="display:flex;"><span>sqlite3 --version 2&gt;/dev/null <span style="color:#f92672">||</span> echo <span style="color:#e6db74">&#34;SQLite版本检查失败&#34;</span>
+</span></span></code></pre></div><h3 id="编译优化">编译优化</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># 重新编译库（带优化）</span>
+</span></span><span style="display:flex;"><span>echo <span style="color:#e6db74">&#34;使用优化重新编译关键库...&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>cd $LFS/sources/system_libs
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 重新编译zlib（优化版本）</span>
+</span></span><span style="display:flex;"><span>tar -xf $LFS/sources/zlib-1.2.13.tar.xz
+</span></span><span style="display:flex;"><span>cd zlib-1.2.13
+</span></span><span style="display:flex;"><span>./configure --prefix<span style="color:#f92672">=</span>/usr CFLAGS<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;-O3 -march=native&#34;</span>
+</span></span><span style="display:flex;"><span>make $LFS_MAKEFLAGS
+</span></span><span style="display:flex;"><span>make install
+</span></span><span style="display:flex;"><span>cd ..
+</span></span><span style="display:flex;"><span>rm -rf zlib-1.2.13
+</span></span></code></pre></div><h2 id="-构建统计">📊 构建统计</h2>
+<h3 id="库大小统计">库大小统计</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># 统计库文件大小</span>
+</span></span><span style="display:flex;"><span>echo <span style="color:#e6db74">&#34;=== 系统库大小统计 ===&#34;</span>
+</span></span><span style="display:flex;"><span>echo <span style="color:#e6db74">&#34;库文件 | 大小 | 类型&#34;</span>
+</span></span><span style="display:flex;"><span>echo <span style="color:#e6db74">&#34;--------|------|------&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">for</span> lib in libz.so libbz2.so liblzma.so libssl.so libxml2.so libpng.so libsqlite3.so; <span style="color:#66d9ef">do</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> <span style="color:#f92672">[</span> -f <span style="color:#e6db74">&#34;/usr/lib/</span>$lib<span style="color:#e6db74">&#34;</span> <span style="color:#f92672">]</span>; <span style="color:#66d9ef">then</span>
+</span></span><span style="display:flex;"><span>        size<span style="color:#f92672">=</span><span style="color:#66d9ef">$(</span>ls -lh <span style="color:#e6db74">&#34;/usr/lib/</span>$lib<span style="color:#e6db74">&#34;</span> | awk <span style="color:#e6db74">&#39;{print $5}&#39;</span><span style="color:#66d9ef">)</span>
+</span></span><span style="display:flex;"><span>        type<span style="color:#f92672">=</span><span style="color:#66d9ef">$(</span>file <span style="color:#e6db74">&#34;/usr/lib/</span>$lib<span style="color:#e6db74">&#34;</span> | cut -d: -f2 | cut -d, -f1<span style="color:#66d9ef">)</span>
+</span></span><span style="display:flex;"><span>        printf <span style="color:#e6db74">&#34;%-12s | %-8s | %s\n&#34;</span> <span style="color:#e6db74">&#34;</span>$lib<span style="color:#e6db74">&#34;</span> <span style="color:#e6db74">&#34;</span>$size<span style="color:#e6db74">&#34;</span> <span style="color:#e6db74">&#34;</span>$type<span style="color:#e6db74">&#34;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">fi</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">done</span>
+</span></span></code></pre></div><h2 id="-相关资源">📚 相关资源</h2>
+<ul>
+<li><a href="http://www.linuxfromscratch.org/lfs/view/stable/chapter06/chapter06.html">LFS官方文档 - 系统库</a></li>
+<li><a href="https://www.gnu.org/software/libc/documentation.html">GNU库文档</a></li>
+<li><a href="https://www.openssl.org/docs/">OpenSSL文档</a></li>
+</ul>
+<hr>
+<p><em>最近更新: {{ .Lastmod.Format &ldquo;2006-01-02&rdquo; }}</em></p>
+
+      
+      <div class="post-separator">------------------------------------------------------------------------</div>
+      
+    </div>
+    <div class="post-footer">
+      
+      <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+      <div class="busuanzi-container">
+        <span id="busuanzi_container_page_pv">--本文总阅读量<span id="busuanzi_value_page_pv"></span>次--</span>
+      </div>
+      
+      
+      <script src="https://utteranc.es/client.js"
+        repo="makkichan947/makkichan947.github.io"
+        issue-term="pathname"
+        label="Utterances"
+        theme="github-dark"
+        crossorigin="anonymous"
+        async>
+      </script>
+    </div>
+  </article>
+
+    </main>
+  </body>
+</html>

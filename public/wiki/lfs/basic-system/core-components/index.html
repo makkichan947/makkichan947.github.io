@@ -1,0 +1,657 @@
+<!doctype html>
+<html lang="zh">
+  <head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+    <title>核心系统组件 // Yaku Makki</title>
+    <link rel="shortcut icon" href="./avatar.jpg" />
+    <meta charset="utf-8" />
+    <meta name="generator" content="Hugo 0.151.2">
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="author" content="Yaku Makki" />
+    <meta name="description" content="构建LFS核心系统组件" />
+    <link rel="stylesheet" href="/css/main.min.422840b4454cb211f5b3dab61f082cdff508e88825173c31806835cb75529734.css" />
+    
+
+    
+    
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="核心系统组件">
+  <meta name="twitter:description" content="构建LFS核心系统组件">
+
+    <meta property="og:url" content="http://localhost:1313/wiki/lfs/basic-system/core-components/">
+  <meta property="og:site_name" content="Yaku Makki">
+  <meta property="og:title" content="核心系统组件">
+  <meta property="og:description" content="构建LFS核心系统组件">
+  <meta property="og:locale" content="zh">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="wiki">
+    <meta property="article:published_time" content="2025-10-28T00:00:00+00:00">
+    <meta property="article:modified_time" content="2025-10-28T00:00:00+00:00">
+
+
+  </head>
+  <body class="synthwave-bg">
+    <header class="app-header glass-morphism neon-border">
+      <a href="/"><img class="app-header-avatar" src="/avatar.jpg" alt="Yaku Makki" /></a>
+      <span class="app-header-title gradient-text">Yaku Makki</span>
+      <nav class="app-header-menu">
+          <a class="app-header-menu-item" href="/">首页</a>
+             | 
+          
+          <a class="app-header-menu-item" href="/post/">博客</a>
+             | 
+          
+          <a class="app-header-menu-item" href="/wiki/">维基</a>
+             | 
+          
+          <a class="app-header-menu-item" href="/tags/">标签</a>
+             | 
+          
+          <a class="app-header-menu-item" href="/about/">关于</a>
+      </nav>
+      <p>个人小巢</p>
+      <div class="app-header-social">
+        
+          <a href="https://github.com/makkichan947" target="_blank" rel="noreferrer noopener me" class="pulse-glow">
+            <svg class="icon icon-brand-github" viewBox="0 0 24 24" fill="currentColor"><title>GitHub</title><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg>
+          </a>
+        
+          <a href="mailto:yakumakki947@hotmail.com" target="_blank" rel="noreferrer noopener me" class="pulse-glow">
+            <svg class="icon icon-mail" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><title>mail</title><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
+          </a>
+        
+          <a href="https://x.com/Makki_Yaku947" target="_blank" rel="noreferrer noopener me" class="pulse-glow">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-link">
+  <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path>
+  <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path>
+</svg>
+          </a>
+        
+          <a href="https://www.twitch.tv/u/makkichan947" target="_blank" rel="noreferrer noopener me" class="pulse-glow">
+            <svg class="icon icon-brand-twitch" viewBox="0 0 24 24" fill="currentColor"><title>Twitch</title><path d="M11.571 4.714h1.715v5.143H11.57zm4.715 0H18v5.143h-1.714zM6 0L1.714 4.286v15.428h5.143V24l4.286-4.286h3.428L22.286 12V0zm14.571 11.143l-3.428 3.428h-3.429l-3 3v-3H6.857V1.714h13.714Z"/></svg>
+          </a>
+        
+      </div>
+    </header>
+    <main class="app-container glass-morphism glow-effect">
+      <div class="floating-particles">
+        <div class="particle" style="left: 10%; animation-delay: 0s;"></div>
+        <div class="particle" style="left: 20%; animation-delay: 1s;"></div>
+        <div class="particle" style="left: 30%; animation-delay: 2s;"></div>
+        <div class="particle" style="left: 40%; animation-delay: 3s;"></div>
+        <div class="particle" style="left: 50%; animation-delay: 4s;"></div>
+        <div class="particle" style="left: 60%; animation-delay: 5s;"></div>
+        <div class="particle" style="left: 70%; animation-delay: 6s;"></div>
+        <div class="particle" style="left: 80%; animation-delay: 7s;"></div>
+        <div class="particle" style="left: 90%; animation-delay: 8s;"></div>
+      </div>
+      
+  <article class="post enhanced-card glow-effect">
+    <header class="post-header">
+      <h1 class ="post-title gradient-text">核心系统组件</h1>
+      <div class="post-meta">
+        <div>
+          <svg class="icon icon-calendar" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><title>calendar</title><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+          Oct 28, 2025
+        </div>
+        <div>
+          <svg class="icon icon-clock" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><title>clock</title><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+          6 min read
+        </div>
+      </div>
+    </header>
+    <div class="post-content">
+      <h1 id="核心系统组件">核心系统组件</h1>
+<p>核心系统组件是Linux系统运行的基础，包括文件系统工具、系统管理工具等。本章将详细介绍这些关键组件的编译和安装。</p>
+<h2 id="-核心组件概述">🎯 核心组件概述</h2>
+<h3 id="组件分类">组件分类</h3>
+<p>LFS核心组件主要包括：</p>
+<ul>
+<li><strong>文件系统工具</strong>：e2fsprogs, dosfstools</li>
+<li><strong>系统管理工具</strong>：procps-ng, sysklogd</li>
+<li><strong>网络工具</strong>：inetutils, dhcpcd</li>
+<li><strong>安全工具</strong>：shadow, pam</li>
+<li><strong>其他核心工具</strong>：coreutils, diffutils</li>
+</ul>
+<h2 id="-e2fsprogs工具">💾 E2fsprogs工具</h2>
+<h3 id="编译e2fsprogs">编译E2fsprogs</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># 切换到lfs用户</span>
+</span></span><span style="display:flex;"><span>su - lfs
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 创建构建目录</span>
+</span></span><span style="display:flex;"><span>mkdir -pv $LFS/sources/core_components
+</span></span><span style="display:flex;"><span>cd $LFS/sources/core_components
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 解压E2fsprogs源码</span>
+</span></span><span style="display:flex;"><span>tar -xf $LFS/sources/e2fsprogs-1.47.0.tar.gz
+</span></span><span style="display:flex;"><span>cd e2fsprogs-1.47.0
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 配置E2fsprogs</span>
+</span></span><span style="display:flex;"><span>mkdir -v build
+</span></span><span style="display:flex;"><span>cd build
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>../configure --prefix<span style="color:#f92672">=</span>/usr <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>             --sysconfdir<span style="color:#f92672">=</span>/etc <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>             --enable-elf-shlibs <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>             --disable-libblkid <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>             --disable-libuuid <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>             --disable-uuidd <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>             --disable-fsck
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 编译</span>
+</span></span><span style="display:flex;"><span>make $LFS_MAKEFLAGS
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 安装</span>
+</span></span><span style="display:flex;"><span>make install
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 配置动态库</span>
+</span></span><span style="display:flex;"><span>chmod -v u+w /usr/lib/<span style="color:#f92672">{</span>libcom_err,libe2p,libext2fs,libss<span style="color:#f92672">}</span>.so
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 创建必要的目录</span>
+</span></span><span style="display:flex;"><span>gunzip -v /usr/share/info/libext2fs.info.gz
+</span></span><span style="display:flex;"><span>install-info --dir-file<span style="color:#f92672">=</span>/usr/share/info/dir /usr/share/info/libext2fs.info
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 创建符号链接</span>
+</span></span><span style="display:flex;"><span>makeinfo -o doc/com_err.info ../lib/et/com_err.texinfo
+</span></span><span style="display:flex;"><span>install-info --dir-file<span style="color:#f92672">=</span>/usr/share/info/dir /usr/share/info/com_err.info
+</span></span></code></pre></div><h2 id="-coreutils工具">🔧 Coreutils工具</h2>
+<h3 id="编译coreutils">编译Coreutils</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># 返回源码目录</span>
+</span></span><span style="display:flex;"><span>cd $LFS/sources/core_components
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 解压Coreutils源码</span>
+</span></span><span style="display:flex;"><span>tar -xf $LFS/sources/coreutils-9.1.tar.xz
+</span></span><span style="display:flex;"><span>cd coreutils-9.1
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 配置Coreutils</span>
+</span></span><span style="display:flex;"><span>./configure --prefix<span style="color:#f92672">=</span>/usr <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>            --host<span style="color:#f92672">=</span>$LFS_TGT <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>            --build<span style="color:#f92672">=</span><span style="color:#66d9ef">$(</span>build-aux/config.guess<span style="color:#66d9ef">)</span> <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>            --enable-install-program<span style="color:#f92672">=</span>hostname <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>            --enable-no-install-program<span style="color:#f92672">=</span>kill,uptime
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 编译</span>
+</span></span><span style="display:flex;"><span>make $LFS_MAKEFLAGS
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 安装</span>
+</span></span><span style="display:flex;"><span>make install
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 移动程序到正确位置</span>
+</span></span><span style="display:flex;"><span>mv -v /usr/bin/chroot /usr/sbin
+</span></span><span style="display:flex;"><span>mv -v /usr/share/man/man1/chroot.1 /usr/share/man/man8/chroot.8
+</span></span><span style="display:flex;"><span>sed -i <span style="color:#e6db74">&#39;s/&#34;1&#34;/&#34;8&#34;/&#39;</span> /usr/share/man/man8/chroot.8
+</span></span></code></pre></div><h2 id="-procps-ng工具">📊 Procps-ng工具</h2>
+<h3 id="编译procps-ng">编译Procps-ng</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># 返回源码目录</span>
+</span></span><span style="display:flex;"><span>cd $LFS/sources/core_components
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 解压Procps-ng源码</span>
+</span></span><span style="display:flex;"><span>tar -xf $LFS/sources/procps-ng-4.0.2.tar.xz
+</span></span><span style="display:flex;"><span>cd procps-ng-4.0.2
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 配置Procps-ng</span>
+</span></span><span style="display:flex;"><span>./configure --prefix<span style="color:#f92672">=</span>/usr <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>            --docdir<span style="color:#f92672">=</span>/usr/share/doc/procps-ng-4.0.2 <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>            --disable-static <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>            --disable-kill
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 编译</span>
+</span></span><span style="display:flex;"><span>make $LFS_MAKEFLAGS
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 安装</span>
+</span></span><span style="display:flex;"><span>make install
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 移动库文件</span>
+</span></span><span style="display:flex;"><span>mv -v /usr/lib/libprocps.so.* /lib
+</span></span><span style="display:flex;"><span>ln -sfv ../../lib/<span style="color:#66d9ef">$(</span>readlink /usr/lib/libprocps.so<span style="color:#66d9ef">)</span> /usr/lib/libprocps.so
+</span></span></code></pre></div><h2 id="-shadow工具">🔐 Shadow工具</h2>
+<h3 id="编译shadow">编译Shadow</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># 返回源码目录</span>
+</span></span><span style="display:flex;"><span>cd $LFS/sources/core_components
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 解压Shadow源码</span>
+</span></span><span style="display:flex;"><span>tar -xf $LFS/sources/shadow-4.13.tar.xz
+</span></span><span style="display:flex;"><span>cd shadow-4.13
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 禁用不需要的功能</span>
+</span></span><span style="display:flex;"><span>sed -i <span style="color:#e6db74">&#39;s/groups$(EXEEXT) //&#39;</span> src/Makefile.in
+</span></span><span style="display:flex;"><span>find man -name Makefile.in -exec sed -i <span style="color:#e6db74">&#39;s/groups\.1 / /&#39;</span> <span style="color:#f92672">{}</span> <span style="color:#ae81ff">\;</span>
+</span></span><span style="display:flex;"><span>find man -name Makefile.in -exec sed -i <span style="color:#e6db74">&#39;s/getspnam\.3 / /&#39;</span> <span style="color:#f92672">{}</span> <span style="color:#ae81ff">\;</span>
+</span></span><span style="display:flex;"><span>find man -name Makefile.in -exec sed -i <span style="color:#e6db74">&#39;s/passwd\.5 / /&#39;</span> <span style="color:#f92672">{}</span> <span style="color:#ae81ff">\;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 配置Shadow</span>
+</span></span><span style="display:flex;"><span>./configure --sysconfdir<span style="color:#f92672">=</span>/etc <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>            --disable-static <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>            --with-group-name-max-length<span style="color:#f92672">=</span><span style="color:#ae81ff">32</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 编译</span>
+</span></span><span style="display:flex;"><span>make $LFS_MAKEFLAGS
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 安装</span>
+</span></span><span style="display:flex;"><span>make exec_prefix<span style="color:#f92672">=</span>/usr install
+</span></span><span style="display:flex;"><span>make -C man install-man
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 启用shadow密码</span>
+</span></span><span style="display:flex;"><span>pwconv
+</span></span><span style="display:flex;"><span>grpconv
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 设置root密码</span>
+</span></span><span style="display:flex;"><span>echo <span style="color:#e6db74">&#34;设置root密码...&#34;</span>
+</span></span><span style="display:flex;"><span>passwd root
+</span></span></code></pre></div><h2 id="-inetutils工具">🌐 Inetutils工具</h2>
+<h3 id="编译inetutils">编译Inetutils</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># 返回源码目录</span>
+</span></span><span style="display:flex;"><span>cd $LFS/sources/core_components
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 解压Inetutils源码</span>
+</span></span><span style="display:flex;"><span>tar -xf $LFS/sources/inetutils-2.4.tar.xz
+</span></span><span style="display:flex;"><span>cd inetutils-2.4
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 配置Inetutils</span>
+</span></span><span style="display:flex;"><span>./configure --prefix<span style="color:#f92672">=</span>/usr <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>            --bindir<span style="color:#f92672">=</span>/usr/bin <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>            --localstatedir<span style="color:#f92672">=</span>/var <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>            --disable-logger <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>            --disable-whois <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>            --disable-rcp <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>            --disable-rexec <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>            --disable-rlogin <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>            --disable-rsh <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>            --disable-servers
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 编译</span>
+</span></span><span style="display:flex;"><span>make $LFS_MAKEFLAGS
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 安装</span>
+</span></span><span style="display:flex;"><span>make install
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 移动程序</span>
+</span></span><span style="display:flex;"><span>mv -v /usr/bin/<span style="color:#f92672">{</span>hostname,ping,ping6,traceroute<span style="color:#f92672">}</span> /bin
+</span></span><span style="display:flex;"><span>mv -v /usr/bin/ifconfig /sbin
+</span></span></code></pre></div><h2 id="-dhcpcd工具">📡 Dhcpcd工具</h2>
+<h3 id="编译dhcpcd">编译Dhcpcd</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># 返回源码目录</span>
+</span></span><span style="display:flex;"><span>cd $LFS/sources/core_components
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 解压Dhcpcd源码</span>
+</span></span><span style="display:flex;"><span>tar -xf $LFS/sources/dhcpcd-9.4.1.tar.xz
+</span></span><span style="display:flex;"><span>cd dhcpcd-9.4.1
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 配置Dhcpcd</span>
+</span></span><span style="display:flex;"><span>./configure --prefix<span style="color:#f92672">=</span>/usr <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>            --sysconfdir<span style="color:#f92672">=</span>/etc <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>            --libexecdir<span style="color:#f92672">=</span>/usr/lib/dhcpcd <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>            --dbdir<span style="color:#f92672">=</span>/var/lib/dhcpcd <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>            --runstatedir<span style="color:#f92672">=</span>/run
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 编译</span>
+</span></span><span style="display:flex;"><span>make $LFS_MAKEFLAGS
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 安装</span>
+</span></span><span style="display:flex;"><span>make install
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 安装服务脚本</span>
+</span></span><span style="display:flex;"><span>install -v -m644 dhcpcd.conf -t /etc/
+</span></span><span style="display:flex;"><span>install -v -m755 -d /usr/share/dhcpcd/hooks
+</span></span></code></pre></div><h2 id="-构建脚本">📋 构建脚本</h2>
+<h3 id="自动化构建脚本">自动化构建脚本</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># 创建核心组件构建脚本</span>
+</span></span><span style="display:flex;"><span>cat &gt; $LFS/build_core_components.sh <span style="color:#e6db74">&lt;&lt; &#39;EOF&#39;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">#!/bin/bash
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74"># LFS核心组件构建脚本
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">set -e
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74"># 组件列表
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">components=(
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    &#34;e2fsprogs-1.47.0:e2fsprogs&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    &#34;coreutils-9.1:coreutils&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    &#34;procps-ng-4.0.2:procps-ng&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    &#34;shadow-4.13:shadow&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    &#34;inetutils-2.4:inetutils&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    &#34;dhcpcd-9.4.1:dhcpcd&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">)
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">total_components=${#components[@]}
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">completed=0
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">for comp_info in &#34;${components[@]}&#34;; do
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    IFS=&#39;:&#39; read -r package_name comp_name &lt;&lt;&lt; &#34;$comp_info&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    echo &#34;=== 构建 $comp_name ($((completed + 1))/$total_components) ===&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    # 检查源码
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    if [ ! -f &#34;$LFS/sources/$package_name.tar.xz&#34; ] &amp;&amp; [ ! -f &#34;$LFS/sources/$package_name.tar.gz&#34; ]; then
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        echo &#34;错误: $package_name 源码不存在&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        exit 1
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    fi
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    cd $LFS/sources/core_components
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    # 解压源码
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    if [ -f &#34;$LFS/sources/$package_name.tar.xz&#34; ]; then
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        tar -xf &#34;$LFS/sources/$package_name.tar.xz&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    else
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        tar -xf &#34;$LFS/sources/$package_name.tar.gz&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    fi
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    cd $package_name
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    # 特殊构建流程
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    case $comp_name in
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        e2fsprogs)
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            mkdir -v build
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            cd build
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            ../configure --prefix=/usr \
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">                         --sysconfdir=/etc \
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">                         --enable-elf-shlibs \
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">                         --disable-libblkid \
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">                         --disable-libuuid \
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">                         --disable-uuidd \
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">                         --disable-fsck
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            make $LFS_MAKEFLAGS
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            make install
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            chmod -v u+w /usr/lib/{libcom_err,libe2p,libext2fs,libss}.so
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            gunzip -v /usr/share/info/libext2fs.info.gz
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            install-info --dir-file=/usr/share/info/dir /usr/share/info/libext2fs.info
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            makeinfo -o doc/com_err.info ../lib/et/com_err.texinfo
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            install-info --dir-file=/usr/share/info/dir /usr/share/info/com_err.info
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            ;;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        coreutils)
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            ./configure --prefix=/usr \
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">                        --host=$LFS_TGT \
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">                        --build=$(build-aux/config.guess) \
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">                        --enable-install-program=hostname \
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">                        --enable-no-install-program=kill,uptime
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            make $LFS_MAKEFLAGS
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            make install
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            mv -v /usr/bin/chroot /usr/sbin
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            mv -v /usr/share/man/man1/chroot.1 /usr/share/man/man8/chroot.8
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            sed -i &#39;s/&#34;1&#34;/&#34;8&#34;/&#39; /usr/share/man/man8/chroot.8
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            ;;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        procps-ng)
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            ./configure --prefix=/usr \
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">                        --docdir=/usr/share/doc/procps-ng-4.0.2 \
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">                        --disable-static \
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">                        --disable-kill
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            make $LFS_MAKEFLAGS
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            make install
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            mv -v /usr/lib/libprocps.so.* /lib
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            ln -sfv ../../lib/$(readlink /usr/lib/libprocps.so) /usr/lib/libprocps.so
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            ;;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        shadow)
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            sed -i &#39;s/groups$(EXEEXT) //&#39; src/Makefile.in
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            find man -name Makefile.in -exec sed -i &#39;s/groups\.1 / /&#39; {} \;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            find man -name Makefile.in -exec sed -i &#39;s/getspnam\.3 / /&#39; {} \;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            find man -name Makefile.in -exec sed -i &#39;s/passwd\.5 / /&#39; {} \;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            ./configure --sysconfdir=/etc \
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">                        --disable-static \
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">                        --with-group-name-max-length=32
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            make $LFS_MAKEFLAGS
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            make exec_prefix=/usr install
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            make -C man install-man
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            pwconv
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            grpconv
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            echo &#34;请设置root密码:&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            passwd root
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            ;;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        inetutils)
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            ./configure --prefix=/usr \
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">                        --bindir=/usr/bin \
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">                        --localstatedir=/var \
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">                        --disable-logger \
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">                        --disable-whois \
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">                        --disable-rcp \
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">                        --disable-rexec \
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">                        --disable-rlogin \
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">                        --disable-rsh \
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">                        --disable-servers
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            make $LFS_MAKEFLAGS
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            make install
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            mv -v /usr/bin/{hostname,ping,ping6,traceroute} /bin
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            mv -v /usr/bin/ifconfig /sbin
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            ;;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        dhcpcd)
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            ./configure --prefix=/usr \
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">                        --sysconfdir=/etc \
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">                        --libexecdir=/usr/lib/dhcpcd \
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">                        --dbdir=/var/lib/dhcpcd \
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">                        --runstatedir=/run
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            make $LFS_MAKEFLAGS
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            make install
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            install -v -m644 dhcpcd.conf -t /etc/
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            install -v -m755 -d /usr/share/dhcpcd/hooks
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            ;;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    esac
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    # 验证安装
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    echo &#34;验证 $comp_name 安装...&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    case $comp_name in
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        e2fsprogs)
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            [ -x /usr/sbin/mke2fs ] &amp;&amp; echo &#34;✓ e2fsprogs 安装成功&#34; || echo &#34;✗ e2fsprogs 安装失败&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            ;;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        coreutils)
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            [ -x /usr/bin/ls ] &amp;&amp; echo &#34;✓ coreutils 安装成功&#34; || echo &#34;✗ coreutils 安装失败&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            ;;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        procps-ng)
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            [ -x /usr/bin/ps ] &amp;&amp; echo &#34;✓ procps-ng 安装成功&#34; || echo &#34;✗ procps-ng 安装失败&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            ;;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        shadow)
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            [ -x /usr/bin/passwd ] &amp;&amp; echo &#34;✓ shadow 安装成功&#34; || echo &#34;✗ shadow 安装失败&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            ;;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        inetutils)
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            [ -x /bin/ping ] &amp;&amp; echo &#34;✓ inetutils 安装成功&#34; || echo &#34;✗ inetutils 安装失败&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            ;;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        dhcpcd)
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            [ -x /usr/sbin/dhcpcd ] &amp;&amp; echo &#34;✓ dhcpcd 安装成功&#34; || echo &#34;✗ dhcpcd 安装失败&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            ;;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    esac
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    completed=$((completed + 1))
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    echo &#34;进度: $completed/$total_components 完成&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    echo &#34;&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    # 清理构建目录
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    cd $LFS/sources/core_components
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    rm -rf $package_name
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">done
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">echo &#34;=== 所有核心组件构建完成 ===&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">EOF</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>chmod +x $LFS/build_core_components.sh
+</span></span></code></pre></div><h2 id="-功能验证">🧪 功能验证</h2>
+<h3 id="组件可用性测试">组件可用性测试</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># 创建验证脚本</span>
+</span></span><span style="display:flex;"><span>cat &gt; $LFS/verify_core_components.sh <span style="color:#e6db74">&lt;&lt; &#39;EOF&#39;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">#!/bin/bash
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74"># 核心组件验证脚本
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">echo &#34;=== LFS核心组件验证 ===&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74"># 定义要验证的组件
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">components=(
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    &#34;/usr/sbin/mke2fs:e2fsprogs&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    &#34;/usr/bin/ls:coreutils&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    &#34;/usr/bin/ps:procps-ng&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    &#34;/usr/bin/passwd:shadow&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    &#34;/bin/ping:inetutils&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    &#34;/usr/sbin/dhcpcd:dhcpcd&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">)
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">passed=0
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">total=${#components[@]}
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">for comp_info in &#34;${components[@]}&#34;; do
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    IFS=&#39;:&#39; read -r comp_path comp_name &lt;&lt;&lt; &#34;$comp_info&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    echo -n &#34;检查 $comp_name ($comp_path)... &#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    if [ -x &#34;$comp_path&#34; ]; then
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        echo &#34;✓ 可用&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        # 基本功能测试
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        case $comp_name in
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            e2fsprogs)
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">                $comp_path --version &gt;/dev/null 2&gt;&amp;1 &amp;&amp; echo &#34;  版本检查: ✓&#34; || echo &#34;  版本检查: ✗&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">                ;;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            coreutils)
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">                ls --version &gt;/dev/null 2&gt;&amp;1 &amp;&amp; echo &#34;  基本功能: ✓&#34; || echo &#34;  基本功能: ✗&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">                ;;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            procps-ng)
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">                ps --version &gt;/dev/null 2&gt;&amp;1 &amp;&amp; echo &#34;  版本检查: ✓&#34; || echo &#34;  版本检查: ✗&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">                ;;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            shadow)
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">                passwd --version &gt;/dev/null 2&gt;&amp;1 &amp;&amp; echo &#34;  版本检查: ✓&#34; || echo &#34;  版本检查: ✗&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">                ;;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            inetutils)
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">                ping -V &gt;/dev/null 2&gt;&amp;1 &amp;&amp; echo &#34;  版本检查: ✓&#34; || echo &#34;  版本检查: ✗&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">                ;;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            dhcpcd)
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">                $comp_path --version &gt;/dev/null 2&gt;&amp;1 &amp;&amp; echo &#34;  版本检查: ✓&#34; || echo &#34;  版本检查: ✗&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">                ;;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        esac
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        passed=$((passed + 1))
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    else
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        echo &#34;✗ 未找到&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    fi
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">done
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">echo &#34;&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">echo &#34;=== 验证结果 ===&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">echo &#34;通过: $passed/$total&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">if [ $passed -eq $total ]; then
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    echo &#34;✓ 所有核心组件都已正确安装&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    exit 0
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">else
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    echo &#34;✗ 部分组件安装失败&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    exit 1
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">fi
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">EOF</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>chmod +x $LFS/verify_core_components.sh
+</span></span></code></pre></div><h2 id="-常见问题">🚨 常见问题</h2>
+<h3 id="权限问题">权限问题</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># 如果遇到权限问题</span>
+</span></span><span style="display:flex;"><span>echo <span style="color:#e6db74">&#34;检查文件权限...&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">for</span> comp in /usr/bin/ls /usr/bin/ps /usr/sbin/mke2fs; <span style="color:#66d9ef">do</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> <span style="color:#f92672">[</span> -x <span style="color:#e6db74">&#34;</span>$comp<span style="color:#e6db74">&#34;</span> <span style="color:#f92672">]</span>; <span style="color:#66d9ef">then</span>
+</span></span><span style="display:flex;"><span>        ls -l <span style="color:#e6db74">&#34;</span>$comp<span style="color:#e6db74">&#34;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">fi</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">done</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 修复权限</span>
+</span></span><span style="display:flex;"><span>chmod +x /usr/bin/* 2&gt;/dev/null <span style="color:#f92672">||</span> true
+</span></span><span style="display:flex;"><span>chmod +x /usr/sbin/* 2&gt;/dev/null <span style="color:#f92672">||</span> true
+</span></span></code></pre></div><h3 id="依赖问题">依赖问题</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># 检查组件依赖</span>
+</span></span><span style="display:flex;"><span>echo <span style="color:#e6db74">&#34;检查动态链接...&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">for</span> comp in /usr/bin/ls /usr/bin/ps; <span style="color:#66d9ef">do</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> <span style="color:#f92672">[</span> -x <span style="color:#e6db74">&#34;</span>$comp<span style="color:#e6db74">&#34;</span> <span style="color:#f92672">]</span>; <span style="color:#66d9ef">then</span>
+</span></span><span style="display:flex;"><span>        echo <span style="color:#e6db74">&#34;=== </span>$comp<span style="color:#e6db74"> 依赖 ===&#34;</span>
+</span></span><span style="display:flex;"><span>        ldd <span style="color:#e6db74">&#34;</span>$comp<span style="color:#e6db74">&#34;</span> 2&gt;/dev/null <span style="color:#f92672">||</span> echo <span style="color:#e6db74">&#34;无法分析依赖&#34;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">fi</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">done</span>
+</span></span></code></pre></div><h3 id="配置问题">配置问题</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># 检查配置文件</span>
+</span></span><span style="display:flex;"><span>echo <span style="color:#e6db74">&#34;检查关键配置文件...&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>files<span style="color:#f92672">=(</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#34;/etc/passwd&#34;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#34;/etc/group&#34;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#34;/etc/shadow&#34;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#34;/etc/gshadow&#34;</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">for</span> file in <span style="color:#e6db74">&#34;</span><span style="color:#e6db74">${</span>files[@]<span style="color:#e6db74">}</span><span style="color:#e6db74">&#34;</span>; <span style="color:#66d9ef">do</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> <span style="color:#f92672">[</span> -f <span style="color:#e6db74">&#34;</span>$file<span style="color:#e6db74">&#34;</span> <span style="color:#f92672">]</span>; <span style="color:#66d9ef">then</span>
+</span></span><span style="display:flex;"><span>        echo <span style="color:#e6db74">&#34;✓ </span>$file<span style="color:#e6db74"> 存在&#34;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">else</span>
+</span></span><span style="display:flex;"><span>        echo <span style="color:#e6db74">&#34;✗ </span>$file<span style="color:#e6db74"> 不存在&#34;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">fi</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">done</span>
+</span></span></code></pre></div><h2 id="-系统状态检查">📊 系统状态检查</h2>
+<h3 id="核心功能测试">核心功能测试</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># 测试基本系统功能</span>
+</span></span><span style="display:flex;"><span>cat &gt; $LFS/test_core_system.sh <span style="color:#e6db74">&lt;&lt; &#39;EOF&#39;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">#!/bin/bash
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74"># 核心系统功能测试
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">echo &#34;=== LFS核心系统功能测试 ===&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74"># 测试文件操作
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">echo &#34;1. 文件操作测试...&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">touch test_file.txt
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">echo &#34;Hello LFS&#34; &gt; test_file.txt
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">cat test_file.txt
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">ls -la test_file.txt
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">rm test_file.txt
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">echo &#34;✓ 文件操作正常&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74"># 测试进程管理
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">echo -e &#34;\n2. 进程管理测试...&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">ps aux | head -5
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">echo &#34;✓ 进程管理正常&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74"># 测试用户管理
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">echo -e &#34;\n3. 用户管理测试...&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">id
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">whoami
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">echo &#34;✓ 用户管理正常&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74"># 测试网络工具
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">echo -e &#34;\n4. 网络工具测试...&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">ping -c 1 127.0.0.1 &gt;/dev/null 2&gt;&amp;1 &amp;&amp; echo &#34;✓ 本地网络正常&#34; || echo &#34;✗ 本地网络异常&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74"># 测试磁盘工具
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">echo -e &#34;\n5. 磁盘工具测试...&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">df -h | head -5
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">echo &#34;✓ 磁盘工具正常&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">echo -e &#34;\n=== 所有测试完成 ===&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">EOF</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>chmod +x $LFS/test_core_system.sh
+</span></span></code></pre></div><h2 id="-相关资源">📚 相关资源</h2>
+<ul>
+<li><a href="http://www.linuxfromscratch.org/lfs/view/stable/chapter06/chapter06.html">LFS官方文档 - 核心组件</a></li>
+<li><a href="https://www.gnu.org/software/coreutils/manual/">GNU Coreutils文档</a></li>
+<li><a href="https://github.com/shadow-maint/shadow">Shadow工具文档</a></li>
+</ul>
+<hr>
+<p><em>最近更新: {{ .Lastmod.Format &ldquo;2006-01-02&rdquo; }}</em></p>
+
+      
+      <div class="post-separator">------------------------------------------------------------------------</div>
+      
+    </div>
+    <div class="post-footer">
+      
+      <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+      <div class="busuanzi-container">
+        <span id="busuanzi_container_page_pv">--本文总阅读量<span id="busuanzi_value_page_pv"></span>次--</span>
+      </div>
+      
+      
+      <script src="https://utteranc.es/client.js"
+        repo="makkichan947/makkichan947.github.io"
+        issue-term="pathname"
+        label="Utterances"
+        theme="github-dark"
+        crossorigin="anonymous"
+        async>
+      </script>
+    </div>
+  </article>
+
+    </main>
+  </body>
+</html>

@@ -1,0 +1,653 @@
+<!doctype html>
+<html lang="zh">
+  <head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+    <title>系统配置工具 // Yaku Makki</title>
+    <link rel="shortcut icon" href="./avatar.jpg" />
+    <meta charset="utf-8" />
+    <meta name="generator" content="Hugo 0.151.2">
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="author" content="Yaku Makki" />
+    <meta name="description" content="安装LFS系统配置和管理工具" />
+    <link rel="stylesheet" href="/css/main.min.422840b4454cb211f5b3dab61f082cdff508e88825173c31806835cb75529734.css" />
+    
+
+    
+    
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="系统配置工具">
+  <meta name="twitter:description" content="安装LFS系统配置和管理工具">
+
+    <meta property="og:url" content="http://localhost:1313/wiki/lfs/basic-system/system-tools/">
+  <meta property="og:site_name" content="Yaku Makki">
+  <meta property="og:title" content="系统配置工具">
+  <meta property="og:description" content="安装LFS系统配置和管理工具">
+  <meta property="og:locale" content="zh">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="wiki">
+    <meta property="article:published_time" content="2025-10-28T00:00:00+00:00">
+    <meta property="article:modified_time" content="2025-10-28T00:00:00+00:00">
+
+
+  </head>
+  <body class="synthwave-bg">
+    <header class="app-header glass-morphism neon-border">
+      <a href="/"><img class="app-header-avatar" src="/avatar.jpg" alt="Yaku Makki" /></a>
+      <span class="app-header-title gradient-text">Yaku Makki</span>
+      <nav class="app-header-menu">
+          <a class="app-header-menu-item" href="/">首页</a>
+             | 
+          
+          <a class="app-header-menu-item" href="/post/">博客</a>
+             | 
+          
+          <a class="app-header-menu-item" href="/wiki/">维基</a>
+             | 
+          
+          <a class="app-header-menu-item" href="/tags/">标签</a>
+             | 
+          
+          <a class="app-header-menu-item" href="/about/">关于</a>
+      </nav>
+      <p>个人小巢</p>
+      <div class="app-header-social">
+        
+          <a href="https://github.com/makkichan947" target="_blank" rel="noreferrer noopener me" class="pulse-glow">
+            <svg class="icon icon-brand-github" viewBox="0 0 24 24" fill="currentColor"><title>GitHub</title><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg>
+          </a>
+        
+          <a href="mailto:yakumakki947@hotmail.com" target="_blank" rel="noreferrer noopener me" class="pulse-glow">
+            <svg class="icon icon-mail" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><title>mail</title><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
+          </a>
+        
+          <a href="https://x.com/Makki_Yaku947" target="_blank" rel="noreferrer noopener me" class="pulse-glow">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-link">
+  <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path>
+  <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path>
+</svg>
+          </a>
+        
+          <a href="https://www.twitch.tv/u/makkichan947" target="_blank" rel="noreferrer noopener me" class="pulse-glow">
+            <svg class="icon icon-brand-twitch" viewBox="0 0 24 24" fill="currentColor"><title>Twitch</title><path d="M11.571 4.714h1.715v5.143H11.57zm4.715 0H18v5.143h-1.714zM6 0L1.714 4.286v15.428h5.143V24l4.286-4.286h3.428L22.286 12V0zm14.571 11.143l-3.428 3.428h-3.429l-3 3v-3H6.857V1.714h13.714Z"/></svg>
+          </a>
+        
+      </div>
+    </header>
+    <main class="app-container glass-morphism glow-effect">
+      <div class="floating-particles">
+        <div class="particle" style="left: 10%; animation-delay: 0s;"></div>
+        <div class="particle" style="left: 20%; animation-delay: 1s;"></div>
+        <div class="particle" style="left: 30%; animation-delay: 2s;"></div>
+        <div class="particle" style="left: 40%; animation-delay: 3s;"></div>
+        <div class="particle" style="left: 50%; animation-delay: 4s;"></div>
+        <div class="particle" style="left: 60%; animation-delay: 5s;"></div>
+        <div class="particle" style="left: 70%; animation-delay: 6s;"></div>
+        <div class="particle" style="left: 80%; animation-delay: 7s;"></div>
+        <div class="particle" style="left: 90%; animation-delay: 8s;"></div>
+      </div>
+      
+  <article class="post enhanced-card glow-effect">
+    <header class="post-header">
+      <h1 class ="post-title gradient-text">系统配置工具</h1>
+      <div class="post-meta">
+        <div>
+          <svg class="icon icon-calendar" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><title>calendar</title><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+          Oct 28, 2025
+        </div>
+        <div>
+          <svg class="icon icon-clock" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><title>clock</title><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+          6 min read
+        </div>
+      </div>
+    </header>
+    <div class="post-content">
+      <h1 id="系统配置工具">系统配置工具</h1>
+<p>系统配置工具是Linux系统管理和配置的核心工具集，包括系统日志、时钟管理、终端工具等。本章将详细介绍这些工具的编译和安装。</p>
+<h2 id="-工具概述">🎯 工具概述</h2>
+<h3 id="工具分类">工具分类</h3>
+<p>系统配置工具主要包括：</p>
+<ul>
+<li><strong>系统日志工具</strong>：sysklogd, syslog-ng</li>
+<li><strong>时钟管理工具</strong>：util-linux (hwclock)</li>
+<li><strong>终端工具</strong>：ncurses, readline</li>
+<li><strong>文档工具</strong>：man-db, texinfo</li>
+<li><strong>其他系统工具</strong>：kbd, console-data</li>
+</ul>
+<h2 id="-sysklogd工具">📝 Sysklogd工具</h2>
+<h3 id="编译sysklogd">编译Sysklogd</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># 切换到lfs用户</span>
+</span></span><span style="display:flex;"><span>su - lfs
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 创建构建目录</span>
+</span></span><span style="display:flex;"><span>mkdir -pv $LFS/sources/system_tools
+</span></span><span style="display:flex;"><span>cd $LFS/sources/system_tools
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 解压Sysklogd源码</span>
+</span></span><span style="display:flex;"><span>tar -xf $LFS/sources/sysklogd-1.5.1.tar.gz
+</span></span><span style="display:flex;"><span>cd sysklogd-1.5.1
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 配置Sysklogd</span>
+</span></span><span style="display:flex;"><span>sed -i <span style="color:#e6db74">&#39;/Error loading kernel symbols/{n;n;d}&#39;</span> ksym_mod.c
+</span></span><span style="display:flex;"><span>sed -i <span style="color:#e6db74">&#39;s/union wait/int/&#39;</span> syslogd.c
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 编译</span>
+</span></span><span style="display:flex;"><span>make $LFS_MAKEFLAGS
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 安装</span>
+</span></span><span style="display:flex;"><span>make BINDIR<span style="color:#f92672">=</span>/sbin install
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 创建配置文件</span>
+</span></span><span style="display:flex;"><span>cat &gt; /etc/syslog.conf &lt;&lt; <span style="color:#e6db74">&#34;EOF&#34;</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Begin /etc/syslog.conf</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>auth,authpriv.* -/var/log/auth.log
+</span></span><span style="display:flex;"><span>*.*;auth,authpriv.none -/var/log/sys.log
+</span></span><span style="display:flex;"><span>daemon.* -/var/log/daemon.log
+</span></span><span style="display:flex;"><span>kern.* -/var/log/kern.log
+</span></span><span style="display:flex;"><span>mail.* -/var/log/mail.log
+</span></span><span style="display:flex;"><span>user.* -/var/log/user.log
+</span></span><span style="display:flex;"><span>*.emerg *
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># End /etc/syslog.conf</span>
+</span></span><span style="display:flex;"><span>EOF
+</span></span></code></pre></div><h2 id="-硬件时钟工具">⌚ 硬件时钟工具</h2>
+<h3 id="配置hwclock">配置Hwclock</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># 返回源码目录</span>
+</span></span><span style="display:flex;"><span>cd $LFS/sources/system_tools
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 解压Util-linux源码（如果还没有解压）</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># tar -xf $LFS/sources/util-linux-2.38.1.tar.xz</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># cd util-linux-2.38.1</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 实际上hwclock已经在util-linux中安装了</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 这里只需要配置</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 创建时钟配置文件</span>
+</span></span><span style="display:flex;"><span>cat &gt; /etc/adjtime &lt;&lt; <span style="color:#e6db74">&#34;EOF&#34;</span>
+</span></span><span style="display:flex;"><span>0.0 <span style="color:#ae81ff">0</span> 0.0
+</span></span><span style="display:flex;"><span><span style="color:#ae81ff">0</span>
+</span></span><span style="display:flex;"><span>LOCAL
+</span></span><span style="display:flex;"><span>EOF
+</span></span></code></pre></div><h2 id="-ncurses库">🖥️ Ncurses库</h2>
+<h3 id="编译ncurses">编译Ncurses</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># 返回源码目录</span>
+</span></span><span style="display:flex;"><span>cd $LFS/sources/system_tools
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 解压Ncurses源码</span>
+</span></span><span style="display:flex;"><span>tar -xf $LFS/sources/ncurses-6.4.tar.gz
+</span></span><span style="display:flex;"><span>cd ncurses-6.4
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 配置Ncurses</span>
+</span></span><span style="display:flex;"><span>./configure --prefix<span style="color:#f92672">=</span>/usr <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>            --mandir<span style="color:#f92672">=</span>/usr/share/man <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>            --with-shared <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>            --without-debug <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>            --without-normal <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>            --with-cxx-shared <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>            --enable-pc-files <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>            --enable-widec <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>            --with-pkg-config-libdir<span style="color:#f92672">=</span>/usr/lib/pkgconfig
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 编译</span>
+</span></span><span style="display:flex;"><span>make $LFS_MAKEFLAGS
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 安装</span>
+</span></span><span style="display:flex;"><span>make DESTDIR<span style="color:#f92672">=</span>$LFS install
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 修复库文件</span>
+</span></span><span style="display:flex;"><span>mv -v $LFS/usr/lib/libncursesw.so.6* /usr/lib
+</span></span><span style="display:flex;"><span>ln -sfv ../../lib/<span style="color:#66d9ef">$(</span>readlink $LFS/usr/lib/libncursesw.so<span style="color:#66d9ef">)</span> /usr/lib/libncursesw.so
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 创建兼容性符号链接</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">for</span> lib in ncurses form panel menu ; <span style="color:#66d9ef">do</span>
+</span></span><span style="display:flex;"><span>    rm -vf /usr/lib/lib<span style="color:#e6db74">${</span>lib<span style="color:#e6db74">}</span>.so
+</span></span><span style="display:flex;"><span>    echo <span style="color:#e6db74">&#34;INPUT(-l</span><span style="color:#e6db74">${</span>lib<span style="color:#e6db74">}</span><span style="color:#e6db74">w)&#34;</span> &gt; /usr/lib/lib<span style="color:#e6db74">${</span>lib<span style="color:#e6db74">}</span>.so
+</span></span><span style="display:flex;"><span>    ln -sfv <span style="color:#e6db74">${</span>lib<span style="color:#e6db74">}</span>w.pc /usr/lib/pkgconfig/<span style="color:#e6db74">${</span>lib<span style="color:#e6db74">}</span>.pc
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">done</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 安装文档</span>
+</span></span><span style="display:flex;"><span>rm -vf /usr/lib/libcursesw.so
+</span></span><span style="display:flex;"><span>echo <span style="color:#e6db74">&#34;INPUT(-lncursesw)&#34;</span> &gt; /usr/lib/libcursesw.so
+</span></span><span style="display:flex;"><span>ln -sfv libncurses.so /usr/lib/libcurses.so
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 清理</span>
+</span></span><span style="display:flex;"><span>rm -rf $LFS/usr/share/man
+</span></span></code></pre></div><h2 id="-readline库">📖 Readline库</h2>
+<h3 id="编译readline">编译Readline</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># 返回源码目录</span>
+</span></span><span style="display:flex;"><span>cd $LFS/sources/system_tools
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 解压Readline源码</span>
+</span></span><span style="display:flex;"><span>tar -xf $LFS/sources/readline-8.2.tar.gz
+</span></span><span style="display:flex;"><span>cd readline-8.2
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 配置Readline</span>
+</span></span><span style="display:flex;"><span>./configure --prefix<span style="color:#f92672">=</span>/usr <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>            --disable-static <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>            --with-curses <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>            --docdir<span style="color:#f92672">=</span>/usr/share/doc/readline-8.2
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 编译</span>
+</span></span><span style="display:flex;"><span>make $LFS_MAKEFLAGS SHLIB_LIBS<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;-lncursesw&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 安装</span>
+</span></span><span style="display:flex;"><span>make SHLIB_LIBS<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;-lncursesw&#34;</span> install
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 安装文档</span>
+</span></span><span style="display:flex;"><span>install -v -m644 doc/*.<span style="color:#f92672">{</span>ps,pdf,html,dvi<span style="color:#f92672">}</span> /usr/share/doc/readline-8.2
+</span></span></code></pre></div><h2 id="-man-db工具">📚 Man-db工具</h2>
+<h3 id="编译man-db">编译Man-db</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># 返回源码目录</span>
+</span></span><span style="display:flex;"><span>cd $LFS/sources/system_tools
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 解压Man-db源码</span>
+</span></span><span style="display:flex;"><span>tar -xf $LFS/sources/man-db-2.11.2.tar.xz
+</span></span><span style="display:flex;"><span>cd man-db-2.11.2
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 配置Man-db</span>
+</span></span><span style="display:flex;"><span>./configure --prefix<span style="color:#f92672">=</span>/usr <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>            --docdir<span style="color:#f92672">=</span>/usr/share/doc/man-db-2.11.2 <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>            --sysconfdir<span style="color:#f92672">=</span>/etc <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>            --disable-setuid <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>            --enable-cache-owner<span style="color:#f92672">=</span>bin <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>            --with-browser<span style="color:#f92672">=</span>/usr/bin/lynx <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>            --with-vgrind<span style="color:#f92672">=</span>/usr/bin/vgrind <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>            --with-grap<span style="color:#f92672">=</span>/usr/bin/grap <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>            --with-systemdtmpfilesdir<span style="color:#f92672">=</span> <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>            --with-systemdsystemunitdir<span style="color:#f92672">=</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 编译</span>
+</span></span><span style="display:flex;"><span>make $LFS_MAKEFLAGS
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 安装</span>
+</span></span><span style="display:flex;"><span>make install
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 创建配置文件</span>
+</span></span><span style="display:flex;"><span>cat &gt; /etc/man_db.conf &lt;&lt; <span style="color:#e6db74">&#34;EOF&#34;</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Begin /etc/man_db.conf</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Mandb configuration</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Every automatically generated manpage snippet in the man-db configuration</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># file must have the same order and information as the one generated by</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># mandb. The man-db configuration file is generated by mandb and possibly</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># modified by the system administrator.</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># The automatically generated manpage snippets are identified by the</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># following comment:</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># This file was generated by mandb</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># The following paths are the defaults for man_db.conf. Uncomment and</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># modify as needed.</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#MANDATORY_MANPATH /usr/man</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#MANDATORY_MANPATH /usr/share/man</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#MANDATORY_MANPATH /usr/local/man</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#MANDATORY_MANPATH /usr/local/share/man</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>MANPATH_MAP /bin /usr/share/man
+</span></span><span style="display:flex;"><span>MANPATH_MAP /usr/bin /usr/share/man
+</span></span><span style="display:flex;"><span>MANPATH_MAP /sbin /usr/share/man
+</span></span><span style="display:flex;"><span>MANPATH_MAP /usr/sbin /usr/share/man
+</span></span><span style="display:flex;"><span>MANPATH_MAP /usr/local/bin /usr/local/share/man
+</span></span><span style="display:flex;"><span>MANPATH_MAP /usr/local/sbin /usr/local/share/man
+</span></span><span style="display:flex;"><span>MANPATH_MAP /usr/X11R6/bin /usr/X11R6/share/man
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># End /etc/man_db.conf</span>
+</span></span><span style="display:flex;"><span>EOF
+</span></span></code></pre></div><h2 id="-kbd工具">⌨️ Kbd工具</h2>
+<h3 id="编译kbd">编译Kbd</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># 返回源码目录</span>
+</span></span><span style="display:flex;"><span>cd $LFS/sources/system_tools
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 解压Kbd源码</span>
+</span></span><span style="display:flex;"><span>tar -xf $LFS/sources/kbd-2.5.1.tar.xz
+</span></span><span style="display:flex;"><span>cd kbd-2.5.1
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 应用补丁</span>
+</span></span><span style="display:flex;"><span>patch -Np1 -i ../kbd-2.5.1-backspace-1.patch
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 配置Kbd</span>
+</span></span><span style="display:flex;"><span>./configure --prefix<span style="color:#f92672">=</span>/usr --disable-vlock
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 编译</span>
+</span></span><span style="display:flex;"><span>make $LFS_MAKEFLAGS
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 安装</span>
+</span></span><span style="display:flex;"><span>make install
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 安装文档</span>
+</span></span><span style="display:flex;"><span>mkdir -v /usr/share/doc/kbd-2.5.1
+</span></span><span style="display:flex;"><span>cp -R -v docs/doc/* /usr/share/doc/kbd-2.5.1
+</span></span></code></pre></div><h2 id="-构建脚本">📋 构建脚本</h2>
+<h3 id="自动化构建脚本">自动化构建脚本</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># 创建系统工具构建脚本</span>
+</span></span><span style="display:flex;"><span>cat &gt; $LFS/build_system_tools.sh <span style="color:#e6db74">&lt;&lt; &#39;EOF&#39;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">#!/bin/bash
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74"># LFS系统工具构建脚本
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">set -e
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74"># 工具列表
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">tools=(
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    &#34;sysklogd-1.5.1:sysklogd&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    &#34;ncurses-6.4:ncurses&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    &#34;readline-8.2:readline&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    &#34;man-db-2.11.2:man-db&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    &#34;kbd-2.5.1:kbd&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">)
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">total_tools=${#tools[@]}
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">completed=0
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">for tool_info in &#34;${tools[@]}&#34;; do
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    IFS=&#39;:&#39; read -r package_name tool_name &lt;&lt;&lt; &#34;$tool_info&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    echo &#34;=== 构建 $tool_name ($((completed + 1))/$total_tools) ===&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    # 检查源码
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    if [ ! -f &#34;$LFS/sources/$package_name.tar.xz&#34; ] &amp;&amp; [ ! -f &#34;$LFS/sources/$package_name.tar.gz&#34; ]; then
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        echo &#34;错误: $package_name 源码不存在&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        exit 1
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    fi
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    cd $LFS/sources/system_tools
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    # 解压源码
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    if [ -f &#34;$LFS/sources/$package_name.tar.xz&#34; ]; then
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        tar -xf &#34;$LFS/sources/$package_name.tar.xz&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    else
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        tar -xf &#34;$LFS/sources/$package_name.tar.gz&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    fi
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    cd $package_name
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    # 特殊构建流程
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    case $tool_name in
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        sysklogd)
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            sed -i &#39;/Error loading kernel symbols/{n;n;d}&#39; ksym_mod.c
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            sed -i &#39;s/union wait/int/&#39; syslogd.c
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            make $LFS_MAKEFLAGS
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            make BINDIR=/sbin install
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            cat &gt; /etc/syslog.conf &lt;&lt; &#34;EOF</span><span style="color:#e6db74">&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">auth,authpriv.* -/var/log/auth.log
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">*.*;auth,authpriv.none -/var/log/sys.log
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">daemon.* -/var/log/daemon.log
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">kern.* -/var/log/kern.log
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">mail.* -/var/log/mail.log
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">user.* -/var/log/user.log
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">*.emerg *
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">EOF
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            ;;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        ncurses)
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            ./configure --prefix=/usr \
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">                        --mandir=/usr/share/man \
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">                        --with-shared \
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">                        --without-debug \
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">                        --without-normal \
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">                        --with-cxx-shared \
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">                        --enable-pc-files \
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">                        --enable-widec \
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">                        --with-pkg-config-libdir=/usr/lib/pkgconfig
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            make </span>$LFS_MAKEFLAGS<span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            make DESTDIR=</span>$LFS<span style="color:#e6db74"> install
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            mv -v </span>$LFS<span style="color:#e6db74">/usr/lib/libncursesw.so.6* /usr/lib
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            ln -sfv ../../lib/</span><span style="color:#66d9ef">$(</span>readlink $LFS/usr/lib/libncursesw.so<span style="color:#66d9ef">)</span><span style="color:#e6db74"> /usr/lib/libncursesw.so
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            for lib in ncurses form panel menu ; do
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">                rm -vf /usr/lib/lib</span><span style="color:#e6db74">${</span>lib<span style="color:#e6db74">}</span><span style="color:#e6db74">.so
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">                echo &#34;</span>INPUT<span style="color:#f92672">(</span>-l<span style="color:#e6db74">${</span>lib<span style="color:#e6db74">}</span>w<span style="color:#f92672">)</span><span style="color:#e6db74">&#34; &gt; /usr/lib/lib</span><span style="color:#e6db74">${</span>lib<span style="color:#e6db74">}</span><span style="color:#e6db74">.so
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">                ln -sfv </span><span style="color:#e6db74">${</span>lib<span style="color:#e6db74">}</span><span style="color:#e6db74">w.pc /usr/lib/pkgconfig/</span><span style="color:#e6db74">${</span>lib<span style="color:#e6db74">}</span><span style="color:#e6db74">.pc
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            done
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            rm -vf /usr/lib/libcursesw.so
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            echo &#34;</span>INPUT<span style="color:#f92672">(</span>-lncursesw<span style="color:#f92672">)</span><span style="color:#e6db74">&#34; &gt; /usr/lib/libcursesw.so
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            ln -sfv libncurses.so /usr/lib/libcurses.so
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            rm -rf </span>$LFS<span style="color:#e6db74">/usr/share/man
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            ;;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        readline)
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            ./configure --prefix=/usr \
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">                        --disable-static \
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">                        --with-curses \
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">                        --docdir=/usr/share/doc/readline-8.2
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            make </span>$LFS_MAKEFLAGS<span style="color:#e6db74"> SHLIB_LIBS=&#34;</span>-lncursesw<span style="color:#e6db74">&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            make SHLIB_LIBS=&#34;</span>-lncursesw<span style="color:#e6db74">&#34; install
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            install -v -m644 doc/*.{ps,pdf,html,dvi} /usr/share/doc/readline-8.2
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            ;;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        man-db)
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            ./configure --prefix=/usr \
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">                        --docdir=/usr/share/doc/man-db-2.11.2 \
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">                        --sysconfdir=/etc \
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">                        --disable-setuid \
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">                        --enable-cache-owner=bin \
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">                        --with-browser=/usr/bin/lynx \
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">                        --with-vgrind=/usr/bin/vgrind \
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">                        --with-grap=/usr/bin/grap \
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">                        --with-systemdtmpfilesdir= \
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">                        --with-systemdsystemunitdir=
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            make </span>$LFS_MAKEFLAGS<span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            make install
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            cat &gt; /etc/man_db.conf &lt;&lt; &#34;</span>EOF<span style="color:#e6db74">&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">MANPATH_MAP /bin /usr/share/man
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">MANPATH_MAP /usr/bin /usr/share/man
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">MANPATH_MAP /sbin /usr/share/man
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">MANPATH_MAP /usr/sbin /usr/share/man
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">MANPATH_MAP /usr/local/bin /usr/local/share/man
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">MANPATH_MAP /usr/local/sbin /usr/local/share/man
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">MANPATH_MAP /usr/X11R6/bin /usr/X11R6/share/man
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">EOF
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            ;;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        kbd)
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            patch -Np1 -i ../kbd-2.5.1-backspace-1.patch
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            ./configure --prefix=/usr --disable-vlock
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            make </span>$LFS_MAKEFLAGS<span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            make install
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            mkdir -v /usr/share/doc/kbd-2.5.1
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            cp -R -v docs/doc/* /usr/share/doc/kbd-2.5.1
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            ;;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    esac
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    # 验证安装
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    echo &#34;</span>验证 $tool_name 安装...<span style="color:#e6db74">&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    case </span>$tool_name<span style="color:#e6db74"> in
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        sysklogd)
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            [ -x /sbin/syslogd ] &amp;&amp; echo &#34;</span>✓ sysklogd 安装成功<span style="color:#e6db74">&#34; || echo &#34;</span>✗ sysklogd 安装失败<span style="color:#e6db74">&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            ;;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        ncurses)
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            [ -f /usr/lib/libncursesw.so ] &amp;&amp; echo &#34;</span>✓ ncurses 安装成功<span style="color:#e6db74">&#34; || echo &#34;</span>✗ ncurses 安装失败<span style="color:#e6db74">&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            ;;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        readline)
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            [ -f /usr/lib/libreadline.so ] &amp;&amp; echo &#34;</span>✓ readline 安装成功<span style="color:#e6db74">&#34; || echo &#34;</span>✗ readline 安装失败<span style="color:#e6db74">&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            ;;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        man-db)
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            [ -x /usr/bin/man ] &amp;&amp; echo &#34;</span>✓ man-db 安装成功<span style="color:#e6db74">&#34; || echo &#34;</span>✗ man-db 安装失败<span style="color:#e6db74">&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            ;;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        kbd)
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            [ -x /usr/bin/loadkeys ] &amp;&amp; echo &#34;</span>✓ kbd 安装成功<span style="color:#e6db74">&#34; || echo &#34;</span>✗ kbd 安装失败<span style="color:#e6db74">&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            ;;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    esac
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    completed=</span><span style="color:#66d9ef">$((</span>completed <span style="color:#f92672">+</span> <span style="color:#ae81ff">1</span><span style="color:#66d9ef">))</span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    echo &#34;</span>进度: $completed/$total_tools 完成<span style="color:#e6db74">&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    echo &#34;&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    # 清理构建目录
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    cd </span>$LFS<span style="color:#e6db74">/sources/system_tools
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    rm -rf </span>$package_name<span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">done
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">echo &#34;</span><span style="color:#f92672">===</span> 所有系统工具构建完成 <span style="color:#f92672">===</span><span style="color:#e6db74">&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">EOF
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">chmod +x </span>$LFS<span style="color:#e6db74">/build_system_tools.sh
+</span></span></span></code></pre></div><h2 id="-功能验证">🧪 功能验证</h2>
+<h3 id="工具可用性测试">工具可用性测试</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># 创建验证脚本</span>
+</span></span><span style="display:flex;"><span>cat &gt; $LFS/verify_system_tools.sh <span style="color:#e6db74">&lt;&lt; &#39;EOF&#39;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">#!/bin/bash
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74"># 系统工具验证脚本
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">echo &#34;=== LFS系统工具验证 ===&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74"># 定义要验证的工具
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">tools=(
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    &#34;/sbin/syslogd:sysklogd&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    &#34;/usr/lib/libncursesw.so:ncurses&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    &#34;/usr/lib/libreadline.so:readline&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    &#34;/usr/bin/man:man-db&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    &#34;/usr/bin/loadkeys:kbd&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">)
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">passed=0
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">total=${#tools[@]}
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">for tool_info in &#34;${tools[@]}&#34;; do
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    IFS=&#39;:&#39; read -r tool_path tool_name &lt;&lt;&lt; &#34;$tool_info&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    echo -n &#34;检查 $tool_name ($tool_path)... &#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    if [ -e &#34;$tool_path&#34; ]; then
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        echo &#34;✓ 存在&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        # 基本功能测试
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        case $tool_name in
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            sysklogd)
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">                $tool_path --version &gt;/dev/null 2&gt;&amp;1 &amp;&amp; echo &#34;  版本检查: ✓&#34; || echo &#34;  版本检查: ✗&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">                ;;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            ncurses)
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">                # 检查是否可以链接
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">                echo &#34;#include &lt;ncurses.h&gt;&#34; &gt; test_ncurses.c
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">                echo &#34;int main() { initscr(); endwin(); return 0; }&#34; &gt;&gt; test_ncurses.c
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">                gcc test_ncurses.c -lncursesw -o test_ncurses &gt;/dev/null 2&gt;&amp;1 &amp;&amp; echo &#34;  编译测试: ✓&#34; || echo &#34;  编译测试: ✗&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">                rm -f test_ncurses.c test_ncurses
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">                ;;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            readline)
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">                # 检查readline头文件
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">                [ -f /usr/include/readline/readline.h ] &amp;&amp; echo &#34;  头文件: ✓&#34; || echo &#34;  头文件: ✗&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">                ;;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            man-db)
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">                man --version &gt;/dev/null 2&gt;&amp;1 &amp;&amp; echo &#34;  版本检查: ✓&#34; || echo &#34;  版本检查: ✗&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">                ;;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            kbd)
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">                $tool_path --version &gt;/dev/null 2&gt;&amp;1 &amp;&amp; echo &#34;  版本检查: ✓&#34; || echo &#34;  版本检查: ✗&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">                ;;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        esac
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        passed=$((passed + 1))
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    else
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        echo &#34;✗ 不存在&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    fi
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">done
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">echo &#34;&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">echo &#34;=== 验证结果 ===&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">echo &#34;通过: $passed/$total&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">if [ $passed -eq $total ]; then
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    echo &#34;✓ 所有系统工具都已正确安装&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    exit 0
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">else
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    echo &#34;✗ 部分工具安装失败&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    exit 1
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">fi
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">EOF</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>chmod +x $LFS/verify_system_tools.sh
+</span></span></code></pre></div><h2 id="-常见问题">🚨 常见问题</h2>
+<h3 id="ncurses编译问题">Ncurses编译问题</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># 如果Ncurses编译失败：</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 1. 检查依赖</span>
+</span></span><span style="display:flex;"><span>echo <span style="color:#e6db74">&#34;检查gcc版本...&#34;</span>
+</span></span><span style="display:flex;"><span>gcc --version
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 2. 检查配置</span>
+</span></span><span style="display:flex;"><span>echo <span style="color:#e6db74">&#34;检查配置选项...&#34;</span>
+</span></span><span style="display:flex;"><span>cd ncurses-6.4
+</span></span><span style="display:flex;"><span>./configure --help | grep -A5 -B5 shared
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 3. 重新配置</span>
+</span></span><span style="display:flex;"><span>make clean
+</span></span><span style="display:flex;"><span>./configure --prefix<span style="color:#f92672">=</span>/usr --with-shared --enable-widec
+</span></span></code></pre></div><h3 id="man-db配置问题">Man-db配置问题</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># 如果man-db配置有问题：</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 1. 检查groff是否安装</span>
+</span></span><span style="display:flex;"><span>which groff <span style="color:#f92672">||</span> echo <span style="color:#e6db74">&#34;groff未安装&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 2. 检查配置文件</span>
+</span></span><span style="display:flex;"><span>cat /etc/man_db.conf
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 3. 重新生成man数据库</span>
+</span></span><span style="display:flex;"><span>mandb -c
+</span></span></code></pre></div><h3 id="kbd工具问题">Kbd工具问题</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># 如果kbd有问题：</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 1. 检查内核头文件</span>
+</span></span><span style="display:flex;"><span>ls -la /usr/include/linux/
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 2. 检查补丁应用</span>
+</span></span><span style="display:flex;"><span>cd kbd-2.5.1
+</span></span><span style="display:flex;"><span>ls -la *.patch 2&gt;/dev/null <span style="color:#f92672">||</span> echo <span style="color:#e6db74">&#34;补丁文件不存在&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 3. 重新应用补丁</span>
+</span></span><span style="display:flex;"><span>patch -Np1 -i ../kbd-2.5.1-backspace-1.patch
+</span></span></code></pre></div><h2 id="-配置验证">📊 配置验证</h2>
+<h3 id="系统日志配置">系统日志配置</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># 测试syslog配置</span>
+</span></span><span style="display:flex;"><span>echo <span style="color:#e6db74">&#34;测试系统日志...&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 检查配置文件</span>
+</span></span><span style="display:flex;"><span>cat /etc/syslog.conf
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 创建测试日志</span>
+</span></span><span style="display:flex;"><span>logger <span style="color:#e6db74">&#34;LFS系统日志测试&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 检查日志文件</span>
+</span></span><span style="display:flex;"><span>ls -la /var/log/
+</span></span><span style="display:flex;"><span>tail /var/log/sys.log
+</span></span></code></pre></div><h3 id="手册页配置">手册页配置</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># 测试手册页</span>
+</span></span><span style="display:flex;"><span>echo <span style="color:#e6db74">&#34;测试手册页...&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 检查man命令</span>
+</span></span><span style="display:flex;"><span>man --version
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 测试具体手册页</span>
+</span></span><span style="display:flex;"><span>man ls &gt;/dev/null <span style="color:#f92672">&amp;&amp;</span> echo <span style="color:#e6db74">&#34;手册页工作正常&#34;</span> <span style="color:#f92672">||</span> echo <span style="color:#e6db74">&#34;手册页有问题&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 更新man数据库</span>
+</span></span><span style="display:flex;"><span>mandb
+</span></span></code></pre></div><h2 id="-相关资源">📚 相关资源</h2>
+<ul>
+<li><a href="http://www.linuxfromscratch.org/lfs/view/stable/chapter06/chapter06.html">LFS官方文档 - 系统工具</a></li>
+<li><a href="https://invisible-island.net/ncurses/">Ncurses文档</a></li>
+<li><a href="https://tiswww.case.edu/php/chet/readline/rltop.html">Readline文档</a></li>
+</ul>
+<hr>
+<p><em>最近更新: {{ .Lastmod.Format &ldquo;2006-01-02&rdquo; }}</em></p>
+
+      
+      <div class="post-separator">------------------------------------------------------------------------</div>
+      
+    </div>
+    <div class="post-footer">
+      
+      <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+      <div class="busuanzi-container">
+        <span id="busuanzi_container_page_pv">--本文总阅读量<span id="busuanzi_value_page_pv"></span>次--</span>
+      </div>
+      
+      
+      <script src="https://utteranc.es/client.js"
+        repo="makkichan947/makkichan947.github.io"
+        issue-term="pathname"
+        label="Utterances"
+        theme="github-dark"
+        crossorigin="anonymous"
+        async>
+      </script>
+    </div>
+  </article>
+
+    </main>
+  </body>
+</html>

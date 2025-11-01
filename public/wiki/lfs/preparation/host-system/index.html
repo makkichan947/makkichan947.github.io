@@ -1,0 +1,449 @@
+<!doctype html>
+<html lang="zh">
+  <head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+    <title>宿主系统配置 // Yaku Makki</title>
+    <link rel="shortcut icon" href="./avatar.jpg" />
+    <meta charset="utf-8" />
+    <meta name="generator" content="Hugo 0.151.2">
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="author" content="Yaku Makki" />
+    <meta name="description" content="配置LFS构建的宿主系统环境" />
+    <link rel="stylesheet" href="/css/main.min.422840b4454cb211f5b3dab61f082cdff508e88825173c31806835cb75529734.css" />
+    
+
+    
+    
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="宿主系统配置">
+  <meta name="twitter:description" content="配置LFS构建的宿主系统环境">
+
+    <meta property="og:url" content="http://localhost:1313/wiki/lfs/preparation/host-system/">
+  <meta property="og:site_name" content="Yaku Makki">
+  <meta property="og:title" content="宿主系统配置">
+  <meta property="og:description" content="配置LFS构建的宿主系统环境">
+  <meta property="og:locale" content="zh">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="wiki">
+    <meta property="article:published_time" content="2025-10-28T00:00:00+00:00">
+    <meta property="article:modified_time" content="2025-10-28T00:00:00+00:00">
+
+
+  </head>
+  <body class="synthwave-bg">
+    <header class="app-header glass-morphism neon-border">
+      <a href="/"><img class="app-header-avatar" src="/avatar.jpg" alt="Yaku Makki" /></a>
+      <span class="app-header-title gradient-text">Yaku Makki</span>
+      <nav class="app-header-menu">
+          <a class="app-header-menu-item" href="/">首页</a>
+             | 
+          
+          <a class="app-header-menu-item" href="/post/">博客</a>
+             | 
+          
+          <a class="app-header-menu-item" href="/wiki/">维基</a>
+             | 
+          
+          <a class="app-header-menu-item" href="/tags/">标签</a>
+             | 
+          
+          <a class="app-header-menu-item" href="/about/">关于</a>
+      </nav>
+      <p>个人小巢</p>
+      <div class="app-header-social">
+        
+          <a href="https://github.com/makkichan947" target="_blank" rel="noreferrer noopener me" class="pulse-glow">
+            <svg class="icon icon-brand-github" viewBox="0 0 24 24" fill="currentColor"><title>GitHub</title><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg>
+          </a>
+        
+          <a href="mailto:yakumakki947@hotmail.com" target="_blank" rel="noreferrer noopener me" class="pulse-glow">
+            <svg class="icon icon-mail" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><title>mail</title><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
+          </a>
+        
+          <a href="https://x.com/Makki_Yaku947" target="_blank" rel="noreferrer noopener me" class="pulse-glow">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-link">
+  <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path>
+  <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path>
+</svg>
+          </a>
+        
+          <a href="https://www.twitch.tv/u/makkichan947" target="_blank" rel="noreferrer noopener me" class="pulse-glow">
+            <svg class="icon icon-brand-twitch" viewBox="0 0 24 24" fill="currentColor"><title>Twitch</title><path d="M11.571 4.714h1.715v5.143H11.57zm4.715 0H18v5.143h-1.714zM6 0L1.714 4.286v15.428h5.143V24l4.286-4.286h3.428L22.286 12V0zm14.571 11.143l-3.428 3.428h-3.429l-3 3v-3H6.857V1.714h13.714Z"/></svg>
+          </a>
+        
+      </div>
+    </header>
+    <main class="app-container glass-morphism glow-effect">
+      <div class="floating-particles">
+        <div class="particle" style="left: 10%; animation-delay: 0s;"></div>
+        <div class="particle" style="left: 20%; animation-delay: 1s;"></div>
+        <div class="particle" style="left: 30%; animation-delay: 2s;"></div>
+        <div class="particle" style="left: 40%; animation-delay: 3s;"></div>
+        <div class="particle" style="left: 50%; animation-delay: 4s;"></div>
+        <div class="particle" style="left: 60%; animation-delay: 5s;"></div>
+        <div class="particle" style="left: 70%; animation-delay: 6s;"></div>
+        <div class="particle" style="left: 80%; animation-delay: 7s;"></div>
+        <div class="particle" style="left: 90%; animation-delay: 8s;"></div>
+      </div>
+      
+  <article class="post enhanced-card glow-effect">
+    <header class="post-header">
+      <h1 class ="post-title gradient-text">宿主系统配置</h1>
+      <div class="post-meta">
+        <div>
+          <svg class="icon icon-calendar" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><title>calendar</title><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+          Oct 28, 2025
+        </div>
+        <div>
+          <svg class="icon icon-clock" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><title>clock</title><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+          4 min read
+        </div>
+      </div>
+    </header>
+    <div class="post-content">
+      <h1 id="宿主系统配置">宿主系统配置</h1>
+<p>在开始LFS构建之前，需要确保宿主系统具有必要的工具和环境。本章将详细介绍如何配置宿主系统以支持LFS构建过程。</p>
+<h2 id="-系统要求">🖥️ 系统要求</h2>
+<h3 id="硬件要求">硬件要求</h3>
+<ul>
+<li><strong>CPU</strong>：x86_64架构，支持64位操作</li>
+<li><strong>内存</strong>：至少2GB，推荐4GB以上</li>
+<li><strong>磁盘空间</strong>：至少10GB可用空间用于LFS构建</li>
+<li><strong>网络</strong>：稳定的互联网连接用于下载源码</li>
+</ul>
+<h3 id="软件要求">软件要求</h3>
+<ul>
+<li><strong>宿主系统</strong>：现代Linux发行版（推荐Arch Linux、Ubuntu 18.04+、Fedora 30+）</li>
+<li><strong>内核版本</strong>：3.2或更高版本</li>
+<li><strong>编译器</strong>：GCC 5.2或更高版本</li>
+<li><strong>核心工具</strong>：bash、binutils、bison、bzip2、coreutils、diffutils、findutils、gawk、gcc、glibc、grep、gzip、m4、make、patch、perl、python3、sed、tar、texinfo、xz</li>
+</ul>
+<h2 id="-环境检查">🔧 环境检查</h2>
+<h3 id="检查系统信息">检查系统信息</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># 检查Linux发行版</span>
+</span></span><span style="display:flex;"><span>cat /etc/os-release
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 检查内核版本</span>
+</span></span><span style="display:flex;"><span>uname -a
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 检查CPU架构</span>
+</span></span><span style="display:flex;"><span>uname -m
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 检查可用内存</span>
+</span></span><span style="display:flex;"><span>free -h
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 检查磁盘空间</span>
+</span></span><span style="display:flex;"><span>df -h
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 检查网络连接</span>
+</span></span><span style="display:flex;"><span>ping -c <span style="color:#ae81ff">3</span> google.com
+</span></span></code></pre></div><h3 id="检查必要工具">检查必要工具</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># 检查编译器版本</span>
+</span></span><span style="display:flex;"><span>gcc --version
+</span></span><span style="display:flex;"><span>g++ --version
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 检查核心工具</span>
+</span></span><span style="display:flex;"><span>which bash binutils bison bzip2 coreutils diffutils findutils gawk glibc grep gzip m4 make patch perl python3 sed tar texinfo xz
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 检查库依赖</span>
+</span></span><span style="display:flex;"><span>ldd --version
+</span></span></code></pre></div><h2 id="-安装必要软件包">📦 安装必要软件包</h2>
+<h3 id="arch-linux">Arch Linux</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># 更新系统</span>
+</span></span><span style="display:flex;"><span>sudo pacman -Syu
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 安装基础开发工具</span>
+</span></span><span style="display:flex;"><span>sudo pacman -S base-devel
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 安装LFS特定工具</span>
+</span></span><span style="display:flex;"><span>sudo pacman -S wget texinfo python
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 可选：安装文档工具</span>
+</span></span><span style="display:flex;"><span>sudo pacman -S man-db man-pages
+</span></span></code></pre></div><h3 id="ubuntudebian">Ubuntu/Debian</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># 更新系统</span>
+</span></span><span style="display:flex;"><span>sudo apt update <span style="color:#f92672">&amp;&amp;</span> sudo apt upgrade
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 安装基础编译工具</span>
+</span></span><span style="display:flex;"><span>sudo apt install build-essential
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 安装LFS所需工具</span>
+</span></span><span style="display:flex;"><span>sudo apt install wget texinfo python3 bison gawk
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 安装文档工具</span>
+</span></span><span style="display:flex;"><span>sudo apt install man-db manpages-dev
+</span></span></code></pre></div><h3 id="fedoracentos">Fedora/CentOS</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># 更新系统</span>
+</span></span><span style="display:flex;"><span>sudo dnf update
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 安装开发工具组</span>
+</span></span><span style="display:flex;"><span>sudo dnf groupinstall <span style="color:#e6db74">&#34;Development Tools&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 安装LFS特定工具</span>
+</span></span><span style="display:flex;"><span>sudo dnf install wget texinfo python3 bison gawk
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 安装文档</span>
+</span></span><span style="display:flex;"><span>sudo dnf install man-db man-pages
+</span></span></code></pre></div><h3 id="检查安装结果">检查安装结果</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># 验证所有工具都已安装</span>
+</span></span><span style="display:flex;"><span>echo <span style="color:#e6db74">&#34;Checking required tools...&#34;</span>
+</span></span><span style="display:flex;"><span>tools<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;bash binutils bison bzip2 coreutils diffutils findutils gawk gcc glibc grep gzip m4 make patch perl python3 sed tar texinfo xz&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">for</span> tool in $tools; <span style="color:#66d9ef">do</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> ! command -v $tool &amp;&gt; /dev/null; <span style="color:#66d9ef">then</span>
+</span></span><span style="display:flex;"><span>        echo <span style="color:#e6db74">&#34;ERROR: </span>$tool<span style="color:#e6db74"> is not installed&#34;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">else</span>
+</span></span><span style="display:flex;"><span>        echo <span style="color:#e6db74">&#34;OK: </span>$tool<span style="color:#e6db74"> found&#34;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">fi</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">done</span>
+</span></span></code></pre></div><h2 id="-用户和权限设置">👤 用户和权限设置</h2>
+<h3 id="创建lfs用户">创建LFS用户</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># 创建lfs用户组</span>
+</span></span><span style="display:flex;"><span>sudo groupadd lfs
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 创建lfs用户</span>
+</span></span><span style="display:flex;"><span>sudo useradd -s /bin/bash -g lfs -m -k /dev/null lfs
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 设置密码</span>
+</span></span><span style="display:flex;"><span>sudo passwd lfs
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 授予lfs用户sudo权限（可选，用于安装软件包）</span>
+</span></span><span style="display:flex;"><span>echo <span style="color:#e6db74">&#39;lfs ALL=(ALL) NOPASSWD: ALL&#39;</span> | sudo tee /etc/sudoers.d/lfs
+</span></span></code></pre></div><h3 id="切换到lfs用户">切换到LFS用户</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># 切换到lfs用户</span>
+</span></span><span style="display:flex;"><span>su - lfs
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 验证用户环境</span>
+</span></span><span style="display:flex;"><span>whoami
+</span></span><span style="display:flex;"><span>pwd
+</span></span><span style="display:flex;"><span>echo $HOME
+</span></span></code></pre></div><h2 id="-目录结构设置">📁 目录结构设置</h2>
+<h3 id="创建lfs目录">创建LFS目录</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># 创建主LFS目录</span>
+</span></span><span style="display:flex;"><span>sudo mkdir -pv $LFS
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 设置正确的权限</span>
+</span></span><span style="display:flex;"><span>sudo chown -v lfs:lfs $LFS
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 验证目录权限</span>
+</span></span><span style="display:flex;"><span>ls -ld $LFS
+</span></span></code></pre></div><h3 id="创建子目录结构">创建子目录结构</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># 创建LFS子目录</span>
+</span></span><span style="display:flex;"><span>mkdir -pv $LFS/<span style="color:#f92672">{</span>etc,var<span style="color:#f92672">}</span> $LFS/usr/<span style="color:#f92672">{</span>bin,lib,sbin<span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">for</span> i in bin lib sbin; <span style="color:#66d9ef">do</span>
+</span></span><span style="display:flex;"><span>  ln -sv usr/$i $LFS/$i
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">done</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">case</span> <span style="color:#66d9ef">$(</span>uname -m<span style="color:#66d9ef">)</span> in
+</span></span><span style="display:flex;"><span>  x86_64<span style="color:#f92672">)</span> mkdir -pv $LFS/lib64 ;;
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">esac</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 创建工具目录</span>
+</span></span><span style="display:flex;"><span>mkdir -pv $LFS/tools
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 创建源码目录</span>
+</span></span><span style="display:flex;"><span>mkdir -pv $LFS/sources
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 设置目录权限</span>
+</span></span><span style="display:flex;"><span>chown -v lfs:lfs $LFS/<span style="color:#f92672">{</span>usr<span style="color:#f92672">{</span>,/*<span style="color:#f92672">}</span>,lib,var,etc,bin,sbin,tools<span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">case</span> <span style="color:#66d9ef">$(</span>uname -m<span style="color:#66d9ef">)</span> in
+</span></span><span style="display:flex;"><span>  x86_64<span style="color:#f92672">)</span> chown -v lfs:lfs $LFS/lib64 ;;
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">esac</span>
+</span></span></code></pre></div><h2 id="-环境变量配置">🔗 环境变量配置</h2>
+<h3 id="设置lfs环境变量">设置LFS环境变量</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># 在~/.bashrc中添加LFS环境变量</span>
+</span></span><span style="display:flex;"><span>cat &gt;&gt; ~/.bashrc &lt;&lt; <span style="color:#e6db74">&#34;EOF&#34;</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># LFS环境变量</span>
+</span></span><span style="display:flex;"><span>export LFS<span style="color:#f92672">=</span>/mnt/lfs
+</span></span><span style="display:flex;"><span>export LFS_TGT<span style="color:#f92672">=</span><span style="color:#66d9ef">$(</span>uname -m<span style="color:#66d9ef">)</span>-lfs-linux-gnu
+</span></span><span style="display:flex;"><span>export PATH<span style="color:#f92672">=</span>$LFS/tools/bin:$PATH
+</span></span><span style="display:flex;"><span>export CONFIG_SITE<span style="color:#f92672">=</span>$LFS/usr/share/config.site
+</span></span><span style="display:flex;"><span>export LC_ALL<span style="color:#f92672">=</span>POSIX
+</span></span><span style="display:flex;"><span>export LFS_MAKEFLAGS<span style="color:#f92672">=</span>-j<span style="color:#66d9ef">$(</span>nproc<span style="color:#66d9ef">)</span>
+</span></span><span style="display:flex;"><span>EOF
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 重新加载bashrc</span>
+</span></span><span style="display:flex;"><span>source ~/.bashrc
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 验证环境变量</span>
+</span></span><span style="display:flex;"><span>echo <span style="color:#e6db74">&#34;LFS=</span>$LFS<span style="color:#e6db74">&#34;</span>
+</span></span><span style="display:flex;"><span>echo <span style="color:#e6db74">&#34;LFS_TGT=</span>$LFS_TGT<span style="color:#e6db74">&#34;</span>
+</span></span><span style="display:flex;"><span>echo <span style="color:#e6db74">&#34;PATH=</span>$PATH<span style="color:#e6db74">&#34;</span>
+</span></span><span style="display:flex;"><span>echo <span style="color:#e6db74">&#34;MAKEFLAGS=</span>$LFS_MAKEFLAGS<span style="color:#e6db74">&#34;</span>
+</span></span></code></pre></div><h3 id="创建构建脚本">创建构建脚本</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># 创建构建日志目录</span>
+</span></span><span style="display:flex;"><span>mkdir -pv $LFS/logs
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 创建构建脚本模板</span>
+</span></span><span style="display:flex;"><span>cat &gt; $LFS/build.sh &lt;&lt; <span style="color:#e6db74">&#34;EOF&#34;</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#!/bin/bash</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># LFS构建脚本模板</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>set -e  <span style="color:#75715e"># 遇到错误立即退出</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 日志函数</span>
+</span></span><span style="display:flex;"><span>log<span style="color:#f92672">()</span> <span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>    echo <span style="color:#e6db74">&#34;</span><span style="color:#66d9ef">$(</span>date <span style="color:#e6db74">&#39;+%Y-%m-%d %H:%M:%S&#39;</span><span style="color:#66d9ef">)</span><span style="color:#e6db74"> - </span>$*<span style="color:#e6db74">&#34;</span> | tee -a $LFS/logs/build.log
+</span></span><span style="display:flex;"><span><span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 错误处理</span>
+</span></span><span style="display:flex;"><span>error_exit<span style="color:#f92672">()</span> <span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>    echo <span style="color:#e6db74">&#34;</span><span style="color:#66d9ef">$(</span>date <span style="color:#e6db74">&#39;+%Y-%m-%d %H:%M:%S&#39;</span><span style="color:#66d9ef">)</span><span style="color:#e6db74"> - ERROR: </span>$*<span style="color:#e6db74">&#34;</span> &gt;&amp;<span style="color:#ae81ff">2</span>
+</span></span><span style="display:flex;"><span>    exit <span style="color:#ae81ff">1</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 包构建函数</span>
+</span></span><span style="display:flex;"><span>build_package<span style="color:#f92672">()</span> <span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>    local package_name<span style="color:#f92672">=</span>$1
+</span></span><span style="display:flex;"><span>    local package_version<span style="color:#f92672">=</span>$2
+</span></span><span style="display:flex;"><span>    local package_url<span style="color:#f92672">=</span>$3
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    log <span style="color:#e6db74">&#34;开始构建 </span>$package_name<span style="color:#e6db74">-</span>$package_version<span style="color:#e6db74">&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># 下载源码</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> <span style="color:#f92672">[</span> ! -f $LFS/sources/$package_name-$package_version.tar.xz <span style="color:#f92672">]</span>; <span style="color:#66d9ef">then</span>
+</span></span><span style="display:flex;"><span>        wget -P $LFS/sources $package_url <span style="color:#f92672">||</span> error_exit <span style="color:#e6db74">&#34;下载 </span>$package_name<span style="color:#e6db74"> 失败&#34;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">fi</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># 解压源码</span>
+</span></span><span style="display:flex;"><span>    cd $LFS/sources
+</span></span><span style="display:flex;"><span>    tar -xf $package_name-$package_version.tar.xz
+</span></span><span style="display:flex;"><span>    cd $package_name-$package_version
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># 配置、编译、安装</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># （具体命令根据包而定）</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    log <span style="color:#e6db74">&#34;</span>$package_name<span style="color:#e6db74">-</span>$package_version<span style="color:#e6db74"> 构建完成&#34;</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 主构建流程</span>
+</span></span><span style="display:flex;"><span>main<span style="color:#f92672">()</span> <span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>    log <span style="color:#e6db74">&#34;开始LFS构建过程&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># 检查环境</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> <span style="color:#f92672">[</span> -z <span style="color:#e6db74">&#34;</span>$LFS<span style="color:#e6db74">&#34;</span> <span style="color:#f92672">]</span>; <span style="color:#66d9ef">then</span>
+</span></span><span style="display:flex;"><span>        error_exit <span style="color:#e6db74">&#34;LFS环境变量未设置&#34;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">fi</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> <span style="color:#f92672">[</span> ! -d <span style="color:#e6db74">&#34;</span>$LFS<span style="color:#e6db74">&#34;</span> <span style="color:#f92672">]</span>; <span style="color:#66d9ef">then</span>
+</span></span><span style="display:flex;"><span>        error_exit <span style="color:#e6db74">&#34;LFS目录不存在: </span>$LFS<span style="color:#e6db74">&#34;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">fi</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    log <span style="color:#e6db74">&#34;环境检查通过，开始构建...&#34;</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 运行主函数</span>
+</span></span><span style="display:flex;"><span>main <span style="color:#e6db74">&#34;</span>$@<span style="color:#e6db74">&#34;</span>
+</span></span><span style="display:flex;"><span>EOF
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 设置脚本执行权限</span>
+</span></span><span style="display:flex;"><span>chmod +x $LFS/build.sh
+</span></span></code></pre></div><h2 id="-系统验证">🧪 系统验证</h2>
+<h3 id="验证构建环境">验证构建环境</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># 检查所有环境变量</span>
+</span></span><span style="display:flex;"><span>echo <span style="color:#e6db74">&#34;=== 环境变量检查 ===&#34;</span>
+</span></span><span style="display:flex;"><span>echo <span style="color:#e6db74">&#34;LFS: </span>$LFS<span style="color:#e6db74">&#34;</span>
+</span></span><span style="display:flex;"><span>echo <span style="color:#e6db74">&#34;LFS_TGT: </span>$LFS_TGT<span style="color:#e6db74">&#34;</span>
+</span></span><span style="display:flex;"><span>echo <span style="color:#e6db74">&#34;PATH: </span>$PATH<span style="color:#e6db74">&#34;</span>
+</span></span><span style="display:flex;"><span>echo <span style="color:#e6db74">&#34;MAKEFLAGS: </span>$MAKEFLAGS<span style="color:#e6db74">&#34;</span>
+</span></span><span style="display:flex;"><span>echo <span style="color:#e6db74">&#34;LC_ALL: </span>$LC_ALL<span style="color:#e6db74">&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 检查目录结构</span>
+</span></span><span style="display:flex;"><span>echo -e <span style="color:#e6db74">&#34;\n=== 目录结构检查 ===&#34;</span>
+</span></span><span style="display:flex;"><span>ls -la $LFS
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 检查工具可用性</span>
+</span></span><span style="display:flex;"><span>echo -e <span style="color:#e6db74">&#34;\n=== 工具可用性检查 ===&#34;</span>
+</span></span><span style="display:flex;"><span>tools<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;bash sh gcc g++ make ld ar as nm strip ranlib&#34;</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">for</span> tool in $tools; <span style="color:#66d9ef">do</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> command -v $tool &gt;/dev/null 2&gt;&amp;1; <span style="color:#66d9ef">then</span>
+</span></span><span style="display:flex;"><span>        echo <span style="color:#e6db74">&#34;✓ </span>$tool<span style="color:#e6db74">: </span><span style="color:#66d9ef">$(</span>which $tool<span style="color:#66d9ef">)</span><span style="color:#e6db74">&#34;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">else</span>
+</span></span><span style="display:flex;"><span>        echo <span style="color:#e6db74">&#34;✗ </span>$tool<span style="color:#e6db74">: 未找到&#34;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">fi</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">done</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 检查磁盘空间</span>
+</span></span><span style="display:flex;"><span>echo -e <span style="color:#e6db74">&#34;\n=== 磁盘空间检查 ===&#34;</span>
+</span></span><span style="display:flex;"><span>df -h $LFS
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 检查内存</span>
+</span></span><span style="display:flex;"><span>echo -e <span style="color:#e6db74">&#34;\n=== 内存检查 ===&#34;</span>
+</span></span><span style="display:flex;"><span>free -h
+</span></span></code></pre></div><h3 id="备份配置">备份配置</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># 备份宿主系统配置</span>
+</span></span><span style="display:flex;"><span>mkdir -pv $LFS/backup
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 备份环境变量</span>
+</span></span><span style="display:flex;"><span>env &gt; $LFS/backup/host_env.txt
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 备份已安装包列表</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">case</span> <span style="color:#66d9ef">$(</span>cat /etc/os-release | grep -E <span style="color:#e6db74">&#39;^ID=&#39;</span> | cut -d<span style="color:#e6db74">&#39;=&#39;</span> -f2 | tr -d <span style="color:#e6db74">&#39;&#34;&#39;</span><span style="color:#66d9ef">)</span> in
+</span></span><span style="display:flex;"><span>    arch<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>        pacman -Q &gt; $LFS/backup/host_packages.txt
+</span></span><span style="display:flex;"><span>        ;;
+</span></span><span style="display:flex;"><span>    ubuntu|debian<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>        dpkg --get-selections &gt; $LFS/backup/host_packages.txt
+</span></span><span style="display:flex;"><span>        ;;
+</span></span><span style="display:flex;"><span>    fedora|rhel|centos<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>        rpm -qa &gt; $LFS/backup/host_packages.txt
+</span></span><span style="display:flex;"><span>        ;;
+</span></span><span style="display:flex;"><span>    *<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>        echo <span style="color:#e6db74">&#34;未知发行版，无法备份包列表&#34;</span> &gt; $LFS/backup/host_packages.txt
+</span></span><span style="display:flex;"><span>        ;;
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">esac</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 备份内核配置</span>
+</span></span><span style="display:flex;"><span>cp /proc/config.gz $LFS/backup/ 2&gt;/dev/null <span style="color:#f92672">||</span> echo <span style="color:#e6db74">&#34;内核配置不可用&#34;</span>
+</span></span></code></pre></div><h2 id="-常见问题">🚨 常见问题</h2>
+<h3 id="权限问题">权限问题</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># 如果遇到权限问题，确保lfs用户有正确的权限</span>
+</span></span><span style="display:flex;"><span>sudo chown -R lfs:lfs $LFS
+</span></span><span style="display:flex;"><span>sudo chmod -R <span style="color:#ae81ff">755</span> $LFS
+</span></span></code></pre></div><h3 id="依赖缺失">依赖缺失</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># 检查并安装缺失的依赖</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Arch Linux</span>
+</span></span><span style="display:flex;"><span>sudo pacman -S --needed base-devel wget texinfo python bison
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Ubuntu</span>
+</span></span><span style="display:flex;"><span>sudo apt install build-essential wget texinfo python3 bison
+</span></span></code></pre></div><h3 id="环境变量问题">环境变量问题</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># 确保环境变量正确设置</span>
+</span></span><span style="display:flex;"><span>source ~/.bashrc
+</span></span><span style="display:flex;"><span>echo $LFS
+</span></span><span style="display:flex;"><span>echo $LFS_TGT
+</span></span></code></pre></div><h2 id="-相关资源">📚 相关资源</h2>
+<ul>
+<li><a href="http://www.linuxfromscratch.org/lfs/view/stable/chapter02/hostreqs.html">LFS官方文档 - 宿主系统要求</a></li>
+<li><a href="http://www.linuxfromscratch.org/lfs/view/stable/chapter02/chapter02.html">LFS官方文档 - 准备工作</a></li>
+<li><a href="https://wiki.archlinux.org/title/Linux_From_Scratch">Arch Wiki - LFS</a></li>
+</ul>
+<hr>
+<p><em>最近更新: {{ .Lastmod.Format &ldquo;2006-01-02&rdquo; }}</em></p>
+
+      
+      <div class="post-separator">------------------------------------------------------------------------</div>
+      
+    </div>
+    <div class="post-footer">
+      
+      <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+      <div class="busuanzi-container">
+        <span id="busuanzi_container_page_pv">--本文总阅读量<span id="busuanzi_value_page_pv"></span>次--</span>
+      </div>
+      
+      
+      <script src="https://utteranc.es/client.js"
+        repo="makkichan947/makkichan947.github.io"
+        issue-term="pathname"
+        label="Utterances"
+        theme="github-dark"
+        crossorigin="anonymous"
+        async>
+      </script>
+    </div>
+  </article>
+
+    </main>
+  </body>
+</html>

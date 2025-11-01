@@ -1,0 +1,848 @@
+<!doctype html>
+<html lang="zh">
+  <head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+    <title>环境变量设置 // Yaku Makki</title>
+    <link rel="shortcut icon" href="./avatar.jpg" />
+    <meta charset="utf-8" />
+    <meta name="generator" content="Hugo 0.151.2">
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="author" content="Yaku Makki" />
+    <meta name="description" content="LFS构建环境的环境变量和脚本配置" />
+    <link rel="stylesheet" href="/css/main.min.422840b4454cb211f5b3dab61f082cdff508e88825173c31806835cb75529734.css" />
+    
+
+    
+    
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="环境变量设置">
+  <meta name="twitter:description" content="LFS构建环境的环境变量和脚本配置">
+
+    <meta property="og:url" content="http://localhost:1313/wiki/lfs/preparation/environment/">
+  <meta property="og:site_name" content="Yaku Makki">
+  <meta property="og:title" content="环境变量设置">
+  <meta property="og:description" content="LFS构建环境的环境变量和脚本配置">
+  <meta property="og:locale" content="zh">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="wiki">
+    <meta property="article:published_time" content="2025-10-28T00:00:00+00:00">
+    <meta property="article:modified_time" content="2025-10-28T00:00:00+00:00">
+
+
+  </head>
+  <body class="synthwave-bg">
+    <header class="app-header glass-morphism neon-border">
+      <a href="/"><img class="app-header-avatar" src="/avatar.jpg" alt="Yaku Makki" /></a>
+      <span class="app-header-title gradient-text">Yaku Makki</span>
+      <nav class="app-header-menu">
+          <a class="app-header-menu-item" href="/">首页</a>
+             | 
+          
+          <a class="app-header-menu-item" href="/post/">博客</a>
+             | 
+          
+          <a class="app-header-menu-item" href="/wiki/">维基</a>
+             | 
+          
+          <a class="app-header-menu-item" href="/tags/">标签</a>
+             | 
+          
+          <a class="app-header-menu-item" href="/about/">关于</a>
+      </nav>
+      <p>个人小巢</p>
+      <div class="app-header-social">
+        
+          <a href="https://github.com/makkichan947" target="_blank" rel="noreferrer noopener me" class="pulse-glow">
+            <svg class="icon icon-brand-github" viewBox="0 0 24 24" fill="currentColor"><title>GitHub</title><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg>
+          </a>
+        
+          <a href="mailto:yakumakki947@hotmail.com" target="_blank" rel="noreferrer noopener me" class="pulse-glow">
+            <svg class="icon icon-mail" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><title>mail</title><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
+          </a>
+        
+          <a href="https://x.com/Makki_Yaku947" target="_blank" rel="noreferrer noopener me" class="pulse-glow">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-link">
+  <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path>
+  <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path>
+</svg>
+          </a>
+        
+          <a href="https://www.twitch.tv/u/makkichan947" target="_blank" rel="noreferrer noopener me" class="pulse-glow">
+            <svg class="icon icon-brand-twitch" viewBox="0 0 24 24" fill="currentColor"><title>Twitch</title><path d="M11.571 4.714h1.715v5.143H11.57zm4.715 0H18v5.143h-1.714zM6 0L1.714 4.286v15.428h5.143V24l4.286-4.286h3.428L22.286 12V0zm14.571 11.143l-3.428 3.428h-3.429l-3 3v-3H6.857V1.714h13.714Z"/></svg>
+          </a>
+        
+      </div>
+    </header>
+    <main class="app-container glass-morphism glow-effect">
+      <div class="floating-particles">
+        <div class="particle" style="left: 10%; animation-delay: 0s;"></div>
+        <div class="particle" style="left: 20%; animation-delay: 1s;"></div>
+        <div class="particle" style="left: 30%; animation-delay: 2s;"></div>
+        <div class="particle" style="left: 40%; animation-delay: 3s;"></div>
+        <div class="particle" style="left: 50%; animation-delay: 4s;"></div>
+        <div class="particle" style="left: 60%; animation-delay: 5s;"></div>
+        <div class="particle" style="left: 70%; animation-delay: 6s;"></div>
+        <div class="particle" style="left: 80%; animation-delay: 7s;"></div>
+        <div class="particle" style="left: 90%; animation-delay: 8s;"></div>
+      </div>
+      
+  <article class="post enhanced-card glow-effect">
+    <header class="post-header">
+      <h1 class ="post-title gradient-text">环境变量设置</h1>
+      <div class="post-meta">
+        <div>
+          <svg class="icon icon-calendar" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><title>calendar</title><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+          Oct 28, 2025
+        </div>
+        <div>
+          <svg class="icon icon-clock" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><title>clock</title><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+          8 min read
+        </div>
+      </div>
+    </header>
+    <div class="post-content">
+      <h1 id="环境变量设置">环境变量设置</h1>
+<p>正确的环境变量配置是LFS构建成功的关键。本章将详细介绍如何设置LFS构建所需的环境变量、构建脚本和开发环境。</p>
+<h2 id="-基本环境变量">🌍 基本环境变量</h2>
+<h3 id="lfs环境变量">LFS环境变量</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># 设置LFS根目录</span>
+</span></span><span style="display:flex;"><span>export LFS<span style="color:#f92672">=</span>/mnt/lfs
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 设置目标架构</span>
+</span></span><span style="display:flex;"><span>export LFS_TGT<span style="color:#f92672">=</span><span style="color:#66d9ef">$(</span>uname -m<span style="color:#66d9ef">)</span>-lfs-linux-gnu
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 添加工具链路径</span>
+</span></span><span style="display:flex;"><span>export PATH<span style="color:#f92672">=</span>$LFS/tools/bin:$PATH
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 设置配置站点</span>
+</span></span><span style="display:flex;"><span>export CONFIG_SITE<span style="color:#f92672">=</span>$LFS/usr/share/config.site
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 设置语言环境</span>
+</span></span><span style="display:flex;"><span>export LC_ALL<span style="color:#f92672">=</span>POSIX
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 设置并行编译参数</span>
+</span></span><span style="display:flex;"><span>export LFS_MAKEFLAGS<span style="color:#f92672">=</span>-j<span style="color:#66d9ef">$(</span>nproc<span style="color:#66d9ef">)</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 验证设置</span>
+</span></span><span style="display:flex;"><span>echo <span style="color:#e6db74">&#34;LFS=</span>$LFS<span style="color:#e6db74">&#34;</span>
+</span></span><span style="display:flex;"><span>echo <span style="color:#e6db74">&#34;LFS_TGT=</span>$LFS_TGT<span style="color:#e6db74">&#34;</span>
+</span></span><span style="display:flex;"><span>echo <span style="color:#e6db74">&#34;PATH=</span>$PATH<span style="color:#e6db74">&#34;</span>
+</span></span><span style="display:flex;"><span>echo <span style="color:#e6db74">&#34;MAKEFLAGS=</span>$LFS_MAKEFLAGS<span style="color:#e6db74">&#34;</span>
+</span></span></code></pre></div><h3 id="永久设置环境变量">永久设置环境变量</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># 在~/.bashrc中添加LFS环境变量</span>
+</span></span><span style="display:flex;"><span>cat &gt;&gt; ~/.bashrc &lt;&lt; <span style="color:#e6db74">&#34;EOF&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># LFS环境变量设置</span>
+</span></span><span style="display:flex;"><span>export LFS<span style="color:#f92672">=</span>/mnt/lfs
+</span></span><span style="display:flex;"><span>export LFS_TGT<span style="color:#f92672">=</span><span style="color:#66d9ef">$(</span>uname -m<span style="color:#66d9ef">)</span>-lfs-linux-gnu
+</span></span><span style="display:flex;"><span>export PATH<span style="color:#f92672">=</span>$LFS/tools/bin:$PATH
+</span></span><span style="display:flex;"><span>export CONFIG_SITE<span style="color:#f92672">=</span>$LFS/usr/share/config.site
+</span></span><span style="display:flex;"><span>export LC_ALL<span style="color:#f92672">=</span>POSIX
+</span></span><span style="display:flex;"><span>export LFS_MAKEFLAGS<span style="color:#f92672">=</span>-j<span style="color:#66d9ef">$(</span>nproc<span style="color:#66d9ef">)</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>EOF
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 重新加载bashrc</span>
+</span></span><span style="display:flex;"><span>source ~/.bashrc
+</span></span></code></pre></div><h2 id="-构建脚本框架">🛠️ 构建脚本框架</h2>
+<h3 id="通用构建函数">通用构建函数</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># 创建构建函数库</span>
+</span></span><span style="display:flex;"><span>cat &gt; $LFS/lib/lfs_build.sh <span style="color:#e6db74">&lt;&lt; &#39;EOF&#39;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">#!/bin/bash
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74"># LFS通用构建函数库
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">set -e  # 遇到错误立即退出
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74"># 颜色输出
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">RED=&#39;\033[0;31m&#39;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">GREEN=&#39;\033[0;32m&#39;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">YELLOW=&#39;\033[1;33m&#39;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">NC=&#39;\033[0m&#39; # No Color
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74"># 日志函数
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">log_info() {
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    echo -e &#34;${GREEN}[$(date &#39;+%H:%M:%S&#39;)] INFO: $*${NC}&#34; | tee -a $LFS/logs/build.log
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">}
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">log_warn() {
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    echo -e &#34;${YELLOW}[$(date &#39;+%H:%M:%S&#39;)] WARN: $*${NC}&#34; | tee -a $LFS/logs/build.log
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">}
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">log_error() {
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    echo -e &#34;${RED}[$(date &#39;+%H:%M:%S&#39;)] ERROR: $*${NC}&#34; &gt;&amp;2 | tee -a $LFS/logs/build.log
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">}
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74"># 环境检查函数
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">check_environment() {
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    log_info &#34;检查构建环境...&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    # 检查LFS变量
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    if [ -z &#34;$LFS&#34; ]; then
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        log_error &#34;LFS环境变量未设置&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        exit 1
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    fi
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    # 检查LFS目录
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    if [ ! -d &#34;$LFS&#34; ]; then
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        log_error &#34;LFS目录不存在: $LFS&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        exit 1
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    fi
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    # 检查工具链
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    if [ ! -d &#34;$LFS/tools&#34; ]; then
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        log_error &#34;工具链目录不存在: $LFS/tools&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        exit 1
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    fi
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    # 检查必要工具
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    local required_tools=&#34;bash sh gcc g++ make ld ar as nm strip ranlib&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    for tool in $required_tools; do
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        if ! command -v $tool &gt;/dev/null 2&gt;&amp;1; then
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            log_error &#34;缺少必要工具: $tool&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            exit 1
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        fi
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    done
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    log_info &#34;环境检查通过&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">}
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74"># 包构建函数
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">build_package() {
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    local package_name=$1
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    local package_version=$2
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    local configure_options=${3:-&#34;&#34;}
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    log_info &#34;开始构建 $package_name-$package_version&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    # 创建构建目录
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    local build_dir=&#34;$LFS/sources/build_$package_name&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    mkdir -pv &#34;$build_dir&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    cd &#34;$build_dir&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    # 下载源码（如果不存在）
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    local package_file=&#34;$LFS/sources/$package_name-$package_version.tar.xz&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    if [ ! -f &#34;$package_file&#34; ]; then
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        log_warn &#34;源码包不存在: $package_file&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        return 1
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    fi
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    # 解压源码
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    log_info &#34;解压源码...&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    if ! tar -xf &#34;$package_file&#34;; then
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        log_error &#34;解压失败: $package_file&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        return 1
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    fi
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    # 进入源码目录
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    cd &#34;$package_name-$package_version&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    # 配置阶段
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    log_info &#34;配置 $package_name...&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    if [ -n &#34;$configure_options&#34; ]; then
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        log_info &#34;配置选项: $configure_options&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    fi
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    if ! ./configure --prefix=/usr $configure_options; then
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        log_error &#34;配置失败&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        return 1
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    fi
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    # 编译阶段
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    log_info &#34;编译 $package_name...&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    if ! make $LFS_MAKEFLAGS; then
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        log_error &#34;编译失败&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        return 1
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    fi
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    # 安装阶段
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    log_info &#34;安装 $package_name...&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    if ! make install; then
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        log_error &#34;安装失败&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        return 1
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    fi
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    # 清理
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    cd &#34;$LFS/sources&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    rm -rf &#34;$build_dir&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    log_info &#34;$package_name-$package_version 构建成功&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    return 0
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">}
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74"># 交叉编译构建函数
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">build_cross_package() {
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    local package_name=$1
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    local package_version=$2
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    local configure_options=${3:-&#34;&#34;}
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    log_info &#34;交叉编译 $package_name-$package_version&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    # 创建构建目录
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    local build_dir=&#34;$LFS/sources/cross_$package_name&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    mkdir -pv &#34;$build_dir&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    cd &#34;$build_dir&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    # 解压源码
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    local package_file=&#34;$LFS/sources/$package_name-$package_version.tar.xz&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    if ! tar -xf &#34;$package_file&#34;; then
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        log_error &#34;解压失败: $package_file&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        return 1
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    fi
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    # 进入源码目录
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    cd &#34;$package_name-$package_version&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    # 配置（使用交叉编译选项）
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    log_info &#34;配置交叉编译...&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    local cross_options=&#34;--target=$LFS_TGT --host=$LFS_TGT --build=$(./config.guess)&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    if ! ./configure $cross_options --prefix=$LFS/tools $configure_options; then
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        log_error &#34;交叉编译配置失败&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        return 1
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    fi
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    # 编译和安装
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    if ! make $LFS_MAKEFLAGS &amp;&amp; make install; then
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        log_error &#34;交叉编译失败&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        return 1
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    fi
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    # 清理
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    cd &#34;$LFS/sources&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    rm -rf &#34;$build_dir&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    log_info &#34;交叉编译 $package_name 成功&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    return 0
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">}
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74"># 进度跟踪
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">init_progress() {
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    local total_steps=$1
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    echo 0 &gt; $LFS/.build_progress
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    echo $total_steps &gt; $LFS/.build_total
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">}
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">update_progress() {
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    local current_step=$1
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    echo $current_step &gt; $LFS/.build_progress
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    local total=$(cat $LFS/.build_total)
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    local percentage=$((current_step * 100 / total))
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    log_info &#34;构建进度: $current_step/$total ($percentage%)&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">}
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74"># 错误处理
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">error_handler() {
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    local exit_code=$?
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    local line_number=$1
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    log_error &#34;构建失败于第 $line_number 行，退出码: $exit_code&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    # 保存错误信息
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    echo &#34;失败时间: $(date)&#34; &gt; $LFS/logs/error_info.txt
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    echo &#34;失败行号: $line_number&#34; &gt;&gt; $LFS/logs/error_info.txt
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    echo &#34;退出码: $exit_code&#34; &gt;&gt; $LFS/logs/error_info.txt
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    echo &#34;当前目录: $(pwd)&#34; &gt;&gt; $LFS/logs/error_info.txt
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    echo &#34;最后命令: $BASH_COMMAND&#34; &gt;&gt; $LFS/logs/error_info.txt
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    exit $exit_code
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">}
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74"># 设置错误处理
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">trap &#39;error_handler $LINENO&#39; ERR
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74"># 导出函数
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">export -f log_info log_warn log_error check_environment
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">export -f build_package build_cross_package
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">export -f init_progress update_progress
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">EOF</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 设置执行权限</span>
+</span></span><span style="display:flex;"><span>chmod +x $LFS/lib/lfs_build.sh
+</span></span></code></pre></div><h3 id="构建进度跟踪">构建进度跟踪</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># 创建进度跟踪脚本</span>
+</span></span><span style="display:flex;"><span>cat &gt; $LFS/bin/build_progress.sh <span style="color:#e6db74">&lt;&lt; &#39;EOF&#39;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">#!/bin/bash
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74"># 构建进度跟踪脚本
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">LFS=${LFS:-/mnt/lfs}
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">show_progress() {
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    if [ -f &#34;$LFS/.build_progress&#34; ] &amp;&amp; [ -f &#34;$LFS/.build_total&#34; ]; then
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        local current=$(cat $LFS/.build_progress)
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        local total=$(cat $LFS/.build_total)
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        local percentage=$((current * 100 / total))
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        echo &#34;构建进度: $current/$total ($percentage%)&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        # 显示进度条
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        local bar_length=50
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        local filled_length=$((current * bar_length / total))
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        local bar=$(printf &#34;%-${bar_length}s&#34; &#34;=&#34; | sed &#34;s/ /=/g&#34; | cut -c1-$filled_length)
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        local empty=$(printf &#34;%-$((bar_length - filled_length))s&#34; &#34;&#34;)
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        echo -ne &#34;[$bar$empty] $percentage%\r&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    else
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        echo &#34;进度信息不可用&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    fi
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">}
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">show_build_status() {
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    echo &#34;=== LFS构建状态 ===&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    echo &#34;LFS目录: $LFS&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    echo &#34;目标架构: $LFS_TGT&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    echo &#34;并行任务数: $(nproc)&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    echo &#34;&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    show_progress
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    echo &#34;&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    # 显示最近的日志
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    if [ -f &#34;$LFS/logs/build.log&#34; ]; then
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        echo &#34;最近构建日志:&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        tail -10 &#34;$LFS/logs/build.log&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    fi
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">}
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">case &#34;$1&#34; in
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    &#34;show&#34;)
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        show_progress
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        ;;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    &#34;status&#34;)
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        show_build_status
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        ;;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    *)
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        echo &#34;用法: $0 {show|status}&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        echo &#34;  show   - 显示当前进度&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        echo &#34;  status - 显示完整状态&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        ;;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">esac
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">EOF</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>chmod +x $LFS/bin/build_progress.sh
+</span></span></code></pre></div><h2 id="-开发环境配置">🔧 开发环境配置</h2>
+<h3 id="编辑器配置">编辑器配置</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># 安装和配置vim</span>
+</span></span><span style="display:flex;"><span>cat &gt; $LFS/root/.vimrc <span style="color:#e6db74">&lt;&lt; &#39;EOF&#39;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">syntax on
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">set number
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">set tabstop=4
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">set shiftwidth=4
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">set expandtab
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">set autoindent
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">set background=dark
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">set mouse=a
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">EOF</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 配置nano</span>
+</span></span><span style="display:flex;"><span>cat &gt; $LFS/root/.nanorc <span style="color:#e6db74">&lt;&lt; &#39;EOF&#39;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">set autoindent
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">set const
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">set mouse
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">set smooth
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">set tabsize 4
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">set tabstospaces
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">include /usr/share/nano/*.nanorc
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">EOF</span>
+</span></span></code></pre></div><h3 id="shell配置">Shell配置</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># 创建root用户的bashrc</span>
+</span></span><span style="display:flex;"><span>cat &gt; $LFS/root/.bashrc <span style="color:#e6db74">&lt;&lt; &#39;EOF&#39;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74"># root用户bashrc
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74"># 彩色提示符
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">PS1=&#39;\[\e[1;32m\][\u@\h \W]\$\[\e[0m\] &#39;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74"># 别名
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">alias ls=&#39;ls --color=auto&#39;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">alias ll=&#39;ls -alF&#39;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">alias la=&#39;ls -A&#39;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">alias l=&#39;ls -CF&#39;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">alias grep=&#39;grep --color=auto&#39;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">alias fgrep=&#39;fgrep --color=auto&#39;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">alias egrep=&#39;egrep --color=auto&#39;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74"># 环境变量
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">export EDITOR=nano
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">export PAGER=less
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">export PATH=/usr/local/bin:/usr/bin:/bin
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74"># 历史记录
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">HISTSIZE=1000
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">HISTFILESIZE=2000
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">shopt -s histappend
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74"># 检查窗口大小
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">shopt -s checkwinsize
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74"># 彩色man页面
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">export LESS_TERMCAP_mb=$&#39;\e[1;31m&#39;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">export LESS_TERMCAP_md=$&#39;\e[1;36m&#39;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">export LESS_TERMCAP_me=$&#39;\e[0m&#39;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">export LESS_TERMCAP_se=$&#39;\e[0m&#39;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">export LESS_TERMCAP_so=$&#39;\e[01;33m&#39;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">export LESS_TERMCAP_ue=$&#39;\e[0m&#39;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">export LESS_TERMCAP_us=$&#39;\e[01;32m&#39;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">EOF</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 创建系统范围的profile</span>
+</span></span><span style="display:flex;"><span>cat &gt; $LFS/etc/profile <span style="color:#e6db74">&lt;&lt; &#39;EOF&#39;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74"># /etc/profile
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74"># 系统范围的环境变量
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">export PATH=/usr/local/bin:/usr/bin:/bin
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74"># 语言设置
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">export LANG=en_US.UTF-8
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74"># 编辑器设置
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">export EDITOR=nano
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74"># 分页器设置
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">export PAGER=less
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74"># 加载bashrc
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">if [ -f ~/.bashrc ]; then
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    . ~/.bashrc
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">fi
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74"># 欢迎信息
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">echo &#34;欢迎使用 LFS 系统!&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">echo &#34;输入 &#39;help&#39; 获取帮助信息&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">EOF</span>
+</span></span></code></pre></div><h3 id="构建文档">构建文档</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># 创建构建文档</span>
+</span></span><span style="display:flex;"><span>cat &gt; $LFS/README_BUILD.txt <span style="color:#e6db74">&lt;&lt; &#39;EOF&#39;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">LFS构建指南
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">============
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">本系统正在构建中，请遵循以下步骤：
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">1. 准备阶段
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">   - 宿主系统配置 ✓
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">   - 分区和文件系统 ✓
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">   - 源码包下载 ✓
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">   - 目录结构创建 ✓
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">2. 工具链构建
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">   - Binutils
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">   - GCC
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">   - Linux API Headers
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">   - Glibc
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">3. 基本系统
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">   - 核心工具
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">   - 系统库
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">   - 网络工具
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">4. 引导和内核
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">   - GRUB
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">   - Linux内核
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">5. 系统配置
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">   - 网络设置
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">   - 用户管理
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">   - 服务配置
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">构建日志: /logs/build.log
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">构建进度: 使用 &#39;build_progress.sh status&#39; 查看
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">如遇问题，请查看:
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">- /logs/error_info.txt (错误信息)
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">- http://www.linuxfromscratch.org/lfs/ (官方文档)
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">EOF</span>
+</span></span></code></pre></div><h2 id="-构建监控">📊 构建监控</h2>
+<h3 id="实时监控脚本">实时监控脚本</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># 创建监控脚本</span>
+</span></span><span style="display:flex;"><span>cat &gt; $LFS/bin/monitor_build.sh <span style="color:#e6db74">&lt;&lt; &#39;EOF&#39;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">#!/bin/bash
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74"># 构建过程监控脚本
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">LFS=${LFS:-/mnt/lfs}
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74"># 颜色定义
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">RED=&#39;\033[0;31m&#39;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">GREEN=&#39;\033[0;32m&#39;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">YELLOW=&#39;\033[1;33m&#39;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">BLUE=&#39;\033[0;34m&#39;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">NC=&#39;\033[0m&#39;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74"># 显示系统信息
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">show_system_info() {
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    echo -e &#34;${BLUE}=== 系统信息 ===${NC}&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    echo &#34;CPU核心数: $(nproc)&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    echo &#34;总内存: $(free -h | awk &#39;NR==2{print $2}&#39;)&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    echo &#34;可用内存: $(free -h | awk &#39;NR==2{print $7}&#39;)&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    echo &#34;磁盘使用: $(df -h $LFS | awk &#39;NR==2{print $3&#34;/&#34;$2&#34; (&#34;$5&#34; used)&#34;}&#39;)&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    echo &#34;&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">}
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74"># 显示构建状态
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">show_build_status() {
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    echo -e &#34;${BLUE}=== 构建状态 ===${NC}&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    if [ -f &#34;$LFS/.build_progress&#34; ]; then
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        local current=$(cat $LFS/.build_progress)
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        local total=$(cat $LFS/.build_total 2&gt;/dev/null || echo &#34;1&#34;)
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        local percentage=$((current * 100 / total))
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        echo &#34;进度: $current/$total ($percentage%)&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        # 进度条
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        local bar_length=50
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        local filled=$((current * bar_length / total))
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        printf &#34;[&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        printf &#34;%${filled}s&#34; | tr &#39; &#39; &#39;=&#39;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        printf &#34;%$((bar_length - filled))s&#34; | tr &#39; &#39; &#39;-&#39;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        printf &#34;] %d%%\n&#34; $percentage
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    else
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        echo &#34;进度信息不可用&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    fi
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    echo &#34;&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">}
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74"># 显示最近日志
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">show_recent_logs() {
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    echo -e &#34;${BLUE}=== 最近日志 ===${NC}&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    if [ -f &#34;$LFS/logs/build.log&#34; ]; then
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        tail -20 &#34;$LFS/logs/build.log&#34; | while read line; do
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            if echo &#34;$line&#34; | grep -q &#34;ERROR&#34;; then
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">                echo -e &#34;${RED}$line${NC}&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            elif echo &#34;$line&#34; | grep -q &#34;WARN&#34;; then
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">                echo -e &#34;${YELLOW}$line${NC}&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            else
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">                echo &#34;$line&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            fi
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        done
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    else
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        echo &#34;日志文件不存在&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    fi
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    echo &#34;&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">}
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74"># 显示资源使用
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">show_resource_usage() {
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    echo -e &#34;${BLUE}=== 资源使用 ===${NC}&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    echo &#34;CPU使用率:&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    top -bn1 | head -10 | tail -5
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    echo &#34;&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    echo &#34;内存使用:&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    free -h
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    echo &#34;&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">}
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74"># 主函数
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">main() {
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    clear
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    echo -e &#34;${GREEN}LFS构建监控器${NC}&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    echo &#34;按 Ctrl+C 退出&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    echo &#34;&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    while true; do
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        show_system_info
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        show_build_status
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        show_recent_logs
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        show_resource_usage
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        echo &#34;最后更新: $(date)&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        sleep 5
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        clear
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    done
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">}
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74"># 检查参数
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">case &#34;$1&#34; in
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    &#34;info&#34;)
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        show_system_info
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        ;;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    &#34;status&#34;)
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        show_build_status
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        ;;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    &#34;logs&#34;)
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        show_recent_logs
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        ;;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    &#34;resources&#34;)
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        show_resource_usage
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        ;;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    &#34;monitor&#34;)
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        main
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        ;;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    *)
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        echo &#34;用法: $0 {info|status|logs|resources|monitor}&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        echo &#34;  info     - 显示系统信息&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        echo &#34;  status   - 显示构建状态&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        echo &#34;  logs     - 显示最近日志&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        echo &#34;  resources- 显示资源使用&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        echo &#34;  monitor  - 实时监控模式&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        ;;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">esac
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">EOF</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>chmod +x $LFS/bin/monitor_build.sh
+</span></span></code></pre></div><h3 id="自动化备份">自动化备份</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># 创建备份脚本</span>
+</span></span><span style="display:flex;"><span>cat &gt; $LFS/bin/backup_build.sh <span style="color:#e6db74">&lt;&lt; &#39;EOF&#39;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">#!/bin/bash
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74"># 构建过程备份脚本
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">LFS=${LFS:-/mnt/lfs}
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">BACKUP_DIR=${BACKUP_DIR:-/mnt/backup}
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74"># 创建备份
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">create_backup() {
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    local backup_name=&#34;lfs_backup_$(date +%Y%m%d_%H%M%S)&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    local backup_path=&#34;$BACKUP_DIR/$backup_name&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    echo &#34;创建备份: $backup_name&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    # 创建备份目录
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    mkdir -p &#34;$backup_path&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    # 备份重要文件
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    cp -r &#34;$LFS/tools&#34; &#34;$backup_path/&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    cp -r &#34;$LFS/usr&#34; &#34;$backup_path/&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    cp -r &#34;$LFS/etc&#34; &#34;$backup_path/&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    cp -r &#34;$LFS/var&#34; &#34;$backup_path/&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    cp -r &#34;$LFS/logs&#34; &#34;$backup_path/&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    # 备份进度信息
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    cp &#34;$LFS/.build_progress&#34; &#34;$backup_path/&#34; 2&gt;/dev/null || true
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    cp &#34;$LFS/.build_total&#34; &#34;$backup_path/&#34; 2&gt;/dev/null || true
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    # 创建压缩包
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    cd &#34;$BACKUP_DIR&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    tar -czf &#34;${backup_name}.tar.gz&#34; &#34;$backup_name&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    # 清理临时文件
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    rm -rf &#34;$backup_name&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    echo &#34;备份完成: ${backup_name}.tar.gz&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">}
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74"># 恢复备份
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">restore_backup() {
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    local backup_file=&#34;$1&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    if [ ! -f &#34;$backup_file&#34; ]; then
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        echo &#34;备份文件不存在: $backup_file&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        exit 1
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    fi
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    echo &#34;从备份恢复: $backup_file&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    # 解压备份
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    local temp_dir=$(mktemp -d)
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    tar -xzf &#34;$backup_file&#34; -C &#34;$temp_dir&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    # 恢复文件
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    cp -r &#34;$temp_dir&#34;/*/tools/* &#34;$LFS/tools/&#34; 2&gt;/dev/null || true
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    cp -r &#34;$temp_dir&#34;/*/usr/* &#34;$LFS/usr/&#34; 2&gt;/dev/null || true
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    cp -r &#34;$temp_dir&#34;/*/etc/* &#34;$LFS/etc/&#34; 2&gt;/dev/null || true
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    cp -r &#34;$temp_dir&#34;/*/var/* &#34;$LFS/var/&#34; 2&gt;/dev/null || true
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    cp -r &#34;$temp_dir&#34;/*/logs/* &#34;$LFS/logs/&#34; 2&gt;/dev/null || true
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    # 恢复进度信息
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    cp &#34;$temp_dir&#34;/*/.build_progress &#34;$LFS/&#34; 2&gt;/dev/null || true
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    cp &#34;$temp_dir&#34;/*/.build_total &#34;$LFS/&#34; 2&gt;/dev/null || true
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    # 清理临时文件
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    rm -rf &#34;$temp_dir&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    echo &#34;恢复完成&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">}
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74"># 显示备份列表
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">list_backups() {
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    echo &#34;可用备份:&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    ls -la &#34;$BACKUP_DIR&#34;/*.tar.gz 2&gt;/dev/null || echo &#34;没有找到备份文件&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">}
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74"># 主函数
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">case &#34;$1&#34; in
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    &#34;create&#34;)
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        create_backup
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        ;;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    &#34;restore&#34;)
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        if [ -z &#34;$2&#34; ]; then
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            echo &#34;用法: $0 restore &lt;备份文件&gt;&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            exit 1
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        fi
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        restore_backup &#34;$2&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        ;;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    &#34;list&#34;)
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        list_backups
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        ;;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    *)
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        echo &#34;用法: $0 {create|restore|list}&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        echo &#34;  create          - 创建备份&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        echo &#34;  restore &lt;file&gt;  - 从备份恢复&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        echo &#34;  list            - 列出可用备份&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        ;;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">esac
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">EOF</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>chmod +x $LFS/bin/backup_build.sh
+</span></span></code></pre></div><h2 id="-故障排除">🚨 故障排除</h2>
+<h3 id="环境变量问题">环境变量问题</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># 检查环境变量</span>
+</span></span><span style="display:flex;"><span>echo <span style="color:#e6db74">&#34;LFS=</span>$LFS<span style="color:#e6db74">&#34;</span>
+</span></span><span style="display:flex;"><span>echo <span style="color:#e6db74">&#34;LFS_TGT=</span>$LFS_TGT<span style="color:#e6db74">&#34;</span>
+</span></span><span style="display:flex;"><span>echo <span style="color:#e6db74">&#34;PATH=</span>$PATH<span style="color:#e6db74">&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 重新设置环境变量</span>
+</span></span><span style="display:flex;"><span>source ~/.bashrc
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 验证工具链</span>
+</span></span><span style="display:flex;"><span>which gcc
+</span></span><span style="display:flex;"><span>gcc --version
+</span></span></code></pre></div><h3 id="权限问题">权限问题</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># 检查目录权限</span>
+</span></span><span style="display:flex;"><span>ls -ld $LFS
+</span></span><span style="display:flex;"><span>ls -ld $LFS/tools
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 修复权限</span>
+</span></span><span style="display:flex;"><span>sudo chown -R lfs:lfs $LFS
+</span></span></code></pre></div><h3 id="构建失败恢复">构建失败恢复</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># 查看错误日志</span>
+</span></span><span style="display:flex;"><span>cat $LFS/logs/error_info.txt
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 清理失败的构建</span>
+</span></span><span style="display:flex;"><span>cd $LFS/sources
+</span></span><span style="display:flex;"><span>rm -rf build_*
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 重新开始构建</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 参考具体包的构建步骤</span>
+</span></span></code></pre></div><h2 id="-相关资源">📚 相关资源</h2>
+<ul>
+<li><a href="http://www.linuxfromscratch.org/lfs/view/stable/chapter04/chapter04.html">LFS官方文档 - 环境设置</a></li>
+<li><a href="https://www.gnu.org/software/bash/manual/">Bash参考手册</a></li>
+<li><a href="https://wiki.archlinux.org/title/Environment_variables">Linux环境变量</a></li>
+</ul>
+<hr>
+<p><em>最近更新: {{ .Lastmod.Format &ldquo;2006-01-02&rdquo; }}</em></p>
+
+      
+      <div class="post-separator">------------------------------------------------------------------------</div>
+      
+    </div>
+    <div class="post-footer">
+      
+      <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+      <div class="busuanzi-container">
+        <span id="busuanzi_container_page_pv">--本文总阅读量<span id="busuanzi_value_page_pv"></span>次--</span>
+      </div>
+      
+      
+      <script src="https://utteranc.es/client.js"
+        repo="makkichan947/makkichan947.github.io"
+        issue-term="pathname"
+        label="Utterances"
+        theme="github-dark"
+        crossorigin="anonymous"
+        async>
+      </script>
+    </div>
+  </article>
+
+    </main>
+  </body>
+</html>

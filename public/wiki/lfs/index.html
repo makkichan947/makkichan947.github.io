@@ -124,14 +124,63 @@
 <li>预计用时：20-40小时</li>
 <li>难度：中高级</li>
 </ul>
+<h2 id="-课程结构">📚 课程结构</h2>
+<h3 id="第一部分准备工作"><a href="./preparation/">第一部分：准备工作</a></h3>
+<ul>
+<li><a href="./preparation/host-system/">宿主系统配置</a></li>
+<li><a href="./preparation/partitions/">分区和文件系统</a></li>
+<li><a href="./preparation/packages/">软件包下载</a></li>
+<li><a href="./preparation/directory-layout/">目录结构规划</a></li>
+<li><a href="./preparation/environment/">环境变量设置</a></li>
+</ul>
+<h3 id="第二部分临时工具链"><a href="./toolchain/">第二部分：临时工具链</a></h3>
+<ul>
+<li><a href="./toolchain/cross-compiler/">交叉编译器构建</a></li>
+<li><a href="./toolchain/temporary-c-library/">临时C库</a></li>
+<li><a href="./toolchain/binutils/">Binutils工具链</a></li>
+<li><a href="./toolchain/gcc/">GCC编译器</a></li>
+<li><a href="./toolchain/testing/">临时工具链测试</a></li>
+</ul>
+<h3 id="第三部分基本系统构建"><a href="./basic-system/">第三部分：基本系统构建</a></h3>
+<ul>
+<li><a href="./basic-system/base-tools/">基础工具安装</a></li>
+<li><a href="./basic-system/core-components/">核心系统组件</a></li>
+<li><a href="./basic-system/system-libraries/">系统库构建</a></li>
+<li><a href="./basic-system/basic-utilities/">基本命令行工具</a></li>
+<li><a href="./basic-system/system-tools/">系统配置工具</a></li>
+</ul>
+<h3 id="第四部分引导和内核"><a href="./bootloader-kernel/">第四部分：引导和内核</a></h3>
+<ul>
+<li><a href="./bootloader-kernel/grub/">GRUB引导加载器</a></li>
+<li><a href="./bootloader-kernel/linux-kernel/">Linux内核编译</a></li>
+<li><a href="./bootloader-kernel/boot-configuration/">系统引导配置</a></li>
+<li><a href="./bootloader-kernel/kernel-modules/">内核模块管理</a></li>
+<li><a href="./bootloader-kernel/device-filesystem/">设备文件系统</a></li>
+</ul>
+<h3 id="第五部分系统配置"><a href="./system-configuration/">第五部分：系统配置</a></h3>
+<ul>
+<li><a href="./system-configuration/network/">网络配置</a></li>
+<li><a href="./system-configuration/systemd/">系统服务</a></li>
+<li><a href="./system-configuration/users/">用户管理</a></li>
+<li><a href="./system-configuration/security/">安全配置</a></li>
+<li><a href="./system-configuration/optimization/">系统优化</a></li>
+</ul>
+<h3 id="第六部分最终系统"><a href="./final-system/">第六部分：最终系统</a></h3>
+<ul>
+<li><a href="./final-system/desktop-environment/">桌面环境</a></li>
+<li><a href="./final-system/development-tools/">开发工具</a></li>
+<li><a href="./final-system/applications/">应用程序</a></li>
+<li><a href="./final-system/maintenance/">系统维护</a></li>
+<li><a href="./final-system/troubleshooting/">故障排除</a></li>
+</ul>
 <h2 id="-构建步骤概览">🚀 构建步骤概览</h2>
 <ol>
-<li><strong>准备宿主系统</strong></li>
-<li><strong>下载源码包</strong></li>
-<li><strong>构建临时工具链</strong></li>
-<li><strong>构建基本系统</strong></li>
-<li><strong>配置引导和内核</strong></li>
-<li><strong>系统配置和优化</strong></li>
+<li><strong>准备工作</strong>：配置宿主系统，创建分区，下载源码</li>
+<li><strong>临时工具链</strong>：构建交叉编译环境和基础工具</li>
+<li><strong>基本系统</strong>：安装核心系统组件和库</li>
+<li><strong>引导和内核</strong>：配置GRUB和编译Linux内核</li>
+<li><strong>系统配置</strong>：网络、用户、服务等系统配置</li>
+<li><strong>最终系统</strong>：桌面环境、开发工具、应用软件</li>
 </ol>
 <h2 id="-学习建议">💡 学习建议</h2>
 <blockquote>
@@ -142,6 +191,7 @@
 <li><a href="http://www.linuxfromscratch.org/lfs/">LFS官方文档</a></li>
 <li><a href="https://lfs.linuxsir.org/">LFS中文社区</a></li>
 <li><a href="http://www.linuxfromscratch.org/blfs/">BLFS（Beyond LFS）</a></li>
+<li><a href="http://www.linuxfromscratch.org/hints/">LFS Hints</a></li>
 </ul>
 </div>
     <ul class="posts-list">

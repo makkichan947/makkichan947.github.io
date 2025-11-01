@@ -2,7 +2,7 @@
 title = "系统配置工具"
 date = "2025-10-28"
 description = "安装LFS系统配置和管理工具"
-weight 5
+weight = 5
 +++
 
 # 系统配置工具

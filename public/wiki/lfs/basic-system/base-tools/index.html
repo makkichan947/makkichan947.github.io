@@ -1,0 +1,580 @@
+<!doctype html>
+<html lang="zh">
+  <head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+    <title>基础工具安装 // Yaku Makki</title>
+    <link rel="shortcut icon" href="./avatar.jpg" />
+    <meta charset="utf-8" />
+    <meta name="generator" content="Hugo 0.151.2">
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="author" content="Yaku Makki" />
+    <meta name="description" content="安装LFS核心基础工具" />
+    <link rel="stylesheet" href="/css/main.min.422840b4454cb211f5b3dab61f082cdff508e88825173c31806835cb75529734.css" />
+    
+
+    
+    
+  <meta name="twitter:card" content="summary">
+  <meta name="twitter:title" content="基础工具安装">
+  <meta name="twitter:description" content="安装LFS核心基础工具">
+
+    <meta property="og:url" content="http://localhost:1313/wiki/lfs/basic-system/base-tools/">
+  <meta property="og:site_name" content="Yaku Makki">
+  <meta property="og:title" content="基础工具安装">
+  <meta property="og:description" content="安装LFS核心基础工具">
+  <meta property="og:locale" content="zh">
+  <meta property="og:type" content="article">
+    <meta property="article:section" content="wiki">
+    <meta property="article:published_time" content="2025-10-28T00:00:00+00:00">
+    <meta property="article:modified_time" content="2025-10-28T00:00:00+00:00">
+
+
+  </head>
+  <body class="synthwave-bg">
+    <header class="app-header glass-morphism neon-border">
+      <a href="/"><img class="app-header-avatar" src="/avatar.jpg" alt="Yaku Makki" /></a>
+      <span class="app-header-title gradient-text">Yaku Makki</span>
+      <nav class="app-header-menu">
+          <a class="app-header-menu-item" href="/">首页</a>
+             | 
+          
+          <a class="app-header-menu-item" href="/post/">博客</a>
+             | 
+          
+          <a class="app-header-menu-item" href="/wiki/">维基</a>
+             | 
+          
+          <a class="app-header-menu-item" href="/tags/">标签</a>
+             | 
+          
+          <a class="app-header-menu-item" href="/about/">关于</a>
+      </nav>
+      <p>个人小巢</p>
+      <div class="app-header-social">
+        
+          <a href="https://github.com/makkichan947" target="_blank" rel="noreferrer noopener me" class="pulse-glow">
+            <svg class="icon icon-brand-github" viewBox="0 0 24 24" fill="currentColor"><title>GitHub</title><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg>
+          </a>
+        
+          <a href="mailto:yakumakki947@hotmail.com" target="_blank" rel="noreferrer noopener me" class="pulse-glow">
+            <svg class="icon icon-mail" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><title>mail</title><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
+          </a>
+        
+          <a href="https://x.com/Makki_Yaku947" target="_blank" rel="noreferrer noopener me" class="pulse-glow">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-link">
+  <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path>
+  <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path>
+</svg>
+          </a>
+        
+          <a href="https://www.twitch.tv/u/makkichan947" target="_blank" rel="noreferrer noopener me" class="pulse-glow">
+            <svg class="icon icon-brand-twitch" viewBox="0 0 24 24" fill="currentColor"><title>Twitch</title><path d="M11.571 4.714h1.715v5.143H11.57zm4.715 0H18v5.143h-1.714zM6 0L1.714 4.286v15.428h5.143V24l4.286-4.286h3.428L22.286 12V0zm14.571 11.143l-3.428 3.428h-3.429l-3 3v-3H6.857V1.714h13.714Z"/></svg>
+          </a>
+        
+      </div>
+    </header>
+    <main class="app-container glass-morphism glow-effect">
+      <div class="floating-particles">
+        <div class="particle" style="left: 10%; animation-delay: 0s;"></div>
+        <div class="particle" style="left: 20%; animation-delay: 1s;"></div>
+        <div class="particle" style="left: 30%; animation-delay: 2s;"></div>
+        <div class="particle" style="left: 40%; animation-delay: 3s;"></div>
+        <div class="particle" style="left: 50%; animation-delay: 4s;"></div>
+        <div class="particle" style="left: 60%; animation-delay: 5s;"></div>
+        <div class="particle" style="left: 70%; animation-delay: 6s;"></div>
+        <div class="particle" style="left: 80%; animation-delay: 7s;"></div>
+        <div class="particle" style="left: 90%; animation-delay: 8s;"></div>
+      </div>
+      
+  <article class="post enhanced-card glow-effect">
+    <header class="post-header">
+      <h1 class ="post-title gradient-text">基础工具安装</h1>
+      <div class="post-meta">
+        <div>
+          <svg class="icon icon-calendar" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><title>calendar</title><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
+          Oct 28, 2025
+        </div>
+        <div>
+          <svg class="icon icon-clock" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><title>clock</title><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+          5 min read
+        </div>
+      </div>
+    </header>
+    <div class="post-content">
+      <h1 id="基础工具安装">基础工具安装</h1>
+<p>基础工具是Linux系统运行的核心组件，包括文件操作、文本处理、系统管理等基本功能。本章将详细介绍如何编译和安装这些基础工具。</p>
+<h2 id="-核心工具概述">🎯 核心工具概述</h2>
+<h3 id="工具分类">工具分类</h3>
+<p>LFS基础工具主要包括：</p>
+<ul>
+<li><strong>文件工具</strong>：cp, mv, rm, ls, cat, mkdir等</li>
+<li><strong>文本处理</strong>：grep, sed, awk, sort, uniq等</li>
+<li><strong>系统工具</strong>：ps, top, kill, mount, umount等</li>
+<li><strong>压缩工具</strong>：gzip, bzip2, xz等</li>
+<li><strong>网络工具</strong>：wget, curl等</li>
+</ul>
+<h2 id="-gettext工具">🛠️ Gettext工具</h2>
+<h3 id="编译gettext">编译Gettext</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># 切换到lfs用户</span>
+</span></span><span style="display:flex;"><span>su - lfs
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 创建构建目录</span>
+</span></span><span style="display:flex;"><span>mkdir -pv $LFS/sources/basic_system
+</span></span><span style="display:flex;"><span>cd $LFS/sources/basic_system
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 解压Gettext源码</span>
+</span></span><span style="display:flex;"><span>tar -xf $LFS/sources/gettext-0.21.tar.xz
+</span></span><span style="display:flex;"><span>cd gettext-0.21
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 配置Gettext</span>
+</span></span><span style="display:flex;"><span>./configure --disable-shared
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 编译</span>
+</span></span><span style="display:flex;"><span>make $LFS_MAKEFLAGS
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 安装到临时位置</span>
+</span></span><span style="display:flex;"><span>cp -v gettext-tools/src/<span style="color:#f92672">{</span>msgfmt,msgmerge,xgettext<span style="color:#f92672">}</span> /usr/bin
+</span></span></code></pre></div><h2 id="-bison工具">📦 Bison工具</h2>
+<h3 id="编译bison">编译Bison</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># 返回源码目录</span>
+</span></span><span style="display:flex;"><span>cd $LFS/sources/basic_system
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 解压Bison源码</span>
+</span></span><span style="display:flex;"><span>tar -xf $LFS/sources/bison-3.8.2.tar.xz
+</span></span><span style="display:flex;"><span>cd bison-3.8.2
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 配置Bison</span>
+</span></span><span style="display:flex;"><span>./configure --prefix<span style="color:#f92672">=</span>/usr <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>            --docdir<span style="color:#f92672">=</span>/usr/share/doc/bison-3.8.2
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 编译</span>
+</span></span><span style="display:flex;"><span>make $LFS_MAKEFLAGS
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 安装</span>
+</span></span><span style="display:flex;"><span>make install
+</span></span></code></pre></div><h2 id="-perl工具">🔧 Perl工具</h2>
+<h3 id="编译perl">编译Perl</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># 返回源码目录</span>
+</span></span><span style="display:flex;"><span>cd $LFS/sources/basic_system
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 解压Perl源码</span>
+</span></span><span style="display:flex;"><span>tar -xf $LFS/sources/perl-5.36.0.tar.xz
+</span></span><span style="display:flex;"><span>cd perl-5.36.0
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 配置Perl</span>
+</span></span><span style="display:flex;"><span>sh Configure -des <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>             -Dprefix<span style="color:#f92672">=</span>/usr <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>             -Dvendorprefix<span style="color:#f92672">=</span>/usr <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>             -Dprivlib<span style="color:#f92672">=</span>/usr/lib/perl5/5.36/core_perl <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>             -Darchlib<span style="color:#f92672">=</span>/usr/lib/perl5/5.36/core_perl <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>             -Dsitelib<span style="color:#f92672">=</span>/usr/lib/perl5/5.36/site_perl <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>             -Dvendorlib<span style="color:#f92672">=</span>/usr/lib/perl5/5.36/vendor_perl <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>             -Dvendorarch<span style="color:#f92672">=</span>/usr/lib/perl5/5.36/vendor_perl <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>             -Dman1dir<span style="color:#f92672">=</span>/usr/share/man/man1 <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>             -Dman3dir<span style="color:#f92672">=</span>/usr/share/man/man3 <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>             -Dpager<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;/usr/bin/less -isR&#34;</span> <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>             -Duseshrplib <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>             -Dusethreads
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 编译</span>
+</span></span><span style="display:flex;"><span>make $LFS_MAKEFLAGS
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 安装</span>
+</span></span><span style="display:flex;"><span>make install
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 清理不必要的文件</span>
+</span></span><span style="display:flex;"><span>rm -rf /usr/lib/perl5/5.36/core_perl/<span style="color:#f92672">{</span>pod,man<span style="color:#f92672">}</span>
+</span></span></code></pre></div><h2 id="-python工具">📚 Python工具</h2>
+<h3 id="编译python">编译Python</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># 返回源码目录</span>
+</span></span><span style="display:flex;"><span>cd $LFS/sources/basic_system
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 解压Python源码</span>
+</span></span><span style="display:flex;"><span>tar -xf $LFS/sources/Python-3.11.2.tar.xz
+</span></span><span style="display:flex;"><span>cd Python-3.11.2
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 配置Python</span>
+</span></span><span style="display:flex;"><span>./configure --prefix<span style="color:#f92672">=</span>/usr <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>            --enable-shared <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>            --without-ensurepip
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 编译</span>
+</span></span><span style="display:flex;"><span>make $LFS_MAKEFLAGS
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 安装</span>
+</span></span><span style="display:flex;"><span>make install
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 创建符号链接</span>
+</span></span><span style="display:flex;"><span>ln -sv /usr/bin/python3 /usr/bin/python
+</span></span></code></pre></div><h2 id="-texinfo工具">🗜️ Texinfo工具</h2>
+<h3 id="编译texinfo">编译Texinfo</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># 返回源码目录</span>
+</span></span><span style="display:flex;"><span>cd $LFS/sources/basic_system
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 解压Texinfo源码</span>
+</span></span><span style="display:flex;"><span>tar -xf $LFS/sources/texinfo-7.0.2.tar.xz
+</span></span><span style="display:flex;"><span>cd texinfo-7.0.2
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 配置Texinfo</span>
+</span></span><span style="display:flex;"><span>./configure --prefix<span style="color:#f92672">=</span>/usr
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 编译</span>
+</span></span><span style="display:flex;"><span>make $LFS_MAKEFLAGS
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 安装</span>
+</span></span><span style="display:flex;"><span>make install
+</span></span></code></pre></div><h2 id="-util-linux工具">🔍 Util-linux工具</h2>
+<h3 id="编译util-linux">编译Util-linux</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># 返回源码目录</span>
+</span></span><span style="display:flex;"><span>cd $LFS/sources/basic_system
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 解压Util-linux源码</span>
+</span></span><span style="display:flex;"><span>tar -xf $LFS/sources/util-linux-2.38.1.tar.xz
+</span></span><span style="display:flex;"><span>cd util-linux-2.38.1
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 配置Util-linux</span>
+</span></span><span style="display:flex;"><span>./configure --prefix<span style="color:#f92672">=</span>/usr <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>            --bindir<span style="color:#f92672">=</span>/usr/bin <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>            --libdir<span style="color:#f92672">=</span>/usr/lib <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>            --sbindir<span style="color:#f92672">=</span>/usr/sbin <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>            --disable-chfn-chsh <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>            --disable-login <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>            --disable-nologin <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>            --disable-su <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>            --disable-setpriv <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>            --disable-runuser <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>            --disable-pylibmount <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>            --disable-static <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>            --without-python <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>            runstatedir<span style="color:#f92672">=</span>/run
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 编译</span>
+</span></span><span style="display:flex;"><span>make $LFS_MAKEFLAGS
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 安装</span>
+</span></span><span style="display:flex;"><span>make install
+</span></span></code></pre></div><h2 id="-进度跟踪">📊 进度跟踪</h2>
+<h3 id="构建状态监控">构建状态监控</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># 创建基础工具构建脚本</span>
+</span></span><span style="display:flex;"><span>cat &gt; $LFS/build_base_tools.sh <span style="color:#e6db74">&lt;&lt; &#39;EOF&#39;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">#!/bin/bash
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74"># LFS基础工具构建脚本
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">set -e
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74"># 工具列表
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">tools=(
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    &#34;gettext-0.21:gettext&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    &#34;bison-3.8.2:bison&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    &#34;perl-5.36.0:perl&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    &#34;Python-3.11.2:python&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    &#34;texinfo-7.0.2:texinfo&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    &#34;util-linux-2.38.1:util-linux&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">)
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">total_tools=${#tools[@]}
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">completed=0
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">for tool_info in &#34;${tools[@]}&#34;; do
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    IFS=&#39;:&#39; read -r package_name tool_name &lt;&lt;&lt; &#34;$tool_info&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    echo &#34;=== 构建 $tool_name ($((completed + 1))/$total_tools) ===&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    # 检查源码是否存在
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    if [ ! -f &#34;$LFS/sources/$package_name.tar.xz&#34; ]; then
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        echo &#34;错误: $package_name 源码不存在&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        exit 1
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    fi
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    # 构建逻辑（根据工具不同而不同）
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    case $tool_name in
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        gettext)
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            cd $LFS/sources/basic_system
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            tar -xf $LFS/sources/$package_name.tar.xz
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            cd $package_name
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            ./configure --disable-shared
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            make $LFS_MAKEFLAGS
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            cp -v gettext-tools/src/{msgfmt,msgmerge,xgettext} /usr/bin
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            ;;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        bison)
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            cd $LFS/sources/basic_system
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            tar -xf $LFS/sources/$package_name.tar.xz
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            cd $package_name
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            ./configure --prefix=/usr --docdir=/usr/share/doc/$package_name
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            make $LFS_MAKEFLAGS
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            make install
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            ;;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        perl)
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            cd $LFS/sources/basic_system
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            tar -xf $LFS/sources/$package_name.tar.xz
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            cd $package_name
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            sh Configure -des \
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">                         -Dprefix=/usr \
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">                         -Dvendorprefix=/usr \
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">                         -Dprivlib=/usr/lib/perl5/5.36/core_perl \
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">                         -Darchlib=/usr/lib/perl5/5.36/core_perl \
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">                         -Dsitelib=/usr/lib/perl5/5.36/site_perl \
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">                         -Dvendorlib=/usr/lib/perl5/5.36/vendor_perl \
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">                         -Dvendorarch=/usr/lib/perl5/5.36/vendor_perl \
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">                         -Dman1dir=/usr/share/man/man1 \
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">                         -Dman3dir=/usr/share/man/man3 \
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">                         -Dpager=&#34;/usr/bin/less -isR&#34; \
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">                         -Duseshrplib \
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">                         -Dusethreads
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            make $LFS_MAKEFLAGS
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            make install
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            rm -rf /usr/lib/perl5/5.36/core_perl/{pod,man}
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            ;;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        python)
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            cd $LFS/sources/basic_system
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            tar -xf $LFS/sources/$package_name.tar.xz
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            cd $package_name
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            ./configure --prefix=/usr --enable-shared --without-ensurepip
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            make $LFS_MAKEFLAGS
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            make install
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            ln -sv /usr/bin/python3 /usr/bin/python
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            ;;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        texinfo)
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            cd $LFS/sources/basic_system
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            tar -xf $LFS/sources/$package_name.tar.xz
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            cd $package_name
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            ./configure --prefix=/usr
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            make $LFS_MAKEFLAGS
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            make install
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            ;;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        util-linux)
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            cd $LFS/sources/basic_system
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            tar -xf $LFS/sources/$package_name.tar.xz
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            cd $package_name
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            ./configure --prefix=/usr \
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">                        --bindir=/usr/bin \
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">                        --libdir=/usr/lib \
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">                        --sbindir=/usr/sbin \
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">                        --disable-chfn-chsh \
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">                        --disable-login \
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">                        --disable-nologin \
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">                        --disable-su \
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">                        --disable-setpriv \
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">                        --disable-runuser \
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">                        --disable-pylibmount \
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">                        --disable-static \
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">                        --without-python \
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">                        runstatedir=/run
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            make $LFS_MAKEFLAGS
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            make install
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            ;;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    esac
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    # 验证安装
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    echo &#34;验证 $tool_name 安装...&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    case $tool_name in
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        gettext)
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            [ -x /usr/bin/msgfmt ] &amp;&amp; echo &#34;✓ gettext 安装成功&#34; || echo &#34;✗ gettext 安装失败&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            ;;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        bison)
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            [ -x /usr/bin/bison ] &amp;&amp; echo &#34;✓ bison 安装成功&#34; || echo &#34;✗ bison 安装失败&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            ;;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        perl)
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            [ -x /usr/bin/perl ] &amp;&amp; echo &#34;✓ perl 安装成功&#34; || echo &#34;✗ perl 安装失败&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            ;;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        python)
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            [ -x /usr/bin/python3 ] &amp;&amp; echo &#34;✓ python 安装成功&#34; || echo &#34;✗ python 安装失败&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            ;;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        texinfo)
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            [ -x /usr/bin/makeinfo ] &amp;&amp; echo &#34;✓ texinfo 安装成功&#34; || echo &#34;✗ texinfo 安装失败&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            ;;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        util-linux)
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            [ -x /usr/bin/mount ] &amp;&amp; echo &#34;✓ util-linux 安装成功&#34; || echo &#34;✗ util-linux 安装失败&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            ;;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    esac
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    completed=$((completed + 1))
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    echo &#34;进度: $completed/$total_tools 完成&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    echo &#34;&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    # 清理构建目录
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    cd $LFS/sources/basic_system
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    rm -rf $package_name
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">done
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">echo &#34;=== 所有基础工具构建完成 ===&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">EOF</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>chmod +x $LFS/build_base_tools.sh
+</span></span></code></pre></div><h2 id="-功能验证">🧪 功能验证</h2>
+<h3 id="工具可用性测试">工具可用性测试</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># 创建验证脚本</span>
+</span></span><span style="display:flex;"><span>cat &gt; $LFS/verify_base_tools.sh <span style="color:#e6db74">&lt;&lt; &#39;EOF&#39;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">#!/bin/bash
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74"># 基础工具验证脚本
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">echo &#34;=== LFS基础工具验证 ===&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74"># 定义要验证的工具
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">tools=(
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    &#34;msgfmt:gettext&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    &#34;bison:bison&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    &#34;perl:perl&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    &#34;python3:python&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    &#34;makeinfo:texinfo&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    &#34;mount:util-linux&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">)
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">passed=0
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">total=${#tools[@]}
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">for tool_info in &#34;${tools[@]}&#34;; do
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    IFS=&#39;:&#39; read -r command tool_name &lt;&lt;&lt; &#34;$tool_info&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    echo -n &#34;检查 $tool_name ($command)... &#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    if command -v &#34;$command&#34; &gt;/dev/null 2&gt;&amp;1; then
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        echo &#34;✓ 可用&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        # 基本功能测试
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        case $tool_name in
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            gettext)
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">                $command --version &gt;/dev/null 2&gt;&amp;1 &amp;&amp; echo &#34;  版本检查: ✓&#34; || echo &#34;  版本检查: ✗&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">                ;;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            bison)
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">                $command --version &gt;/dev/null 2&gt;&amp;1 &amp;&amp; echo &#34;  版本检查: ✓&#34; || echo &#34;  版本检查: ✗&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">                ;;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            perl)
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">                $command -e &#39;print &#34;Hello from Perl\n&#34;&#39; &gt;/dev/null 2&gt;&amp;1 &amp;&amp; echo &#34;  基本功能: ✓&#34; || echo &#34;  基本功能: ✗&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">                ;;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            python)
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">                $command -c &#39;print(&#34;Hello from Python&#34;)&#39; &gt;/dev/null 2&gt;&amp;1 &amp;&amp; echo &#34;  基本功能: ✓&#34; || echo &#34;  基本功能: ✗&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">                ;;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            texinfo)
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">                $command --version &gt;/dev/null 2&gt;&amp;1 &amp;&amp; echo &#34;  版本检查: ✓&#34; || echo &#34;  版本检查: ✗&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">                ;;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            util-linux)
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">                $command --version &gt;/dev/null 2&gt;&amp;1 &amp;&amp; echo &#34;  版本检查: ✓&#34; || echo &#34;  版本检查: ✗&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">                ;;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        esac
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        passed=$((passed + 1))
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    else
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        echo &#34;✗ 未找到&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    fi
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">done
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">echo &#34;&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">echo &#34;=== 验证结果 ===&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">echo &#34;通过: $passed/$total&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">if [ $passed -eq $total ]; then
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    echo &#34;✓ 所有基础工具都已正确安装&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    exit 0
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">else
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    echo &#34;✗ 部分工具安装失败&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    exit 1
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">fi
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">EOF</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>chmod +x $LFS/verify_base_tools.sh
+</span></span></code></pre></div><h2 id="-常见问题">🚨 常见问题</h2>
+<h3 id="编译失败处理">编译失败处理</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># 如果某个工具编译失败：</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 1. 检查依赖</span>
+</span></span><span style="display:flex;"><span>echo <span style="color:#e6db74">&#34;检查依赖...&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 2. 查看错误日志</span>
+</span></span><span style="display:flex;"><span>echo <span style="color:#e6db74">&#34;查看构建日志...&#34;</span>
+</span></span><span style="display:flex;"><span>tail -50 $LFS/logs/build.log
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 3. 重新配置</span>
+</span></span><span style="display:flex;"><span>echo <span style="color:#e6db74">&#34;尝试重新配置...&#34;</span>
+</span></span><span style="display:flex;"><span>make clean
+</span></span><span style="display:flex;"><span>./configure <span style="color:#f92672">[</span>选项<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 4. 检查磁盘空间</span>
+</span></span><span style="display:flex;"><span>df -h $LFS
+</span></span></code></pre></div><h3 id="依赖问题">依赖问题</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># 检查工具依赖关系</span>
+</span></span><span style="display:flex;"><span>echo <span style="color:#e6db74">&#34;检查gettext依赖...&#34;</span>
+</span></span><span style="display:flex;"><span>ldd /usr/bin/msgfmt
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>echo <span style="color:#e6db74">&#34;检查perl依赖...&#34;</span>
+</span></span><span style="display:flex;"><span>ldd /usr/bin/perl
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>echo <span style="color:#e6db74">&#34;检查python依赖...&#34;</span>
+</span></span><span style="display:flex;"><span>ldd /usr/bin/python3
+</span></span></code></pre></div><h3 id="版本兼容性">版本兼容性</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># 检查版本信息</span>
+</span></span><span style="display:flex;"><span>echo <span style="color:#e6db74">&#34;工具版本信息:&#34;</span>
+</span></span><span style="display:flex;"><span>msgfmt --version | head -1
+</span></span><span style="display:flex;"><span>bison --version | head -1
+</span></span><span style="display:flex;"><span>perl --version | head -2
+</span></span><span style="display:flex;"><span>python3 --version
+</span></span><span style="display:flex;"><span>makeinfo --version | head -1
+</span></span><span style="display:flex;"><span>mount --version
+</span></span></code></pre></div><h2 id="-构建统计">📊 构建统计</h2>
+<h3 id="构建时间统计">构建时间统计</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># 记录构建时间</span>
+</span></span><span style="display:flex;"><span>cat &gt; $LFS/log_build_times.sh <span style="color:#e6db74">&lt;&lt; &#39;EOF&#39;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">#!/bin/bash
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74"># 构建时间记录脚本
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">LOG_FILE=&#34;$LFS/logs/build_times.log&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">log_time() {
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    local tool_name=$1
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    local start_time=$2
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    local end_time=$3
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    local duration=$((end_time - start_time))
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    local minutes=$((duration / 60))
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    local seconds=$((duration % 60))
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    echo &#34;$(date &#39;+%Y-%m-%d %H:%M:%S&#39;) - $tool_name: ${minutes}分${seconds}秒&#34; &gt;&gt; &#34;$LOG_FILE&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    echo &#34;$tool_name 构建时间: ${minutes}分${seconds}秒&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">}
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74"># 在构建脚本中使用
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74"># start_time=$(date +%s)
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74"># [构建命令]
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74"># end_time=$(date +%s)
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74"># log_time &#34;tool_name&#34; $start_time $end_time
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">EOF</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>chmod +x $LFS/log_build_times.sh
+</span></span></code></pre></div><h2 id="-相关资源">📚 相关资源</h2>
+<ul>
+<li><a href="http://www.linuxfromscratch.org/lfs/view/stable/chapter06/chapter06.html">LFS官方文档 - 基础工具</a></li>
+<li><a href="https://www.gnu.org/software/">GNU工具文档</a></li>
+<li><a href="https://docs.python.org/">Python官方文档</a></li>
+</ul>
+<hr>
+<p><em>最近更新: {{ .Lastmod.Format &ldquo;2006-01-02&rdquo; }}</em></p>
+
+      
+      <div class="post-separator">------------------------------------------------------------------------</div>
+      
+    </div>
+    <div class="post-footer">
+      
+      <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+      <div class="busuanzi-container">
+        <span id="busuanzi_container_page_pv">--本文总阅读量<span id="busuanzi_value_page_pv"></span>次--</span>
+      </div>
+      
+      
+      <script src="https://utteranc.es/client.js"
+        repo="makkichan947/makkichan947.github.io"
+        issue-term="pathname"
+        label="Utterances"
+        theme="github-dark"
+        crossorigin="anonymous"
+        async>
+      </script>
+    </div>
+  </article>
+
+    </main>
+  </body>
+</html>
