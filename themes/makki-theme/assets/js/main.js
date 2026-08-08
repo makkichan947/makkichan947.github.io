@@ -47,8 +47,10 @@
       const done = [];
       for (const [name, p] of d.props) {
         if (!p.active) continue;
-        const a = -p.k * (p.pos - p.to) - p.c * p.vel;
-        p.vel += a * dt;
+        /* Implicit damping keeps the integrator stable for stiff springs
+           (response 0.12 needs dt < ~9.5ms; explicit Euler diverges at 60Hz
+           and long-pressing a button would blow the scale up forever). */
+        p.vel = (p.vel - p.k * dt * (p.pos - p.to)) / (1 + p.c * dt);
         p.pos += p.vel * dt;
         if (Math.abs(p.pos - p.to) < 0.02 && Math.abs(p.vel) < 0.02) {
           p.pos = p.to; p.vel = 0; p.active = false;
