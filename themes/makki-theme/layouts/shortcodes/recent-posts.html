@@ -3,17 +3,19 @@
 {{ $limit := .Get "limit" | default 5 }}
 
 <div class="recent-posts">
-    {{ range first $limit (where site.RegularPages "Section" $section) }}
-    <div class="recent-post-item">
-        <div class="recent-post-meta">
-            <time>{{ .Date.Format "2006-01-02" }}</time>
-        </div>
-        <h4><a href="{{ .RelPermalink }}">{{ .Title }}</a></h4>
-        {{ if .Description }}
-        <p>{{ .Description | truncate 100 }}</p>
-        {{ else }}
-        <p>{{ .Summary | truncate 100 }}</p>
-        {{ end }}
+  {{ range first $limit (where site.RegularPages "Section" $section) }}
+  <a class="recent-post-item" href="{{ .RelPermalink }}" data-press>
+    <div class="recent-post-meta">
+      <time>{{ .Date.Format "2006-01-02" }}</time>
     </div>
-    {{ end }}
+    <div class="recent-post-body">
+      <h4>{{ .Title }}</h4>
+      {{ if .Description }}
+      <p>{{ .Description | truncate 100 }}</p>
+      {{ else }}
+      <p>{{ .Summary | truncate 100 }}</p>
+      {{ end }}
+    </div>
+  </a>
+  {{ end }}
 </div>

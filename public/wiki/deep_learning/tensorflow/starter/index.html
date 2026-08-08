@@ -1,112 +1,121 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="zh">
-  <head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
-    <title>TensorFlow基础教程 // Yaku Makki</title>
-    <link rel="shortcut icon" href="./avatar.jpg" />
-    <meta charset="utf-8" />
-    <meta name="generator" content="Hugo 0.151.2">
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="author" content="Yaku Makki" />
-    <meta name="description" content="" />
-    <link rel="stylesheet" href="/css/main.min.422840b4454cb211f5b3dab61f082cdff508e88825173c31806835cb75529734.css" />
-    
+<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>TensorFlow基础教程 · Yaku Makki</title>
+  <meta name="description" content="个人小巢">
+  <meta name="theme-color" content="#0a0a0f">
+  <script>document.documentElement.classList.add('js');</script>
 
-    
-    
-  <meta name="twitter:card" content="summary">
-  <meta name="twitter:title" content="TensorFlow基础教程">
-  <meta name="twitter:description" content="TensorFlow基础教程 本教程将从零开始介绍TensorFlow的基础知识，包括环境搭建、基本概念、简单模型构建和训练。通过本教程，你将能够使用TensorFlow构建和训练基本的机器学习模型。
-🛠️ 环境搭建 安装TensorFlow # CPU版本 pip install tensorflow # GPU版本（需要CUDA支持） pip install tensorflow[and-cuda] # 验证安装 python -c &#34;import tensorflow as tf; print(tf.config.list_physical_devices(&#39;GPU&#39; if tf.test.is_gpu_available() else &#39;CPU&#39;))&#34; 推荐开发环境 # 创建虚拟环境 conda create -n tf_env python=3.9 conda activate tf_env # 安装TensorFlow和相关依赖 pip install tensorflow numpy matplotlib jupyter pandas scikit-learn # 启动Jupyter Notebook jupyter notebook 🎯 基础概念 Hello TensorFlow import tensorflow as tf # 打印TensorFlow版本 print(f&#34;TensorFlow版本: {tf.__version__}&#34;) # 创建常量张量 hello = tf.constant(&#34;Hello, TensorFlow!&#34;) print(f&#34;常量: {hello.numpy()}&#34;) # 基本运算 a = tf.constant(5) b = tf.constant(3) print(f&#34;5 &#43; 3 = {tf.add(a, b).numpy()}&#34;) print(f&#34;5 * 3 = {tf.multiply(a, b).numpy()}&#34;) 张量操作 import tensorflow as tf import numpy as np # 创建不同类型的张量 scalar = tf.constant(42) # 标量 vector = tf.constant([1, 2, 3, 4, 5]) # 向量 matrix = tf.constant([[1, 2], [3, 4], [5, 6]]) # 矩阵 tensor_3d = tf.constant(np.random.rand(2, 3, 4)) # 三维张量 print(f&#34;标量形状: {scalar.shape}&#34;) print(f&#34;向量形状: {vector.shape}&#34;) print(f&#34;矩阵形状: {matrix.shape}&#34;) print(f&#34;三维张量形状: {tensor_3d.shape}&#34;) # 张量运算 x = tf.constant([1, 2, 3, 4, 5]) y = tf.constant([6, 7, 8, 9, 10]) # 元素级运算 print(f&#34;x &#43; y = {tf.add(x, y).numpy()}&#34;) print(f&#34;x * y = {tf.multiply(x, y).numpy()}&#34;) # 广播机制 matrix = tf.constant([[1, 2], [3, 4]]) vector = tf.constant([5, 6]) print(f&#34;矩阵 &#43; 向量广播结果:\n{tf.add(matrix, vector).numpy()}&#34;) 🏗️ 第一个神经网络 线性回归模型 import tensorflow as tf import numpy as np import matplotlib.pyplot as plt # 生成模拟数据 np.random.seed(42) X = np.random.rand(100, 1) * 10 y = 2 * X &#43; 1 &#43; np.random.randn(100, 1) * 0.5 # 构建模型 model = tf.keras.Sequential([ tf.keras.layers.Dense(1, input_shape=(1,)) ]) # 编译模型 model.compile( optimizer=&#39;sgd&#39;, # 随机梯度下降 loss=&#39;mse&#39;, # 均方误差 metrics=[&#39;mae&#39;] # 平均绝对误差 ) # 模型摘要 model.summary() # 训练模型 history = model.fit(X, y, epochs=100, verbose=0) # 预测 y_pred = model.predict(X) # 可视化结果 plt.figure(figsize=(12, 4)) plt.subplot(1, 2, 1) plt.scatter(X, y, alpha=0.5, label=&#39;真实数据&#39;) plt.plot(X, y_pred, color=&#39;red&#39;, label=&#39;预测结果&#39;) plt.xlabel(&#39;X&#39;) plt.ylabel(&#39;y&#39;) plt.title(&#39;线性回归结果&#39;) plt.legend() plt.subplot(1, 2, 2) plt.plot(history.history[&#39;loss&#39;]) plt.xlabel(&#39;Epoch&#39;) plt.ylabel(&#39;Loss&#39;) plt.title(&#39;训练损失曲线&#39;) plt.tight_layout() plt.show() print(f&#34;模型权重: {model.weights[0].numpy().flatten()}&#34;) print(f&#34;模型偏置: {model.weights[1].numpy()}&#34;) 分类模型 - MNIST手写数字识别 import tensorflow as tf from tensorflow.keras.datasets import mnist from tensorflow.keras.utils import to_categorical # 加载MNIST数据集 (x_train, y_train), (x_test, y_test) = mnist.load_data() # 数据预处理 x_train = x_train.reshape(-1, 784) / 255.0 # 展平并归一化 x_test = x_test.reshape(-1, 784) / 255.0 y_train = to_categorical(y_train, 10) # one-hot编码 y_test = to_categorical(y_test, 10) # 构建模型 model = tf.keras.Sequential([ tf.keras.layers.Dense(128, activation=&#39;relu&#39;, input_shape=(784,)), tf.keras.layers.Dropout(0.2), # Dropout防止过拟合 tf.keras.layers.Dense(64, activation=&#39;relu&#39;), tf.keras.layers.Dense(10, activation=&#39;softmax&#39;) # 输出层 ]) # 编译模型 model.compile( optimizer=&#39;adam&#39;, # Adam优化器 loss=&#39;categorical_crossentropy&#39;, # 交叉熵损失 metrics=[&#39;accuracy&#39;] # 准确率 ) # 训练模型 history = model.fit( x_train, y_train, batch_size=128, epochs=10, validation_split=0.1, # 验证集 verbose=1 ) # 评估模型 test_loss, test_acc = model.evaluate(x_test, y_test, verbose=0) print(f&#34;测试集准确率: {test_acc:.4f}&#34;) # 预测 predictions = model.predict(x_test[:5]) predicted_labels = tf.argmax(predictions, axis=1).numpy() true_labels = tf.argmax(y_test[:5], axis=1).numpy() print(&#34;预测结果:&#34;, predicted_labels) print(&#34;真实标签:&#34;, true_labels) 📊 数据处理 使用tf.data API import tensorflow as tf import numpy as np # 创建数据集 def create_dataset(): # 生成随机数据 X = np.random.rand(1000, 10) y = np.random.randint(0, 2, 1000) # 创建tf.data.Dataset dataset = tf.data.Dataset.from_tensor_slices((X, y)) # 数据预处理 def preprocess(x, y): # 归一化 x = (x - tf.reduce_mean(x)) / tf.math.reduce_std(x) return x, y # 应用预处理 dataset = dataset.map(preprocess) # 打乱和批处理 dataset = dataset.shuffle(buffer_size=100) dataset = dataset.batch(32) # 重复和预取 dataset = dataset.repeat() dataset = dataset.prefetch(tf.data.AUTOTUNE) return dataset # 使用数据集训练 dataset = create_dataset() model = tf.keras.Sequential([ tf.keras.layers.Dense(64, activation=&#39;relu&#39;, input_shape=(10,)), tf.keras.layers.Dense(32, activation=&#39;relu&#39;), tf.keras.layers.Dense(1, activation=&#39;sigmoid&#39;) ]) model.compile(optimizer=&#39;adam&#39;, loss=&#39;binary_crossentropy&#39;, metrics=[&#39;accuracy&#39;]) # 训练 model.fit(dataset, epochs=5, steps_per_epoch=10) 图像数据增强 from tensorflow.keras.preprocessing.image import ImageDataGenerator # 创建图像数据生成器 datagen = ImageDataGenerator( rotation_range=20, # 随机旋转角度 width_shift_range=0.1, # 水平平移 height_shift_range=0.1, # 垂直平移 shear_range=0.1, # 剪切变换 zoom_range=0.1, # 缩放 horizontal_flip=True, # 水平翻转 fill_mode=&#39;nearest&#39; # 填充模式 ) # 应用数据增强 # datagen.fit(x_train) # 如果需要的话 # enhanced_data = datagen.flow(x_train, y_train, batch_size=32) 🎨 自定义模型和层 自定义层 import tensorflow as tf class CustomDense(tf.keras.layers.Layer): def __init__(self, units, activation=None, **kwargs): super(CustomDense, self).__init__(**kwargs) self.units = units self.activation = tf.keras.activations.get(activation) def build(self, input_shape): # 创建权重 self.w = self.add_weight( name=&#39;kernel&#39;, shape=(input_shape[-1], self.units), initializer=&#39;glorot_uniform&#39;, trainable=True ) self.b = self.add_weight( name=&#39;bias&#39;, shape=(self.units,), initializer=&#39;zeros&#39;, trainable=True ) def call(self, inputs): # 前向传播 output = tf.matmul(inputs, self.w) &#43; self.b if self.activation is not None: output = self.activation(output) return output def get_config(self): # 序列化配置 config = super(CustomDense, self).get_config() config.update({ &#39;units&#39;: self.units, &#39;activation&#39;: tf.keras.activations.serialize(self.activation) }) return config # 使用自定义层 model = tf.keras.Sequential([ CustomDense(128, activation=&#39;relu&#39;, input_shape=(784,)), CustomDense(64, activation=&#39;relu&#39;), CustomDense(10, activation=&#39;softmax&#39;) ]) 自定义模型 class CustomModel(tf.keras.Model): def __init__(self, num_classes): super(CustomModel, self).__init__() self.dense1 = tf.keras.layers.Dense(128, activation=&#39;relu&#39;) self.dense2 = tf.keras.layers.Dense(64, activation=&#39;relu&#39;) self.dense3 = tf.keras.layers.Dense(num_classes, activation=&#39;softmax&#39;) self.dropout = tf.keras.layers.Dropout(0.2) def call(self, inputs, training=False): x = self.dense1(inputs) x = self.dropout(x, training=training) x = self.dense2(x) x = self.dropout(x, training=training) return self.dense3(x) # 使用自定义模型 model = CustomModel(num_classes=10) model.compile(optimizer=&#39;adam&#39;, loss=&#39;sparse_categorical_crossentropy&#39;, metrics=[&#39;accuracy&#39;]) 🔧 模型保存和加载 保存和加载模型 import tensorflow as tf # 构建和训练模型 model = tf.keras.Sequential([ tf.keras.layers.Dense(64, activation=&#39;relu&#39;, input_shape=(10,)), tf.keras.layers.Dense(1, activation=&#39;sigmoid&#39;) ]) model.compile(optimizer=&#39;adam&#39;, loss=&#39;binary_crossentropy&#39;, metrics=[&#39;accuracy&#39;]) # 训练模型（这里使用随机数据作为示例） import numpy as np X_train = np.random.rand(100, 10) y_train = np.random.randint(0, 2, 100) model.fit(X_train, y_train, epochs=5, verbose=0) # 保存完整模型 model.save(&#39;my_model.h5&#39;) # HDF5格式 model.save(&#39;my_model&#39;) # TensorFlow SavedModel格式 # 加载模型 loaded_model_h5 = tf.keras.models.load_model(&#39;my_model.h5&#39;) loaded_model = tf.keras.models.load_model(&#39;my_model&#39;) # 比较预测结果 test_data = np.random.rand(5, 10) original_pred = model.predict(test_data) loaded_pred = loaded_model.predict(test_data) print(f&#34;预测结果一致: {np.allclose(original_pred, loaded_pred)}&#34;) 保存和加载权重 # 保存模型权重 model.save_weights(&#39;model_weights.h5&#39;) # 创建相同架构的新模型 new_model = tf.keras.Sequential([ tf.keras.layers.Dense(64, activation=&#39;relu&#39;, input_shape=(10,)), tf.keras.layers.Dense(1, activation=&#39;sigmoid&#39;) ]) # 加载权重 new_model.load_weights(&#39;model_weights.h5&#39;) # 验证权重是否相同 original_weights = model.get_weights() loaded_weights = new_model.get_weights() for i, (orig, loaded) in enumerate(zip(original_weights, loaded_weights)): print(f&#34;权重{i}一致: {np.allclose(orig, loaded)}&#34;) 📈 模型评估和可视化 评估指标 from sklearn.metrics import classification_report, confusion_matrix import seaborn as sns # 预测测试集 y_pred = model.predict(x_test) y_pred_classes = tf.argmax(y_pred, axis=1).numpy() y_true = tf.argmax(y_test, axis=1).numpy() # 分类报告 print(&#34;分类报告:&#34;) print(classification_report(y_true, y_pred_classes)) # 混淆矩阵 cm = confusion_matrix(y_true, y_pred_classes) plt.figure(figsize=(10, 8)) sns.heatmap(cm, annot=True, fmt=&#39;d&#39;, cmap=&#39;Blues&#39;) plt.xlabel(&#39;预测标签&#39;) plt.ylabel(&#39;真实标签&#39;) plt.title(&#39;混淆矩阵&#39;) plt.show() 训练历史可视化 import matplotlib.pyplot as plt # 训练历史 history = model.fit(x_train, y_train, validation_data=(x_val, y_val), epochs=20) # 绘制训练曲线 plt.figure(figsize=(12, 4)) # 损失曲线 plt.subplot(1, 2, 1) plt.plot(history.history[&#39;loss&#39;], label=&#39;训练损失&#39;) plt.plot(history.history[&#39;val_loss&#39;], label=&#39;验证损失&#39;) plt.xlabel(&#39;Epoch&#39;) plt.ylabel(&#39;Loss&#39;) plt.title(&#39;训练和验证损失&#39;) plt.legend() # 准确率曲线 plt.subplot(1, 2, 2) plt.plot(history.history[&#39;accuracy&#39;], label=&#39;训练准确率&#39;) plt.plot(history.history[&#39;val_accuracy&#39;], label=&#39;验证准确率&#39;) plt.xlabel(&#39;Epoch&#39;) plt.ylabel(&#39;Accuracy&#39;) plt.title(&#39;训练和验证准确率&#39;) plt.legend() plt.tight_layout() plt.show() 🚀 实际项目：房价预测 完整项目代码 import tensorflow as tf import numpy as np import pandas as pd from sklearn.model_selection import train_test_split from sklearn.preprocessing import StandardScaler # 生成模拟房价数据 np.random.seed(42) n_samples = 1000 # 特征：面积、房间数、年龄、距离市中心距离 areas = np.random.normal(100, 20, n_samples) # 平方米 rooms = np.random.randint(1, 6, n_samples) # 房间数 ages = np.random.randint(0, 50, n_samples) # 房屋年龄 distances = np.random.normal(10, 3, n_samples) # 距离市中心（公里） # 目标：房价（万元） prices = 50 &#43; 0.8 * areas &#43; 10 * rooms - 0.5 * ages - 2 * distances &#43; np.random.normal(0, 10, n_samples) # 创建DataFrame data = pd.DataFrame({ &#39;area&#39;: areas, &#39;rooms&#39;: rooms, &#39;age&#39;: ages, &#39;distance&#39;: distances, &#39;price&#39;: prices }) # 数据预处理 features = [&#39;area&#39;, &#39;rooms&#39;, &#39;age&#39;, &#39;distance&#39;] X = data[features].values y = data[&#39;price&#39;].values # 标准化特征 scaler = StandardScaler() X_scaled = scaler.fit_transform(X) # 分割数据集 X_train, X_test, y_train, y_test = train_test_split(X_scaled, y, test_size=0.2, random_state=42) # 构建模型 model = tf.keras.Sequential([ tf.keras.layers.Dense(64, activation=&#39;relu&#39;, input_shape=(4,)), tf.keras.layers.Dense(32, activation=&#39;relu&#39;), tf.keras.layers.Dense(16, activation=&#39;relu&#39;), tf.keras.layers.Dense(1) # 回归问题，输出层无激活函数 ]) # 编译模型 model.compile( optimizer=&#39;adam&#39;, loss=&#39;mse&#39;, metrics=[&#39;mae&#39;, &#39;mse&#39;] ) # 训练模型 history = model.fit( X_train, y_train, batch_size=32, epochs=100, validation_split=0.2, callbacks=[ tf.keras.callbacks.EarlyStopping(patience=10, restore_best_weights=True), tf.keras.callbacks.ReduceLROnPlateau(factor=0.5, patience=5) ], verbose=1 ) # 评估模型 test_loss, test_mae, test_mse = model.evaluate(X_test, y_test, verbose=0) print(f&#34;测试集MAE: {test_mae:.2f}万元&#34;) print(f&#34;测试集MSE: {test_mse:.2f}万元²&#34;) # 预测 predictions = model.predict(X_test[:5]) print(&#34;\n预测结果:&#34;) for i in range(5): print(f&#34;真实价格: {y_test[i]:.2f}万元, 预测价格: {predictions[i][0]:.2f}万元&#34;) # 保存模型 model.save(&#39;house_price_model.h5&#39;) print(&#34;\n模型已保存为 &#39;house_price_model.h5&#39;&#34;) 🎯 最佳实践 代码组织 # 推荐的项目结构 house_price_prediction/ ├── data/ │ ├── raw/ │ └── processed/ ├── models/ │ └── saved_models/ ├── notebooks/ │ └── exploration.ipynb ├── src/ │ ├── __init__.py │ ├── data_preprocessing.py │ ├── model.py │ └── train.py ├── config/ │ └── config.yaml └── requirements.txt 调试技巧 # 启用TensorFlow调试 import os os.environ[&#39;TF_CPP_MIN_LOG_LEVEL&#39;] = &#39;2&#39; # 减少警告信息 # 检查模型结构 model.summary() # 检查张量形状 print(f&#34;输入形状: {x_train.shape}&#34;) print(f&#34;输出形状: {model.predict(x_train[:1]).shape}&#34;) # 使用tf.debugging x = tf.constant([1, 2, 3]) tf.debugging.assert_shapes([ (x, (&#39;N&#39;,)), # 断言x的形状 ]) 📚 学习资源 官方教程 TensorFlow官方教程 Keras文档 TensorFlow 2.0快速入门 吴恩达课程 深度学习课程中关于TensorFlow的部分 实践项目 TensorFlow Examples Kaggle竞赛 Google Colab 🔧 常见问题 GPU内存不足 # 限制GPU内存使用 gpus = tf.config.experimental.list_physical_devices(&#39;GPU&#39;) if gpus: try: for gpu in gpus: tf.config.experimental.set_memory_growth(gpu, True) except RuntimeError as e: print(e) 模型不收敛 # 调整学习率 optimizer = tf.keras.optimizers.Adam(learning_rate=0.001) # 使用学习率调度 lr_schedule = tf.keras.optimizers.schedules.ExponentialDecay( initial_learning_rate=0.001, decay_steps=1000, decay_rate=0.9 ) optimizer = tf.keras.optimizers.Adam(learning_rate=lr_schedule) 数据预处理 # 正确的数据预处理流程 def preprocess_data(X, y): # 1. 处理缺失值 # 2. 特征缩放 scaler = StandardScaler() X_scaled = scaler.fit_transform(X) # 3. 分割数据集 X_train, X_test, y_train, y_test = train_test_split(X_scaled, y, test_size=0.2) return X_train, X_test, y_train, y_test, scaler 最近更新: {{ .Lastmod.Format “2006-01-02” }}">
+  <link rel="icon" href="/avatar/avatar.jpg" type="image/jpeg">
 
-    <meta property="og:url" content="http://localhost:1313/wiki/deep_learning/tensorflow/starter/">
-  <meta property="og:site_name" content="Yaku Makki">
-  <meta property="og:title" content="TensorFlow基础教程">
-  <meta property="og:description" content="TensorFlow基础教程 本教程将从零开始介绍TensorFlow的基础知识，包括环境搭建、基本概念、简单模型构建和训练。通过本教程，你将能够使用TensorFlow构建和训练基本的机器学习模型。
-🛠️ 环境搭建 安装TensorFlow # CPU版本 pip install tensorflow # GPU版本（需要CUDA支持） pip install tensorflow[and-cuda] # 验证安装 python -c &#34;import tensorflow as tf; print(tf.config.list_physical_devices(&#39;GPU&#39; if tf.test.is_gpu_available() else &#39;CPU&#39;))&#34; 推荐开发环境 # 创建虚拟环境 conda create -n tf_env python=3.9 conda activate tf_env # 安装TensorFlow和相关依赖 pip install tensorflow numpy matplotlib jupyter pandas scikit-learn # 启动Jupyter Notebook jupyter notebook 🎯 基础概念 Hello TensorFlow import tensorflow as tf # 打印TensorFlow版本 print(f&#34;TensorFlow版本: {tf.__version__}&#34;) # 创建常量张量 hello = tf.constant(&#34;Hello, TensorFlow!&#34;) print(f&#34;常量: {hello.numpy()}&#34;) # 基本运算 a = tf.constant(5) b = tf.constant(3) print(f&#34;5 &#43; 3 = {tf.add(a, b).numpy()}&#34;) print(f&#34;5 * 3 = {tf.multiply(a, b).numpy()}&#34;) 张量操作 import tensorflow as tf import numpy as np # 创建不同类型的张量 scalar = tf.constant(42) # 标量 vector = tf.constant([1, 2, 3, 4, 5]) # 向量 matrix = tf.constant([[1, 2], [3, 4], [5, 6]]) # 矩阵 tensor_3d = tf.constant(np.random.rand(2, 3, 4)) # 三维张量 print(f&#34;标量形状: {scalar.shape}&#34;) print(f&#34;向量形状: {vector.shape}&#34;) print(f&#34;矩阵形状: {matrix.shape}&#34;) print(f&#34;三维张量形状: {tensor_3d.shape}&#34;) # 张量运算 x = tf.constant([1, 2, 3, 4, 5]) y = tf.constant([6, 7, 8, 9, 10]) # 元素级运算 print(f&#34;x &#43; y = {tf.add(x, y).numpy()}&#34;) print(f&#34;x * y = {tf.multiply(x, y).numpy()}&#34;) # 广播机制 matrix = tf.constant([[1, 2], [3, 4]]) vector = tf.constant([5, 6]) print(f&#34;矩阵 &#43; 向量广播结果:\n{tf.add(matrix, vector).numpy()}&#34;) 🏗️ 第一个神经网络 线性回归模型 import tensorflow as tf import numpy as np import matplotlib.pyplot as plt # 生成模拟数据 np.random.seed(42) X = np.random.rand(100, 1) * 10 y = 2 * X &#43; 1 &#43; np.random.randn(100, 1) * 0.5 # 构建模型 model = tf.keras.Sequential([ tf.keras.layers.Dense(1, input_shape=(1,)) ]) # 编译模型 model.compile( optimizer=&#39;sgd&#39;, # 随机梯度下降 loss=&#39;mse&#39;, # 均方误差 metrics=[&#39;mae&#39;] # 平均绝对误差 ) # 模型摘要 model.summary() # 训练模型 history = model.fit(X, y, epochs=100, verbose=0) # 预测 y_pred = model.predict(X) # 可视化结果 plt.figure(figsize=(12, 4)) plt.subplot(1, 2, 1) plt.scatter(X, y, alpha=0.5, label=&#39;真实数据&#39;) plt.plot(X, y_pred, color=&#39;red&#39;, label=&#39;预测结果&#39;) plt.xlabel(&#39;X&#39;) plt.ylabel(&#39;y&#39;) plt.title(&#39;线性回归结果&#39;) plt.legend() plt.subplot(1, 2, 2) plt.plot(history.history[&#39;loss&#39;]) plt.xlabel(&#39;Epoch&#39;) plt.ylabel(&#39;Loss&#39;) plt.title(&#39;训练损失曲线&#39;) plt.tight_layout() plt.show() print(f&#34;模型权重: {model.weights[0].numpy().flatten()}&#34;) print(f&#34;模型偏置: {model.weights[1].numpy()}&#34;) 分类模型 - MNIST手写数字识别 import tensorflow as tf from tensorflow.keras.datasets import mnist from tensorflow.keras.utils import to_categorical # 加载MNIST数据集 (x_train, y_train), (x_test, y_test) = mnist.load_data() # 数据预处理 x_train = x_train.reshape(-1, 784) / 255.0 # 展平并归一化 x_test = x_test.reshape(-1, 784) / 255.0 y_train = to_categorical(y_train, 10) # one-hot编码 y_test = to_categorical(y_test, 10) # 构建模型 model = tf.keras.Sequential([ tf.keras.layers.Dense(128, activation=&#39;relu&#39;, input_shape=(784,)), tf.keras.layers.Dropout(0.2), # Dropout防止过拟合 tf.keras.layers.Dense(64, activation=&#39;relu&#39;), tf.keras.layers.Dense(10, activation=&#39;softmax&#39;) # 输出层 ]) # 编译模型 model.compile( optimizer=&#39;adam&#39;, # Adam优化器 loss=&#39;categorical_crossentropy&#39;, # 交叉熵损失 metrics=[&#39;accuracy&#39;] # 准确率 ) # 训练模型 history = model.fit( x_train, y_train, batch_size=128, epochs=10, validation_split=0.1, # 验证集 verbose=1 ) # 评估模型 test_loss, test_acc = model.evaluate(x_test, y_test, verbose=0) print(f&#34;测试集准确率: {test_acc:.4f}&#34;) # 预测 predictions = model.predict(x_test[:5]) predicted_labels = tf.argmax(predictions, axis=1).numpy() true_labels = tf.argmax(y_test[:5], axis=1).numpy() print(&#34;预测结果:&#34;, predicted_labels) print(&#34;真实标签:&#34;, true_labels) 📊 数据处理 使用tf.data API import tensorflow as tf import numpy as np # 创建数据集 def create_dataset(): # 生成随机数据 X = np.random.rand(1000, 10) y = np.random.randint(0, 2, 1000) # 创建tf.data.Dataset dataset = tf.data.Dataset.from_tensor_slices((X, y)) # 数据预处理 def preprocess(x, y): # 归一化 x = (x - tf.reduce_mean(x)) / tf.math.reduce_std(x) return x, y # 应用预处理 dataset = dataset.map(preprocess) # 打乱和批处理 dataset = dataset.shuffle(buffer_size=100) dataset = dataset.batch(32) # 重复和预取 dataset = dataset.repeat() dataset = dataset.prefetch(tf.data.AUTOTUNE) return dataset # 使用数据集训练 dataset = create_dataset() model = tf.keras.Sequential([ tf.keras.layers.Dense(64, activation=&#39;relu&#39;, input_shape=(10,)), tf.keras.layers.Dense(32, activation=&#39;relu&#39;), tf.keras.layers.Dense(1, activation=&#39;sigmoid&#39;) ]) model.compile(optimizer=&#39;adam&#39;, loss=&#39;binary_crossentropy&#39;, metrics=[&#39;accuracy&#39;]) # 训练 model.fit(dataset, epochs=5, steps_per_epoch=10) 图像数据增强 from tensorflow.keras.preprocessing.image import ImageDataGenerator # 创建图像数据生成器 datagen = ImageDataGenerator( rotation_range=20, # 随机旋转角度 width_shift_range=0.1, # 水平平移 height_shift_range=0.1, # 垂直平移 shear_range=0.1, # 剪切变换 zoom_range=0.1, # 缩放 horizontal_flip=True, # 水平翻转 fill_mode=&#39;nearest&#39; # 填充模式 ) # 应用数据增强 # datagen.fit(x_train) # 如果需要的话 # enhanced_data = datagen.flow(x_train, y_train, batch_size=32) 🎨 自定义模型和层 自定义层 import tensorflow as tf class CustomDense(tf.keras.layers.Layer): def __init__(self, units, activation=None, **kwargs): super(CustomDense, self).__init__(**kwargs) self.units = units self.activation = tf.keras.activations.get(activation) def build(self, input_shape): # 创建权重 self.w = self.add_weight( name=&#39;kernel&#39;, shape=(input_shape[-1], self.units), initializer=&#39;glorot_uniform&#39;, trainable=True ) self.b = self.add_weight( name=&#39;bias&#39;, shape=(self.units,), initializer=&#39;zeros&#39;, trainable=True ) def call(self, inputs): # 前向传播 output = tf.matmul(inputs, self.w) &#43; self.b if self.activation is not None: output = self.activation(output) return output def get_config(self): # 序列化配置 config = super(CustomDense, self).get_config() config.update({ &#39;units&#39;: self.units, &#39;activation&#39;: tf.keras.activations.serialize(self.activation) }) return config # 使用自定义层 model = tf.keras.Sequential([ CustomDense(128, activation=&#39;relu&#39;, input_shape=(784,)), CustomDense(64, activation=&#39;relu&#39;), CustomDense(10, activation=&#39;softmax&#39;) ]) 自定义模型 class CustomModel(tf.keras.Model): def __init__(self, num_classes): super(CustomModel, self).__init__() self.dense1 = tf.keras.layers.Dense(128, activation=&#39;relu&#39;) self.dense2 = tf.keras.layers.Dense(64, activation=&#39;relu&#39;) self.dense3 = tf.keras.layers.Dense(num_classes, activation=&#39;softmax&#39;) self.dropout = tf.keras.layers.Dropout(0.2) def call(self, inputs, training=False): x = self.dense1(inputs) x = self.dropout(x, training=training) x = self.dense2(x) x = self.dropout(x, training=training) return self.dense3(x) # 使用自定义模型 model = CustomModel(num_classes=10) model.compile(optimizer=&#39;adam&#39;, loss=&#39;sparse_categorical_crossentropy&#39;, metrics=[&#39;accuracy&#39;]) 🔧 模型保存和加载 保存和加载模型 import tensorflow as tf # 构建和训练模型 model = tf.keras.Sequential([ tf.keras.layers.Dense(64, activation=&#39;relu&#39;, input_shape=(10,)), tf.keras.layers.Dense(1, activation=&#39;sigmoid&#39;) ]) model.compile(optimizer=&#39;adam&#39;, loss=&#39;binary_crossentropy&#39;, metrics=[&#39;accuracy&#39;]) # 训练模型（这里使用随机数据作为示例） import numpy as np X_train = np.random.rand(100, 10) y_train = np.random.randint(0, 2, 100) model.fit(X_train, y_train, epochs=5, verbose=0) # 保存完整模型 model.save(&#39;my_model.h5&#39;) # HDF5格式 model.save(&#39;my_model&#39;) # TensorFlow SavedModel格式 # 加载模型 loaded_model_h5 = tf.keras.models.load_model(&#39;my_model.h5&#39;) loaded_model = tf.keras.models.load_model(&#39;my_model&#39;) # 比较预测结果 test_data = np.random.rand(5, 10) original_pred = model.predict(test_data) loaded_pred = loaded_model.predict(test_data) print(f&#34;预测结果一致: {np.allclose(original_pred, loaded_pred)}&#34;) 保存和加载权重 # 保存模型权重 model.save_weights(&#39;model_weights.h5&#39;) # 创建相同架构的新模型 new_model = tf.keras.Sequential([ tf.keras.layers.Dense(64, activation=&#39;relu&#39;, input_shape=(10,)), tf.keras.layers.Dense(1, activation=&#39;sigmoid&#39;) ]) # 加载权重 new_model.load_weights(&#39;model_weights.h5&#39;) # 验证权重是否相同 original_weights = model.get_weights() loaded_weights = new_model.get_weights() for i, (orig, loaded) in enumerate(zip(original_weights, loaded_weights)): print(f&#34;权重{i}一致: {np.allclose(orig, loaded)}&#34;) 📈 模型评估和可视化 评估指标 from sklearn.metrics import classification_report, confusion_matrix import seaborn as sns # 预测测试集 y_pred = model.predict(x_test) y_pred_classes = tf.argmax(y_pred, axis=1).numpy() y_true = tf.argmax(y_test, axis=1).numpy() # 分类报告 print(&#34;分类报告:&#34;) print(classification_report(y_true, y_pred_classes)) # 混淆矩阵 cm = confusion_matrix(y_true, y_pred_classes) plt.figure(figsize=(10, 8)) sns.heatmap(cm, annot=True, fmt=&#39;d&#39;, cmap=&#39;Blues&#39;) plt.xlabel(&#39;预测标签&#39;) plt.ylabel(&#39;真实标签&#39;) plt.title(&#39;混淆矩阵&#39;) plt.show() 训练历史可视化 import matplotlib.pyplot as plt # 训练历史 history = model.fit(x_train, y_train, validation_data=(x_val, y_val), epochs=20) # 绘制训练曲线 plt.figure(figsize=(12, 4)) # 损失曲线 plt.subplot(1, 2, 1) plt.plot(history.history[&#39;loss&#39;], label=&#39;训练损失&#39;) plt.plot(history.history[&#39;val_loss&#39;], label=&#39;验证损失&#39;) plt.xlabel(&#39;Epoch&#39;) plt.ylabel(&#39;Loss&#39;) plt.title(&#39;训练和验证损失&#39;) plt.legend() # 准确率曲线 plt.subplot(1, 2, 2) plt.plot(history.history[&#39;accuracy&#39;], label=&#39;训练准确率&#39;) plt.plot(history.history[&#39;val_accuracy&#39;], label=&#39;验证准确率&#39;) plt.xlabel(&#39;Epoch&#39;) plt.ylabel(&#39;Accuracy&#39;) plt.title(&#39;训练和验证准确率&#39;) plt.legend() plt.tight_layout() plt.show() 🚀 实际项目：房价预测 完整项目代码 import tensorflow as tf import numpy as np import pandas as pd from sklearn.model_selection import train_test_split from sklearn.preprocessing import StandardScaler # 生成模拟房价数据 np.random.seed(42) n_samples = 1000 # 特征：面积、房间数、年龄、距离市中心距离 areas = np.random.normal(100, 20, n_samples) # 平方米 rooms = np.random.randint(1, 6, n_samples) # 房间数 ages = np.random.randint(0, 50, n_samples) # 房屋年龄 distances = np.random.normal(10, 3, n_samples) # 距离市中心（公里） # 目标：房价（万元） prices = 50 &#43; 0.8 * areas &#43; 10 * rooms - 0.5 * ages - 2 * distances &#43; np.random.normal(0, 10, n_samples) # 创建DataFrame data = pd.DataFrame({ &#39;area&#39;: areas, &#39;rooms&#39;: rooms, &#39;age&#39;: ages, &#39;distance&#39;: distances, &#39;price&#39;: prices }) # 数据预处理 features = [&#39;area&#39;, &#39;rooms&#39;, &#39;age&#39;, &#39;distance&#39;] X = data[features].values y = data[&#39;price&#39;].values # 标准化特征 scaler = StandardScaler() X_scaled = scaler.fit_transform(X) # 分割数据集 X_train, X_test, y_train, y_test = train_test_split(X_scaled, y, test_size=0.2, random_state=42) # 构建模型 model = tf.keras.Sequential([ tf.keras.layers.Dense(64, activation=&#39;relu&#39;, input_shape=(4,)), tf.keras.layers.Dense(32, activation=&#39;relu&#39;), tf.keras.layers.Dense(16, activation=&#39;relu&#39;), tf.keras.layers.Dense(1) # 回归问题，输出层无激活函数 ]) # 编译模型 model.compile( optimizer=&#39;adam&#39;, loss=&#39;mse&#39;, metrics=[&#39;mae&#39;, &#39;mse&#39;] ) # 训练模型 history = model.fit( X_train, y_train, batch_size=32, epochs=100, validation_split=0.2, callbacks=[ tf.keras.callbacks.EarlyStopping(patience=10, restore_best_weights=True), tf.keras.callbacks.ReduceLROnPlateau(factor=0.5, patience=5) ], verbose=1 ) # 评估模型 test_loss, test_mae, test_mse = model.evaluate(X_test, y_test, verbose=0) print(f&#34;测试集MAE: {test_mae:.2f}万元&#34;) print(f&#34;测试集MSE: {test_mse:.2f}万元²&#34;) # 预测 predictions = model.predict(X_test[:5]) print(&#34;\n预测结果:&#34;) for i in range(5): print(f&#34;真实价格: {y_test[i]:.2f}万元, 预测价格: {predictions[i][0]:.2f}万元&#34;) # 保存模型 model.save(&#39;house_price_model.h5&#39;) print(&#34;\n模型已保存为 &#39;house_price_model.h5&#39;&#34;) 🎯 最佳实践 代码组织 # 推荐的项目结构 house_price_prediction/ ├── data/ │ ├── raw/ │ └── processed/ ├── models/ │ └── saved_models/ ├── notebooks/ │ └── exploration.ipynb ├── src/ │ ├── __init__.py │ ├── data_preprocessing.py │ ├── model.py │ └── train.py ├── config/ │ └── config.yaml └── requirements.txt 调试技巧 # 启用TensorFlow调试 import os os.environ[&#39;TF_CPP_MIN_LOG_LEVEL&#39;] = &#39;2&#39; # 减少警告信息 # 检查模型结构 model.summary() # 检查张量形状 print(f&#34;输入形状: {x_train.shape}&#34;) print(f&#34;输出形状: {model.predict(x_train[:1]).shape}&#34;) # 使用tf.debugging x = tf.constant([1, 2, 3]) tf.debugging.assert_shapes([ (x, (&#39;N&#39;,)), # 断言x的形状 ]) 📚 学习资源 官方教程 TensorFlow官方教程 Keras文档 TensorFlow 2.0快速入门 吴恩达课程 深度学习课程中关于TensorFlow的部分 实践项目 TensorFlow Examples Kaggle竞赛 Google Colab 🔧 常见问题 GPU内存不足 # 限制GPU内存使用 gpus = tf.config.experimental.list_physical_devices(&#39;GPU&#39;) if gpus: try: for gpu in gpus: tf.config.experimental.set_memory_growth(gpu, True) except RuntimeError as e: print(e) 模型不收敛 # 调整学习率 optimizer = tf.keras.optimizers.Adam(learning_rate=0.001) # 使用学习率调度 lr_schedule = tf.keras.optimizers.schedules.ExponentialDecay( initial_learning_rate=0.001, decay_steps=1000, decay_rate=0.9 ) optimizer = tf.keras.optimizers.Adam(learning_rate=lr_schedule) 数据预处理 # 正确的数据预处理流程 def preprocess_data(X, y): # 1. 处理缺失值 # 2. 特征缩放 scaler = StandardScaler() X_scaled = scaler.fit_transform(X) # 3. 分割数据集 X_train, X_test, y_train, y_test = train_test_split(X_scaled, y, test_size=0.2) return X_train, X_test, y_train, y_test, scaler 最近更新: {{ .Lastmod.Format “2006-01-02” }}">
-  <meta property="og:locale" content="zh">
-  <meta property="og:type" content="article">
-    <meta property="article:section" content="wiki">
-    <meta property="article:published_time" content="2025-10-24T21:58:35+08:00">
-    <meta property="article:modified_time" content="2025-10-24T21:58:35+08:00">
+  
+  <link rel="stylesheet" href="/css/main.min.b64e4527cc255b367461135391e39e321a5d86fc97defca99c7afda308ada007.css" integrity="sha256-tk5FJ8wlWzZ0YRNTkeOeMhpdhvyX3vypnHr9owitoAc=">
 
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
 
-  </head>
-  <body class="synthwave-bg">
-    <header class="app-header glass-morphism neon-border">
-      <a href="/"><img class="app-header-avatar" src="/avatar.jpg" alt="Yaku Makki" /></a>
-      <span class="app-header-title gradient-text">Yaku Makki</span>
-      <nav class="app-header-menu">
-          <a class="app-header-menu-item" href="/">首页</a>
-             | 
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/katex.min.css" crossorigin="anonymous">
+</head>
+<body>
+  <a class="skip-link" href="#main">跳到内容</a>
+
+  <div class="scene" aria-hidden="true">
+    <div class="scene-sky"></div>
+    <div class="scene-stars"></div>
+    <div class="scene-sun-halo"></div>
+    <div class="scene-sun"></div>
+    <div class="scene-mountains scene-mountains-far"></div>
+    <div class="scene-mountains scene-mountains-near"></div>
+    <div class="scene-horizon"></div>
+    <div class="scene-floor"></div>
+    <div class="scene-scanlines"></div>
+  </div>
+
+  <nav class="navbar" aria-label="主导航">
+    <div class="nav-inner">
+      <a class="logo" href="/" data-press>
+        <img class="logo-avatar" src="/avatar/avatar.jpg" alt="" width="34" height="34">
+        <span class="logo-text">Yaku Makki</span>
+      </a>
+      <div class="nav-menu-wrap">
+        <span class="nav-tick" aria-hidden="true"></span>
+        <ul class="nav-menu">
           
-          <a class="app-header-menu-item" href="/post/">博客</a>
-             | 
+          <li>
+            <a href="/" data-press>首页</a>
+          </li>
           
-          <a class="app-header-menu-item" href="/wiki/">维基</a>
-             | 
+          <li>
+            <a href="/post/" data-press>博客</a>
+          </li>
           
-          <a class="app-header-menu-item" href="/tags/">标签</a>
-             | 
+          <li>
+            <a href="/wiki/" data-press>维基</a>
+          </li>
           
-          <a class="app-header-menu-item" href="/about/">关于</a>
-      </nav>
-      <p>个人小巢</p>
-      <div class="app-header-social">
-        
-          <a href="https://github.com/makkichan947" target="_blank" rel="noreferrer noopener me" class="pulse-glow">
-            <svg class="icon icon-brand-github" viewBox="0 0 24 24" fill="currentColor"><title>GitHub</title><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg>
-          </a>
-        
-          <a href="mailto:yakumakki947@hotmail.com" target="_blank" rel="noreferrer noopener me" class="pulse-glow">
-            <svg class="icon icon-mail" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><title>mail</title><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
-          </a>
-        
-          <a href="https://x.com/Makki_Yaku947" target="_blank" rel="noreferrer noopener me" class="pulse-glow">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-link">
-  <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path>
-  <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path>
-</svg>
-          </a>
-        
-          <a href="https://www.twitch.tv/u/makkichan947" target="_blank" rel="noreferrer noopener me" class="pulse-glow">
-            <svg class="icon icon-brand-twitch" viewBox="0 0 24 24" fill="currentColor"><title>Twitch</title><path d="M11.571 4.714h1.715v5.143H11.57zm4.715 0H18v5.143h-1.714zM6 0L1.714 4.286v15.428h5.143V24l4.286-4.286h3.428L22.286 12V0zm14.571 11.143l-3.428 3.428h-3.429l-3 3v-3H6.857V1.714h13.714Z"/></svg>
-          </a>
-        
+          <li>
+            <a href="/tags/" data-press>标签</a>
+          </li>
+          
+          <li>
+            <a href="/about/" data-press>关于</a>
+          </li>
+          
+          
+          <li>
+            <button id="search-toggle" class="search-toggle" type="button" title="搜索 (Ctrl+K 或 /)" aria-haspopup="dialog" aria-expanded="false" data-press>搜索</button>
+          </li>
+          
+        </ul>
       </div>
-    </header>
-    <main class="app-container glass-morphism glow-effect">
-      <div class="floating-particles">
-        <div class="particle" style="left: 10%; animation-delay: 0s;"></div>
-        <div class="particle" style="left: 20%; animation-delay: 1s;"></div>
-        <div class="particle" style="left: 30%; animation-delay: 2s;"></div>
-        <div class="particle" style="left: 40%; animation-delay: 3s;"></div>
-        <div class="particle" style="left: 50%; animation-delay: 4s;"></div>
-        <div class="particle" style="left: 60%; animation-delay: 5s;"></div>
-        <div class="particle" style="left: 70%; animation-delay: 6s;"></div>
-        <div class="particle" style="left: 80%; animation-delay: 7s;"></div>
-        <div class="particle" style="left: 90%; animation-delay: 8s;"></div>
-      </div>
-      
-  <article class="post enhanced-card glow-effect">
-    <header class="post-header">
-      <h1 class ="post-title gradient-text">TensorFlow基础教程</h1>
-      <div class="post-meta">
-        <div>
-          <svg class="icon icon-calendar" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><title>calendar</title><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
-          Oct 24, 2025
+    </div>
+  </nav>
+
+  
+  <div class="sheet-scrim" id="sheet-scrim"></div>
+  <section class="sheet" id="search-sheet" role="dialog" aria-modal="true" aria-label="搜索" aria-hidden="true">
+    <div class="sheet-panel" id="sheet-panel">
+      <div class="sheet-handle" id="sheet-handle" role="presentation" aria-hidden="true"></div>
+      <div class="sheet-body">
+        <div class="search-field">
+          <input id="search-input" type="search" placeholder="搜索文章和 Wiki…"
+                 autocomplete="off" spellcheck="false" aria-controls="search-results">
+          <span class="search-key" aria-hidden="true">/</span>
         </div>
-        <div>
-          <svg class="icon icon-clock" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><title>clock</title><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
-          7 min read
-        </div>
+        <div id="search-results" class="search-results" role="listbox" aria-label="搜索结果"></div>
       </div>
-    </header>
-    <div class="post-content">
-      <h1 id="tensorflow基础教程">TensorFlow基础教程</h1>
+    </div>
+  </section>
+  
+
+  <main class="main" id="main">
+    
+<header class="page-head">
+  <nav class="crumb" aria-label="面包屑">
+    <a href="/" data-press>首页</a>
+    <span class="sep">/</span>
+    <a href="/wiki/" data-press>维基</a>
+    
+    
+    <span class="sep">/</span>
+    <a href="/wiki/deep_learning/tensorflow/" data-press>TensorFlow框架</a>
+    
+    
+  </nav>
+  <h1>TensorFlow基础教程</h1>
+  
+</header>
+
+<div class="wiki-layout">
+  <article class="article">
+    <div class="article-content"><h1 id="tensorflow基础教程">TensorFlow基础教程</h1>
 <p>本教程将从零开始介绍TensorFlow的基础知识，包括环境搭建、基本概念、简单模型构建和训练。通过本教程，你将能够使用TensorFlow构建和训练基本的机器学习模型。</p>
 <h2 id="-环境搭建">🛠️ 环境搭建</h2>
 <h3 id="安装tensorflow">安装TensorFlow</h3>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># CPU版本</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># CPU版本</span>
 </span></span><span style="display:flex;"><span>pip install tensorflow
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span><span style="color:#75715e"># GPU版本（需要CUDA支持）</span>
@@ -115,7 +124,7 @@
 </span></span><span style="display:flex;"><span><span style="color:#75715e"># 验证安装</span>
 </span></span><span style="display:flex;"><span>python -c <span style="color:#e6db74">&#34;import tensorflow as tf; print(tf.config.list_physical_devices(&#39;GPU&#39; if tf.test.is_gpu_available() else &#39;CPU&#39;))&#34;</span>
 </span></span></code></pre></div><h3 id="推荐开发环境">推荐开发环境</h3>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># 创建虚拟环境</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># 创建虚拟环境</span>
 </span></span><span style="display:flex;"><span>conda create -n tf_env python<span style="color:#f92672">=</span>3.9
 </span></span><span style="display:flex;"><span>conda activate tf_env
 </span></span><span style="display:flex;"><span>
@@ -126,7 +135,7 @@
 </span></span><span style="display:flex;"><span>jupyter notebook
 </span></span></code></pre></div><h2 id="-基础概念">🎯 基础概念</h2>
 <h3 id="hello-tensorflow">Hello TensorFlow</h3>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#f92672">import</span> tensorflow <span style="color:#66d9ef">as</span> tf
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#f92672">import</span> tensorflow <span style="color:#66d9ef">as</span> tf
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span><span style="color:#75715e"># 打印TensorFlow版本</span>
 </span></span><span style="display:flex;"><span>print(<span style="color:#e6db74">f</span><span style="color:#e6db74">&#34;TensorFlow版本: </span><span style="color:#e6db74">{</span>tf<span style="color:#f92672">.</span>__version__<span style="color:#e6db74">}</span><span style="color:#e6db74">&#34;</span>)
@@ -141,7 +150,7 @@
 </span></span><span style="display:flex;"><span>print(<span style="color:#e6db74">f</span><span style="color:#e6db74">&#34;5 + 3 = </span><span style="color:#e6db74">{</span>tf<span style="color:#f92672">.</span>add(a, b)<span style="color:#f92672">.</span>numpy()<span style="color:#e6db74">}</span><span style="color:#e6db74">&#34;</span>)
 </span></span><span style="display:flex;"><span>print(<span style="color:#e6db74">f</span><span style="color:#e6db74">&#34;5 * 3 = </span><span style="color:#e6db74">{</span>tf<span style="color:#f92672">.</span>multiply(a, b)<span style="color:#f92672">.</span>numpy()<span style="color:#e6db74">}</span><span style="color:#e6db74">&#34;</span>)
 </span></span></code></pre></div><h3 id="张量操作">张量操作</h3>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#f92672">import</span> tensorflow <span style="color:#66d9ef">as</span> tf
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#f92672">import</span> tensorflow <span style="color:#66d9ef">as</span> tf
 </span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> numpy <span style="color:#66d9ef">as</span> np
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span><span style="color:#75715e"># 创建不同类型的张量</span>
@@ -169,7 +178,7 @@
 </span></span><span style="display:flex;"><span>print(<span style="color:#e6db74">f</span><span style="color:#e6db74">&#34;矩阵 + 向量广播结果:</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">{</span>tf<span style="color:#f92672">.</span>add(matrix, vector)<span style="color:#f92672">.</span>numpy()<span style="color:#e6db74">}</span><span style="color:#e6db74">&#34;</span>)
 </span></span></code></pre></div><h2 id="-第一个神经网络">🏗️ 第一个神经网络</h2>
 <h3 id="线性回归模型">线性回归模型</h3>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#f92672">import</span> tensorflow <span style="color:#66d9ef">as</span> tf
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#f92672">import</span> tensorflow <span style="color:#66d9ef">as</span> tf
 </span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> numpy <span style="color:#66d9ef">as</span> np
 </span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> matplotlib.pyplot <span style="color:#66d9ef">as</span> plt
 </span></span><span style="display:flex;"><span>
@@ -222,7 +231,7 @@
 </span></span><span style="display:flex;"><span>print(<span style="color:#e6db74">f</span><span style="color:#e6db74">&#34;模型权重: </span><span style="color:#e6db74">{</span>model<span style="color:#f92672">.</span>weights[<span style="color:#ae81ff">0</span>]<span style="color:#f92672">.</span>numpy()<span style="color:#f92672">.</span>flatten()<span style="color:#e6db74">}</span><span style="color:#e6db74">&#34;</span>)
 </span></span><span style="display:flex;"><span>print(<span style="color:#e6db74">f</span><span style="color:#e6db74">&#34;模型偏置: </span><span style="color:#e6db74">{</span>model<span style="color:#f92672">.</span>weights[<span style="color:#ae81ff">1</span>]<span style="color:#f92672">.</span>numpy()<span style="color:#e6db74">}</span><span style="color:#e6db74">&#34;</span>)
 </span></span></code></pre></div><h3 id="分类模型---mnist手写数字识别">分类模型 - MNIST手写数字识别</h3>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#f92672">import</span> tensorflow <span style="color:#66d9ef">as</span> tf
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#f92672">import</span> tensorflow <span style="color:#66d9ef">as</span> tf
 </span></span><span style="display:flex;"><span><span style="color:#f92672">from</span> tensorflow.keras.datasets <span style="color:#f92672">import</span> mnist
 </span></span><span style="display:flex;"><span><span style="color:#f92672">from</span> tensorflow.keras.utils <span style="color:#f92672">import</span> to_categorical
 </span></span><span style="display:flex;"><span>
@@ -272,7 +281,7 @@
 </span></span><span style="display:flex;"><span>print(<span style="color:#e6db74">&#34;真实标签:&#34;</span>, true_labels)
 </span></span></code></pre></div><h2 id="-数据处理">📊 数据处理</h2>
 <h3 id="使用tfdata-api">使用tf.data API</h3>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#f92672">import</span> tensorflow <span style="color:#66d9ef">as</span> tf
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#f92672">import</span> tensorflow <span style="color:#66d9ef">as</span> tf
 </span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> numpy <span style="color:#66d9ef">as</span> np
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span><span style="color:#75715e"># 创建数据集</span>
@@ -317,7 +326,7 @@
 </span></span><span style="display:flex;"><span><span style="color:#75715e"># 训练</span>
 </span></span><span style="display:flex;"><span>model<span style="color:#f92672">.</span>fit(dataset, epochs<span style="color:#f92672">=</span><span style="color:#ae81ff">5</span>, steps_per_epoch<span style="color:#f92672">=</span><span style="color:#ae81ff">10</span>)
 </span></span></code></pre></div><h3 id="图像数据增强">图像数据增强</h3>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#f92672">from</span> tensorflow.keras.preprocessing.image <span style="color:#f92672">import</span> ImageDataGenerator
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#f92672">from</span> tensorflow.keras.preprocessing.image <span style="color:#f92672">import</span> ImageDataGenerator
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span><span style="color:#75715e"># 创建图像数据生成器</span>
 </span></span><span style="display:flex;"><span>datagen <span style="color:#f92672">=</span> ImageDataGenerator(
@@ -335,7 +344,7 @@
 </span></span><span style="display:flex;"><span><span style="color:#75715e"># enhanced_data = datagen.flow(x_train, y_train, batch_size=32)</span>
 </span></span></code></pre></div><h2 id="-自定义模型和层">🎨 自定义模型和层</h2>
 <h3 id="自定义层">自定义层</h3>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#f92672">import</span> tensorflow <span style="color:#66d9ef">as</span> tf
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#f92672">import</span> tensorflow <span style="color:#66d9ef">as</span> tf
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">CustomDense</span>(tf<span style="color:#f92672">.</span>keras<span style="color:#f92672">.</span>layers<span style="color:#f92672">.</span>Layer):
 </span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">__init__</span>(self, units, activation<span style="color:#f92672">=</span><span style="color:#66d9ef">None</span>, <span style="color:#f92672">**</span>kwargs):
@@ -381,7 +390,7 @@
 </span></span><span style="display:flex;"><span>    CustomDense(<span style="color:#ae81ff">10</span>, activation<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;softmax&#39;</span>)
 </span></span><span style="display:flex;"><span>])
 </span></span></code></pre></div><h3 id="自定义模型">自定义模型</h3>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">CustomModel</span>(tf<span style="color:#f92672">.</span>keras<span style="color:#f92672">.</span>Model):
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">CustomModel</span>(tf<span style="color:#f92672">.</span>keras<span style="color:#f92672">.</span>Model):
 </span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">__init__</span>(self, num_classes):
 </span></span><span style="display:flex;"><span>        super(CustomModel, self)<span style="color:#f92672">.</span><span style="color:#a6e22e">__init__</span>()
 </span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>dense1 <span style="color:#f92672">=</span> tf<span style="color:#f92672">.</span>keras<span style="color:#f92672">.</span>layers<span style="color:#f92672">.</span>Dense(<span style="color:#ae81ff">128</span>, activation<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;relu&#39;</span>)
@@ -401,7 +410,7 @@
 </span></span><span style="display:flex;"><span>model<span style="color:#f92672">.</span>compile(optimizer<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;adam&#39;</span>, loss<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;sparse_categorical_crossentropy&#39;</span>, metrics<span style="color:#f92672">=</span>[<span style="color:#e6db74">&#39;accuracy&#39;</span>])
 </span></span></code></pre></div><h2 id="-模型保存和加载">🔧 模型保存和加载</h2>
 <h3 id="保存和加载模型">保存和加载模型</h3>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#f92672">import</span> tensorflow <span style="color:#66d9ef">as</span> tf
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#f92672">import</span> tensorflow <span style="color:#66d9ef">as</span> tf
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span><span style="color:#75715e"># 构建和训练模型</span>
 </span></span><span style="display:flex;"><span>model <span style="color:#f92672">=</span> tf<span style="color:#f92672">.</span>keras<span style="color:#f92672">.</span>Sequential([
@@ -433,7 +442,7 @@
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span>print(<span style="color:#e6db74">f</span><span style="color:#e6db74">&#34;预测结果一致: </span><span style="color:#e6db74">{</span>np<span style="color:#f92672">.</span>allclose(original_pred, loaded_pred)<span style="color:#e6db74">}</span><span style="color:#e6db74">&#34;</span>)
 </span></span></code></pre></div><h3 id="保存和加载权重">保存和加载权重</h3>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#75715e"># 保存模型权重</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#75715e"># 保存模型权重</span>
 </span></span><span style="display:flex;"><span>model<span style="color:#f92672">.</span>save_weights(<span style="color:#e6db74">&#39;model_weights.h5&#39;</span>)
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span><span style="color:#75715e"># 创建相同架构的新模型</span>
@@ -453,7 +462,7 @@
 </span></span><span style="display:flex;"><span>    print(<span style="color:#e6db74">f</span><span style="color:#e6db74">&#34;权重</span><span style="color:#e6db74">{</span>i<span style="color:#e6db74">}</span><span style="color:#e6db74">一致: </span><span style="color:#e6db74">{</span>np<span style="color:#f92672">.</span>allclose(orig, loaded)<span style="color:#e6db74">}</span><span style="color:#e6db74">&#34;</span>)
 </span></span></code></pre></div><h2 id="-模型评估和可视化">📈 模型评估和可视化</h2>
 <h3 id="评估指标">评估指标</h3>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#f92672">from</span> sklearn.metrics <span style="color:#f92672">import</span> classification_report, confusion_matrix
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#f92672">from</span> sklearn.metrics <span style="color:#f92672">import</span> classification_report, confusion_matrix
 </span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> seaborn <span style="color:#66d9ef">as</span> sns
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span><span style="color:#75715e"># 预测测试集</span>
@@ -474,7 +483,7 @@
 </span></span><span style="display:flex;"><span>plt<span style="color:#f92672">.</span>title(<span style="color:#e6db74">&#39;混淆矩阵&#39;</span>)
 </span></span><span style="display:flex;"><span>plt<span style="color:#f92672">.</span>show()
 </span></span></code></pre></div><h3 id="训练历史可视化">训练历史可视化</h3>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#f92672">import</span> matplotlib.pyplot <span style="color:#66d9ef">as</span> plt
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#f92672">import</span> matplotlib.pyplot <span style="color:#66d9ef">as</span> plt
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span><span style="color:#75715e"># 训练历史</span>
 </span></span><span style="display:flex;"><span>history <span style="color:#f92672">=</span> model<span style="color:#f92672">.</span>fit(x_train, y_train, validation_data<span style="color:#f92672">=</span>(x_val, y_val), epochs<span style="color:#f92672">=</span><span style="color:#ae81ff">20</span>)
@@ -504,7 +513,7 @@
 </span></span><span style="display:flex;"><span>plt<span style="color:#f92672">.</span>show()
 </span></span></code></pre></div><h2 id="-实际项目房价预测">🚀 实际项目：房价预测</h2>
 <h3 id="完整项目代码">完整项目代码</h3>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#f92672">import</span> tensorflow <span style="color:#66d9ef">as</span> tf
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#f92672">import</span> tensorflow <span style="color:#66d9ef">as</span> tf
 </span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> numpy <span style="color:#66d9ef">as</span> np
 </span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> pandas <span style="color:#66d9ef">as</span> pd
 </span></span><span style="display:flex;"><span><span style="color:#f92672">from</span> sklearn.model_selection <span style="color:#f92672">import</span> train_test_split
@@ -588,7 +597,7 @@
 </span></span><span style="display:flex;"><span>print(<span style="color:#e6db74">&#34;</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">模型已保存为 &#39;house_price_model.h5&#39;&#34;</span>)
 </span></span></code></pre></div><h2 id="-最佳实践">🎯 最佳实践</h2>
 <h3 id="代码组织">代码组织</h3>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#75715e"># 推荐的项目结构</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#75715e"># 推荐的项目结构</span>
 </span></span><span style="display:flex;"><span>house_price_prediction<span style="color:#f92672">/</span>
 </span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">├──</span> data<span style="color:#f92672">/</span>
 </span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">│</span>   <span style="color:#960050;background-color:#1e0010">├──</span> raw<span style="color:#f92672">/</span>
@@ -606,7 +615,7 @@
 </span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">│</span>   <span style="color:#960050;background-color:#1e0010">└──</span> config<span style="color:#f92672">.</span>yaml
 </span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">└──</span> requirements<span style="color:#f92672">.</span>txt
 </span></span></code></pre></div><h3 id="调试技巧">调试技巧</h3>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#75715e"># 启用TensorFlow调试</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#75715e"># 启用TensorFlow调试</span>
 </span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> os
 </span></span><span style="display:flex;"><span>os<span style="color:#f92672">.</span>environ[<span style="color:#e6db74">&#39;TF_CPP_MIN_LOG_LEVEL&#39;</span>] <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;2&#39;</span>  <span style="color:#75715e"># 减少警告信息</span>
 </span></span><span style="display:flex;"><span>
@@ -641,7 +650,7 @@
 </ul>
 <h2 id="-常见问题">🔧 常见问题</h2>
 <h3 id="gpu内存不足">GPU内存不足</h3>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#75715e"># 限制GPU内存使用</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#75715e"># 限制GPU内存使用</span>
 </span></span><span style="display:flex;"><span>gpus <span style="color:#f92672">=</span> tf<span style="color:#f92672">.</span>config<span style="color:#f92672">.</span>experimental<span style="color:#f92672">.</span>list_physical_devices(<span style="color:#e6db74">&#39;GPU&#39;</span>)
 </span></span><span style="display:flex;"><span><span style="color:#66d9ef">if</span> gpus:
 </span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">try</span>:
@@ -650,7 +659,7 @@
 </span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">except</span> <span style="color:#a6e22e">RuntimeError</span> <span style="color:#66d9ef">as</span> e:
 </span></span><span style="display:flex;"><span>        print(e)
 </span></span></code></pre></div><h3 id="模型不收敛">模型不收敛</h3>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#75715e"># 调整学习率</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#75715e"># 调整学习率</span>
 </span></span><span style="display:flex;"><span>optimizer <span style="color:#f92672">=</span> tf<span style="color:#f92672">.</span>keras<span style="color:#f92672">.</span>optimizers<span style="color:#f92672">.</span>Adam(learning_rate<span style="color:#f92672">=</span><span style="color:#ae81ff">0.001</span>)
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span><span style="color:#75715e"># 使用学习率调度</span>
@@ -661,7 +670,7 @@
 </span></span><span style="display:flex;"><span>)
 </span></span><span style="display:flex;"><span>optimizer <span style="color:#f92672">=</span> tf<span style="color:#f92672">.</span>keras<span style="color:#f92672">.</span>optimizers<span style="color:#f92672">.</span>Adam(learning_rate<span style="color:#f92672">=</span>lr_schedule)
 </span></span></code></pre></div><h3 id="数据预处理">数据预处理</h3>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#75715e"># 正确的数据预处理流程</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#75715e"># 正确的数据预处理流程</span>
 </span></span><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">preprocess_data</span>(X, y):
 </span></span><span style="display:flex;"><span>    <span style="color:#75715e"># 1. 处理缺失值</span>
 </span></span><span style="display:flex;"><span>    <span style="color:#75715e"># 2. 特征缩放</span>
@@ -674,30 +683,85 @@
 </span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> X_train, X_test, y_train, y_test, scaler
 </span></span></code></pre></div><hr>
 <p><em>最近更新: {{ .Lastmod.Format &ldquo;2006-01-02&rdquo; }}</em></p>
+</div>
+    
+<nav class="pager" aria-label="文章导航">
+  
+  <a href="/wiki/deep_learning/tensorflow/advanced_1/" data-press>
+    <span class="dir">← 上一篇</span>TensorFlow高级特性
+  </a>
+  
+  
+</nav>
 
+
+    
+<div class="comments">
+  <h2 class="comments-title">评论</h2>
+  <div id="utterances"></div>
+  <script>
+    (function () {
+      if (window.location.protocol === 'file:') return;
+      var s = document.createElement('script');
+      s.src = 'https://utteranc.es/client.js';
+      s.async = true;
+      s.setAttribute('repo', "\"makkichan947/makkichan947.github.io\"");
+      s.setAttribute('issue-term', "\"pathname\"");
+      s.setAttribute('theme', "\"github-dark\"");
+      s.setAttribute('crossorigin', 'anonymous');
+      document.getElementById('utterances').appendChild(s);
+    })();
+  </script>
+</div>
+
+
+  </article>
+  
+</div>
+
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+      <div class="footer-links">
+        
+        <a href="https://github.com/makkichan947" target="_blank" rel="noopener" title="Github" data-press>Github</a>
+        
+        <a href="mailto:yakumakki947@hotmail.com" target="_blank" rel="noopener" title="Email" data-press>Email</a>
+        
+        <a href="https://x.com/Makki_Yaku947" target="_blank" rel="noopener" title="Twitter" data-press>Twitter</a>
+        
+        <a href="https://www.twitch.tv/u/makkichan947" target="_blank" rel="noopener" title="Twitch" data-press>Twitch</a>
+        
+      </div>
+      <p>&copy; 2026 Yaku Makki</p>
+      <p>Powered by <a href="https://gohugo.io" target="_blank" rel="noopener">Hugo</a> · Makki Theme</p>
       
-      <div class="post-separator">------------------------------------------------------------------------</div>
-      
-    </div>
-    <div class="post-footer">
-      
-      <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
-      <div class="busuanzi-container">
-        <span id="busuanzi_container_page_pv">--本文总阅读量<span id="busuanzi_value_page_pv"></span>次--</span>
+      <div class="stats">
+        <span>访客 <span id="busuanzi_value_site_uv"></span></span>
+        <span>访问 <span id="busuanzi_value_site_pv"></span></span>
+        <span>本页 <span id="busuanzi_value_page_pv"></span></span>
       </div>
       
-      
-      <script src="https://utteranc.es/client.js"
-        repo="makkichan947/makkichan947.github.io"
-        issue-term="pathname"
-        label="Utterances"
-        theme="github-dark"
-        crossorigin="anonymous"
-        async>
-      </script>
     </div>
-  </article>
+  </footer>
 
-    </main>
-  </body>
+  <button class="back-to-top" id="back-to-top" type="button" aria-label="回到顶部" data-press>
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 19V5"/><path d="M5 12l7-7 7 7"/></svg>
+  </button>
+
+  
+  <script src="/js/main.min.21b3296e340ecb2ced2fb338acc5c540b53c154fb3595e8efddf10016cc5226d.js" integrity="sha256-IbMpbjQOyyztL7M4rMXFQLU8FU&#43;zWV6O/d8QAWzFIm0=" defer></script>
+  
+  
+  <script src="/js/search.min.b2d6ba6610ce24454bc1436dc521dcfd878b2583ad9f65f77aadedaaa1e1a54c.js" integrity="sha256-sta6ZhDOJEVLwUNtxSHc/YeLJYOtn2X3eq3tqqHhpUw=" defer></script>
+  
+
+  
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+  
+
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/katex.min.js" crossorigin="anonymous"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/contrib/auto-render.min.js" crossorigin="anonymous"></script>
+</body>
 </html>

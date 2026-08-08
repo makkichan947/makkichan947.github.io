@@ -1,0 +1,14 @@
+{{ if or .PrevInSection .NextInSection }}
+<nav class="pager" aria-label="文章导航">
+  {{ with .PrevInSection }}
+  <a href="{{ .RelPermalink }}" data-press>
+    <span class="dir">← 上一篇</span>{{ .Title }}
+  </a>
+  {{ end }}
+  {{ with .NextInSection }}
+  <a href="{{ .RelPermalink }}" class="is-next" data-press>
+    <span class="dir">下一篇 →</span>{{ .Title }}
+  </a>
+  {{ end }}
+</nav>
+{{ end }}

@@ -1,112 +1,121 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="zh">
-  <head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
-    <title>TensorFlow高级应用 // Yaku Makki</title>
-    <link rel="shortcut icon" href="./avatar.jpg" />
-    <meta charset="utf-8" />
-    <meta name="generator" content="Hugo 0.151.2">
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="author" content="Yaku Makki" />
-    <meta name="description" content="" />
-    <link rel="stylesheet" href="/css/main.min.422840b4454cb211f5b3dab61f082cdff508e88825173c31806835cb75529734.css" />
-    
+<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>TensorFlow高级应用 · Yaku Makki</title>
+  <meta name="description" content="个人小巢">
+  <meta name="theme-color" content="#0a0a0f">
+  <script>document.documentElement.classList.add('js');</script>
 
-    
-    
-  <meta name="twitter:card" content="summary">
-  <meta name="twitter:title" content="TensorFlow高级应用">
-  <meta name="twitter:description" content="TensorFlow高级应用 本章介绍TensorFlow在实际项目中的高级应用，包括计算机视觉、自然语言处理、强化学习、模型部署等领域的完整解决方案和最佳实践。
-🎨 计算机视觉应用 目标检测 - YOLO实现 import tensorflow as tf import numpy as np import cv2 def create_yolo_model(num_classes, input_shape=(416, 416, 3)): &#34;&#34;&#34;创建YOLO模型&#34;&#34;&#34; inputs = tf.keras.Input(shape=input_shape) # 特征提取网络 x = tf.keras.layers.Conv2D(32, 3, strides=1, padding=&#39;same&#39;, activation=&#39;relu&#39;)(inputs) x = tf.keras.layers.BatchNormalization()(x) x = tf.keras.layers.MaxPooling2D(pool_size=2)(x) x = tf.keras.layers.Conv2D(64, 3, strides=1, padding=&#39;same&#39;, activation=&#39;relu&#39;)(x) x = tf.keras.layers.BatchNormalization()(x) x = tf.keras.layers.MaxPooling2D(pool_size=2)(x) x = tf.keras.layers.Conv2D(128, 3, strides=1, padding=&#39;same&#39;, activation=&#39;relu&#39;)(x) x = tf.keras.layers.BatchNormalization()(x) x = tf.keras.layers.MaxPooling2D(pool_size=2)(x) # 检测头 x = tf.keras.layers.Conv2D(256, 3, strides=1, padding=&#39;same&#39;, activation=&#39;relu&#39;)(x) x = tf.keras.layers.Conv2D(512, 3, strides=1, padding=&#39;same&#39;, activation=&#39;relu&#39;)(x) # 输出层：边界框、置信度和类别预测 output = tf.keras.layers.Conv2D( num_classes &#43; 5, 1, strides=1, padding=&#39;same&#39;, activation=&#39;linear&#39; )(x) return tf.keras.Model(inputs=inputs, outputs=output) # YOLO损失函数 class YOLOLoss(tf.keras.losses.Loss): def __init__(self, num_classes, grid_size=13, **kwargs): super(YOLOLoss, self).__init__(**kwargs) self.num_classes = num_classes self.grid_size = grid_size def call(self, y_true, y_pred): # 实现YOLO损失函数 # 包括边界框回归损失、置信度损失和分类损失 return total_loss # 创建和训练YOLO模型 model = create_yolo_model(num_classes=20) model.compile( optimizer=tf.keras.optimizers.Adam(learning_rate=0.001), loss=YOLOLoss(num_classes=20), metrics=[&#39;accuracy&#39;] ) 图像分割 - U-Net实现 def create_unet_model(input_shape=(256, 256, 3), num_classes=1): &#34;&#34;&#34;创建U-Net模型&#34;&#34;&#34; inputs = tf.keras.Input(shape=input_shape) # 编码器 c1 = tf.keras.layers.Conv2D(64, 3, padding=&#39;same&#39;, activation=&#39;relu&#39;)(inputs) c1 = tf.keras.layers.Conv2D(64, 3, padding=&#39;same&#39;, activation=&#39;relu&#39;)(c1) p1 = tf.keras.layers.MaxPooling2D(pool_size=2)(c1) c2 = tf.keras.layers.Conv2D(128, 3, padding=&#39;same&#39;, activation=&#39;relu&#39;)(p1) c2 = tf.keras.layers.Conv2D(128, 3, padding=&#39;same&#39;, activation=&#39;relu&#39;)(c2) p2 = tf.keras.layers.MaxPooling2D(pool_size=2)(c2) c3 = tf.keras.layers.Conv2D(256, 3, padding=&#39;same&#39;, activation=&#39;relu&#39;)(p2) c3 = tf.keras.layers.Conv2D(256, 3, padding=&#39;same&#39;, activation=&#39;relu&#39;)(c3) p3 = tf.keras.layers.MaxPooling2D(pool_size=2)(c3) # 瓶颈层 c4 = tf.keras.layers.Conv2D(512, 3, padding=&#39;same&#39;, activation=&#39;relu&#39;)(p3) c4 = tf.keras.layers.Conv2D(512, 3, padding=&#39;same&#39;, activation=&#39;relu&#39;)(c4) # 解码器 u5 = tf.keras.layers.Conv2DTranspose(256, 2, strides=2, padding=&#39;same&#39;)(c4) u5 = tf.keras.layers.concatenate([u5, c3]) c5 = tf.keras.layers.Conv2D(256, 3, padding=&#39;same&#39;, activation=&#39;relu&#39;)(u5) c5 = tf.keras.layers.Conv2D(256, 3, padding=&#39;same&#39;, activation=&#39;relu&#39;)(c5) u6 = tf.keras.layers.Conv2DTranspose(128, 2, strides=2, padding=&#39;same&#39;)(c5) u6 = tf.keras.layers.concatenate([u6, c2]) c6 = tf.keras.layers.Conv2D(128, 3, padding=&#39;same&#39;, activation=&#39;relu&#39;)(u6) c6 = tf.keras.layers.Conv2D(128, 3, padding=&#39;same&#39;, activation=&#39;relu&#39;)(c6) u7 = tf.keras.layers.Conv2DTranspose(64, 2, strides=2, padding=&#39;same&#39;)(c6) u7 = tf.keras.layers.concatenate([u7, c1]) c7 = tf.keras.layers.Conv2D(64, 3, padding=&#39;same&#39;, activation=&#39;relu&#39;)(u7) c7 = tf.keras.layers.Conv2D(64, 3, padding=&#39;same&#39;, activation=&#39;relu&#39;)(c7) # 输出层 outputs = tf.keras.layers.Conv2D(num_classes, 1, activation=&#39;sigmoid&#39;)(c7) return tf.keras.Model(inputs=inputs, outputs=outputs) # Dice损失函数 def dice_loss(y_true, y_pred): smooth = 1e-15 intersection = tf.reduce_sum(y_true * y_pred) union = tf.reduce_sum(y_true) &#43; tf.reduce_sum(y_pred) dice = (2.0 * intersection &#43; smooth) / (union &#43; smooth) return 1.0 - dice # 创建和训练U-Net model = create_unet_model() model.compile( optimizer=tf.keras.optimizers.Adam(learning_rate=0.001), loss=dice_loss, metrics=[tf.keras.metrics.MeanIoU(num_classes=2)] ) 📝 自然语言处理应用 Transformer模型实现 class TransformerModel(tf.keras.Model): def __init__(self, vocab_size, d_model, num_heads, num_layers, d_ff, max_len): super(TransformerModel, self).__init__() self.embedding = tf.keras.layers.Embedding(vocab_size, d_model) self.pos_encoding = self.positional_encoding(max_len, d_model) self.encoder_layers = [ self.encoder_layer(d_model, num_heads, d_ff) for _ in range(num_layers) ] self.decoder_layers = [ self.decoder_layer(d_model, num_heads, d_ff) for _ in range(num_layers) ] self.final_layer = tf.keras.layers.Dense(vocab_size) def positional_encoding(self, max_len, d_model): pos = tf.range(max_len, dtype=tf.float32)[:, tf.newaxis] i = tf.range(d_model, dtype=tf.float32)[tf.newaxis, :] angle_rates = 1 / tf.pow(10000, (2 * (i // 2)) / tf.cast(d_model, tf.float32)) angle_rads = pos * angle_rates angle_rads = tf.where(i % 2 == 0, tf.sin(angle_rads), tf.cos(angle_rads)) return angle_rads[tf.newaxis, ...] def encoder_layer(self, d_model, num_heads, d_ff): inputs = tf.keras.Input(shape=(None, d_model)) # 多头注意力 attn_output = tf.keras.layers.MultiHeadAttention(num_heads, d_model)(inputs, inputs) attn_output = tf.keras.layers.Dropout(0.1)(attn_output) out1 = tf.keras.layers.LayerNormalization(epsilon=1e-6)(inputs &#43; attn_output) # 前馈网络 ffn_output = tf.keras.layers.Dense(d_ff, activation=&#39;relu&#39;)(out1) ffn_output = tf.keras.layers.Dense(d_model)(ffn_output) ffn_output = tf.keras.layers.Dropout(0.1)(ffn_output) out2 = tf.keras.layers.LayerNormalization(epsilon=1e-6)(out1 &#43; ffn_output) return tf.keras.Model(inputs=inputs, outputs=out2) def decoder_layer(self, d_model, num_heads, d_ff): inputs = tf.keras.Input(shape=(None, d_model)) enc_output = tf.keras.Input(shape=(None, d_model)) # 掩码多头注意力 attn1 = tf.keras.layers.MultiHeadAttention(num_heads, d_model)(inputs, inputs) attn1 = tf.keras.layers.Dropout(0.1)(attn1) out1 = tf.keras.layers.LayerNormalization(epsilon=1e-6)(inputs &#43; attn1) # 编码器-解码器注意力 attn2 = tf.keras.layers.MultiHeadAttention(num_heads, d_model)(out1, enc_output) attn2 = tf.keras.layers.Dropout(0.1)(attn2) out2 = tf.keras.layers.LayerNormalization(epsilon=1e-6)(out1 &#43; attn2) # 前馈网络 ffn_output = tf.keras.layers.Dense(d_ff, activation=&#39;relu&#39;)(out2) ffn_output = tf.keras.layers.Dense(d_model)(ffn_output) ffn_output = tf.keras.layers.Dropout(0.1)(ffn_output) out3 = tf.keras.layers.LayerNormalization(epsilon=1e-6)(out2 &#43; ffn_output) return tf.keras.Model(inputs=[inputs, enc_output], outputs=out3) def call(self, inputs, targets=None, training=False): # 词嵌入 &#43; 位置编码 x = self.embedding(inputs) x *= tf.math.sqrt(tf.cast(tf.shape(x)[-1], tf.float32)) x &#43;= self.pos_encoding[:, :tf.shape(x)[1], :] # 编码器 enc_output = x for layer in self.encoder_layers: enc_output = layer(enc_output) # 解码器 if targets is not None: y = self.embedding(targets) y *= tf.math.sqrt(tf.cast(tf.shape(y)[-1], tf.float32)) y &#43;= self.pos_encoding[:, :tf.shape(y)[1], :] for layer in self.decoder_layers: y = layer([y, enc_output]) outputs = self.final_layer(y) else: outputs = None return outputs, enc_output # 创建Transformer模型 model = TransformerModel( vocab_size=10000, d_model=512, num_heads=8, num_layers=6, d_ff=2048, max_len=100 ) BERT预训练模型 class BERTModel(tf.keras.Model): def __init__(self, vocab_size, d_model, num_heads, num_layers, d_ff, max_len): super(BERTModel, self).__init__() self.embedding = tf.keras.layers.Embedding(vocab_size, d_model) self.pos_encoding = self.positional_encoding(max_len, d_model) self.segment_embedding = tf.keras.layers.Embedding(2, d_model) self.transformer_layers = [ self.transformer_layer(d_model, num_heads, d_ff) for _ in range(num_layers) ] self.mlm_head = tf.keras.layers.Dense(vocab_size, activation=&#39;softmax&#39;) self.nsp_head = tf.keras.layers.Dense(2, activation=&#39;softmax&#39;) def transformer_layer(self, d_model, num_heads, d_ff): inputs = tf.keras.Input(shape=(None, d_model)) # 多头注意力 attn_output = tf.keras.layers.MultiHeadAttention(num_heads, d_model)(inputs, inputs) attn_output = tf.keras.layers.Dropout(0.1)(attn_output) out1 = tf.keras.layers.LayerNormalization(epsilon=1e-6)(inputs &#43; attn_output) # 前馈网络 ffn_output = tf.keras.layers.Dense(d_ff, activation=&#39;relu&#39;)(out1) ffn_output = tf.keras.layers.Dense(d_model)(ffn_output) ffn_output = tf.keras.layers.Dropout(0.1)(ffn_output) out2 = tf.keras.layers.LayerNormalization(epsilon=1e-6)(out1 &#43; ffn_output) return tf.keras.Model(inputs=inputs, outputs=out2) def call(self, inputs, segment_ids=None, masked_positions=None): # 词嵌入 &#43; 位置编码 &#43; 段编码 x = self.embedding(inputs) x &#43;= self.pos_encoding[:, :tf.shape(x)[1], :] if segment_ids is not None: x &#43;= self.segment_embedding(segment_ids) # Transformer层 for layer in self.transformer_layers: x = layer(x) # 掩码语言模型预测 if masked_positions is not None: masked_outputs = tf.gather(x, masked_positions, axis=1, batch_dims=1) mlm_logits = self.mlm_head(masked_outputs) else: mlm_logits = None # 下一句预测 cls_token = x[:, 0, :] # [CLS] token nsp_logits = self.nsp_head(cls_token) return mlm_logits, nsp_logits # 创建BERT模型 bert_model = BERTModel( vocab_size=30000, d_model=768, num_heads=12, num_layers=12, d_ff=3072, max_len=512 ) 🎮 强化学习应用 DQN实现 import tensorflow as tf import numpy as np import random from collections import deque class DQNAgent: def __init__(self, state_size, action_size): self.state_size = state_size self.action_size = action_size self.memory = deque(maxlen=2000) self.gamma = 0.95 # 折扣因子 self.epsilon = 1.0 # 探索率 self.epsilon_min = 0.01 self.epsilon_decay = 0.995 self.learning_rate = 0.001 self.model = self._build_model() self.target_model = self._build_model() self.update_target_model() def _build_model(self): &#34;&#34;&#34;构建DQN网络&#34;&#34;&#34; model = tf.keras.Sequential([ tf.keras.layers.Dense(24, input_dim=self.state_size, activation=&#39;relu&#39;), tf.keras.layers.Dense(24, activation=&#39;relu&#39;), tf.keras.layers.Dense(self.action_size, activation=&#39;linear&#39;) ]) model.compile( optimizer=tf.keras.optimizers.Adam(learning_rate=self.learning_rate), loss=&#39;mse&#39; ) return model def update_target_model(self): &#34;&#34;&#34;更新目标网络&#34;&#34;&#34; self.target_model.set_weights(self.model.get_weights()) def remember(self, state, action, reward, next_state, done): &#34;&#34;&#34;存储经验&#34;&#34;&#34; self.memory.append((state, action, reward, next_state, done)) def act(self, state): &#34;&#34;&#34;选择动作&#34;&#34;&#34; if np.random.rand() &lt;= self.epsilon: return random.randrange(self.action_size) # 随机探索 act_values = self.model.predict(state, verbose=0) return np.argmax(act_values[0]) # 利用 def replay(self, batch_size): &#34;&#34;&#34;经验回放&#34;&#34;&#34; minibatch = random.sample(self.memory, batch_size) for state, action, reward, next_state, done in minibatch: target = self.model.predict(state, verbose=0) if done: target[0][action] = reward else: t = self.target_model.predict(next_state, verbose=0) target[0][action] = reward &#43; self.gamma * np.amax(t[0]) self.model.fit(state, target, epochs=1, verbose=0) if self.epsilon &gt; self.epsilon_min: self.epsilon *= self.epsilon_decay # 使用DQN代理 env = gym.make(&#39;CartPole-v1&#39;) state_size = env.observation_space.shape[0] action_size = env.action_space.n agent = DQNAgent(state_size, action_size) # 训练DQN episodes = 1000 batch_size = 32 for e in range(episodes): state = env.reset() state = np.reshape(state, [1, state_size]) for time in range(500): action = agent.act(state) next_state, reward, done, _ = env.step(action) next_state = np.reshape(next_state, [1, state_size]) agent.remember(state, action, reward, next_state, done) state = next_state if done: agent.update_target_model() print(f&#34;Episode: {e}/{episodes}, Score: {time}&#34;) break if len(agent.memory) &gt; batch_size: agent.replay(batch_size) PPO实现 class PPOAgent: def __init__(self, state_size, action_size, clip_ratio=0.2): self.state_size = state_size self.action_size = action_size self.clip_ratio = clip_ratio # Actor网络 self.actor = self._build_actor() # Critic网络 self.critic = self._build_critic() self.actor_optimizer = tf.keras.optimizers.Adam(learning_rate=0.0003) self.critic_optimizer = tf.keras.optimizers.Adam(learning_rate=0.001) def _build_actor(self): &#34;&#34;&#34;构建策略网络&#34;&#34;&#34; inputs = tf.keras.Input(shape=(self.state_size,)) x = tf.keras.layers.Dense(64, activation=&#39;relu&#39;)(inputs) x = tf.keras.layers.Dense(64, activation=&#39;relu&#39;)(x) outputs = tf.keras.layers.Dense(self.action_size, activation=&#39;softmax&#39;)(x) return tf.keras.Model(inputs=inputs, outputs=outputs) def _build_critic(self): &#34;&#34;&#34;构建价值网络&#34;&#34;&#34; inputs = tf.keras.Input(shape=(self.state_size,)) x = tf.keras.layers.Dense(64, activation=&#39;relu&#39;)(inputs) x = tf.keras.layers.Dense(64, activation=&#39;relu&#39;)(x) outputs = tf.keras.layers.Dense(1)(x) return tf.keras.Model(inputs=inputs, outputs=outputs) def get_action(self, state): &#34;&#34;&#34;获取动作&#34;&#34;&#34; state = np.reshape(state, [1, self.state_size]) probs = self.actor.predict(state, verbose=0)[0] action = np.random.choice(self.action_size, p=probs) return action, probs[action] def compute_advantages(self, rewards, values, next_values, dones): &#34;&#34;&#34;计算优势函数&#34;&#34;&#34; advantages = np.zeros_like(rewards) last_gae_lam = 0 for t in reversed(range(len(rewards))): if t == len(rewards) - 1: next_non_terminal = 1.0 - dones[t] next_values = next_values[t] else: next_non_terminal = 1.0 - dones[t] next_values = values[t &#43; 1] delta = rewards[t] &#43; 0.99 * next_values * next_non_terminal - values[t] advantages[t] = last_gae_lam = delta &#43; 0.99 * 0.95 * next_non_terminal * last_gae_lam return advantages def train(self, states, actions, old_probs, advantages, returns): &#34;&#34;&#34;PPO训练&#34;&#34;&#34; with tf.GradientTape() as tape: probs = self.actor(states) values = self.critic(states) # 计算策略损失 new_probs = tf.gather(probs, actions, axis=1, batch_dims=1) ratio = new_probs / old_probs clipped_ratio = tf.clip_by_value(ratio, 1 - self.clip_ratio, 1 &#43; self.clip_ratio) policy_loss = -tf.reduce_mean(tf.minimum(ratio * advantages, clipped_ratio * advantages)) # 计算价值损失 value_loss = tf.reduce_mean(tf.square(returns - values)) # 总损失 loss = policy_loss &#43; 0.5 * value_loss # 更新Actor actor_grads = tape.gradient(policy_loss, self.actor.trainable_variables) self.actor_optimizer.apply_gradients(zip(actor_grads, self.actor.trainable_variables)) # 更新Critic critic_grads = tape.gradient(value_loss, self.critic.trainable_variables) self.critic_optimizer.apply_gradients(zip(critic_grads, self.critic.trainable_variables)) return loss 🚀 模型部署 TensorFlow Serving # 保存模型用于Serving import tensorflow as tf # 创建模型 model = tf.keras.Sequential([ tf.keras.layers.Dense(64, activation=&#39;relu&#39;, input_shape=(10,)), tf.keras.layers.Dense(1, activation=&#39;sigmoid&#39;) ]) # 训练模型（示例） # model.fit(...) # 保存模型 model.save(&#39;model/1&#39;) # TensorFlow Serving格式 # 启动TensorFlow Serving &#34;&#34;&#34; tensorflow_model_server \ --rest_api_port=8501 \ --model_name=my_model \ --model_base_path=/path/to/model &#34;&#34;&#34; # 使用REST API进行预测 import requests import json data = json.dumps({ &#34;signature_name&#34;: &#34;serving_default&#34;, &#34;inputs&#34;: { &#34;dense_input&#34;: [[1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0]] } }) headers = {&#34;content-type&#34;: &#34;application/json&#34;} response = requests.post(&#39;http://localhost:8501/v1/models/my_model:predict&#39;, data=data, headers=headers) print(response.json()) TensorFlow Lite转换和部署 # 转换为TensorFlow Lite def convert_to_tflite(model, quantization=&#39;float32&#39;): &#34;&#34;&#34;转换为TensorFlow Lite格式&#34;&#34;&#34; # 创建转换器 converter = tf.lite.TFLiteConverter.from_keras_model(model) if quantization == &#39;float16&#39;: converter.optimizations = [tf.lite.Optimize.DEFAULT] converter.target_spec.supported_types = [tf.float16] elif quantization == &#39;int8&#39;: converter.optimizations = [tf.lite.Optimize.DEFAULT] # 提供代表性数据集用于量化 def representative_data_gen(): for input_value in tf.data.Dataset.from_tensor_slices(x_train).batch(1).take(100): yield [input_value] converter.representative_dataset = representative_data_gen converter.target_spec.supported_ops = [tf.lite.OpsSet.TFLITE_BUILTINS_INT8] converter.inference_input_type = tf.int8 converter.inference_output_type = tf.int8 # 转换模型 tflite_model = converter.convert() # 保存模型 with open(f&#39;model_{quantization}.tflite&#39;, &#39;wb&#39;) as f: f.write(tflite_model) return tflite_model # 转换不同精度版本 model = create_model() # 假设的模型创建函数 # 转换为不同精度 convert_to_tflite(model, &#39;float32&#39;) convert_to_tflite(model, &#39;float16&#39;) convert_to_tflite(model, &#39;int8&#39;) # 评估模型大小和性能 import os for precision in [&#39;float32&#39;, &#39;float16&#39;, &#39;int8&#39;]: model_path = f&#39;model_{precision}.tflite&#39; if os.path.exists(model_path): size = os.path.getsize(model_path) / 1024 / 1024 # MB print(f&#34;{precision}模型大小: {size:.2f} MB&#34;) TensorFlow.js转换 # 转换为TensorFlow.js格式 import tensorflowjs as tfjs # 保存为TensorFlow.js格式 tfjs.converters.save_keras_model(model, &#39;tfjs_model/&#39;) # 或者转换为分层格式 tfjs.converters.save_keras_model(model, &#39;tfjs_model/&#39;, quantization_dtype=tfjs.quantization_config.INT8) # HTML中使用模型 &#34;&#34;&#34; &lt;html&gt; &lt;head&gt; &lt;script src=&#34;https://cdn.jsdelivr.net/npm/@tensorflow/tfjs&#34;&gt;&lt;/script&gt; &lt;/head&gt; &lt;body&gt; &lt;script&gt; async function loadModel() { // 加载模型 const model = await tf.loadLayersModel(&#39;tfjs_model/model.json&#39;); // 准备输入数据 const input = tf.tensor2d([[1, 2, 3, 4, 5, 6, 7, 8, 9, 10]]); // 进行预测 const prediction = model.predict(input); prediction.print(); } loadModel(); &lt;/script&gt; &lt;/body&gt; &lt;/html&gt; &#34;&#34;&#34; 📊 生产环境最佳实践 模型监控 class ModelMonitor: def __init__(self, model, metrics=[&#39;accuracy&#39;, &#39;latency&#39;, &#39;throughput&#39;]): self.model = model self.metrics = metrics self.predictions = [] self.true_labels = [] self.latencies = [] def predict_with_monitoring(self, inputs, true_labels=None): &#34;&#34;&#34;带监控的预测&#34;&#34;&#34; import time start_time = time.time() # 进行预测 predictions = self.model.predict(inputs) end_time = time.time() latency = end_time - start_time # 记录指标 self.latencies.append(latency) self.predictions.extend(predictions) if true_labels is not None: self.true_labels.extend(true_labels) return predictions def generate_report(self): &#34;&#34;&#34;生成监控报告&#34;&#34;&#34; report = {} if self.latencies: report[&#39;avg_latency&#39;] = np.mean(self.latencies) report[&#39;p95_latency&#39;] = np.percentile(self.latencies, 95) report[&#39;throughput&#39;] = len(self.latencies) / sum(self.latencies) if self.true_labels and self.predictions: predictions = np.array(self.predictions) true_labels = np.array(self.true_labels) if len(predictions.shape) &gt; 1: pred_classes = np.argmax(predictions, axis=1) true_classes = np.argmax(true_labels, axis=1) else: pred_classes = (predictions &gt; 0.5).astype(int) true_classes = true_labels report[&#39;accuracy&#39;] = np.mean(pred_classes == true_classes) return report # 使用模型监控 monitor = ModelMonitor(model) # 模拟生产环境预测 for i in range(100): test_input = np.random.rand(1, 10) true_label = np.random.randint(0, 2, 1) prediction = monitor.predict_with_monitoring(test_input, true_label) # 生成报告 report = monitor.generate_report() print(&#34;模型监控报告:&#34;, report) A/B测试框架 class ABTestFramework: def __init__(self, model_a, model_b, traffic_split=0.5): self.model_a = model_a self.model_b = model_b self.traffic_split = traffic_split self.model_a_metrics = [] self.model_b_metrics = [] def predict(self, inputs, true_labels=None): &#34;&#34;&#34;A/B测试预测&#34;&#34;&#34; results = [] for i, (input_data, true_label) in enumerate(zip(inputs, true_labels or [])): # 随机分配流量 if np.random.random() &lt; self.traffic_split: model = self.model_a model_name = &#39;A&#39; else: model = self.model_b model_name = &#39;B&#39; # 进行预测 prediction = model.predict(np.expand_dims(input_data, 0))[0] results.append({ &#39;model&#39;: model_name, &#39;prediction&#39;: prediction, &#39;true_label&#39;: true_label }) return results def evaluate_models(self, results): &#34;&#34;&#34;评估模型性能&#34;&#34;&#34; model_a_results = [r for r in results if r[&#39;model&#39;] == &#39;A&#39;] model_b_results = [r for r in results if r[&#39;model&#39;] == &#39;B&#39;] def calculate_metrics(results): if not results: return {} predictions = np.array([r[&#39;prediction&#39;] for r in results]) true_labels = np.array([r[&#39;true_label&#39;] for r in results]) pred_classes = np.argmax(predictions, axis=1) true_classes = np.argmax(true_labels, axis=1) accuracy = np.mean(pred_classes == true_classes) return {&#39;accuracy&#39;: accuracy, &#39;sample_size&#39;: len(results)} metrics_a = calculate_metrics(model_a_results) metrics_b = calculate_metrics(model_b_results) return {&#39;model_a&#39;: metrics_a, &#39;model_b&#39;: metrics_b} # 使用A/B测试框架 ab_test = ABTestFramework(model_v1, model_v2, traffic_split=0.5) # 模拟A/B测试 test_inputs = [np.random.rand(10) for _ in range(1000)] test_labels = [np.random.randint(0, 2, 10) for _ in range(1000)] results = ab_test.predict(test_inputs, test_labels) metrics = ab_test.evaluate_models(results) print(&#34;A/B测试结果:&#34;, metrics) 📚 学习资源 官方文档 TensorFlow Serving文档 TensorFlow Lite文档 TensorFlow.js文档 吴恩达课程 深度学习课程中关于实际应用的部分 经典项目 TensorFlow Models - 官方模型库 TensorFlow Hub - 预训练模型仓库 Kaggle竞赛 - 实践项目 🔧 部署最佳实践 容器化部署 # Dockerfile FROM tensorflow/serving:latest COPY model/ /models/my_model ENV MODEL_NAME=my_model # 启动命令 CMD [&#34;tensorflow_model_server&#34;, &#34;--rest_api_port=8501&#34;, &#34;--model_name=my_model&#34;, &#34;--model_base_path=/models/my_model&#34;] 模型版本管理 # 模型版本管理 import tensorflow as tf class ModelVersionManager: def __init__(self, model_base_path): self.model_base_path = model_base_path self.versions = {} def save_model_version(self, model, version, metadata=None): &#34;&#34;&#34;保存模型版本&#34;&#34;&#34; version_path = f&#34;{self.model_base_path}/{version}&#34; # 保存模型 model.save(version_path) # 保存元数据 if metadata: with open(f&#34;{version_path}/metadata.json&#34;, &#39;w&#39;) as f: json.dump(metadata, f) self.versions[version] = { &#39;path&#39;: version_path, &#39;metadata&#39;: metadata, &#39;timestamp&#39;: time.time() } def load_model_version(self, version): &#34;&#34;&#34;加载模型版本&#34;&#34;&#34; if version not in self.versions: raise ValueError(f&#34;版本 {version} 不存在&#34;) version_path = self.versions[version][&#39;path&#39;] return tf.keras.models.load_model(version_path) def list_versions(self): &#34;&#34;&#34;列出版本&#34;&#34;&#34; return list(self.versions.keys()) def rollback(self, version): &#34;&#34;&#34;回滚到指定版本&#34;&#34;&#34; model = self.load_model_version(version) self.save_model_version(model, &#39;current&#39;, {&#39;rollback_from&#39;: version}) return model # 使用版本管理器 version_manager = ModelVersionManager(&#39;./models&#39;) # 保存不同版本 for i, model in enumerate([model_v1, model_v2, model_v3]): version_manager.save_model_version( model, version=f&#34;v{i&#43;1}&#34;, metadata={&#39;description&#39;: f&#39;模型版本{i&#43;1}&#39;, &#39;accuracy&#39;: 0.95 &#43; i*0.01} ) 最近更新: {{ .Lastmod.Format “2006-01-02” }}">
+  <link rel="icon" href="/avatar/avatar.jpg" type="image/jpeg">
 
-    <meta property="og:url" content="http://localhost:1313/wiki/deep_learning/tensorflow/advanced_2/">
-  <meta property="og:site_name" content="Yaku Makki">
-  <meta property="og:title" content="TensorFlow高级应用">
-  <meta property="og:description" content="TensorFlow高级应用 本章介绍TensorFlow在实际项目中的高级应用，包括计算机视觉、自然语言处理、强化学习、模型部署等领域的完整解决方案和最佳实践。
-🎨 计算机视觉应用 目标检测 - YOLO实现 import tensorflow as tf import numpy as np import cv2 def create_yolo_model(num_classes, input_shape=(416, 416, 3)): &#34;&#34;&#34;创建YOLO模型&#34;&#34;&#34; inputs = tf.keras.Input(shape=input_shape) # 特征提取网络 x = tf.keras.layers.Conv2D(32, 3, strides=1, padding=&#39;same&#39;, activation=&#39;relu&#39;)(inputs) x = tf.keras.layers.BatchNormalization()(x) x = tf.keras.layers.MaxPooling2D(pool_size=2)(x) x = tf.keras.layers.Conv2D(64, 3, strides=1, padding=&#39;same&#39;, activation=&#39;relu&#39;)(x) x = tf.keras.layers.BatchNormalization()(x) x = tf.keras.layers.MaxPooling2D(pool_size=2)(x) x = tf.keras.layers.Conv2D(128, 3, strides=1, padding=&#39;same&#39;, activation=&#39;relu&#39;)(x) x = tf.keras.layers.BatchNormalization()(x) x = tf.keras.layers.MaxPooling2D(pool_size=2)(x) # 检测头 x = tf.keras.layers.Conv2D(256, 3, strides=1, padding=&#39;same&#39;, activation=&#39;relu&#39;)(x) x = tf.keras.layers.Conv2D(512, 3, strides=1, padding=&#39;same&#39;, activation=&#39;relu&#39;)(x) # 输出层：边界框、置信度和类别预测 output = tf.keras.layers.Conv2D( num_classes &#43; 5, 1, strides=1, padding=&#39;same&#39;, activation=&#39;linear&#39; )(x) return tf.keras.Model(inputs=inputs, outputs=output) # YOLO损失函数 class YOLOLoss(tf.keras.losses.Loss): def __init__(self, num_classes, grid_size=13, **kwargs): super(YOLOLoss, self).__init__(**kwargs) self.num_classes = num_classes self.grid_size = grid_size def call(self, y_true, y_pred): # 实现YOLO损失函数 # 包括边界框回归损失、置信度损失和分类损失 return total_loss # 创建和训练YOLO模型 model = create_yolo_model(num_classes=20) model.compile( optimizer=tf.keras.optimizers.Adam(learning_rate=0.001), loss=YOLOLoss(num_classes=20), metrics=[&#39;accuracy&#39;] ) 图像分割 - U-Net实现 def create_unet_model(input_shape=(256, 256, 3), num_classes=1): &#34;&#34;&#34;创建U-Net模型&#34;&#34;&#34; inputs = tf.keras.Input(shape=input_shape) # 编码器 c1 = tf.keras.layers.Conv2D(64, 3, padding=&#39;same&#39;, activation=&#39;relu&#39;)(inputs) c1 = tf.keras.layers.Conv2D(64, 3, padding=&#39;same&#39;, activation=&#39;relu&#39;)(c1) p1 = tf.keras.layers.MaxPooling2D(pool_size=2)(c1) c2 = tf.keras.layers.Conv2D(128, 3, padding=&#39;same&#39;, activation=&#39;relu&#39;)(p1) c2 = tf.keras.layers.Conv2D(128, 3, padding=&#39;same&#39;, activation=&#39;relu&#39;)(c2) p2 = tf.keras.layers.MaxPooling2D(pool_size=2)(c2) c3 = tf.keras.layers.Conv2D(256, 3, padding=&#39;same&#39;, activation=&#39;relu&#39;)(p2) c3 = tf.keras.layers.Conv2D(256, 3, padding=&#39;same&#39;, activation=&#39;relu&#39;)(c3) p3 = tf.keras.layers.MaxPooling2D(pool_size=2)(c3) # 瓶颈层 c4 = tf.keras.layers.Conv2D(512, 3, padding=&#39;same&#39;, activation=&#39;relu&#39;)(p3) c4 = tf.keras.layers.Conv2D(512, 3, padding=&#39;same&#39;, activation=&#39;relu&#39;)(c4) # 解码器 u5 = tf.keras.layers.Conv2DTranspose(256, 2, strides=2, padding=&#39;same&#39;)(c4) u5 = tf.keras.layers.concatenate([u5, c3]) c5 = tf.keras.layers.Conv2D(256, 3, padding=&#39;same&#39;, activation=&#39;relu&#39;)(u5) c5 = tf.keras.layers.Conv2D(256, 3, padding=&#39;same&#39;, activation=&#39;relu&#39;)(c5) u6 = tf.keras.layers.Conv2DTranspose(128, 2, strides=2, padding=&#39;same&#39;)(c5) u6 = tf.keras.layers.concatenate([u6, c2]) c6 = tf.keras.layers.Conv2D(128, 3, padding=&#39;same&#39;, activation=&#39;relu&#39;)(u6) c6 = tf.keras.layers.Conv2D(128, 3, padding=&#39;same&#39;, activation=&#39;relu&#39;)(c6) u7 = tf.keras.layers.Conv2DTranspose(64, 2, strides=2, padding=&#39;same&#39;)(c6) u7 = tf.keras.layers.concatenate([u7, c1]) c7 = tf.keras.layers.Conv2D(64, 3, padding=&#39;same&#39;, activation=&#39;relu&#39;)(u7) c7 = tf.keras.layers.Conv2D(64, 3, padding=&#39;same&#39;, activation=&#39;relu&#39;)(c7) # 输出层 outputs = tf.keras.layers.Conv2D(num_classes, 1, activation=&#39;sigmoid&#39;)(c7) return tf.keras.Model(inputs=inputs, outputs=outputs) # Dice损失函数 def dice_loss(y_true, y_pred): smooth = 1e-15 intersection = tf.reduce_sum(y_true * y_pred) union = tf.reduce_sum(y_true) &#43; tf.reduce_sum(y_pred) dice = (2.0 * intersection &#43; smooth) / (union &#43; smooth) return 1.0 - dice # 创建和训练U-Net model = create_unet_model() model.compile( optimizer=tf.keras.optimizers.Adam(learning_rate=0.001), loss=dice_loss, metrics=[tf.keras.metrics.MeanIoU(num_classes=2)] ) 📝 自然语言处理应用 Transformer模型实现 class TransformerModel(tf.keras.Model): def __init__(self, vocab_size, d_model, num_heads, num_layers, d_ff, max_len): super(TransformerModel, self).__init__() self.embedding = tf.keras.layers.Embedding(vocab_size, d_model) self.pos_encoding = self.positional_encoding(max_len, d_model) self.encoder_layers = [ self.encoder_layer(d_model, num_heads, d_ff) for _ in range(num_layers) ] self.decoder_layers = [ self.decoder_layer(d_model, num_heads, d_ff) for _ in range(num_layers) ] self.final_layer = tf.keras.layers.Dense(vocab_size) def positional_encoding(self, max_len, d_model): pos = tf.range(max_len, dtype=tf.float32)[:, tf.newaxis] i = tf.range(d_model, dtype=tf.float32)[tf.newaxis, :] angle_rates = 1 / tf.pow(10000, (2 * (i // 2)) / tf.cast(d_model, tf.float32)) angle_rads = pos * angle_rates angle_rads = tf.where(i % 2 == 0, tf.sin(angle_rads), tf.cos(angle_rads)) return angle_rads[tf.newaxis, ...] def encoder_layer(self, d_model, num_heads, d_ff): inputs = tf.keras.Input(shape=(None, d_model)) # 多头注意力 attn_output = tf.keras.layers.MultiHeadAttention(num_heads, d_model)(inputs, inputs) attn_output = tf.keras.layers.Dropout(0.1)(attn_output) out1 = tf.keras.layers.LayerNormalization(epsilon=1e-6)(inputs &#43; attn_output) # 前馈网络 ffn_output = tf.keras.layers.Dense(d_ff, activation=&#39;relu&#39;)(out1) ffn_output = tf.keras.layers.Dense(d_model)(ffn_output) ffn_output = tf.keras.layers.Dropout(0.1)(ffn_output) out2 = tf.keras.layers.LayerNormalization(epsilon=1e-6)(out1 &#43; ffn_output) return tf.keras.Model(inputs=inputs, outputs=out2) def decoder_layer(self, d_model, num_heads, d_ff): inputs = tf.keras.Input(shape=(None, d_model)) enc_output = tf.keras.Input(shape=(None, d_model)) # 掩码多头注意力 attn1 = tf.keras.layers.MultiHeadAttention(num_heads, d_model)(inputs, inputs) attn1 = tf.keras.layers.Dropout(0.1)(attn1) out1 = tf.keras.layers.LayerNormalization(epsilon=1e-6)(inputs &#43; attn1) # 编码器-解码器注意力 attn2 = tf.keras.layers.MultiHeadAttention(num_heads, d_model)(out1, enc_output) attn2 = tf.keras.layers.Dropout(0.1)(attn2) out2 = tf.keras.layers.LayerNormalization(epsilon=1e-6)(out1 &#43; attn2) # 前馈网络 ffn_output = tf.keras.layers.Dense(d_ff, activation=&#39;relu&#39;)(out2) ffn_output = tf.keras.layers.Dense(d_model)(ffn_output) ffn_output = tf.keras.layers.Dropout(0.1)(ffn_output) out3 = tf.keras.layers.LayerNormalization(epsilon=1e-6)(out2 &#43; ffn_output) return tf.keras.Model(inputs=[inputs, enc_output], outputs=out3) def call(self, inputs, targets=None, training=False): # 词嵌入 &#43; 位置编码 x = self.embedding(inputs) x *= tf.math.sqrt(tf.cast(tf.shape(x)[-1], tf.float32)) x &#43;= self.pos_encoding[:, :tf.shape(x)[1], :] # 编码器 enc_output = x for layer in self.encoder_layers: enc_output = layer(enc_output) # 解码器 if targets is not None: y = self.embedding(targets) y *= tf.math.sqrt(tf.cast(tf.shape(y)[-1], tf.float32)) y &#43;= self.pos_encoding[:, :tf.shape(y)[1], :] for layer in self.decoder_layers: y = layer([y, enc_output]) outputs = self.final_layer(y) else: outputs = None return outputs, enc_output # 创建Transformer模型 model = TransformerModel( vocab_size=10000, d_model=512, num_heads=8, num_layers=6, d_ff=2048, max_len=100 ) BERT预训练模型 class BERTModel(tf.keras.Model): def __init__(self, vocab_size, d_model, num_heads, num_layers, d_ff, max_len): super(BERTModel, self).__init__() self.embedding = tf.keras.layers.Embedding(vocab_size, d_model) self.pos_encoding = self.positional_encoding(max_len, d_model) self.segment_embedding = tf.keras.layers.Embedding(2, d_model) self.transformer_layers = [ self.transformer_layer(d_model, num_heads, d_ff) for _ in range(num_layers) ] self.mlm_head = tf.keras.layers.Dense(vocab_size, activation=&#39;softmax&#39;) self.nsp_head = tf.keras.layers.Dense(2, activation=&#39;softmax&#39;) def transformer_layer(self, d_model, num_heads, d_ff): inputs = tf.keras.Input(shape=(None, d_model)) # 多头注意力 attn_output = tf.keras.layers.MultiHeadAttention(num_heads, d_model)(inputs, inputs) attn_output = tf.keras.layers.Dropout(0.1)(attn_output) out1 = tf.keras.layers.LayerNormalization(epsilon=1e-6)(inputs &#43; attn_output) # 前馈网络 ffn_output = tf.keras.layers.Dense(d_ff, activation=&#39;relu&#39;)(out1) ffn_output = tf.keras.layers.Dense(d_model)(ffn_output) ffn_output = tf.keras.layers.Dropout(0.1)(ffn_output) out2 = tf.keras.layers.LayerNormalization(epsilon=1e-6)(out1 &#43; ffn_output) return tf.keras.Model(inputs=inputs, outputs=out2) def call(self, inputs, segment_ids=None, masked_positions=None): # 词嵌入 &#43; 位置编码 &#43; 段编码 x = self.embedding(inputs) x &#43;= self.pos_encoding[:, :tf.shape(x)[1], :] if segment_ids is not None: x &#43;= self.segment_embedding(segment_ids) # Transformer层 for layer in self.transformer_layers: x = layer(x) # 掩码语言模型预测 if masked_positions is not None: masked_outputs = tf.gather(x, masked_positions, axis=1, batch_dims=1) mlm_logits = self.mlm_head(masked_outputs) else: mlm_logits = None # 下一句预测 cls_token = x[:, 0, :] # [CLS] token nsp_logits = self.nsp_head(cls_token) return mlm_logits, nsp_logits # 创建BERT模型 bert_model = BERTModel( vocab_size=30000, d_model=768, num_heads=12, num_layers=12, d_ff=3072, max_len=512 ) 🎮 强化学习应用 DQN实现 import tensorflow as tf import numpy as np import random from collections import deque class DQNAgent: def __init__(self, state_size, action_size): self.state_size = state_size self.action_size = action_size self.memory = deque(maxlen=2000) self.gamma = 0.95 # 折扣因子 self.epsilon = 1.0 # 探索率 self.epsilon_min = 0.01 self.epsilon_decay = 0.995 self.learning_rate = 0.001 self.model = self._build_model() self.target_model = self._build_model() self.update_target_model() def _build_model(self): &#34;&#34;&#34;构建DQN网络&#34;&#34;&#34; model = tf.keras.Sequential([ tf.keras.layers.Dense(24, input_dim=self.state_size, activation=&#39;relu&#39;), tf.keras.layers.Dense(24, activation=&#39;relu&#39;), tf.keras.layers.Dense(self.action_size, activation=&#39;linear&#39;) ]) model.compile( optimizer=tf.keras.optimizers.Adam(learning_rate=self.learning_rate), loss=&#39;mse&#39; ) return model def update_target_model(self): &#34;&#34;&#34;更新目标网络&#34;&#34;&#34; self.target_model.set_weights(self.model.get_weights()) def remember(self, state, action, reward, next_state, done): &#34;&#34;&#34;存储经验&#34;&#34;&#34; self.memory.append((state, action, reward, next_state, done)) def act(self, state): &#34;&#34;&#34;选择动作&#34;&#34;&#34; if np.random.rand() &lt;= self.epsilon: return random.randrange(self.action_size) # 随机探索 act_values = self.model.predict(state, verbose=0) return np.argmax(act_values[0]) # 利用 def replay(self, batch_size): &#34;&#34;&#34;经验回放&#34;&#34;&#34; minibatch = random.sample(self.memory, batch_size) for state, action, reward, next_state, done in minibatch: target = self.model.predict(state, verbose=0) if done: target[0][action] = reward else: t = self.target_model.predict(next_state, verbose=0) target[0][action] = reward &#43; self.gamma * np.amax(t[0]) self.model.fit(state, target, epochs=1, verbose=0) if self.epsilon &gt; self.epsilon_min: self.epsilon *= self.epsilon_decay # 使用DQN代理 env = gym.make(&#39;CartPole-v1&#39;) state_size = env.observation_space.shape[0] action_size = env.action_space.n agent = DQNAgent(state_size, action_size) # 训练DQN episodes = 1000 batch_size = 32 for e in range(episodes): state = env.reset() state = np.reshape(state, [1, state_size]) for time in range(500): action = agent.act(state) next_state, reward, done, _ = env.step(action) next_state = np.reshape(next_state, [1, state_size]) agent.remember(state, action, reward, next_state, done) state = next_state if done: agent.update_target_model() print(f&#34;Episode: {e}/{episodes}, Score: {time}&#34;) break if len(agent.memory) &gt; batch_size: agent.replay(batch_size) PPO实现 class PPOAgent: def __init__(self, state_size, action_size, clip_ratio=0.2): self.state_size = state_size self.action_size = action_size self.clip_ratio = clip_ratio # Actor网络 self.actor = self._build_actor() # Critic网络 self.critic = self._build_critic() self.actor_optimizer = tf.keras.optimizers.Adam(learning_rate=0.0003) self.critic_optimizer = tf.keras.optimizers.Adam(learning_rate=0.001) def _build_actor(self): &#34;&#34;&#34;构建策略网络&#34;&#34;&#34; inputs = tf.keras.Input(shape=(self.state_size,)) x = tf.keras.layers.Dense(64, activation=&#39;relu&#39;)(inputs) x = tf.keras.layers.Dense(64, activation=&#39;relu&#39;)(x) outputs = tf.keras.layers.Dense(self.action_size, activation=&#39;softmax&#39;)(x) return tf.keras.Model(inputs=inputs, outputs=outputs) def _build_critic(self): &#34;&#34;&#34;构建价值网络&#34;&#34;&#34; inputs = tf.keras.Input(shape=(self.state_size,)) x = tf.keras.layers.Dense(64, activation=&#39;relu&#39;)(inputs) x = tf.keras.layers.Dense(64, activation=&#39;relu&#39;)(x) outputs = tf.keras.layers.Dense(1)(x) return tf.keras.Model(inputs=inputs, outputs=outputs) def get_action(self, state): &#34;&#34;&#34;获取动作&#34;&#34;&#34; state = np.reshape(state, [1, self.state_size]) probs = self.actor.predict(state, verbose=0)[0] action = np.random.choice(self.action_size, p=probs) return action, probs[action] def compute_advantages(self, rewards, values, next_values, dones): &#34;&#34;&#34;计算优势函数&#34;&#34;&#34; advantages = np.zeros_like(rewards) last_gae_lam = 0 for t in reversed(range(len(rewards))): if t == len(rewards) - 1: next_non_terminal = 1.0 - dones[t] next_values = next_values[t] else: next_non_terminal = 1.0 - dones[t] next_values = values[t &#43; 1] delta = rewards[t] &#43; 0.99 * next_values * next_non_terminal - values[t] advantages[t] = last_gae_lam = delta &#43; 0.99 * 0.95 * next_non_terminal * last_gae_lam return advantages def train(self, states, actions, old_probs, advantages, returns): &#34;&#34;&#34;PPO训练&#34;&#34;&#34; with tf.GradientTape() as tape: probs = self.actor(states) values = self.critic(states) # 计算策略损失 new_probs = tf.gather(probs, actions, axis=1, batch_dims=1) ratio = new_probs / old_probs clipped_ratio = tf.clip_by_value(ratio, 1 - self.clip_ratio, 1 &#43; self.clip_ratio) policy_loss = -tf.reduce_mean(tf.minimum(ratio * advantages, clipped_ratio * advantages)) # 计算价值损失 value_loss = tf.reduce_mean(tf.square(returns - values)) # 总损失 loss = policy_loss &#43; 0.5 * value_loss # 更新Actor actor_grads = tape.gradient(policy_loss, self.actor.trainable_variables) self.actor_optimizer.apply_gradients(zip(actor_grads, self.actor.trainable_variables)) # 更新Critic critic_grads = tape.gradient(value_loss, self.critic.trainable_variables) self.critic_optimizer.apply_gradients(zip(critic_grads, self.critic.trainable_variables)) return loss 🚀 模型部署 TensorFlow Serving # 保存模型用于Serving import tensorflow as tf # 创建模型 model = tf.keras.Sequential([ tf.keras.layers.Dense(64, activation=&#39;relu&#39;, input_shape=(10,)), tf.keras.layers.Dense(1, activation=&#39;sigmoid&#39;) ]) # 训练模型（示例） # model.fit(...) # 保存模型 model.save(&#39;model/1&#39;) # TensorFlow Serving格式 # 启动TensorFlow Serving &#34;&#34;&#34; tensorflow_model_server \ --rest_api_port=8501 \ --model_name=my_model \ --model_base_path=/path/to/model &#34;&#34;&#34; # 使用REST API进行预测 import requests import json data = json.dumps({ &#34;signature_name&#34;: &#34;serving_default&#34;, &#34;inputs&#34;: { &#34;dense_input&#34;: [[1.0, 2.0, 3.0, 4.0, 5.0, 6.0, 7.0, 8.0, 9.0, 10.0]] } }) headers = {&#34;content-type&#34;: &#34;application/json&#34;} response = requests.post(&#39;http://localhost:8501/v1/models/my_model:predict&#39;, data=data, headers=headers) print(response.json()) TensorFlow Lite转换和部署 # 转换为TensorFlow Lite def convert_to_tflite(model, quantization=&#39;float32&#39;): &#34;&#34;&#34;转换为TensorFlow Lite格式&#34;&#34;&#34; # 创建转换器 converter = tf.lite.TFLiteConverter.from_keras_model(model) if quantization == &#39;float16&#39;: converter.optimizations = [tf.lite.Optimize.DEFAULT] converter.target_spec.supported_types = [tf.float16] elif quantization == &#39;int8&#39;: converter.optimizations = [tf.lite.Optimize.DEFAULT] # 提供代表性数据集用于量化 def representative_data_gen(): for input_value in tf.data.Dataset.from_tensor_slices(x_train).batch(1).take(100): yield [input_value] converter.representative_dataset = representative_data_gen converter.target_spec.supported_ops = [tf.lite.OpsSet.TFLITE_BUILTINS_INT8] converter.inference_input_type = tf.int8 converter.inference_output_type = tf.int8 # 转换模型 tflite_model = converter.convert() # 保存模型 with open(f&#39;model_{quantization}.tflite&#39;, &#39;wb&#39;) as f: f.write(tflite_model) return tflite_model # 转换不同精度版本 model = create_model() # 假设的模型创建函数 # 转换为不同精度 convert_to_tflite(model, &#39;float32&#39;) convert_to_tflite(model, &#39;float16&#39;) convert_to_tflite(model, &#39;int8&#39;) # 评估模型大小和性能 import os for precision in [&#39;float32&#39;, &#39;float16&#39;, &#39;int8&#39;]: model_path = f&#39;model_{precision}.tflite&#39; if os.path.exists(model_path): size = os.path.getsize(model_path) / 1024 / 1024 # MB print(f&#34;{precision}模型大小: {size:.2f} MB&#34;) TensorFlow.js转换 # 转换为TensorFlow.js格式 import tensorflowjs as tfjs # 保存为TensorFlow.js格式 tfjs.converters.save_keras_model(model, &#39;tfjs_model/&#39;) # 或者转换为分层格式 tfjs.converters.save_keras_model(model, &#39;tfjs_model/&#39;, quantization_dtype=tfjs.quantization_config.INT8) # HTML中使用模型 &#34;&#34;&#34; &lt;html&gt; &lt;head&gt; &lt;script src=&#34;https://cdn.jsdelivr.net/npm/@tensorflow/tfjs&#34;&gt;&lt;/script&gt; &lt;/head&gt; &lt;body&gt; &lt;script&gt; async function loadModel() { // 加载模型 const model = await tf.loadLayersModel(&#39;tfjs_model/model.json&#39;); // 准备输入数据 const input = tf.tensor2d([[1, 2, 3, 4, 5, 6, 7, 8, 9, 10]]); // 进行预测 const prediction = model.predict(input); prediction.print(); } loadModel(); &lt;/script&gt; &lt;/body&gt; &lt;/html&gt; &#34;&#34;&#34; 📊 生产环境最佳实践 模型监控 class ModelMonitor: def __init__(self, model, metrics=[&#39;accuracy&#39;, &#39;latency&#39;, &#39;throughput&#39;]): self.model = model self.metrics = metrics self.predictions = [] self.true_labels = [] self.latencies = [] def predict_with_monitoring(self, inputs, true_labels=None): &#34;&#34;&#34;带监控的预测&#34;&#34;&#34; import time start_time = time.time() # 进行预测 predictions = self.model.predict(inputs) end_time = time.time() latency = end_time - start_time # 记录指标 self.latencies.append(latency) self.predictions.extend(predictions) if true_labels is not None: self.true_labels.extend(true_labels) return predictions def generate_report(self): &#34;&#34;&#34;生成监控报告&#34;&#34;&#34; report = {} if self.latencies: report[&#39;avg_latency&#39;] = np.mean(self.latencies) report[&#39;p95_latency&#39;] = np.percentile(self.latencies, 95) report[&#39;throughput&#39;] = len(self.latencies) / sum(self.latencies) if self.true_labels and self.predictions: predictions = np.array(self.predictions) true_labels = np.array(self.true_labels) if len(predictions.shape) &gt; 1: pred_classes = np.argmax(predictions, axis=1) true_classes = np.argmax(true_labels, axis=1) else: pred_classes = (predictions &gt; 0.5).astype(int) true_classes = true_labels report[&#39;accuracy&#39;] = np.mean(pred_classes == true_classes) return report # 使用模型监控 monitor = ModelMonitor(model) # 模拟生产环境预测 for i in range(100): test_input = np.random.rand(1, 10) true_label = np.random.randint(0, 2, 1) prediction = monitor.predict_with_monitoring(test_input, true_label) # 生成报告 report = monitor.generate_report() print(&#34;模型监控报告:&#34;, report) A/B测试框架 class ABTestFramework: def __init__(self, model_a, model_b, traffic_split=0.5): self.model_a = model_a self.model_b = model_b self.traffic_split = traffic_split self.model_a_metrics = [] self.model_b_metrics = [] def predict(self, inputs, true_labels=None): &#34;&#34;&#34;A/B测试预测&#34;&#34;&#34; results = [] for i, (input_data, true_label) in enumerate(zip(inputs, true_labels or [])): # 随机分配流量 if np.random.random() &lt; self.traffic_split: model = self.model_a model_name = &#39;A&#39; else: model = self.model_b model_name = &#39;B&#39; # 进行预测 prediction = model.predict(np.expand_dims(input_data, 0))[0] results.append({ &#39;model&#39;: model_name, &#39;prediction&#39;: prediction, &#39;true_label&#39;: true_label }) return results def evaluate_models(self, results): &#34;&#34;&#34;评估模型性能&#34;&#34;&#34; model_a_results = [r for r in results if r[&#39;model&#39;] == &#39;A&#39;] model_b_results = [r for r in results if r[&#39;model&#39;] == &#39;B&#39;] def calculate_metrics(results): if not results: return {} predictions = np.array([r[&#39;prediction&#39;] for r in results]) true_labels = np.array([r[&#39;true_label&#39;] for r in results]) pred_classes = np.argmax(predictions, axis=1) true_classes = np.argmax(true_labels, axis=1) accuracy = np.mean(pred_classes == true_classes) return {&#39;accuracy&#39;: accuracy, &#39;sample_size&#39;: len(results)} metrics_a = calculate_metrics(model_a_results) metrics_b = calculate_metrics(model_b_results) return {&#39;model_a&#39;: metrics_a, &#39;model_b&#39;: metrics_b} # 使用A/B测试框架 ab_test = ABTestFramework(model_v1, model_v2, traffic_split=0.5) # 模拟A/B测试 test_inputs = [np.random.rand(10) for _ in range(1000)] test_labels = [np.random.randint(0, 2, 10) for _ in range(1000)] results = ab_test.predict(test_inputs, test_labels) metrics = ab_test.evaluate_models(results) print(&#34;A/B测试结果:&#34;, metrics) 📚 学习资源 官方文档 TensorFlow Serving文档 TensorFlow Lite文档 TensorFlow.js文档 吴恩达课程 深度学习课程中关于实际应用的部分 经典项目 TensorFlow Models - 官方模型库 TensorFlow Hub - 预训练模型仓库 Kaggle竞赛 - 实践项目 🔧 部署最佳实践 容器化部署 # Dockerfile FROM tensorflow/serving:latest COPY model/ /models/my_model ENV MODEL_NAME=my_model # 启动命令 CMD [&#34;tensorflow_model_server&#34;, &#34;--rest_api_port=8501&#34;, &#34;--model_name=my_model&#34;, &#34;--model_base_path=/models/my_model&#34;] 模型版本管理 # 模型版本管理 import tensorflow as tf class ModelVersionManager: def __init__(self, model_base_path): self.model_base_path = model_base_path self.versions = {} def save_model_version(self, model, version, metadata=None): &#34;&#34;&#34;保存模型版本&#34;&#34;&#34; version_path = f&#34;{self.model_base_path}/{version}&#34; # 保存模型 model.save(version_path) # 保存元数据 if metadata: with open(f&#34;{version_path}/metadata.json&#34;, &#39;w&#39;) as f: json.dump(metadata, f) self.versions[version] = { &#39;path&#39;: version_path, &#39;metadata&#39;: metadata, &#39;timestamp&#39;: time.time() } def load_model_version(self, version): &#34;&#34;&#34;加载模型版本&#34;&#34;&#34; if version not in self.versions: raise ValueError(f&#34;版本 {version} 不存在&#34;) version_path = self.versions[version][&#39;path&#39;] return tf.keras.models.load_model(version_path) def list_versions(self): &#34;&#34;&#34;列出版本&#34;&#34;&#34; return list(self.versions.keys()) def rollback(self, version): &#34;&#34;&#34;回滚到指定版本&#34;&#34;&#34; model = self.load_model_version(version) self.save_model_version(model, &#39;current&#39;, {&#39;rollback_from&#39;: version}) return model # 使用版本管理器 version_manager = ModelVersionManager(&#39;./models&#39;) # 保存不同版本 for i, model in enumerate([model_v1, model_v2, model_v3]): version_manager.save_model_version( model, version=f&#34;v{i&#43;1}&#34;, metadata={&#39;description&#39;: f&#39;模型版本{i&#43;1}&#39;, &#39;accuracy&#39;: 0.95 &#43; i*0.01} ) 最近更新: {{ .Lastmod.Format “2006-01-02” }}">
-  <meta property="og:locale" content="zh">
-  <meta property="og:type" content="article">
-    <meta property="article:section" content="wiki">
-    <meta property="article:published_time" content="2025-10-24T21:58:51+08:00">
-    <meta property="article:modified_time" content="2025-10-24T21:58:51+08:00">
+  
+  <link rel="stylesheet" href="/css/main.min.b64e4527cc255b367461135391e39e321a5d86fc97defca99c7afda308ada007.css" integrity="sha256-tk5FJ8wlWzZ0YRNTkeOeMhpdhvyX3vypnHr9owitoAc=">
 
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
 
-  </head>
-  <body class="synthwave-bg">
-    <header class="app-header glass-morphism neon-border">
-      <a href="/"><img class="app-header-avatar" src="/avatar.jpg" alt="Yaku Makki" /></a>
-      <span class="app-header-title gradient-text">Yaku Makki</span>
-      <nav class="app-header-menu">
-          <a class="app-header-menu-item" href="/">首页</a>
-             | 
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/katex.min.css" crossorigin="anonymous">
+</head>
+<body>
+  <a class="skip-link" href="#main">跳到内容</a>
+
+  <div class="scene" aria-hidden="true">
+    <div class="scene-sky"></div>
+    <div class="scene-stars"></div>
+    <div class="scene-sun-halo"></div>
+    <div class="scene-sun"></div>
+    <div class="scene-mountains scene-mountains-far"></div>
+    <div class="scene-mountains scene-mountains-near"></div>
+    <div class="scene-horizon"></div>
+    <div class="scene-floor"></div>
+    <div class="scene-scanlines"></div>
+  </div>
+
+  <nav class="navbar" aria-label="主导航">
+    <div class="nav-inner">
+      <a class="logo" href="/" data-press>
+        <img class="logo-avatar" src="/avatar/avatar.jpg" alt="" width="34" height="34">
+        <span class="logo-text">Yaku Makki</span>
+      </a>
+      <div class="nav-menu-wrap">
+        <span class="nav-tick" aria-hidden="true"></span>
+        <ul class="nav-menu">
           
-          <a class="app-header-menu-item" href="/post/">博客</a>
-             | 
+          <li>
+            <a href="/" data-press>首页</a>
+          </li>
           
-          <a class="app-header-menu-item" href="/wiki/">维基</a>
-             | 
+          <li>
+            <a href="/post/" data-press>博客</a>
+          </li>
           
-          <a class="app-header-menu-item" href="/tags/">标签</a>
-             | 
+          <li>
+            <a href="/wiki/" data-press>维基</a>
+          </li>
           
-          <a class="app-header-menu-item" href="/about/">关于</a>
-      </nav>
-      <p>个人小巢</p>
-      <div class="app-header-social">
-        
-          <a href="https://github.com/makkichan947" target="_blank" rel="noreferrer noopener me" class="pulse-glow">
-            <svg class="icon icon-brand-github" viewBox="0 0 24 24" fill="currentColor"><title>GitHub</title><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg>
-          </a>
-        
-          <a href="mailto:yakumakki947@hotmail.com" target="_blank" rel="noreferrer noopener me" class="pulse-glow">
-            <svg class="icon icon-mail" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><title>mail</title><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
-          </a>
-        
-          <a href="https://x.com/Makki_Yaku947" target="_blank" rel="noreferrer noopener me" class="pulse-glow">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-link">
-  <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path>
-  <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path>
-</svg>
-          </a>
-        
-          <a href="https://www.twitch.tv/u/makkichan947" target="_blank" rel="noreferrer noopener me" class="pulse-glow">
-            <svg class="icon icon-brand-twitch" viewBox="0 0 24 24" fill="currentColor"><title>Twitch</title><path d="M11.571 4.714h1.715v5.143H11.57zm4.715 0H18v5.143h-1.714zM6 0L1.714 4.286v15.428h5.143V24l4.286-4.286h3.428L22.286 12V0zm14.571 11.143l-3.428 3.428h-3.429l-3 3v-3H6.857V1.714h13.714Z"/></svg>
-          </a>
-        
+          <li>
+            <a href="/tags/" data-press>标签</a>
+          </li>
+          
+          <li>
+            <a href="/about/" data-press>关于</a>
+          </li>
+          
+          
+          <li>
+            <button id="search-toggle" class="search-toggle" type="button" title="搜索 (Ctrl+K 或 /)" aria-haspopup="dialog" aria-expanded="false" data-press>搜索</button>
+          </li>
+          
+        </ul>
       </div>
-    </header>
-    <main class="app-container glass-morphism glow-effect">
-      <div class="floating-particles">
-        <div class="particle" style="left: 10%; animation-delay: 0s;"></div>
-        <div class="particle" style="left: 20%; animation-delay: 1s;"></div>
-        <div class="particle" style="left: 30%; animation-delay: 2s;"></div>
-        <div class="particle" style="left: 40%; animation-delay: 3s;"></div>
-        <div class="particle" style="left: 50%; animation-delay: 4s;"></div>
-        <div class="particle" style="left: 60%; animation-delay: 5s;"></div>
-        <div class="particle" style="left: 70%; animation-delay: 6s;"></div>
-        <div class="particle" style="left: 80%; animation-delay: 7s;"></div>
-        <div class="particle" style="left: 90%; animation-delay: 8s;"></div>
-      </div>
-      
-  <article class="post enhanced-card glow-effect">
-    <header class="post-header">
-      <h1 class ="post-title gradient-text">TensorFlow高级应用</h1>
-      <div class="post-meta">
-        <div>
-          <svg class="icon icon-calendar" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><title>calendar</title><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
-          Oct 24, 2025
+    </div>
+  </nav>
+
+  
+  <div class="sheet-scrim" id="sheet-scrim"></div>
+  <section class="sheet" id="search-sheet" role="dialog" aria-modal="true" aria-label="搜索" aria-hidden="true">
+    <div class="sheet-panel" id="sheet-panel">
+      <div class="sheet-handle" id="sheet-handle" role="presentation" aria-hidden="true"></div>
+      <div class="sheet-body">
+        <div class="search-field">
+          <input id="search-input" type="search" placeholder="搜索文章和 Wiki…"
+                 autocomplete="off" spellcheck="false" aria-controls="search-results">
+          <span class="search-key" aria-hidden="true">/</span>
         </div>
-        <div>
-          <svg class="icon icon-clock" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><title>clock</title><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
-          10 min read
-        </div>
+        <div id="search-results" class="search-results" role="listbox" aria-label="搜索结果"></div>
       </div>
-    </header>
-    <div class="post-content">
-      <h1 id="tensorflow高级应用">TensorFlow高级应用</h1>
+    </div>
+  </section>
+  
+
+  <main class="main" id="main">
+    
+<header class="page-head">
+  <nav class="crumb" aria-label="面包屑">
+    <a href="/" data-press>首页</a>
+    <span class="sep">/</span>
+    <a href="/wiki/" data-press>维基</a>
+    
+    
+    <span class="sep">/</span>
+    <a href="/wiki/deep_learning/tensorflow/" data-press>TensorFlow框架</a>
+    
+    
+  </nav>
+  <h1>TensorFlow高级应用</h1>
+  
+</header>
+
+<div class="wiki-layout">
+  <article class="article">
+    <div class="article-content"><h1 id="tensorflow高级应用">TensorFlow高级应用</h1>
 <p>本章介绍TensorFlow在实际项目中的高级应用，包括计算机视觉、自然语言处理、强化学习、模型部署等领域的完整解决方案和最佳实践。</p>
 <h2 id="-计算机视觉应用">🎨 计算机视觉应用</h2>
 <h3 id="目标检测---yolo实现">目标检测 - YOLO实现</h3>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#f92672">import</span> tensorflow <span style="color:#66d9ef">as</span> tf
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#f92672">import</span> tensorflow <span style="color:#66d9ef">as</span> tf
 </span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> numpy <span style="color:#66d9ef">as</span> np
 </span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> cv2
 </span></span><span style="display:flex;"><span>
@@ -158,7 +167,7 @@
 </span></span><span style="display:flex;"><span>    metrics<span style="color:#f92672">=</span>[<span style="color:#e6db74">&#39;accuracy&#39;</span>]
 </span></span><span style="display:flex;"><span>)
 </span></span></code></pre></div><h3 id="图像分割---u-net实现">图像分割 - U-Net实现</h3>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">create_unet_model</span>(input_shape<span style="color:#f92672">=</span>(<span style="color:#ae81ff">256</span>, <span style="color:#ae81ff">256</span>, <span style="color:#ae81ff">3</span>), num_classes<span style="color:#f92672">=</span><span style="color:#ae81ff">1</span>):
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">create_unet_model</span>(input_shape<span style="color:#f92672">=</span>(<span style="color:#ae81ff">256</span>, <span style="color:#ae81ff">256</span>, <span style="color:#ae81ff">3</span>), num_classes<span style="color:#f92672">=</span><span style="color:#ae81ff">1</span>):
 </span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#34;&#34;&#34;创建U-Net模型&#34;&#34;&#34;</span>
 </span></span><span style="display:flex;"><span>    inputs <span style="color:#f92672">=</span> tf<span style="color:#f92672">.</span>keras<span style="color:#f92672">.</span>Input(shape<span style="color:#f92672">=</span>input_shape)
 </span></span><span style="display:flex;"><span>
@@ -217,7 +226,7 @@
 </span></span><span style="display:flex;"><span>)
 </span></span></code></pre></div><h2 id="-自然语言处理应用">📝 自然语言处理应用</h2>
 <h3 id="transformer模型实现">Transformer模型实现</h3>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">TransformerModel</span>(tf<span style="color:#f92672">.</span>keras<span style="color:#f92672">.</span>Model):
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">TransformerModel</span>(tf<span style="color:#f92672">.</span>keras<span style="color:#f92672">.</span>Model):
 </span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">__init__</span>(self, vocab_size, d_model, num_heads, num_layers, d_ff, max_len):
 </span></span><span style="display:flex;"><span>        super(TransformerModel, self)<span style="color:#f92672">.</span><span style="color:#a6e22e">__init__</span>()
 </span></span><span style="display:flex;"><span>
@@ -316,7 +325,7 @@
 </span></span><span style="display:flex;"><span>    max_len<span style="color:#f92672">=</span><span style="color:#ae81ff">100</span>
 </span></span><span style="display:flex;"><span>)
 </span></span></code></pre></div><h3 id="bert预训练模型">BERT预训练模型</h3>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">BERTModel</span>(tf<span style="color:#f92672">.</span>keras<span style="color:#f92672">.</span>Model):
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">BERTModel</span>(tf<span style="color:#f92672">.</span>keras<span style="color:#f92672">.</span>Model):
 </span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">__init__</span>(self, vocab_size, d_model, num_heads, num_layers, d_ff, max_len):
 </span></span><span style="display:flex;"><span>        super(BERTModel, self)<span style="color:#f92672">.</span><span style="color:#a6e22e">__init__</span>()
 </span></span><span style="display:flex;"><span>
@@ -383,7 +392,7 @@
 </span></span><span style="display:flex;"><span>)
 </span></span></code></pre></div><h2 id="-强化学习应用">🎮 强化学习应用</h2>
 <h3 id="dqn实现">DQN实现</h3>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#f92672">import</span> tensorflow <span style="color:#66d9ef">as</span> tf
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#f92672">import</span> tensorflow <span style="color:#66d9ef">as</span> tf
 </span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> numpy <span style="color:#66d9ef">as</span> np
 </span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> random
 </span></span><span style="display:flex;"><span><span style="color:#f92672">from</span> collections <span style="color:#f92672">import</span> deque
@@ -483,7 +492,7 @@
 </span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> len(agent<span style="color:#f92672">.</span>memory) <span style="color:#f92672">&gt;</span> batch_size:
 </span></span><span style="display:flex;"><span>            agent<span style="color:#f92672">.</span>replay(batch_size)
 </span></span></code></pre></div><h3 id="ppo实现">PPO实现</h3>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">PPOAgent</span>:
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">PPOAgent</span>:
 </span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">__init__</span>(self, state_size, action_size, clip_ratio<span style="color:#f92672">=</span><span style="color:#ae81ff">0.2</span>):
 </span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>state_size <span style="color:#f92672">=</span> state_size
 </span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>action_size <span style="color:#f92672">=</span> action_size
@@ -568,7 +577,7 @@
 </span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> loss
 </span></span></code></pre></div><h2 id="-模型部署">🚀 模型部署</h2>
 <h3 id="tensorflow-serving">TensorFlow Serving</h3>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#75715e"># 保存模型用于Serving</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#75715e"># 保存模型用于Serving</span>
 </span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> tensorflow <span style="color:#66d9ef">as</span> tf
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span><span style="color:#75715e"># 创建模型</span>
@@ -586,9 +595,9 @@
 </span></span><span style="display:flex;"><span><span style="color:#75715e"># 启动TensorFlow Serving</span>
 </span></span><span style="display:flex;"><span><span style="color:#e6db74">&#34;&#34;&#34;
 </span></span></span><span style="display:flex;"><span><span style="color:#e6db74">tensorflow_model_server </span><span style="color:#ae81ff">\
-</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span><span style="color:#e6db74">    --rest_api_port=8501 </span><span style="color:#ae81ff">\
-</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span><span style="color:#e6db74">    --model_name=my_model </span><span style="color:#ae81ff">\
-</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span><span style="color:#e6db74">    --model_base_path=/path/to/model
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    --rest_api_port=8501 </span><span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    --model_name=my_model </span><span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    --model_base_path=/path/to/model
 </span></span></span><span style="display:flex;"><span><span style="color:#e6db74">&#34;&#34;&#34;</span>
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span><span style="color:#75715e"># 使用REST API进行预测</span>
@@ -606,7 +615,7 @@
 </span></span><span style="display:flex;"><span>response <span style="color:#f92672">=</span> requests<span style="color:#f92672">.</span>post(<span style="color:#e6db74">&#39;http://localhost:8501/v1/models/my_model:predict&#39;</span>, data<span style="color:#f92672">=</span>data, headers<span style="color:#f92672">=</span>headers)
 </span></span><span style="display:flex;"><span>print(response<span style="color:#f92672">.</span>json())
 </span></span></code></pre></div><h3 id="tensorflow-lite转换和部署">TensorFlow Lite转换和部署</h3>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#75715e"># 转换为TensorFlow Lite</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#75715e"># 转换为TensorFlow Lite</span>
 </span></span><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">convert_to_tflite</span>(model, quantization<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;float32&#39;</span>):
 </span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#34;&#34;&#34;转换为TensorFlow Lite格式&#34;&#34;&#34;</span>
 </span></span><span style="display:flex;"><span>
@@ -655,7 +664,7 @@
 </span></span><span style="display:flex;"><span>        size <span style="color:#f92672">=</span> os<span style="color:#f92672">.</span>path<span style="color:#f92672">.</span>getsize(model_path) <span style="color:#f92672">/</span> <span style="color:#ae81ff">1024</span> <span style="color:#f92672">/</span> <span style="color:#ae81ff">1024</span>  <span style="color:#75715e"># MB</span>
 </span></span><span style="display:flex;"><span>        print(<span style="color:#e6db74">f</span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">{</span>precision<span style="color:#e6db74">}</span><span style="color:#e6db74">模型大小: </span><span style="color:#e6db74">{</span>size<span style="color:#e6db74">:</span><span style="color:#e6db74">.2f</span><span style="color:#e6db74">}</span><span style="color:#e6db74"> MB&#34;</span>)
 </span></span></code></pre></div><h3 id="tensorflowjs转换">TensorFlow.js转换</h3>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#75715e"># 转换为TensorFlow.js格式</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#75715e"># 转换为TensorFlow.js格式</span>
 </span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> tensorflowjs <span style="color:#66d9ef">as</span> tfjs
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span><span style="color:#75715e"># 保存为TensorFlow.js格式</span>
@@ -691,7 +700,7 @@
 </span></span></span><span style="display:flex;"><span><span style="color:#e6db74">&#34;&#34;&#34;</span>
 </span></span></code></pre></div><h2 id="-生产环境最佳实践">📊 生产环境最佳实践</h2>
 <h3 id="模型监控">模型监控</h3>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">ModelMonitor</span>:
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">ModelMonitor</span>:
 </span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">__init__</span>(self, model, metrics<span style="color:#f92672">=</span>[<span style="color:#e6db74">&#39;accuracy&#39;</span>, <span style="color:#e6db74">&#39;latency&#39;</span>, <span style="color:#e6db74">&#39;throughput&#39;</span>]):
 </span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>model <span style="color:#f92672">=</span> model
 </span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>metrics <span style="color:#f92672">=</span> metrics
@@ -758,7 +767,7 @@
 </span></span><span style="display:flex;"><span>report <span style="color:#f92672">=</span> monitor<span style="color:#f92672">.</span>generate_report()
 </span></span><span style="display:flex;"><span>print(<span style="color:#e6db74">&#34;模型监控报告:&#34;</span>, report)
 </span></span></code></pre></div><h3 id="ab测试框架">A/B测试框架</h3>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">ABTestFramework</span>:
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">ABTestFramework</span>:
 </span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">__init__</span>(self, model_a, model_b, traffic_split<span style="color:#f92672">=</span><span style="color:#ae81ff">0.5</span>):
 </span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>model_a <span style="color:#f92672">=</span> model_a
 </span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>model_b <span style="color:#f92672">=</span> model_b
@@ -845,16 +854,16 @@
 </ul>
 <h2 id="-部署最佳实践">🔧 部署最佳实践</h2>
 <h3 id="容器化部署">容器化部署</h3>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-dockerfile" data-lang="dockerfile"><span style="display:flex;"><span><span style="color:#75715e"># Dockerfile</span><span style="color:#960050;background-color:#1e0010">
-</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#66d9ef">FROM</span> <span style="color:#e6db74">tensorflow/serving:latest</span><span style="color:#960050;background-color:#1e0010">
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-dockerfile" data-lang="dockerfile"><span style="display:flex;"><span><span style="color:#75715e"># Dockerfile</span><span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#66d9ef">FROM</span> <span style="color:#e6db74">tensorflow/serving:latest</span><span style="color:#960050;background-color:#1e0010">
 </span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">
-</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#66d9ef">COPY</span> model/ /models/my_model<span style="color:#960050;background-color:#1e0010">
-</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#66d9ef">ENV</span> MODEL_NAME<span style="color:#f92672">=</span>my_model
+</span></span></span><span style="display:flex;"><span><span style="color:#66d9ef">COPY</span> model/ /models/my_model<span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#66d9ef">ENV</span> MODEL_NAME<span style="color:#f92672">=</span>my_model
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span><span style="color:#75715e"># 启动命令</span><span style="color:#960050;background-color:#1e0010">
-</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010"></span><span style="color:#66d9ef">CMD</span> [<span style="color:#e6db74">&#34;tensorflow_model_server&#34;</span>, <span style="color:#e6db74">&#34;--rest_api_port=8501&#34;</span>, <span style="color:#e6db74">&#34;--model_name=my_model&#34;</span>, <span style="color:#e6db74">&#34;--model_base_path=/models/my_model&#34;</span>]<span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#66d9ef">CMD</span> [<span style="color:#e6db74">&#34;tensorflow_model_server&#34;</span>, <span style="color:#e6db74">&#34;--rest_api_port=8501&#34;</span>, <span style="color:#e6db74">&#34;--model_name=my_model&#34;</span>, <span style="color:#e6db74">&#34;--model_base_path=/models/my_model&#34;</span>]<span style="color:#960050;background-color:#1e0010">
 </span></span></span></code></pre></div><h3 id="模型版本管理">模型版本管理</h3>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#75715e"># 模型版本管理</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#75715e"># 模型版本管理</span>
 </span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> tensorflow <span style="color:#66d9ef">as</span> tf
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">ModelVersionManager</span>:
@@ -910,30 +919,85 @@
 </span></span><span style="display:flex;"><span>    )
 </span></span></code></pre></div><hr>
 <p><em>最近更新: {{ .Lastmod.Format &ldquo;2006-01-02&rdquo; }}</em></p>
+</div>
+    
+<nav class="pager" aria-label="文章导航">
+  
+  
+  <a href="/wiki/deep_learning/tensorflow/advanced_1/" class="is-next" data-press>
+    <span class="dir">下一篇 →</span>TensorFlow高级特性
+  </a>
+  
+</nav>
 
+
+    
+<div class="comments">
+  <h2 class="comments-title">评论</h2>
+  <div id="utterances"></div>
+  <script>
+    (function () {
+      if (window.location.protocol === 'file:') return;
+      var s = document.createElement('script');
+      s.src = 'https://utteranc.es/client.js';
+      s.async = true;
+      s.setAttribute('repo', "\"makkichan947/makkichan947.github.io\"");
+      s.setAttribute('issue-term', "\"pathname\"");
+      s.setAttribute('theme', "\"github-dark\"");
+      s.setAttribute('crossorigin', 'anonymous');
+      document.getElementById('utterances').appendChild(s);
+    })();
+  </script>
+</div>
+
+
+  </article>
+  
+</div>
+
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+      <div class="footer-links">
+        
+        <a href="https://github.com/makkichan947" target="_blank" rel="noopener" title="Github" data-press>Github</a>
+        
+        <a href="mailto:yakumakki947@hotmail.com" target="_blank" rel="noopener" title="Email" data-press>Email</a>
+        
+        <a href="https://x.com/Makki_Yaku947" target="_blank" rel="noopener" title="Twitter" data-press>Twitter</a>
+        
+        <a href="https://www.twitch.tv/u/makkichan947" target="_blank" rel="noopener" title="Twitch" data-press>Twitch</a>
+        
+      </div>
+      <p>&copy; 2026 Yaku Makki</p>
+      <p>Powered by <a href="https://gohugo.io" target="_blank" rel="noopener">Hugo</a> · Makki Theme</p>
       
-      <div class="post-separator">------------------------------------------------------------------------</div>
-      
-    </div>
-    <div class="post-footer">
-      
-      <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
-      <div class="busuanzi-container">
-        <span id="busuanzi_container_page_pv">--本文总阅读量<span id="busuanzi_value_page_pv"></span>次--</span>
+      <div class="stats">
+        <span>访客 <span id="busuanzi_value_site_uv"></span></span>
+        <span>访问 <span id="busuanzi_value_site_pv"></span></span>
+        <span>本页 <span id="busuanzi_value_page_pv"></span></span>
       </div>
       
-      
-      <script src="https://utteranc.es/client.js"
-        repo="makkichan947/makkichan947.github.io"
-        issue-term="pathname"
-        label="Utterances"
-        theme="github-dark"
-        crossorigin="anonymous"
-        async>
-      </script>
     </div>
-  </article>
+  </footer>
 
-    </main>
-  </body>
+  <button class="back-to-top" id="back-to-top" type="button" aria-label="回到顶部" data-press>
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 19V5"/><path d="M5 12l7-7 7 7"/></svg>
+  </button>
+
+  
+  <script src="/js/main.min.21b3296e340ecb2ced2fb338acc5c540b53c154fb3595e8efddf10016cc5226d.js" integrity="sha256-IbMpbjQOyyztL7M4rMXFQLU8FU&#43;zWV6O/d8QAWzFIm0=" defer></script>
+  
+  
+  <script src="/js/search.min.b2d6ba6610ce24454bc1436dc521dcfd878b2583ad9f65f77aadedaaa1e1a54c.js" integrity="sha256-sta6ZhDOJEVLwUNtxSHc/YeLJYOtn2X3eq3tqqHhpUw=" defer></script>
+  
+
+  
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+  
+
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/katex.min.js" crossorigin="anonymous"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/contrib/auto-render.min.js" crossorigin="anonymous"></script>
+</body>
 </html>

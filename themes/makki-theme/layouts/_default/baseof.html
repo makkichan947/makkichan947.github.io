@@ -1,108 +1,119 @@
 <!DOCTYPE html>
 <html lang="{{ .Site.LanguageCode }}">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ .Title }} - {{ .Site.Title }}</title>
-    <meta name="description" content="{{ .Description | default .Site.Params.description }}">
-    
-    <!-- Favicon -->
-    <link rel="icon" type="image/jpeg" href="{{ .Site.Params.favicon | relURL }}">
-    
-    <!-- CSS -->
-    <link rel="stylesheet" href="{{ "css/main.css" | relURL }}">
-    
-    <!-- 字体 -->
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
-    
-    <!-- KaTeX for math -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/katex.min.css" integrity="sha384-Xi8rHCmBmhbuyyhbI88391ZKP2dmfnOl4rT9ZfRI7mLTdk1wblIUnrIq35nqwEvC" crossorigin="anonymous">
-    
-    <!-- 搜索功能 -->
-    {{ if .Site.Params.search.enable }}
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@docsearch/css@3"></link>
-    {{ end }}
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>{{ if .IsHome }}{{ .Site.Title }}{{ else }}{{ .Title }} · {{ .Site.Title }}{{ end }}</title>
+  <meta name="description" content="{{ .Description | default .Site.Params.description }}">
+  <meta name="theme-color" content="#0a0a0f">
+  <script>document.documentElement.classList.add('js');</script>
+
+  <link rel="icon" href="{{ .Site.Params.favicon | default "/avatar/avatar.jpg" | relURL }}" type="image/jpeg">
+
+  {{ $css := resources.Get "css/main.css" | minify | fingerprint }}
+  <link rel="stylesheet" href="{{ $css.RelPermalink }}" integrity="{{ $css.Data.Integrity }}">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/katex.min.css" crossorigin="anonymous">
 </head>
-<body class="synthwave-bg">
-    <!-- 导航栏 -->
-    <nav class="navbar fade-in-up glass-morphism neon-border">
-        <div class="nav-container">
-            <div class="logo pulse gradient-text">
-                {{ .Site.Title }}
-            </div>
-            <ul class="nav-menu">
-                {{ range .Site.Menus.main }}
-                <li>
-                    <a href="{{ .URL }}" title="{{ .Name }}">
-                        {{ .Name }}
-                    </a>
-                </li>
-                {{ end }}
-                
-                <!-- 搜索按钮 -->
-                {{ if .Site.Params.search.enable }}
-                <li>
-                    <button id="search-toggle" class="search-toggle" title="搜索">
-                        🔍
-                    </button>
-                </li>
-                {{ end }}
-            </ul>
-        </div>
-    </nav>
+<body>
+  <a class="skip-link" href="#main">跳到内容</a>
 
-    <!-- 搜索模态框 -->
-    {{ if .Site.Params.search.enable }}
-    <div id="search-modal" class="search-modal">
-        <div class="search-container glass-morphism glow-effect">
-            <input type="text" id="search-input" class="search-input" placeholder="搜索文章和Wiki...">
-            <span class="search-icon">🔍</span>
-        </div>
-        <div id="search-results" class="search-results"></div>
+  <div class="scene" aria-hidden="true">
+    <div class="scene-sky"></div>
+    <div class="scene-stars"></div>
+    <div class="scene-sun-halo"></div>
+    <div class="scene-sun"></div>
+    <div class="scene-mountains scene-mountains-far"></div>
+    <div class="scene-mountains scene-mountains-near"></div>
+    <div class="scene-horizon"></div>
+    <div class="scene-floor"></div>
+    <div class="scene-scanlines"></div>
+  </div>
+
+  <nav class="navbar" aria-label="主导航">
+    <div class="nav-inner">
+      <a class="logo" href="{{ "" | relURL }}" data-press>
+        {{ with .Site.Params.avatar }}<img class="logo-avatar" src="{{ . | relURL }}" alt="" width="34" height="34">{{ end }}
+        <span class="logo-text">{{ .Site.Title }}</span>
+      </a>
+      <div class="nav-menu-wrap">
+        <span class="nav-tick" aria-hidden="true"></span>
+        <ul class="nav-menu">
+          {{ range .Site.Menus.main }}
+          <li>
+            <a href="{{ .URL }}"{{ if $.IsMenuCurrent "main" . }} class="is-active" aria-current="page"{{ end }} data-press>{{ .Name }}</a>
+          </li>
+          {{ end }}
+          {{ if .Site.Params.search.enable }}
+          <li>
+            <button id="search-toggle" class="search-toggle" type="button" title="搜索 (Ctrl+K 或 /)" aria-haspopup="dialog" aria-expanded="false" data-press>搜索</button>
+          </li>
+          {{ end }}
+        </ul>
+      </div>
     </div>
-    {{ end }}
+  </nav>
 
-    <!-- 主内容区域 -->
-    <main class="main-container">
-        <div class="floating-particles">
-            <div class="particle" style="left: 10%; animation-delay: 0s;"></div>
-            <div class="particle" style="left: 20%; animation-delay: 1s;"></div>
-            <div class="particle" style="left: 30%; animation-delay: 2s;"></div>
-            <div class="particle" style="left: 40%; animation-delay: 3s;"></div>
-            <div class="particle" style="left: 50%; animation-delay: 4s;"></div>
-            <div class="particle" style="left: 60%; animation-delay: 5s;"></div>
-            <div class="particle" style="left: 70%; animation-delay: 6s;"></div>
-            <div class="particle" style="left: 80%; animation-delay: 7s;"></div>
-            <div class="particle" style="left: 90%; animation-delay: 8s;"></div>
+  {{ if .Site.Params.search.enable }}
+  <div class="sheet-scrim" id="sheet-scrim"></div>
+  <section class="sheet" id="search-sheet" role="dialog" aria-modal="true" aria-label="搜索" aria-hidden="true">
+    <div class="sheet-panel" id="sheet-panel">
+      <div class="sheet-handle" id="sheet-handle" role="presentation" aria-hidden="true"></div>
+      <div class="sheet-body">
+        <div class="search-field">
+          <input id="search-input" type="search" placeholder="搜索文章和 Wiki…"
+                 autocomplete="off" spellcheck="false" aria-controls="search-results">
+          <span class="search-key" aria-hidden="true">/</span>
         </div>
-        {{ block "main" . }}{{ end }}
-    </main>
+        <div id="search-results" class="search-results" role="listbox" aria-label="搜索结果"></div>
+      </div>
+    </div>
+  </section>
+  {{ end }}
 
-    <!-- 页脚 -->
-    <footer class="footer glass-morphism neon-border">
-        <div class="footer-content">
-            <p>&copy; {{ now.Year }} {{ .Site.Params.author }}. All rights reserved.</p>
-            <p>Powered by <a href="https://gohugo.io" target="_blank">Hugo</a> & <span class="gradient-text">Makki Theme</span></p>
-            <div class="footer-links">
-                {{ range .Site.Params.social }}
-                <a href="{{ .url }}" target="_blank" title="{{ .name }}" class="pulse-glow">
-                    {{ .name }}
-                </a>
-                {{ end }}
-            </div>
-        </div>
-    </footer>
+  <main class="main" id="main">
+    {{ block "main" . }}{{ end }}
+  </main>
 
-    <!-- JavaScript -->
-    <script src="{{ "js/main.js" | relURL }}"></script>
-    {{ if .Site.Params.search.enable }}
-    <script src="{{ "js/search.js" | relURL }}"></script>
-    {{ end }}
-    
-    <!-- KaTeX JavaScript -->
-    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/katex.min.js" integrity="sha384-XwIf0/YbIl6S9ZkKie8smIsrEjkCfI+DQNtHs8anrKWDR/Rh/euWVsap+6qwkB" crossorigin="anonymous"></script>
-    <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/contrib/auto-render.min.js" integrity="sha384-+XBljXPPiv+OzfbB3cVmLHf4hdUFHlWNZN5spNQHRoLkw/BBp0AV2ym6XrJDz" crossorigin="anonymous"></script>
+  <footer class="footer">
+    <div class="footer-inner">
+      <div class="footer-links">
+        {{ range .Site.Params.social }}
+        <a href="{{ .url }}" target="_blank" rel="noopener" title="{{ .name }}" data-press>{{ .name }}</a>
+        {{ end }}
+      </div>
+      <p>&copy; {{ now.Year }} {{ .Site.Params.author | default .Site.Title }}</p>
+      <p>Powered by <a href="https://gohugo.io" target="_blank" rel="noopener">Hugo</a> · Makki Theme</p>
+      {{ if .Site.Params.busuanzi.enable }}
+      <div class="stats">
+        {{ if .Site.Params.busuanzi.site_uv }}<span>访客 <span id="busuanzi_value_site_uv"></span></span>{{ end }}
+        {{ if .Site.Params.busuanzi.site_pv }}<span>访问 <span id="busuanzi_value_site_pv"></span></span>{{ end }}
+        {{ if .Site.Params.busuanzi.page_pv }}<span>本页 <span id="busuanzi_value_page_pv"></span></span>{{ end }}
+      </div>
+      {{ end }}
+    </div>
+  </footer>
+
+  <button class="back-to-top" id="back-to-top" type="button" aria-label="回到顶部" data-press>
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 19V5"/><path d="M5 12l7-7 7 7"/></svg>
+  </button>
+
+  {{ $js := resources.Get "js/main.js" | minify | fingerprint }}
+  <script src="{{ $js.RelPermalink }}" integrity="{{ $js.Data.Integrity }}" defer></script>
+  {{ if .Site.Params.search.enable }}
+  {{ $sj := resources.Get "js/search.js" | minify | fingerprint }}
+  <script src="{{ $sj.RelPermalink }}" integrity="{{ $sj.Data.Integrity }}" defer></script>
+  {{ end }}
+
+  {{ if .Site.Params.busuanzi.enable }}
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+  {{ end }}
+
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/katex.min.js" crossorigin="anonymous"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/contrib/auto-render.min.js" crossorigin="anonymous"></script>
 </body>
 </html>

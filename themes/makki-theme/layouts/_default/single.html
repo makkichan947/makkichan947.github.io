@@ -1,27 +1,16 @@
 {{ define "main" }}
-<div class="content-wrapper fade-in-up enhanced-card glow-effect">
-    <article class="single-article">
-        <header class="article-header">
-            <h1 class="gradient-text">{{ .Title }}</h1>
-
-            {{ if .Date }}
-            <div class="article-meta">
-                <time datetime="{{ .Date.Format "2006-01-02T15:04:05Z07:00" }}">
-                    📅 {{ .Date.Format "2006年01月02日" }}
-                </time>
-            </div>
-            {{ end }}
-        </header>
-
-        <div class="article-content">
-            {{ .Content }}
-        </div>
-
-        {{ if .Params.comments }}
-        <div class="comments-section">
-            {{ template "_internal/disqus.html" . }}
-        </div>
-        {{ end }}
-    </article>
-</div>
+<article class="article">
+  <header class="article-head" data-reveal>
+    <h1>{{ .Title }}</h1>
+    <div class="meta">
+      {{ if .Date }}<time datetime="{{ .Date.Format "2006-01-02T15:04:05Z07:00" }}">{{ .Date.Format "2006-01-02" }}</time>{{ end }}
+      {{ if .Site.Params.showReadingTime }}<span>{{ .ReadingTime }} 分钟阅读</span>{{ end }}
+      {{ if .Site.Params.showWordCount }}<span>{{ .WordCount }} 字</span>{{ end }}
+      {{ range .Params.tags }}<a class="tag" href="{{ "tags/" | relLangURL }}{{ . | urlize }}/" data-press>{{ . }}</a>{{ end }}
+    </div>
+  </header>
+  <div class="article-content" data-reveal data-reveal-delay="60">{{ .Content }}</div>
+  {{ partial "pager.html" . }}
+  {{ partial "comments.html" . }}
+</article>
 {{ end }}

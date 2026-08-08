@@ -1,60 +1,55 @@
 {{ define "main" }}
-<div class="content-wrapper fade-in-up enhanced-card glow-effect">
-    <h1 class="gradient-text typewriter">{{ .Site.Title }}</h1>
+<section class="hero">
+  <h1 class="hero-title" data-reveal>
+    <span class="gradient-text">{{ .Site.Title }}</span>
+  </h1>
+  <p class="hero-sub" data-reveal data-reveal-delay="45">{{ .Site.Params.description | default "个人小巢" }}</p>
+  <div class="hero-actions" data-reveal data-reveal-delay="90">
+    <a class="btn btn-primary" href="/post/" data-press>博客</a>
+    <a class="btn btn-ghost" href="/wiki/" data-press>维基</a>
+  </div>
+</section>
 
-    <div class="hero-section">
-        <p class="hero-text">{{ .Site.Params.description | default "欢迎来到我的技术博客和维基" }}</p>
-        <div class="hero-buttons">
-            <a href="/post/" class="btn pulse-glow">📝 博客文章</a>
-            <a href="/wiki/" class="btn btn-secondary pulse-glow">📚 维基</a>
-        </div>
-    </div>
-
-    <div class="recent-content">
-        <div class="section-card enhanced-card">
-            <h2 class="gradient-text">🆕 最新博客</h2>
-            {{ range first 3 (where .Site.RegularPages "Section" "post") }}
-            <div class="card enhanced-card">
-                <h3><a href="{{ .RelPermalink }}" class="gradient-text">{{ .Title }}</a></h3>
-                <p>{{ .Summary | truncate 100 }}</p>
-                <div class="meta">
-                    <time>{{ .Date.Format "2006-01-02" }}</time>
-                    {{ if .Params.tags }}
-                    <div class="tags">
-                        {{ range .Params.tags }}
-                        <span class="tag pulse-glow">{{ . }}</span>
-                        {{ end }}
-                    </div>
-                    {{ end }}
-                </div>
-            </div>
-            {{ end }}
-            <a href="/post/" class="view-all gradient-text">查看全部文章 →</a>
-        </div>
-
-        <div class="section-card enhanced-card">
-            <h2 class="gradient-text">📖 维基</h2>
-            {{ range first 3 (where .Site.RegularPages "Section" "wiki") }}
-            <div class="card enhanced-card">
-                <h3><a href="{{ .RelPermalink }}" class="gradient-text">{{ .Title }}</a></h3>
-                <p>{{ .Summary | truncate 100 }}</p>
-                <div class="meta">
-                    <time>{{ .Date.Format "2006-01-02" }}</time>
-                </div>
-            </div>
-            {{ end }}
-            <a href="/wiki/" class="view-all gradient-text">浏览维基 →</a>
-        </div>
-    </div>
-
-    {{ if .Site.Params.search.enable }}
-    <div class="search-section enhanced-card">
-        <h2 class="gradient-text">🔍 搜索</h2>
-        <div class="search-container glass-morphism">
-            <input type="text" id="main-search" class="search-input" placeholder="搜索文章、Wiki和标签...">
-            <span class="search-icon">🔍</span>
-        </div>
-    </div>
+{{ $recent := first 3 (where .Site.RegularPages "Section" "post") }}
+{{ if $recent }}
+<section>
+  <div class="section-head">
+    <h2>最新博客</h2>
+    <a class="view-all" href="/post/" data-press>查看全部 →</a>
+  </div>
+  <div class="card-grid">
+    {{ range $i, $p := $recent }}
+    <article class="card" data-press data-reveal data-reveal-delay="{{ mod $i 6 }}45">
+      <h3><a href="{{ $p.RelPermalink }}">{{ $p.Title }}</a></h3>
+      <p>{{ $p.Summary | truncate 110 }}</p>
+      <div class="meta">
+        <time datetime="{{ $p.Date.Format "2006-01-02" }}">{{ $p.Date.Format "2006-01-02" }}</time>
+        {{ range $p.Params.tags }}<span class="tag">{{ . }}</span>{{ end }}
+      </div>
+    </article>
     {{ end }}
-</div>
+  </div>
+</section>
+{{ end }}
+
+{{ $wikis := first 4 (where .Site.RegularPages "Section" "wiki") }}
+{{ if $wikis }}
+<section>
+  <div class="section-head">
+    <h2>维基</h2>
+    <a class="view-all" href="/wiki/" data-press>浏览全部 →</a>
+  </div>
+  <div class="card-grid">
+    {{ range $i, $p := $wikis }}
+    <article class="card" data-press data-reveal data-reveal-delay="{{ mod $i 6 }}45">
+      <h3><a href="{{ $p.RelPermalink }}">{{ $p.Title }}</a></h3>
+      <p>{{ $p.Summary | truncate 110 }}</p>
+      <div class="meta">
+        <time datetime="{{ $p.Date.Format "2006-01-02" }}">{{ $p.Date.Format "2006-01-02" }}</time>
+      </div>
+    </article>
+    {{ end }}
+  </div>
+</section>
+{{ end }}
 {{ end }}

@@ -1,112 +1,121 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="zh">
-  <head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
-    <title>TensorFlow高级特性 // Yaku Makki</title>
-    <link rel="shortcut icon" href="./avatar.jpg" />
-    <meta charset="utf-8" />
-    <meta name="generator" content="Hugo 0.151.2">
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="author" content="Yaku Makki" />
-    <meta name="description" content="" />
-    <link rel="stylesheet" href="/css/main.min.422840b4454cb211f5b3dab61f082cdff508e88825173c31806835cb75529734.css" />
-    
+<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>TensorFlow高级特性 · Yaku Makki</title>
+  <meta name="description" content="个人小巢">
+  <meta name="theme-color" content="#0a0a0f">
+  <script>document.documentElement.classList.add('js');</script>
 
-    
-    
-  <meta name="twitter:card" content="summary">
-  <meta name="twitter:title" content="TensorFlow高级特性">
-  <meta name="twitter:description" content="TensorFlow高级特性 本章深入介绍TensorFlow的高级特性，包括自定义训练循环、分布式训练、模型优化、性能调优等内容，帮助你构建更复杂和高效的深度学习模型。
-🎯 自定义训练循环 基础自定义训练 import tensorflow as tf import numpy as np # 准备数据 (x_train, y_train), (x_test, y_test) = tf.keras.datasets.mnist.load_data() x_train = x_train.reshape(-1, 784) / 255.0 x_test = x_test.reshape(-1, 784) / 255.0 y_train = tf.keras.utils.to_categorical(y_train, 10) y_test = tf.keras.utils.to_categorical(y_test, 10) # 创建数据集 train_dataset = tf.data.Dataset.from_tensor_slices((x_train, y_train)) train_dataset = train_dataset.shuffle(1000).batch(32) # 构建模型 class CustomModel(tf.keras.Model): def __init__(self): super(CustomModel, self).__init__() self.dense1 = tf.keras.layers.Dense(128, activation=&#39;relu&#39;) self.dense2 = tf.keras.layers.Dense(64, activation=&#39;relu&#39;) self.dense3 = tf.keras.layers.Dense(10, activation=&#39;softmax&#39;) def call(self, inputs): x = self.dense1(inputs) x = self.dense2(x) return self.dense3(x) model = CustomModel() # 定义损失函数和优化器 loss_fn = tf.keras.losses.CategoricalCrossentropy() optimizer = tf.keras.optimizers.Adam() # 自定义训练循环 @tf.function # 编译加速 def train_step(x, y): with tf.GradientTape() as tape: predictions = model(x) loss = loss_fn(y, predictions) gradients = tape.gradient(loss, model.trainable_variables) optimizer.apply_gradients(zip(gradients, model.trainable_variables)) return loss # 训练 epochs = 5 for epoch in range(epochs): total_loss = 0 num_batches = 0 for x_batch, y_batch in train_dataset: loss = train_step(x_batch, y_batch) total_loss &#43;= loss num_batches &#43;= 1 avg_loss = total_loss / num_batches print(f&#34;Epoch {epoch &#43; 1}, Loss: {avg_loss:.4f}&#34;) 高级自定义训练 class AdvancedTrainer: def __init__(self, model, optimizer, loss_fn, metrics=None): self.model = model self.optimizer = optimizer self.loss_fn = loss_fn self.metrics = metrics or [] @tf.function def train_step(self, x, y): with tf.GradientTape() as tape: predictions = self.model(x, training=True) loss = self.loss_fn(y, predictions) # 添加正则化损失 for var in self.model.trainable_variables: loss &#43;= tf.nn.l2_loss(var) * 1e-4 gradients = tape.gradient(loss, self.model.trainable_variables) self.optimizer.apply_gradients(zip(gradients, self.model.trainable_variables)) # 计算指标 for metric in self.metrics: metric.update_state(y, predictions) return loss def train_epoch(self, dataset): total_loss = 0 num_batches = 0 for x_batch, y_batch in dataset: loss = self.train_step(x_batch, y_batch) total_loss &#43;= loss num_batches &#43;= 1 # 重置指标状态 for metric in self.metrics: metric.reset_states() return total_loss / num_batches # 使用高级训练器 model = CustomModel() optimizer = tf.keras.optimizers.Adam(learning_rate=0.001) loss_fn = tf.keras.losses.CategoricalCrossentropy() # 定义指标 train_acc = tf.keras.metrics.CategoricalAccuracy() val_acc = tf.keras.metrics.CategoricalAccuracy() trainer = AdvancedTrainer(model, optimizer, loss_fn, [train_acc]) # 训练多个epoch for epoch in range(10): loss = trainer.train_epoch(train_dataset) print(f&#34;Epoch {epoch &#43; 1}, Loss: {loss:.4f}, Accuracy: {train_acc.result():.4f}&#34;) 📊 分布式训练 多GPU训练 # 策略1: MirroredStrategy strategy = tf.distribute.MirroredStrategy() print(f&#34;GPU数量: {strategy.num_replicas_in_sync}&#34;) with strategy.scope(): # 在策略范围内构建模型 model = tf.keras.Sequential([ tf.keras.layers.Dense(128, activation=&#39;relu&#39;, input_shape=(784,)), tf.keras.layers.Dense(64, activation=&#39;relu&#39;), tf.keras.layers.Dense(10, activation=&#39;softmax&#39;) ]) model.compile( optimizer=&#39;adam&#39;, loss=&#39;categorical_crossentropy&#39;, metrics=[&#39;accuracy&#39;] ) # 训练 model.fit(x_train, y_train, epochs=5, batch_size=64) TPU训练 # TPU训练 resolver = tf.distribute.cluster_resolver.TPUClusterResolver() tf.config.experimental_connect_to_cluster(resolver) tf.tpu.experimental.initialize_tpu_system(resolver) # 创建TPU策略 strategy = tf.distribute.experimental.TPUStrategy(resolver) with strategy.scope(): model = create_model() # 在TPU策略范围内创建模型 model.compile(...) # 训练 model.fit(train_dataset, epochs=10) 自定义分布式训练 # 自定义分布式训练循环 @tf.function def distributed_train_step(dataset_inputs): def train_step_fn(inputs): x, y = inputs with tf.GradientTape() as tape: predictions = model(x, training=True) loss = loss_fn(y, predictions) gradients = tape.gradient(loss, model.trainable_variables) optimizer.apply_gradients(zip(gradients, model.trainable_variables)) return loss # 在所有副本上运行 per_replica_losses = strategy.run(train_step_fn, args=(dataset_inputs,)) return strategy.reduce(tf.distribute.ReduceOp.SUM, per_replica_losses, axis=None) # 分布式训练循环 for epoch in range(num_epochs): total_loss = 0 num_batches = 0 for x_batch, y_batch in distributed_dataset: loss = distributed_train_step((x_batch, y_batch)) total_loss &#43;= loss num_batches &#43;= 1 avg_loss = total_loss / num_batches print(f&#34;Epoch {epoch}, Loss: {avg_loss}&#34;) 🚀 模型优化 混合精度训练 from tensorflow.keras.mixed_precision import experimental as mixed_precision # 设置混合精度策略 policy = mixed_precision.Policy(&#39;mixed_float16&#39;) mixed_precision.set_policy(policy) # 构建模型（自动使用混合精度） with strategy.scope(): model = tf.keras.Sequential([ tf.keras.layers.Dense(128, activation=&#39;relu&#39;, input_shape=(784,)), tf.keras.layers.Dense(10, activation=&#39;softmax&#39;) ]) # 使用混合精度优化器 optimizer = mixed_precision.LossScaleOptimizer( tf.keras.optimizers.Adam(), loss_scale=&#39;dynamic&#39; ) model.compile(optimizer=optimizer, loss=&#39;categorical_crossentropy&#39;, metrics=[&#39;accuracy&#39;]) # 训练 model.fit(x_train, y_train, epochs=5) 模型量化 import tensorflow_model_optimization as tfmot # 应用量化感知训练 quantize_model = tfmot.quantization.keras.quantize_model q_aware_model = quantize_model(model) # 编译量化模型 q_aware_model.compile( optimizer=&#39;adam&#39;, loss=&#39;categorical_crossentropy&#39;, metrics=[&#39;accuracy&#39;] ) # 量化感知训练 q_aware_model.fit(x_train, y_train, epochs=5) # 转换为完全量化模型 converter = tf.lite.TFLiteConverter.from_keras_model(q_aware_model) converter.optimizations = [tf.lite.Optimize.DEFAULT] quantized_tflite_model = converter.convert() 模型剪枝 # 应用模型剪枝 prune_low_magnitude = tfmot.sparsity.keras.prune_low_magnitude # 定义剪枝参数 pruning_params = { &#39;pruning_schedule&#39;: tfmot.sparsity.keras.PolynomialDecay( initial_sparsity=0.0, final_sparsity=0.5, begin_step=0, end_step=1000 ) } # 创建剪枝模型 pruned_model = prune_low_magnitude(model, **pruning_params) # 编译剪枝模型 pruned_model.compile( optimizer=&#39;adam&#39;, loss=&#39;categorical_crossentropy&#39;, metrics=[&#39;accuracy&#39;] ) # 剪枝训练 pruned_model.fit(x_train, y_train, epochs=10) # 剥离剪枝结构 stripped_pruned_model = tfmot.sparsity.keras.strip_pruning(pruned_model) 🎨 高级层和操作 自定义层 class AttentionLayer(tf.keras.layers.Layer): def __init__(self, units, **kwargs): super(AttentionLayer, self).__init__(**kwargs) self.units = units self.W = None self.b = None self.V = None def build(self, input_shape): self.W = self.add_weight( name=&#39;W&#39;, shape=(input_shape[-1], self.units), initializer=&#39;glorot_uniform&#39;, trainable=True ) self.b = self.add_weight( name=&#39;b&#39;, shape=(self.units,), initializer=&#39;zeros&#39;, trainable=True ) self.V = self.add_weight( name=&#39;V&#39;, shape=(self.units, 1), initializer=&#39;glorot_uniform&#39;, trainable=True ) def call(self, inputs): # 计算注意力分数 score = tf.nn.tanh(tf.matmul(inputs, self.W) &#43; self.b) attention_weights = tf.nn.softmax(tf.matmul(score, self.V), axis=1) # 应用注意力权重 context_vector = attention_weights * inputs context_vector = tf.reduce_sum(context_vector, axis=1) return context_vector, attention_weights # 使用注意力层 inputs = tf.keras.Input(shape=(10, 64)) # (batch_size, seq_len, features) context, attention = AttentionLayer(32)(inputs) outputs = tf.keras.layers.Dense(10, activation=&#39;softmax&#39;)(context) model = tf.keras.Model(inputs=inputs, outputs=outputs) 自定义损失函数 class FocalLoss(tf.keras.losses.Loss): def __init__(self, alpha=1.0, gamma=2.0, **kwargs): super(FocalLoss, self).__init__(**kwargs) self.alpha = alpha self.gamma = gamma def call(self, y_true, y_pred): # 将标签转换为one-hot编码 y_true = tf.one_hot(tf.cast(y_true, tf.int32), depth=tf.shape(y_pred)[-1]) # 计算交叉熵 ce = tf.keras.losses.categorical_crossentropy(y_true, y_pred) # 计算调制因子 pt = tf.exp(-ce) focal_modulation = self.alpha * tf.pow((1 - pt), self.gamma) return focal_modulation * ce # 使用焦点损失 model.compile( optimizer=&#39;adam&#39;, loss=FocalLoss(alpha=1.0, gamma=2.0), metrics=[&#39;accuracy&#39;] ) 自定义指标 class F1Score(tf.keras.metrics.Metric): def __init__(self, name=&#39;f1_score&#39;, **kwargs): super(F1Score, self).__init__(name=name, **kwargs) self.true_positives = self.add_weight(name=&#39;tp&#39;, initializer=&#39;zeros&#39;) self.false_positives = self.add_weight(name=&#39;fp&#39;, initializer=&#39;zeros&#39;) self.false_negatives = self.add_weight(name=&#39;fn&#39;, initializer=&#39;zeros&#39;) def update_state(self, y_true, y_pred, sample_weight=None): # 转换为二分类 y_pred = tf.cast(tf.greater(y_pred, 0.5), tf.float32) y_true = tf.cast(y_true, tf.float32) # 计算TP, FP, FN tp = tf.reduce_sum(y_true * y_pred) fp = tf.reduce_sum((1 - y_true) * y_pred) fn = tf.reduce_sum(y_true * (1 - y_pred)) self.true_positives.assign_add(tp) self.false_positives.assign_add(fp) self.false_negatives.assign_add(fn) def result(self): precision = self.true_positives / (self.true_positives &#43; self.false_positives &#43; 1e-15) recall = self.true_positives / (self.true_positives &#43; self.false_negatives &#43; 1e-15) return 2 * precision * recall / (precision &#43; recall &#43; 1e-15) def reset_states(self): self.true_positives.assign(0.0) self.false_positives.assign(0.0) self.false_negatives.assign(0.0) # 使用F1分数指标 model.compile( optimizer=&#39;adam&#39;, loss=&#39;binary_crossentropy&#39;, metrics=[&#39;accuracy&#39;, F1Score()] ) 🔧 性能优化 TensorFlow Profiler import tensorflow as tf # 创建分析器 profiler = tf.profiler.experimental.Profiler(&#39;/tmp/tf_profile&#39;) # 启动分析 tf.profiler.experimental.start(&#39;/tmp/tf_profile&#39;) # 运行训练代码 model.fit(x_train, y_train, epochs=1) # 停止分析 tf.profiler.experimental.stop() # 查看分析结果 # 在浏览器中打开 http://localhost:6006 查看TensorBoard 内存优化 # 限制GPU内存增长 gpus = tf.config.experimental.list_physical_devices(&#39;GPU&#39;) if gpus: try: for gpu in gpus: tf.config.experimental.set_memory_growth(gpu, True) except RuntimeError as e: print(e) # 使用虚拟GPU tf.config.experimental.set_virtual_device_configuration( gpus[0], [tf.config.experimental.VirtualDeviceConfiguration(memory_limit=1024)] ) 计算图优化 # 使用tf.function编译函数 @tf.function def train_step(x, y): with tf.GradientTape() as tape: predictions = model(x) loss = loss_fn(y, predictions) gradients = tape.gradient(loss, model.trainable_variables) optimizer.apply_gradients(zip(gradients, model.trainable_variables)) return loss # XLA编译 @tf.function(jit_compile=True) def optimized_train_step(x, y): return train_step(x, y) 📈 模型解释性 Grad-CAM可视化 def grad_cam(model, image, layer_name, class_idx): &#34;&#34;&#34;Grad-CAM可视化&#34;&#34;&#34; # 创建梯度模型 grad_model = tf.keras.models.Model( inputs=model.input, outputs=[model.get_layer(layer_name).output, model.output] ) with tf.GradientTape() as tape: conv_outputs, predictions = grad_model(image) loss = predictions[:, class_idx] # 计算梯度 grads = tape.gradient(loss, conv_outputs) pooled_grads = tf.reduce_mean(grads, axis=(0, 1, 2)) # 应用Grad-CAM conv_outputs = conv_outputs[0] heatmap = tf.reduce_sum(pooled_grads * conv_outputs, axis=-1) heatmap = tf.maximum(heatmap, 0) # ReLU heatmap /= tf.reduce_max(heatmap) # 归一化 return heatmap.numpy() # 使用Grad-CAM image = tf.expand_dims(x_test[0], 0) heatmap = grad_cam(model, image, &#39;dense1&#39;, class_idx=5) # 可视化热力图 plt.figure(figsize=(10, 4)) plt.subplot(1, 2, 1) plt.imshow(x_test[0].reshape(28, 28), cmap=&#39;gray&#39;) plt.title(&#39;原始图像&#39;) plt.subplot(1, 2, 2) plt.imshow(heatmap, cmap=&#39;jet&#39;) plt.title(&#39;Grad-CAM热力图&#39;) plt.show() 特征重要性分析 def permutation_importance(model, x, y, feature_names): &#34;&#34;&#34;排列重要性分析&#34;&#34;&#34; baseline_score = model.evaluate(x, y, verbose=0)[1] importances = [] for i in range(x.shape[1]): # 打乱第i个特征 x_permuted = x.copy() np.random.shuffle(x_permuted[:, i]) # 计算打乱后的分数 permuted_score = model.evaluate(x_permuted, y, verbose=0)[1] importance = baseline_score - permuted_score importances.append(importance) return dict(zip(feature_names, importances)) # 分析特征重要性 feature_names = [&#39;feature1&#39;, &#39;feature2&#39;, &#39;feature3&#39;, ...] importances = permutation_importance(model, x_test, y_test, feature_names) # 绘制特征重要性 plt.figure(figsize=(10, 6)) plt.barh(list(importances.keys()), list(importances.values())) plt.xlabel(&#39;重要性&#39;) plt.title(&#39;特征重要性分析&#39;) plt.show() 🎯 实际项目：图像分类器 完整项目代码 import tensorflow as tf import numpy as np import matplotlib.pyplot as plt from tensorflow.keras.preprocessing.image import ImageDataGenerator # 数据准备 (x_train, y_train), (x_test, y_test) = tf.keras.datasets.cifar10.load_data() # 数据增强 datagen = ImageDataGenerator( rotation_range=15, width_shift_range=0.1, height_shift_range=0.1, horizontal_flip=True, zoom_range=0.1 ) datagen.fit(x_train) # 构建高级模型 def create_advanced_model(): base_model = tf.keras.applications.ResNet50( weights=&#39;imagenet&#39;, include_top=False, input_shape=(32, 32, 3) ) # 冻结基础模型层 base_model.trainable = False model = tf.keras.Sequential([ base_model, tf.keras.layers.GlobalAveragePooling2D(), tf.keras.layers.Dense(256, activation=&#39;relu&#39;), tf.keras.layers.BatchNormalization(), tf.keras.layers.Dropout(0.5), tf.keras.layers.Dense(10, activation=&#39;softmax&#39;) ]) return model # 创建和编译模型 model = create_advanced_model() model.compile( optimizer=tf.keras.optimizers.Adam(learning_rate=0.001), loss=&#39;sparse_categorical_crossentropy&#39;, metrics=[&#39;accuracy&#39;] ) # 自定义回调 class AdvancedCallback(tf.keras.callbacks.Callback): def __init__(self): self.best_accuracy = 0 def on_epoch_end(self, epoch, logs=None): if logs[&#39;val_accuracy&#39;] &gt; self.best_accuracy: self.best_accuracy = logs[&#39;val_accuracy&#39;] self.model.save(&#39;best_model.h5&#39;) print(f&#34;\n保存最佳模型，准确率: {self.best_accuracy:.4f}&#34;) # 训练模型 history = model.fit( datagen.flow(x_train, y_train, batch_size=64), epochs=20, validation_data=(x_test, y_test), callbacks=[ AdvancedCallback(), tf.keras.callbacks.EarlyStopping(patience=5, restore_best_weights=True), tf.keras.callbacks.ReduceLROnPlateau(factor=0.5, patience=3) ] ) # 评估模型 test_loss, test_acc = model.evaluate(x_test, y_test) print(f&#34;测试准确率: {test_acc:.4f}&#34;) # 预测和可视化 predictions = model.predict(x_test[:9]) predicted_classes = tf.argmax(predictions, axis=1).numpy() plt.figure(figsize=(12, 6)) for i in range(9): plt.subplot(3, 3, i&#43;1) plt.imshow(x_test[i]) plt.title(f&#34;预测: {predicted_classes[i]}, 真实: {y_test[i][0]}&#34;) plt.axis(&#39;off&#39;) plt.tight_layout() plt.show() 📚 学习资源 官方文档 TensorFlow高级教程 TensorFlow指南 TensorFlow性能指南 吴恩达课程 深度学习课程中关于TensorFlow高级特性的部分 经典论文 EfficientNet: Rethinking Model Scaling Batch Normalization Dropout: A Simple Way to Prevent Neural Networks from Overfitting 🔧 最佳实践 代码组织 # 高级项目结构 advanced_project/ ├── config/ │ ├── __init__.py │ ├── config.yaml │ └── hyperparameters.py ├── src/ │ ├── __init__.py │ ├── data/ │ │ ├── __init__.py │ │ ├── preprocessing.py │ │ └── augmentation.py │ ├── models/ │ │ ├── __init__.py │ │ ├── custom_layers.py │ │ ├── custom_losses.py │ │ └── model_builder.py │ ├── training/ │ │ ├── __init__.py │ │ ├── trainer.py │ │ └── callbacks.py │ └── utils/ │ ├── __init__.py │ └── visualization.py ├── notebooks/ │ └── experiments.ipynb └── scripts/ ├── train.py └── evaluate.py 调试技巧 # 启用详细日志 tf.debugging.set_log_device_placement(True) # 检查数值稳定性 with tf.GradientTape() as tape: predictions = model(x) loss = loss_fn(y, predictions) gradients = tape.gradient(loss, model.trainable_variables) # 检查梯度 for i, grad in enumerate(gradients): if grad is not None: print(f&#34;梯度{i}的范数: {tf.norm(grad).numpy()}&#34;) # 使用tf.print调试 x = tf.print(x, [x], &#34;调试信息:&#34;) 最近更新: {{ .Lastmod.Format “2006-01-02” }}">
+  <link rel="icon" href="/avatar/avatar.jpg" type="image/jpeg">
 
-    <meta property="og:url" content="http://localhost:1313/wiki/deep_learning/tensorflow/advanced_1/">
-  <meta property="og:site_name" content="Yaku Makki">
-  <meta property="og:title" content="TensorFlow高级特性">
-  <meta property="og:description" content="TensorFlow高级特性 本章深入介绍TensorFlow的高级特性，包括自定义训练循环、分布式训练、模型优化、性能调优等内容，帮助你构建更复杂和高效的深度学习模型。
-🎯 自定义训练循环 基础自定义训练 import tensorflow as tf import numpy as np # 准备数据 (x_train, y_train), (x_test, y_test) = tf.keras.datasets.mnist.load_data() x_train = x_train.reshape(-1, 784) / 255.0 x_test = x_test.reshape(-1, 784) / 255.0 y_train = tf.keras.utils.to_categorical(y_train, 10) y_test = tf.keras.utils.to_categorical(y_test, 10) # 创建数据集 train_dataset = tf.data.Dataset.from_tensor_slices((x_train, y_train)) train_dataset = train_dataset.shuffle(1000).batch(32) # 构建模型 class CustomModel(tf.keras.Model): def __init__(self): super(CustomModel, self).__init__() self.dense1 = tf.keras.layers.Dense(128, activation=&#39;relu&#39;) self.dense2 = tf.keras.layers.Dense(64, activation=&#39;relu&#39;) self.dense3 = tf.keras.layers.Dense(10, activation=&#39;softmax&#39;) def call(self, inputs): x = self.dense1(inputs) x = self.dense2(x) return self.dense3(x) model = CustomModel() # 定义损失函数和优化器 loss_fn = tf.keras.losses.CategoricalCrossentropy() optimizer = tf.keras.optimizers.Adam() # 自定义训练循环 @tf.function # 编译加速 def train_step(x, y): with tf.GradientTape() as tape: predictions = model(x) loss = loss_fn(y, predictions) gradients = tape.gradient(loss, model.trainable_variables) optimizer.apply_gradients(zip(gradients, model.trainable_variables)) return loss # 训练 epochs = 5 for epoch in range(epochs): total_loss = 0 num_batches = 0 for x_batch, y_batch in train_dataset: loss = train_step(x_batch, y_batch) total_loss &#43;= loss num_batches &#43;= 1 avg_loss = total_loss / num_batches print(f&#34;Epoch {epoch &#43; 1}, Loss: {avg_loss:.4f}&#34;) 高级自定义训练 class AdvancedTrainer: def __init__(self, model, optimizer, loss_fn, metrics=None): self.model = model self.optimizer = optimizer self.loss_fn = loss_fn self.metrics = metrics or [] @tf.function def train_step(self, x, y): with tf.GradientTape() as tape: predictions = self.model(x, training=True) loss = self.loss_fn(y, predictions) # 添加正则化损失 for var in self.model.trainable_variables: loss &#43;= tf.nn.l2_loss(var) * 1e-4 gradients = tape.gradient(loss, self.model.trainable_variables) self.optimizer.apply_gradients(zip(gradients, self.model.trainable_variables)) # 计算指标 for metric in self.metrics: metric.update_state(y, predictions) return loss def train_epoch(self, dataset): total_loss = 0 num_batches = 0 for x_batch, y_batch in dataset: loss = self.train_step(x_batch, y_batch) total_loss &#43;= loss num_batches &#43;= 1 # 重置指标状态 for metric in self.metrics: metric.reset_states() return total_loss / num_batches # 使用高级训练器 model = CustomModel() optimizer = tf.keras.optimizers.Adam(learning_rate=0.001) loss_fn = tf.keras.losses.CategoricalCrossentropy() # 定义指标 train_acc = tf.keras.metrics.CategoricalAccuracy() val_acc = tf.keras.metrics.CategoricalAccuracy() trainer = AdvancedTrainer(model, optimizer, loss_fn, [train_acc]) # 训练多个epoch for epoch in range(10): loss = trainer.train_epoch(train_dataset) print(f&#34;Epoch {epoch &#43; 1}, Loss: {loss:.4f}, Accuracy: {train_acc.result():.4f}&#34;) 📊 分布式训练 多GPU训练 # 策略1: MirroredStrategy strategy = tf.distribute.MirroredStrategy() print(f&#34;GPU数量: {strategy.num_replicas_in_sync}&#34;) with strategy.scope(): # 在策略范围内构建模型 model = tf.keras.Sequential([ tf.keras.layers.Dense(128, activation=&#39;relu&#39;, input_shape=(784,)), tf.keras.layers.Dense(64, activation=&#39;relu&#39;), tf.keras.layers.Dense(10, activation=&#39;softmax&#39;) ]) model.compile( optimizer=&#39;adam&#39;, loss=&#39;categorical_crossentropy&#39;, metrics=[&#39;accuracy&#39;] ) # 训练 model.fit(x_train, y_train, epochs=5, batch_size=64) TPU训练 # TPU训练 resolver = tf.distribute.cluster_resolver.TPUClusterResolver() tf.config.experimental_connect_to_cluster(resolver) tf.tpu.experimental.initialize_tpu_system(resolver) # 创建TPU策略 strategy = tf.distribute.experimental.TPUStrategy(resolver) with strategy.scope(): model = create_model() # 在TPU策略范围内创建模型 model.compile(...) # 训练 model.fit(train_dataset, epochs=10) 自定义分布式训练 # 自定义分布式训练循环 @tf.function def distributed_train_step(dataset_inputs): def train_step_fn(inputs): x, y = inputs with tf.GradientTape() as tape: predictions = model(x, training=True) loss = loss_fn(y, predictions) gradients = tape.gradient(loss, model.trainable_variables) optimizer.apply_gradients(zip(gradients, model.trainable_variables)) return loss # 在所有副本上运行 per_replica_losses = strategy.run(train_step_fn, args=(dataset_inputs,)) return strategy.reduce(tf.distribute.ReduceOp.SUM, per_replica_losses, axis=None) # 分布式训练循环 for epoch in range(num_epochs): total_loss = 0 num_batches = 0 for x_batch, y_batch in distributed_dataset: loss = distributed_train_step((x_batch, y_batch)) total_loss &#43;= loss num_batches &#43;= 1 avg_loss = total_loss / num_batches print(f&#34;Epoch {epoch}, Loss: {avg_loss}&#34;) 🚀 模型优化 混合精度训练 from tensorflow.keras.mixed_precision import experimental as mixed_precision # 设置混合精度策略 policy = mixed_precision.Policy(&#39;mixed_float16&#39;) mixed_precision.set_policy(policy) # 构建模型（自动使用混合精度） with strategy.scope(): model = tf.keras.Sequential([ tf.keras.layers.Dense(128, activation=&#39;relu&#39;, input_shape=(784,)), tf.keras.layers.Dense(10, activation=&#39;softmax&#39;) ]) # 使用混合精度优化器 optimizer = mixed_precision.LossScaleOptimizer( tf.keras.optimizers.Adam(), loss_scale=&#39;dynamic&#39; ) model.compile(optimizer=optimizer, loss=&#39;categorical_crossentropy&#39;, metrics=[&#39;accuracy&#39;]) # 训练 model.fit(x_train, y_train, epochs=5) 模型量化 import tensorflow_model_optimization as tfmot # 应用量化感知训练 quantize_model = tfmot.quantization.keras.quantize_model q_aware_model = quantize_model(model) # 编译量化模型 q_aware_model.compile( optimizer=&#39;adam&#39;, loss=&#39;categorical_crossentropy&#39;, metrics=[&#39;accuracy&#39;] ) # 量化感知训练 q_aware_model.fit(x_train, y_train, epochs=5) # 转换为完全量化模型 converter = tf.lite.TFLiteConverter.from_keras_model(q_aware_model) converter.optimizations = [tf.lite.Optimize.DEFAULT] quantized_tflite_model = converter.convert() 模型剪枝 # 应用模型剪枝 prune_low_magnitude = tfmot.sparsity.keras.prune_low_magnitude # 定义剪枝参数 pruning_params = { &#39;pruning_schedule&#39;: tfmot.sparsity.keras.PolynomialDecay( initial_sparsity=0.0, final_sparsity=0.5, begin_step=0, end_step=1000 ) } # 创建剪枝模型 pruned_model = prune_low_magnitude(model, **pruning_params) # 编译剪枝模型 pruned_model.compile( optimizer=&#39;adam&#39;, loss=&#39;categorical_crossentropy&#39;, metrics=[&#39;accuracy&#39;] ) # 剪枝训练 pruned_model.fit(x_train, y_train, epochs=10) # 剥离剪枝结构 stripped_pruned_model = tfmot.sparsity.keras.strip_pruning(pruned_model) 🎨 高级层和操作 自定义层 class AttentionLayer(tf.keras.layers.Layer): def __init__(self, units, **kwargs): super(AttentionLayer, self).__init__(**kwargs) self.units = units self.W = None self.b = None self.V = None def build(self, input_shape): self.W = self.add_weight( name=&#39;W&#39;, shape=(input_shape[-1], self.units), initializer=&#39;glorot_uniform&#39;, trainable=True ) self.b = self.add_weight( name=&#39;b&#39;, shape=(self.units,), initializer=&#39;zeros&#39;, trainable=True ) self.V = self.add_weight( name=&#39;V&#39;, shape=(self.units, 1), initializer=&#39;glorot_uniform&#39;, trainable=True ) def call(self, inputs): # 计算注意力分数 score = tf.nn.tanh(tf.matmul(inputs, self.W) &#43; self.b) attention_weights = tf.nn.softmax(tf.matmul(score, self.V), axis=1) # 应用注意力权重 context_vector = attention_weights * inputs context_vector = tf.reduce_sum(context_vector, axis=1) return context_vector, attention_weights # 使用注意力层 inputs = tf.keras.Input(shape=(10, 64)) # (batch_size, seq_len, features) context, attention = AttentionLayer(32)(inputs) outputs = tf.keras.layers.Dense(10, activation=&#39;softmax&#39;)(context) model = tf.keras.Model(inputs=inputs, outputs=outputs) 自定义损失函数 class FocalLoss(tf.keras.losses.Loss): def __init__(self, alpha=1.0, gamma=2.0, **kwargs): super(FocalLoss, self).__init__(**kwargs) self.alpha = alpha self.gamma = gamma def call(self, y_true, y_pred): # 将标签转换为one-hot编码 y_true = tf.one_hot(tf.cast(y_true, tf.int32), depth=tf.shape(y_pred)[-1]) # 计算交叉熵 ce = tf.keras.losses.categorical_crossentropy(y_true, y_pred) # 计算调制因子 pt = tf.exp(-ce) focal_modulation = self.alpha * tf.pow((1 - pt), self.gamma) return focal_modulation * ce # 使用焦点损失 model.compile( optimizer=&#39;adam&#39;, loss=FocalLoss(alpha=1.0, gamma=2.0), metrics=[&#39;accuracy&#39;] ) 自定义指标 class F1Score(tf.keras.metrics.Metric): def __init__(self, name=&#39;f1_score&#39;, **kwargs): super(F1Score, self).__init__(name=name, **kwargs) self.true_positives = self.add_weight(name=&#39;tp&#39;, initializer=&#39;zeros&#39;) self.false_positives = self.add_weight(name=&#39;fp&#39;, initializer=&#39;zeros&#39;) self.false_negatives = self.add_weight(name=&#39;fn&#39;, initializer=&#39;zeros&#39;) def update_state(self, y_true, y_pred, sample_weight=None): # 转换为二分类 y_pred = tf.cast(tf.greater(y_pred, 0.5), tf.float32) y_true = tf.cast(y_true, tf.float32) # 计算TP, FP, FN tp = tf.reduce_sum(y_true * y_pred) fp = tf.reduce_sum((1 - y_true) * y_pred) fn = tf.reduce_sum(y_true * (1 - y_pred)) self.true_positives.assign_add(tp) self.false_positives.assign_add(fp) self.false_negatives.assign_add(fn) def result(self): precision = self.true_positives / (self.true_positives &#43; self.false_positives &#43; 1e-15) recall = self.true_positives / (self.true_positives &#43; self.false_negatives &#43; 1e-15) return 2 * precision * recall / (precision &#43; recall &#43; 1e-15) def reset_states(self): self.true_positives.assign(0.0) self.false_positives.assign(0.0) self.false_negatives.assign(0.0) # 使用F1分数指标 model.compile( optimizer=&#39;adam&#39;, loss=&#39;binary_crossentropy&#39;, metrics=[&#39;accuracy&#39;, F1Score()] ) 🔧 性能优化 TensorFlow Profiler import tensorflow as tf # 创建分析器 profiler = tf.profiler.experimental.Profiler(&#39;/tmp/tf_profile&#39;) # 启动分析 tf.profiler.experimental.start(&#39;/tmp/tf_profile&#39;) # 运行训练代码 model.fit(x_train, y_train, epochs=1) # 停止分析 tf.profiler.experimental.stop() # 查看分析结果 # 在浏览器中打开 http://localhost:6006 查看TensorBoard 内存优化 # 限制GPU内存增长 gpus = tf.config.experimental.list_physical_devices(&#39;GPU&#39;) if gpus: try: for gpu in gpus: tf.config.experimental.set_memory_growth(gpu, True) except RuntimeError as e: print(e) # 使用虚拟GPU tf.config.experimental.set_virtual_device_configuration( gpus[0], [tf.config.experimental.VirtualDeviceConfiguration(memory_limit=1024)] ) 计算图优化 # 使用tf.function编译函数 @tf.function def train_step(x, y): with tf.GradientTape() as tape: predictions = model(x) loss = loss_fn(y, predictions) gradients = tape.gradient(loss, model.trainable_variables) optimizer.apply_gradients(zip(gradients, model.trainable_variables)) return loss # XLA编译 @tf.function(jit_compile=True) def optimized_train_step(x, y): return train_step(x, y) 📈 模型解释性 Grad-CAM可视化 def grad_cam(model, image, layer_name, class_idx): &#34;&#34;&#34;Grad-CAM可视化&#34;&#34;&#34; # 创建梯度模型 grad_model = tf.keras.models.Model( inputs=model.input, outputs=[model.get_layer(layer_name).output, model.output] ) with tf.GradientTape() as tape: conv_outputs, predictions = grad_model(image) loss = predictions[:, class_idx] # 计算梯度 grads = tape.gradient(loss, conv_outputs) pooled_grads = tf.reduce_mean(grads, axis=(0, 1, 2)) # 应用Grad-CAM conv_outputs = conv_outputs[0] heatmap = tf.reduce_sum(pooled_grads * conv_outputs, axis=-1) heatmap = tf.maximum(heatmap, 0) # ReLU heatmap /= tf.reduce_max(heatmap) # 归一化 return heatmap.numpy() # 使用Grad-CAM image = tf.expand_dims(x_test[0], 0) heatmap = grad_cam(model, image, &#39;dense1&#39;, class_idx=5) # 可视化热力图 plt.figure(figsize=(10, 4)) plt.subplot(1, 2, 1) plt.imshow(x_test[0].reshape(28, 28), cmap=&#39;gray&#39;) plt.title(&#39;原始图像&#39;) plt.subplot(1, 2, 2) plt.imshow(heatmap, cmap=&#39;jet&#39;) plt.title(&#39;Grad-CAM热力图&#39;) plt.show() 特征重要性分析 def permutation_importance(model, x, y, feature_names): &#34;&#34;&#34;排列重要性分析&#34;&#34;&#34; baseline_score = model.evaluate(x, y, verbose=0)[1] importances = [] for i in range(x.shape[1]): # 打乱第i个特征 x_permuted = x.copy() np.random.shuffle(x_permuted[:, i]) # 计算打乱后的分数 permuted_score = model.evaluate(x_permuted, y, verbose=0)[1] importance = baseline_score - permuted_score importances.append(importance) return dict(zip(feature_names, importances)) # 分析特征重要性 feature_names = [&#39;feature1&#39;, &#39;feature2&#39;, &#39;feature3&#39;, ...] importances = permutation_importance(model, x_test, y_test, feature_names) # 绘制特征重要性 plt.figure(figsize=(10, 6)) plt.barh(list(importances.keys()), list(importances.values())) plt.xlabel(&#39;重要性&#39;) plt.title(&#39;特征重要性分析&#39;) plt.show() 🎯 实际项目：图像分类器 完整项目代码 import tensorflow as tf import numpy as np import matplotlib.pyplot as plt from tensorflow.keras.preprocessing.image import ImageDataGenerator # 数据准备 (x_train, y_train), (x_test, y_test) = tf.keras.datasets.cifar10.load_data() # 数据增强 datagen = ImageDataGenerator( rotation_range=15, width_shift_range=0.1, height_shift_range=0.1, horizontal_flip=True, zoom_range=0.1 ) datagen.fit(x_train) # 构建高级模型 def create_advanced_model(): base_model = tf.keras.applications.ResNet50( weights=&#39;imagenet&#39;, include_top=False, input_shape=(32, 32, 3) ) # 冻结基础模型层 base_model.trainable = False model = tf.keras.Sequential([ base_model, tf.keras.layers.GlobalAveragePooling2D(), tf.keras.layers.Dense(256, activation=&#39;relu&#39;), tf.keras.layers.BatchNormalization(), tf.keras.layers.Dropout(0.5), tf.keras.layers.Dense(10, activation=&#39;softmax&#39;) ]) return model # 创建和编译模型 model = create_advanced_model() model.compile( optimizer=tf.keras.optimizers.Adam(learning_rate=0.001), loss=&#39;sparse_categorical_crossentropy&#39;, metrics=[&#39;accuracy&#39;] ) # 自定义回调 class AdvancedCallback(tf.keras.callbacks.Callback): def __init__(self): self.best_accuracy = 0 def on_epoch_end(self, epoch, logs=None): if logs[&#39;val_accuracy&#39;] &gt; self.best_accuracy: self.best_accuracy = logs[&#39;val_accuracy&#39;] self.model.save(&#39;best_model.h5&#39;) print(f&#34;\n保存最佳模型，准确率: {self.best_accuracy:.4f}&#34;) # 训练模型 history = model.fit( datagen.flow(x_train, y_train, batch_size=64), epochs=20, validation_data=(x_test, y_test), callbacks=[ AdvancedCallback(), tf.keras.callbacks.EarlyStopping(patience=5, restore_best_weights=True), tf.keras.callbacks.ReduceLROnPlateau(factor=0.5, patience=3) ] ) # 评估模型 test_loss, test_acc = model.evaluate(x_test, y_test) print(f&#34;测试准确率: {test_acc:.4f}&#34;) # 预测和可视化 predictions = model.predict(x_test[:9]) predicted_classes = tf.argmax(predictions, axis=1).numpy() plt.figure(figsize=(12, 6)) for i in range(9): plt.subplot(3, 3, i&#43;1) plt.imshow(x_test[i]) plt.title(f&#34;预测: {predicted_classes[i]}, 真实: {y_test[i][0]}&#34;) plt.axis(&#39;off&#39;) plt.tight_layout() plt.show() 📚 学习资源 官方文档 TensorFlow高级教程 TensorFlow指南 TensorFlow性能指南 吴恩达课程 深度学习课程中关于TensorFlow高级特性的部分 经典论文 EfficientNet: Rethinking Model Scaling Batch Normalization Dropout: A Simple Way to Prevent Neural Networks from Overfitting 🔧 最佳实践 代码组织 # 高级项目结构 advanced_project/ ├── config/ │ ├── __init__.py │ ├── config.yaml │ └── hyperparameters.py ├── src/ │ ├── __init__.py │ ├── data/ │ │ ├── __init__.py │ │ ├── preprocessing.py │ │ └── augmentation.py │ ├── models/ │ │ ├── __init__.py │ │ ├── custom_layers.py │ │ ├── custom_losses.py │ │ └── model_builder.py │ ├── training/ │ │ ├── __init__.py │ │ ├── trainer.py │ │ └── callbacks.py │ └── utils/ │ ├── __init__.py │ └── visualization.py ├── notebooks/ │ └── experiments.ipynb └── scripts/ ├── train.py └── evaluate.py 调试技巧 # 启用详细日志 tf.debugging.set_log_device_placement(True) # 检查数值稳定性 with tf.GradientTape() as tape: predictions = model(x) loss = loss_fn(y, predictions) gradients = tape.gradient(loss, model.trainable_variables) # 检查梯度 for i, grad in enumerate(gradients): if grad is not None: print(f&#34;梯度{i}的范数: {tf.norm(grad).numpy()}&#34;) # 使用tf.print调试 x = tf.print(x, [x], &#34;调试信息:&#34;) 最近更新: {{ .Lastmod.Format “2006-01-02” }}">
-  <meta property="og:locale" content="zh">
-  <meta property="og:type" content="article">
-    <meta property="article:section" content="wiki">
-    <meta property="article:published_time" content="2025-10-24T21:58:49+08:00">
-    <meta property="article:modified_time" content="2025-10-24T21:58:49+08:00">
+  
+  <link rel="stylesheet" href="/css/main.min.b64e4527cc255b367461135391e39e321a5d86fc97defca99c7afda308ada007.css" integrity="sha256-tk5FJ8wlWzZ0YRNTkeOeMhpdhvyX3vypnHr9owitoAc=">
 
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
 
-  </head>
-  <body class="synthwave-bg">
-    <header class="app-header glass-morphism neon-border">
-      <a href="/"><img class="app-header-avatar" src="/avatar.jpg" alt="Yaku Makki" /></a>
-      <span class="app-header-title gradient-text">Yaku Makki</span>
-      <nav class="app-header-menu">
-          <a class="app-header-menu-item" href="/">首页</a>
-             | 
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/katex.min.css" crossorigin="anonymous">
+</head>
+<body>
+  <a class="skip-link" href="#main">跳到内容</a>
+
+  <div class="scene" aria-hidden="true">
+    <div class="scene-sky"></div>
+    <div class="scene-stars"></div>
+    <div class="scene-sun-halo"></div>
+    <div class="scene-sun"></div>
+    <div class="scene-mountains scene-mountains-far"></div>
+    <div class="scene-mountains scene-mountains-near"></div>
+    <div class="scene-horizon"></div>
+    <div class="scene-floor"></div>
+    <div class="scene-scanlines"></div>
+  </div>
+
+  <nav class="navbar" aria-label="主导航">
+    <div class="nav-inner">
+      <a class="logo" href="/" data-press>
+        <img class="logo-avatar" src="/avatar/avatar.jpg" alt="" width="34" height="34">
+        <span class="logo-text">Yaku Makki</span>
+      </a>
+      <div class="nav-menu-wrap">
+        <span class="nav-tick" aria-hidden="true"></span>
+        <ul class="nav-menu">
           
-          <a class="app-header-menu-item" href="/post/">博客</a>
-             | 
+          <li>
+            <a href="/" data-press>首页</a>
+          </li>
           
-          <a class="app-header-menu-item" href="/wiki/">维基</a>
-             | 
+          <li>
+            <a href="/post/" data-press>博客</a>
+          </li>
           
-          <a class="app-header-menu-item" href="/tags/">标签</a>
-             | 
+          <li>
+            <a href="/wiki/" data-press>维基</a>
+          </li>
           
-          <a class="app-header-menu-item" href="/about/">关于</a>
-      </nav>
-      <p>个人小巢</p>
-      <div class="app-header-social">
-        
-          <a href="https://github.com/makkichan947" target="_blank" rel="noreferrer noopener me" class="pulse-glow">
-            <svg class="icon icon-brand-github" viewBox="0 0 24 24" fill="currentColor"><title>GitHub</title><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg>
-          </a>
-        
-          <a href="mailto:yakumakki947@hotmail.com" target="_blank" rel="noreferrer noopener me" class="pulse-glow">
-            <svg class="icon icon-mail" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><title>mail</title><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
-          </a>
-        
-          <a href="https://x.com/Makki_Yaku947" target="_blank" rel="noreferrer noopener me" class="pulse-glow">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-link">
-  <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path>
-  <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path>
-</svg>
-          </a>
-        
-          <a href="https://www.twitch.tv/u/makkichan947" target="_blank" rel="noreferrer noopener me" class="pulse-glow">
-            <svg class="icon icon-brand-twitch" viewBox="0 0 24 24" fill="currentColor"><title>Twitch</title><path d="M11.571 4.714h1.715v5.143H11.57zm4.715 0H18v5.143h-1.714zM6 0L1.714 4.286v15.428h5.143V24l4.286-4.286h3.428L22.286 12V0zm14.571 11.143l-3.428 3.428h-3.429l-3 3v-3H6.857V1.714h13.714Z"/></svg>
-          </a>
-        
+          <li>
+            <a href="/tags/" data-press>标签</a>
+          </li>
+          
+          <li>
+            <a href="/about/" data-press>关于</a>
+          </li>
+          
+          
+          <li>
+            <button id="search-toggle" class="search-toggle" type="button" title="搜索 (Ctrl+K 或 /)" aria-haspopup="dialog" aria-expanded="false" data-press>搜索</button>
+          </li>
+          
+        </ul>
       </div>
-    </header>
-    <main class="app-container glass-morphism glow-effect">
-      <div class="floating-particles">
-        <div class="particle" style="left: 10%; animation-delay: 0s;"></div>
-        <div class="particle" style="left: 20%; animation-delay: 1s;"></div>
-        <div class="particle" style="left: 30%; animation-delay: 2s;"></div>
-        <div class="particle" style="left: 40%; animation-delay: 3s;"></div>
-        <div class="particle" style="left: 50%; animation-delay: 4s;"></div>
-        <div class="particle" style="left: 60%; animation-delay: 5s;"></div>
-        <div class="particle" style="left: 70%; animation-delay: 6s;"></div>
-        <div class="particle" style="left: 80%; animation-delay: 7s;"></div>
-        <div class="particle" style="left: 90%; animation-delay: 8s;"></div>
-      </div>
-      
-  <article class="post enhanced-card glow-effect">
-    <header class="post-header">
-      <h1 class ="post-title gradient-text">TensorFlow高级特性</h1>
-      <div class="post-meta">
-        <div>
-          <svg class="icon icon-calendar" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><title>calendar</title><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
-          Oct 24, 2025
+    </div>
+  </nav>
+
+  
+  <div class="sheet-scrim" id="sheet-scrim"></div>
+  <section class="sheet" id="search-sheet" role="dialog" aria-modal="true" aria-label="搜索" aria-hidden="true">
+    <div class="sheet-panel" id="sheet-panel">
+      <div class="sheet-handle" id="sheet-handle" role="presentation" aria-hidden="true"></div>
+      <div class="sheet-body">
+        <div class="search-field">
+          <input id="search-input" type="search" placeholder="搜索文章和 Wiki…"
+                 autocomplete="off" spellcheck="false" aria-controls="search-results">
+          <span class="search-key" aria-hidden="true">/</span>
         </div>
-        <div>
-          <svg class="icon icon-clock" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><title>clock</title><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
-          7 min read
-        </div>
+        <div id="search-results" class="search-results" role="listbox" aria-label="搜索结果"></div>
       </div>
-    </header>
-    <div class="post-content">
-      <h1 id="tensorflow高级特性">TensorFlow高级特性</h1>
+    </div>
+  </section>
+  
+
+  <main class="main" id="main">
+    
+<header class="page-head">
+  <nav class="crumb" aria-label="面包屑">
+    <a href="/" data-press>首页</a>
+    <span class="sep">/</span>
+    <a href="/wiki/" data-press>维基</a>
+    
+    
+    <span class="sep">/</span>
+    <a href="/wiki/deep_learning/tensorflow/" data-press>TensorFlow框架</a>
+    
+    
+  </nav>
+  <h1>TensorFlow高级特性</h1>
+  
+</header>
+
+<div class="wiki-layout">
+  <article class="article">
+    <div class="article-content"><h1 id="tensorflow高级特性">TensorFlow高级特性</h1>
 <p>本章深入介绍TensorFlow的高级特性，包括自定义训练循环、分布式训练、模型优化、性能调优等内容，帮助你构建更复杂和高效的深度学习模型。</p>
 <h2 id="-自定义训练循环">🎯 自定义训练循环</h2>
 <h3 id="基础自定义训练">基础自定义训练</h3>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#f92672">import</span> tensorflow <span style="color:#66d9ef">as</span> tf
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#f92672">import</span> tensorflow <span style="color:#66d9ef">as</span> tf
 </span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> numpy <span style="color:#66d9ef">as</span> np
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span><span style="color:#75715e"># 准备数据</span>
@@ -165,7 +174,7 @@
 </span></span><span style="display:flex;"><span>    avg_loss <span style="color:#f92672">=</span> total_loss <span style="color:#f92672">/</span> num_batches
 </span></span><span style="display:flex;"><span>    print(<span style="color:#e6db74">f</span><span style="color:#e6db74">&#34;Epoch </span><span style="color:#e6db74">{</span>epoch <span style="color:#f92672">+</span> <span style="color:#ae81ff">1</span><span style="color:#e6db74">}</span><span style="color:#e6db74">, Loss: </span><span style="color:#e6db74">{</span>avg_loss<span style="color:#e6db74">:</span><span style="color:#e6db74">.4f</span><span style="color:#e6db74">}</span><span style="color:#e6db74">&#34;</span>)
 </span></span></code></pre></div><h3 id="高级自定义训练">高级自定义训练</h3>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">AdvancedTrainer</span>:
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">AdvancedTrainer</span>:
 </span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">__init__</span>(self, model, optimizer, loss_fn, metrics<span style="color:#f92672">=</span><span style="color:#66d9ef">None</span>):
 </span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>model <span style="color:#f92672">=</span> model
 </span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>optimizer <span style="color:#f92672">=</span> optimizer
@@ -223,7 +232,7 @@
 </span></span><span style="display:flex;"><span>    print(<span style="color:#e6db74">f</span><span style="color:#e6db74">&#34;Epoch </span><span style="color:#e6db74">{</span>epoch <span style="color:#f92672">+</span> <span style="color:#ae81ff">1</span><span style="color:#e6db74">}</span><span style="color:#e6db74">, Loss: </span><span style="color:#e6db74">{</span>loss<span style="color:#e6db74">:</span><span style="color:#e6db74">.4f</span><span style="color:#e6db74">}</span><span style="color:#e6db74">, Accuracy: </span><span style="color:#e6db74">{</span>train_acc<span style="color:#f92672">.</span>result()<span style="color:#e6db74">:</span><span style="color:#e6db74">.4f</span><span style="color:#e6db74">}</span><span style="color:#e6db74">&#34;</span>)
 </span></span></code></pre></div><h2 id="-分布式训练">📊 分布式训练</h2>
 <h3 id="多gpu训练">多GPU训练</h3>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#75715e"># 策略1: MirroredStrategy</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#75715e"># 策略1: MirroredStrategy</span>
 </span></span><span style="display:flex;"><span>strategy <span style="color:#f92672">=</span> tf<span style="color:#f92672">.</span>distribute<span style="color:#f92672">.</span>MirroredStrategy()
 </span></span><span style="display:flex;"><span>print(<span style="color:#e6db74">f</span><span style="color:#e6db74">&#34;GPU数量: </span><span style="color:#e6db74">{</span>strategy<span style="color:#f92672">.</span>num_replicas_in_sync<span style="color:#e6db74">}</span><span style="color:#e6db74">&#34;</span>)
 </span></span><span style="display:flex;"><span>
@@ -244,7 +253,7 @@
 </span></span><span style="display:flex;"><span><span style="color:#75715e"># 训练</span>
 </span></span><span style="display:flex;"><span>model<span style="color:#f92672">.</span>fit(x_train, y_train, epochs<span style="color:#f92672">=</span><span style="color:#ae81ff">5</span>, batch_size<span style="color:#f92672">=</span><span style="color:#ae81ff">64</span>)
 </span></span></code></pre></div><h3 id="tpu训练">TPU训练</h3>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#75715e"># TPU训练</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#75715e"># TPU训练</span>
 </span></span><span style="display:flex;"><span>resolver <span style="color:#f92672">=</span> tf<span style="color:#f92672">.</span>distribute<span style="color:#f92672">.</span>cluster_resolver<span style="color:#f92672">.</span>TPUClusterResolver()
 </span></span><span style="display:flex;"><span>tf<span style="color:#f92672">.</span>config<span style="color:#f92672">.</span>experimental_connect_to_cluster(resolver)
 </span></span><span style="display:flex;"><span>tf<span style="color:#f92672">.</span>tpu<span style="color:#f92672">.</span>experimental<span style="color:#f92672">.</span>initialize_tpu_system(resolver)
@@ -259,7 +268,7 @@
 </span></span><span style="display:flex;"><span><span style="color:#75715e"># 训练</span>
 </span></span><span style="display:flex;"><span>model<span style="color:#f92672">.</span>fit(train_dataset, epochs<span style="color:#f92672">=</span><span style="color:#ae81ff">10</span>)
 </span></span></code></pre></div><h3 id="自定义分布式训练">自定义分布式训练</h3>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#75715e"># 自定义分布式训练循环</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#75715e"># 自定义分布式训练循环</span>
 </span></span><span style="display:flex;"><span><span style="color:#a6e22e">@tf.function</span>
 </span></span><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">distributed_train_step</span>(dataset_inputs):
 </span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">train_step_fn</span>(inputs):
@@ -290,7 +299,7 @@
 </span></span><span style="display:flex;"><span>    print(<span style="color:#e6db74">f</span><span style="color:#e6db74">&#34;Epoch </span><span style="color:#e6db74">{</span>epoch<span style="color:#e6db74">}</span><span style="color:#e6db74">, Loss: </span><span style="color:#e6db74">{</span>avg_loss<span style="color:#e6db74">}</span><span style="color:#e6db74">&#34;</span>)
 </span></span></code></pre></div><h2 id="-模型优化">🚀 模型优化</h2>
 <h3 id="混合精度训练">混合精度训练</h3>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#f92672">from</span> tensorflow.keras.mixed_precision <span style="color:#f92672">import</span> experimental <span style="color:#66d9ef">as</span> mixed_precision
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#f92672">from</span> tensorflow.keras.mixed_precision <span style="color:#f92672">import</span> experimental <span style="color:#66d9ef">as</span> mixed_precision
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span><span style="color:#75715e"># 设置混合精度策略</span>
 </span></span><span style="display:flex;"><span>policy <span style="color:#f92672">=</span> mixed_precision<span style="color:#f92672">.</span>Policy(<span style="color:#e6db74">&#39;mixed_float16&#39;</span>)
@@ -313,7 +322,7 @@
 </span></span><span style="display:flex;"><span><span style="color:#75715e"># 训练</span>
 </span></span><span style="display:flex;"><span>model<span style="color:#f92672">.</span>fit(x_train, y_train, epochs<span style="color:#f92672">=</span><span style="color:#ae81ff">5</span>)
 </span></span></code></pre></div><h3 id="模型量化">模型量化</h3>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#f92672">import</span> tensorflow_model_optimization <span style="color:#66d9ef">as</span> tfmot
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#f92672">import</span> tensorflow_model_optimization <span style="color:#66d9ef">as</span> tfmot
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span><span style="color:#75715e"># 应用量化感知训练</span>
 </span></span><span style="display:flex;"><span>quantize_model <span style="color:#f92672">=</span> tfmot<span style="color:#f92672">.</span>quantization<span style="color:#f92672">.</span>keras<span style="color:#f92672">.</span>quantize_model
@@ -334,7 +343,7 @@
 </span></span><span style="display:flex;"><span>converter<span style="color:#f92672">.</span>optimizations <span style="color:#f92672">=</span> [tf<span style="color:#f92672">.</span>lite<span style="color:#f92672">.</span>Optimize<span style="color:#f92672">.</span>DEFAULT]
 </span></span><span style="display:flex;"><span>quantized_tflite_model <span style="color:#f92672">=</span> converter<span style="color:#f92672">.</span>convert()
 </span></span></code></pre></div><h3 id="模型剪枝">模型剪枝</h3>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#75715e"># 应用模型剪枝</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#75715e"># 应用模型剪枝</span>
 </span></span><span style="display:flex;"><span>prune_low_magnitude <span style="color:#f92672">=</span> tfmot<span style="color:#f92672">.</span>sparsity<span style="color:#f92672">.</span>keras<span style="color:#f92672">.</span>prune_low_magnitude
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span><span style="color:#75715e"># 定义剪枝参数</span>
@@ -364,7 +373,7 @@
 </span></span><span style="display:flex;"><span>stripped_pruned_model <span style="color:#f92672">=</span> tfmot<span style="color:#f92672">.</span>sparsity<span style="color:#f92672">.</span>keras<span style="color:#f92672">.</span>strip_pruning(pruned_model)
 </span></span></code></pre></div><h2 id="-高级层和操作">🎨 高级层和操作</h2>
 <h3 id="自定义层">自定义层</h3>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">AttentionLayer</span>(tf<span style="color:#f92672">.</span>keras<span style="color:#f92672">.</span>layers<span style="color:#f92672">.</span>Layer):
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">AttentionLayer</span>(tf<span style="color:#f92672">.</span>keras<span style="color:#f92672">.</span>layers<span style="color:#f92672">.</span>Layer):
 </span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">__init__</span>(self, units, <span style="color:#f92672">**</span>kwargs):
 </span></span><span style="display:flex;"><span>        super(AttentionLayer, self)<span style="color:#f92672">.</span><span style="color:#a6e22e">__init__</span>(<span style="color:#f92672">**</span>kwargs)
 </span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>units <span style="color:#f92672">=</span> units
@@ -410,7 +419,7 @@
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span>model <span style="color:#f92672">=</span> tf<span style="color:#f92672">.</span>keras<span style="color:#f92672">.</span>Model(inputs<span style="color:#f92672">=</span>inputs, outputs<span style="color:#f92672">=</span>outputs)
 </span></span></code></pre></div><h3 id="自定义损失函数">自定义损失函数</h3>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">FocalLoss</span>(tf<span style="color:#f92672">.</span>keras<span style="color:#f92672">.</span>losses<span style="color:#f92672">.</span>Loss):
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">FocalLoss</span>(tf<span style="color:#f92672">.</span>keras<span style="color:#f92672">.</span>losses<span style="color:#f92672">.</span>Loss):
 </span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">__init__</span>(self, alpha<span style="color:#f92672">=</span><span style="color:#ae81ff">1.0</span>, gamma<span style="color:#f92672">=</span><span style="color:#ae81ff">2.0</span>, <span style="color:#f92672">**</span>kwargs):
 </span></span><span style="display:flex;"><span>        super(FocalLoss, self)<span style="color:#f92672">.</span><span style="color:#a6e22e">__init__</span>(<span style="color:#f92672">**</span>kwargs)
 </span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>alpha <span style="color:#f92672">=</span> alpha
@@ -436,7 +445,7 @@
 </span></span><span style="display:flex;"><span>    metrics<span style="color:#f92672">=</span>[<span style="color:#e6db74">&#39;accuracy&#39;</span>]
 </span></span><span style="display:flex;"><span>)
 </span></span></code></pre></div><h3 id="自定义指标">自定义指标</h3>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">F1Score</span>(tf<span style="color:#f92672">.</span>keras<span style="color:#f92672">.</span>metrics<span style="color:#f92672">.</span>Metric):
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">F1Score</span>(tf<span style="color:#f92672">.</span>keras<span style="color:#f92672">.</span>metrics<span style="color:#f92672">.</span>Metric):
 </span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">__init__</span>(self, name<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;f1_score&#39;</span>, <span style="color:#f92672">**</span>kwargs):
 </span></span><span style="display:flex;"><span>        super(F1Score, self)<span style="color:#f92672">.</span><span style="color:#a6e22e">__init__</span>(name<span style="color:#f92672">=</span>name, <span style="color:#f92672">**</span>kwargs)
 </span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>true_positives <span style="color:#f92672">=</span> self<span style="color:#f92672">.</span>add_weight(name<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;tp&#39;</span>, initializer<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;zeros&#39;</span>)
@@ -475,7 +484,7 @@
 </span></span><span style="display:flex;"><span>)
 </span></span></code></pre></div><h2 id="-性能优化">🔧 性能优化</h2>
 <h3 id="tensorflow-profiler">TensorFlow Profiler</h3>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#f92672">import</span> tensorflow <span style="color:#66d9ef">as</span> tf
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#f92672">import</span> tensorflow <span style="color:#66d9ef">as</span> tf
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span><span style="color:#75715e"># 创建分析器</span>
 </span></span><span style="display:flex;"><span>profiler <span style="color:#f92672">=</span> tf<span style="color:#f92672">.</span>profiler<span style="color:#f92672">.</span>experimental<span style="color:#f92672">.</span>Profiler(<span style="color:#e6db74">&#39;/tmp/tf_profile&#39;</span>)
@@ -492,7 +501,7 @@
 </span></span><span style="display:flex;"><span><span style="color:#75715e"># 查看分析结果</span>
 </span></span><span style="display:flex;"><span><span style="color:#75715e"># 在浏览器中打开 http://localhost:6006 查看TensorBoard</span>
 </span></span></code></pre></div><h3 id="内存优化">内存优化</h3>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#75715e"># 限制GPU内存增长</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#75715e"># 限制GPU内存增长</span>
 </span></span><span style="display:flex;"><span>gpus <span style="color:#f92672">=</span> tf<span style="color:#f92672">.</span>config<span style="color:#f92672">.</span>experimental<span style="color:#f92672">.</span>list_physical_devices(<span style="color:#e6db74">&#39;GPU&#39;</span>)
 </span></span><span style="display:flex;"><span><span style="color:#66d9ef">if</span> gpus:
 </span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">try</span>:
@@ -507,7 +516,7 @@
 </span></span><span style="display:flex;"><span>    [tf<span style="color:#f92672">.</span>config<span style="color:#f92672">.</span>experimental<span style="color:#f92672">.</span>VirtualDeviceConfiguration(memory_limit<span style="color:#f92672">=</span><span style="color:#ae81ff">1024</span>)]
 </span></span><span style="display:flex;"><span>)
 </span></span></code></pre></div><h3 id="计算图优化">计算图优化</h3>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#75715e"># 使用tf.function编译函数</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#75715e"># 使用tf.function编译函数</span>
 </span></span><span style="display:flex;"><span><span style="color:#a6e22e">@tf.function</span>
 </span></span><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">train_step</span>(x, y):
 </span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">with</span> tf<span style="color:#f92672">.</span>GradientTape() <span style="color:#66d9ef">as</span> tape:
@@ -524,7 +533,7 @@
 </span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> train_step(x, y)
 </span></span></code></pre></div><h2 id="-模型解释性">📈 模型解释性</h2>
 <h3 id="grad-cam可视化">Grad-CAM可视化</h3>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">grad_cam</span>(model, image, layer_name, class_idx):
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">grad_cam</span>(model, image, layer_name, class_idx):
 </span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#34;&#34;&#34;Grad-CAM可视化&#34;&#34;&#34;</span>
 </span></span><span style="display:flex;"><span>    <span style="color:#75715e"># 创建梯度模型</span>
 </span></span><span style="display:flex;"><span>    grad_model <span style="color:#f92672">=</span> tf<span style="color:#f92672">.</span>keras<span style="color:#f92672">.</span>models<span style="color:#f92672">.</span>Model(
@@ -563,7 +572,7 @@
 </span></span><span style="display:flex;"><span>plt<span style="color:#f92672">.</span>title(<span style="color:#e6db74">&#39;Grad-CAM热力图&#39;</span>)
 </span></span><span style="display:flex;"><span>plt<span style="color:#f92672">.</span>show()
 </span></span></code></pre></div><h3 id="特征重要性分析">特征重要性分析</h3>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">permutation_importance</span>(model, x, y, feature_names):
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">permutation_importance</span>(model, x, y, feature_names):
 </span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#34;&#34;&#34;排列重要性分析&#34;&#34;&#34;</span>
 </span></span><span style="display:flex;"><span>    baseline_score <span style="color:#f92672">=</span> model<span style="color:#f92672">.</span>evaluate(x, y, verbose<span style="color:#f92672">=</span><span style="color:#ae81ff">0</span>)[<span style="color:#ae81ff">1</span>]
 </span></span><span style="display:flex;"><span>    importances <span style="color:#f92672">=</span> []
@@ -592,7 +601,7 @@
 </span></span><span style="display:flex;"><span>plt<span style="color:#f92672">.</span>show()
 </span></span></code></pre></div><h2 id="-实际项目图像分类器">🎯 实际项目：图像分类器</h2>
 <h3 id="完整项目代码">完整项目代码</h3>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#f92672">import</span> tensorflow <span style="color:#66d9ef">as</span> tf
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#f92672">import</span> tensorflow <span style="color:#66d9ef">as</span> tf
 </span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> numpy <span style="color:#66d9ef">as</span> np
 </span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> matplotlib.pyplot <span style="color:#66d9ef">as</span> plt
 </span></span><span style="display:flex;"><span><span style="color:#f92672">from</span> tensorflow.keras.preprocessing.image <span style="color:#f92672">import</span> ImageDataGenerator
@@ -700,7 +709,7 @@
 </ul>
 <h2 id="-最佳实践">🔧 最佳实践</h2>
 <h3 id="代码组织">代码组织</h3>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#75715e"># 高级项目结构</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#75715e"># 高级项目结构</span>
 </span></span><span style="display:flex;"><span>advanced_project<span style="color:#f92672">/</span>
 </span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">├──</span> config<span style="color:#f92672">/</span>
 </span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">│</span>   <span style="color:#960050;background-color:#1e0010">├──</span> <span style="color:#a6e22e">__init__</span><span style="color:#f92672">.</span>py
@@ -730,7 +739,7 @@
 </span></span><span style="display:flex;"><span>    <span style="color:#960050;background-color:#1e0010">├──</span> train<span style="color:#f92672">.</span>py
 </span></span><span style="display:flex;"><span>    <span style="color:#960050;background-color:#1e0010">└──</span> evaluate<span style="color:#f92672">.</span>py
 </span></span></code></pre></div><h3 id="调试技巧">调试技巧</h3>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#75715e"># 启用详细日志</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#75715e"># 启用详细日志</span>
 </span></span><span style="display:flex;"><span>tf<span style="color:#f92672">.</span>debugging<span style="color:#f92672">.</span>set_log_device_placement(<span style="color:#66d9ef">True</span>)
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span><span style="color:#75715e"># 检查数值稳定性</span>
@@ -749,30 +758,89 @@
 </span></span><span style="display:flex;"><span>x <span style="color:#f92672">=</span> tf<span style="color:#f92672">.</span>print(x, [x], <span style="color:#e6db74">&#34;调试信息:&#34;</span>)
 </span></span></code></pre></div><hr>
 <p><em>最近更新: {{ .Lastmod.Format &ldquo;2006-01-02&rdquo; }}</em></p>
+</div>
+    
+<nav class="pager" aria-label="文章导航">
+  
+  <a href="/wiki/deep_learning/tensorflow/advanced_2/" data-press>
+    <span class="dir">← 上一篇</span>TensorFlow高级应用
+  </a>
+  
+  
+  <a href="/wiki/deep_learning/tensorflow/starter/" class="is-next" data-press>
+    <span class="dir">下一篇 →</span>TensorFlow基础教程
+  </a>
+  
+</nav>
 
+
+    
+<div class="comments">
+  <h2 class="comments-title">评论</h2>
+  <div id="utterances"></div>
+  <script>
+    (function () {
+      if (window.location.protocol === 'file:') return;
+      var s = document.createElement('script');
+      s.src = 'https://utteranc.es/client.js';
+      s.async = true;
+      s.setAttribute('repo', "\"makkichan947/makkichan947.github.io\"");
+      s.setAttribute('issue-term', "\"pathname\"");
+      s.setAttribute('theme', "\"github-dark\"");
+      s.setAttribute('crossorigin', 'anonymous');
+      document.getElementById('utterances').appendChild(s);
+    })();
+  </script>
+</div>
+
+
+  </article>
+  
+</div>
+
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+      <div class="footer-links">
+        
+        <a href="https://github.com/makkichan947" target="_blank" rel="noopener" title="Github" data-press>Github</a>
+        
+        <a href="mailto:yakumakki947@hotmail.com" target="_blank" rel="noopener" title="Email" data-press>Email</a>
+        
+        <a href="https://x.com/Makki_Yaku947" target="_blank" rel="noopener" title="Twitter" data-press>Twitter</a>
+        
+        <a href="https://www.twitch.tv/u/makkichan947" target="_blank" rel="noopener" title="Twitch" data-press>Twitch</a>
+        
+      </div>
+      <p>&copy; 2026 Yaku Makki</p>
+      <p>Powered by <a href="https://gohugo.io" target="_blank" rel="noopener">Hugo</a> · Makki Theme</p>
       
-      <div class="post-separator">------------------------------------------------------------------------</div>
-      
-    </div>
-    <div class="post-footer">
-      
-      <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
-      <div class="busuanzi-container">
-        <span id="busuanzi_container_page_pv">--本文总阅读量<span id="busuanzi_value_page_pv"></span>次--</span>
+      <div class="stats">
+        <span>访客 <span id="busuanzi_value_site_uv"></span></span>
+        <span>访问 <span id="busuanzi_value_site_pv"></span></span>
+        <span>本页 <span id="busuanzi_value_page_pv"></span></span>
       </div>
       
-      
-      <script src="https://utteranc.es/client.js"
-        repo="makkichan947/makkichan947.github.io"
-        issue-term="pathname"
-        label="Utterances"
-        theme="github-dark"
-        crossorigin="anonymous"
-        async>
-      </script>
     </div>
-  </article>
+  </footer>
 
-    </main>
-  </body>
+  <button class="back-to-top" id="back-to-top" type="button" aria-label="回到顶部" data-press>
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 19V5"/><path d="M5 12l7-7 7 7"/></svg>
+  </button>
+
+  
+  <script src="/js/main.min.21b3296e340ecb2ced2fb338acc5c540b53c154fb3595e8efddf10016cc5226d.js" integrity="sha256-IbMpbjQOyyztL7M4rMXFQLU8FU&#43;zWV6O/d8QAWzFIm0=" defer></script>
+  
+  
+  <script src="/js/search.min.b2d6ba6610ce24454bc1436dc521dcfd878b2583ad9f65f77aadedaaa1e1a54c.js" integrity="sha256-sta6ZhDOJEVLwUNtxSHc/YeLJYOtn2X3eq3tqqHhpUw=" defer></script>
+  
+
+  
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+  
+
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/katex.min.js" crossorigin="anonymous"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/contrib/auto-render.min.js" crossorigin="anonymous"></script>
+</body>
 </html>

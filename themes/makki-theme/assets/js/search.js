@@ -1,149 +1,164 @@
-// 搜索功能实现
-// 使用Lunr.js进行全文搜索
+/* ==========================================================================
+   Makki Theme — local full-text search over the Hugo JSON index.
+   Loaded lazily on first open; runs on every keystroke (no debounce —
+   the corpus is small, and input latency is a regression).
+   ========================================================================== */
+(() => {
+  'use strict';
 
-let searchIndex = null;
-let searchData = null;
+  const MAX_RESULTS = 10;
 
-// 初始化搜索索引
-function initSearchIndex() {
-    // 获取搜索数据
-    fetch('/index.json')
-        .then(response => response.json())
-        .then(data => {
-            searchData = data;
-            
-            // 创建Lunr索引
-            searchIndex = lunr(function() {
-                this.ref('uri');
-                this.field('title', { boost: 10 });
-                this.field('content', { boost: 5 });
-                this.field('tags', { boost: 8 });
-                this.field('categories');
-                
-                data.forEach(page => {
-                    this.add({
-                        uri: page.uri,
-                        title: page.title,
-                        content: page.content,
-                        tags: page.tags,
-                        categories: page.categories
-                    });
-                });
-            });
-        })
-        .catch(error => {
-            console.error('搜索索引加载失败:', error);
-        });
-}
+  let index = null;
+  let loaded = false;
+  let loading = null;
+  let current = -1;
 
-// 执行搜索
-function performSearch(query) {
-    if (!searchIndex || !query) return;
-    
-    const results = searchIndex.search(query);
-    displaySearchResults(results, query);
-}
+  const resultsEl = () => document.getElementById('search-results');
+  const inputEl = () => document.getElementById('search-input');
 
-// 显示搜索结果
-function displaySearchResults(results, query) {
-    const searchResults = document.getElementById('search-results');
-    if (!searchResults) return;
-    
-    if (results.length === 0) {
-        searchResults.innerHTML = `
-            <div class="search-no-results">
-                <p>没有找到与 "${query}" 相关的内容</p>
-                <p>尝试使用不同的关键词搜索</p>
-            </div>
-        `;
-        return;
+  const escapeHtml = (s) =>
+    s.replace(/[&<>"']/g, (c) => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]));
+
+  function loadIndex() {
+    if (loaded || loading) return loading;
+    loading = fetch('/index.json', { credentials: 'same-origin' })
+      .then((r) => r.json())
+      .then((data) => { index = data; loaded = true; })
+      .catch((err) => { console.error('搜索索引加载失败:', err); })
+      .finally(() => { loading = null; });
+    return loading;
+  }
+
+  function score(page, tokens) {
+    let s = 0;
+    const title = (page.title || '').toLowerCase();
+    const content = (page.content || '').toLowerCase();
+    const tags = (page.tags || []).map((t) => String(t).toLowerCase());
+    for (const tok of tokens) {
+      if (title === tok) s += 120;
+      else if (title.startsWith(tok)) s += 90;
+      else if (title.includes(tok)) s += 60;
+      if (tags.some((t) => t.includes(tok))) s += 45;
+      if (content.includes(tok)) s += 20;
+      if (snippetAt(content, tok)) s += 15;
     }
-    
-    const resultsHTML = results.slice(0, 10).map(result => {
-        const page = searchData.find(p => p.uri === result.ref);
-        if (!page) return '';
-        
-        return `
-            <div class="search-result">
-                <h3><a href="${page.uri}">${page.title}</a></h3>
-                <p>${getSnippet(page.content, query)}</p>
-                <div class="search-meta">
-                    <span class="search-type">${page.section}</span>
-                    ${page.tags ? page.tags.map(tag => `<span class="search-tag">${tag}</span>`).join('') : ''}
-                </div>
-            </div>
-        `;
-    }).join('');
-    
-    searchResults.innerHTML = `<div class="search-results-container">${resultsHTML}</div>`;
-}
+    return s;
+  }
 
-// 获取搜索片段
-function getSnippet(content, query) {
+  function snippetAt(content, tok) {
+    const i = content.indexOf(tok);
+    return i === -1 ? null : i;
+  }
+
+  function highlight(text, tokens) {
+    let out = escapeHtml(text);
+    for (const tok of tokens) {
+      out = out.replace(new RegExp(escapeHtml(tok).replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'gi'),
+        (m) => `<mark>${m}</mark>`);
+    }
+    return out;
+  }
+
+  function snippet(content, tokens, len) {
     if (!content) return '';
-    
-    const words = query.split(' ').filter(word => word.length > 0);
-    let snippet = content.substring(0, 200);
-    
-    // 尝试在片段中包含搜索词
-    for (const word of words) {
-        const index = content.toLowerCase().indexOf(word.toLowerCase());
-        if (index !== -1 && index < 200) {
-            snippet = content.substring(Math.max(0, index - 50), Math.min(content.length, index + 150));
-            break;
-        }
+    const plain = content.replace(/\s+/g, ' ').trim();
+    let i = Infinity;
+    for (const tok of tokens) {
+      const at = snippetAt(plain.toLowerCase(), tok.toLowerCase());
+      if (at !== null && at < i) i = at;
     }
-    
-    return snippet + (content.length > 200 ? '...' : '');
-}
+    let start = 0;
+    if (i !== Infinity) start = Math.max(0, i - Math.floor(len / 3));
+    const text = plain.slice(start, start + len);
+    return highlight(text, tokens) + (start + len < plain.length ? '…' : '');
+  }
 
-// 绑定搜索事件
-document.addEventListener('DOMContentLoaded', function() {
-    initSearchIndex();
-    
-    // 绑定搜索输入框事件
-    const searchInputs = document.querySelectorAll('#search-input, #main-search');
-    searchInputs.forEach(input => {
-        if (input) {
-            // 使用防抖优化搜索性能
-            const debouncedSearch = window.MakkiTheme.debounce(function(e) {
-                const query = e.target.value.trim();
-                if (query.length > 2) {
-                    performSearch(query);
-                } else {
-                    hideSearchResults();
-                }
-            }, 300);
-            
-            input.addEventListener('input', debouncedSearch);
-        }
+  function render(query) {
+    const box = resultsEl();
+    if (!box) return;
+    current = -1;
+
+    const tokens = query.toLowerCase().split(/\s+/).filter(Boolean);
+    if (!tokens.length) { box.innerHTML = ''; return; }
+
+    const scored = index
+      .map((page) => ({ page, s: score(page, tokens) }))
+      .filter((r) => r.s > 0)
+      .sort((a, b) => b.s - a.s)
+      .slice(0, MAX_RESULTS);
+
+    if (!scored.length) {
+      box.innerHTML = `<div class="search-empty">没有找到与 “${escapeHtml(query)}” 相关的内容</div>`;
+      return;
+    }
+
+    box.innerHTML = scored.map(({ page }) => `
+      <div class="search-result" data-uri="${escapeHtml(page.uri)}">
+        <h3><a href="${escapeHtml(page.uri)}">${highlight(page.title, tokens)}</a></h3>
+        <p>${snippet(page.content, tokens, 90)}</p>
+        <div class="search-meta">
+          ${page.section ? `<span class="search-type">${escapeHtml(page.section)}</span>` : ''}
+          ${(page.tags || []).slice(0, 3).map((t) => `<span class="tag">${escapeHtml(t)}</span>`).join('')}
+        </div>
+      </div>`).join('');
+
+    /* Hint in the direction of the gesture: results grow from the input. */
+    qa('.search-result').forEach((el, i) => {
+      el.style.opacity = '0';
+      el.style.transform = 'translateY(6px)';
+      setTimeout(() => {
+        el.style.transition = 'opacity 200ms ease-out, transform 200ms ease-out';
+        el.style.opacity = '1';
+        el.style.transform = '';
+      }, Math.min(i * 30, 150));
     });
-});
+  }
 
-// 隐藏搜索结果
-function hideSearchResults() {
-    const searchResults = document.getElementById('search-results');
-    if (searchResults) {
-        searchResults.innerHTML = '';
+  const qa = (sel, ctx = document) => Array.from(ctx.querySelectorAll(sel));
+
+  function move(delta) {
+    const items = qa('.search-result', resultsEl() || document);
+    if (!items.length) return;
+    current = (current + delta + items.length) % items.length;
+    items.forEach((el, i) => el.classList.toggle('is-current', i === current));
+    items[current].scrollIntoView({ block: 'nearest' });
+  }
+
+  function commit() {
+    const items = qa('.search-result', resultsEl() || document);
+    const el = items.find((x) => x.classList.contains('is-current')) || items[0];
+    if (el) {
+      const link = el.querySelector('a');
+      if (link) window.location.href = link.getAttribute('href');
     }
-}
+  }
 
-// 键盘快捷键支持
-document.addEventListener('keydown', function(e) {
-    // Ctrl+K 或 Cmd+K 聚焦搜索
-    if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
-        e.preventDefault();
-        const searchInput = document.getElementById('search-input') || document.getElementById('main-search');
-        if (searchInput) {
-            searchInput.focus();
-        }
-    }
-});
+  document.addEventListener('DOMContentLoaded', () => {
+    const input = inputEl();
+    if (!input) return;
 
-// 导出搜索函数
-window.SearchModule = {
-    initSearchIndex,
-    performSearch,
-    displaySearchResults,
-    hideSearchResults
-};
+    /* Load the index the first time the sheet opens — never on page load. */
+    document.addEventListener('makki:sheet-open', () => {
+      loadIndex().then(() => { if (document.activeElement === input) render(input.value); });
+    });
+
+    input.addEventListener('input', () => {
+      if (!loaded) { loadIndex(); return; }
+      render(input.value);
+    });
+
+    input.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowDown') { e.preventDefault(); move(1); }
+      else if (e.key === 'ArrowUp') { e.preventDefault(); move(-1); }
+      else if (e.key === 'Enter') { e.preventDefault(); commit(); }
+    });
+
+    resultsEl()?.addEventListener('click', (e) => {
+      const item = e.target.closest('.search-result');
+      if (item) {
+        const link = item.querySelector('a');
+        if (link) window.location.href = link.getAttribute('href');
+      }
+    });
+  });
+})();

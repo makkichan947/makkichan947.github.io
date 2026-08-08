@@ -1,89 +1,51 @@
 +++
 title = "M4KK1 操作系统"
 date = "2025-10-16"
-description = "个人操作系统项目"
+description = "基于 4P1 独立标准的 i386 操作系统"
 weight = 2
+comments = false
+toc = true
 +++
 
-# M4KK1 操作系统
+M4KK1 是一个从零开发的 **i386 操作系统**，采用 **4P1 独立标准**，不兼容 POSIX。项目使用 freestanding C 和 NASM 汇编编写，遵循宏内核设计。
 
-M4KK1是我个人开发的操作系统项目，旨在探索操作系统设计的各个方面，并实现一些有趣的想法。
+## 快速开始
 
-## 🎨 项目理念
-
-M4KK1的设计哲学：
-- **简洁性**：最小可用内核，专注核心功能
-- **学习性**：作为学习操作系统原理的实践项目
-- **趣味性**：融入个人特色和创意元素
-- **实用性**：能够在真实硬件上运行
-
-## 🏗️ 技术架构
-
-### 内核设计
-- **语言**：x86汇编 + C语言
-- **引导**：自制的BootCamp引导加载器
-- **内存管理**：物理内存管理 + 虚拟内存
-- **进程调度**：简单轮转调度算法
-
-### 系统特性
-- [x] 基础引导和内核加载
-- [x] 基本内存管理
-- [ ] 进程管理与调度
-- [ ] 文件系统支持
-- [ ] 用户模式支持
-
-## 📊 项目状态
-
-### 当前版本：v0.1.0-alpha
-- ✅ 内核能够成功引导
-- ✅ 基础内存管理功能
-- ✅ 简单的终端输出
-- 🚧 进程调度系统开发中
-
-### 开发路线图
-1. **Phase 1**：基础内核功能 ✅
-2. **Phase 2**：进程与内存管理（进行中）
-3. **Phase 3**：文件系统实现
-4. **Phase 4**：网络栈开发
-5. **Phase 5**：用户界面与应用
-
-## 💻 开发环境
-
-### 必需工具
-- **汇编器**：NASM
-- **编译器**：GCC with cross-compilation，后面转自己写的编译器MLang
-- **模拟器**：QEMU
-- **调试器**：GDB
-
-### 推荐学习资源
-- 《操作系统设计与实现》
-- 《Linux内核设计与实现》
-- 《Intel开发手册》
-
-## 🚀 快速开始
-
-### 环境搭建
 ```bash
-# 安装必要工具
-sudo apt-get install nasm gcc gdb qemu-system-x86
-# 使用pacman
-sudo pacman -S qemu-system-x86 base-devel
-
-# 克隆项目
-git clone https://github.com/makkichan947/m4kk1.git
-cd m4kk1
-
-# 构建内核
-make
-
-# 运行模拟器
-make run
+git clone https://github.com/makkichan947/M4KK1.git
+cd M4KK1
+bash tools/build/build_krn.sh
+qemu-system-x86_64 -cdrom m4kk1-test.iso -serial stdio
 ```
 
-## 🤝 参与贡献
+## 关键概念
 
-欢迎对操作系统提交Pull Request。
+| 概念 | 说明 |
+|------|------|
+| 内核 | **Y4KU** 宏内核，i386 保护模式，GRUB multiboot 引导 |
+| 用户空间 | **M4SH** 单进程 Shell（PID 1），40+ 内置命令，静态链接 |
+| 文件系统 | **YAFS** — COW B+Tree RAM 磁盘（16 MB） |
+| 标准 | **4P1** — 不兼容 POSIX，无 `errno`，无 MMU |
+| 文档 | BSD 风格手册页 + i18n（zh_CN / en_US） |
 
-## 📝 开发日志
+## 文档导航
 
-我会在这里记录M4KK1开发的点点滴滴，包括遇到的技术难题和解决方案。
+- **[系统手册](./handbook/)** — 完整使用手册（9 章）
+- **[专题文章](./articles/)** — 设计细节深入解析
+- **[手册页](./man/)** — BSD 格式命令参考（man1–man8）
+
+## 项目状态
+
+当前为 **v1.0.0-alpha1**，处于早期实验阶段。已完成内核基础、YAFS 文件系统、M4SH Shell 和 40+ 内置命令。
+
+### 已知限制
+
+- i386 32-bit 仅，无 SMP/APIC
+- 单进程用户空间，全部 Ring 0
+- 无 MMU 隔离、无网络栈、无图形界面
+- YAFS 无日志/崩溃恢复
+- 无 POSIX 兼容层
+
+## 参与贡献
+
+欢迎提交 Pull Request 或 Issue：<https://github.com/makkichan947/M4KK1>

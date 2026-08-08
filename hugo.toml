@@ -1,9 +1,12 @@
 baseURL = 'https://makkichan947.github.io/'
 languageCode = 'zh'
 title = 'Yaku Makki'
-theme = "hugo-theme-m10c"
+theme = "makki-theme"
 
 sectionPagesMenu = 'main'
+
+[taxonomies]
+  tag = 'tags'
 
 [markup.goldmark.renderer]
   unsafe = true
@@ -38,13 +41,12 @@ sectionPagesMenu = 'main'
 [params]
   author = "Yaku Makki"
   description = "个人小巢"
-  avatar = './avatar.jpg'
-  favicon = './avatar.jpg'
+  avatar = '/avatar/avatar.jpg'
+  favicon = '/avatar/avatar.jpg'
   enableEmoji = true
-  menu_item_separator = " | "
   showReadingTime = true
   showWordCount = true
-  
+
   [[params.social]]
     icon = "brand-github"
     name = "Github"
@@ -74,21 +76,13 @@ sectionPagesMenu = 'main'
   site_uv = true
   page_pv = true
 
-# 搜索功能配置
 [outputs]
   home = ["HTML", "RSS", "JSON"]
 
 [params.search]
   enable = true
-  type = "lunr"
+  type = "local"
   maxResultLength = 10
   snippetLength = 30
-  highlightTag = "em"
+  highlightTag = "mark"
   absoluteURLs = false
-
-[params.style]
-  darkestColor = "#0a0a0f"
-  darkColor = "#1a1a2e"
-  lightColor = "#b0b0c0"
-  lightestColor = "#ffffff"
-  primaryColor = "#00d4ff"

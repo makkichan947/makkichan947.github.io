@@ -1,120 +1,117 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="zh">
-  <head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
-    <title>强化学习 // Yaku Makki</title>
-    <link rel="shortcut icon" href="./avatar.jpg" />
-    <meta charset="utf-8" />
-    <meta name="generator" content="Hugo 0.151.2">
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="author" content="Yaku Makki" />
-    <meta name="description" content="" />
-    <link rel="stylesheet" href="/css/main.min.422840b4454cb211f5b3dab61f082cdff508e88825173c31806835cb75529734.css" />
-    
+<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>强化学习 · Yaku Makki</title>
+  <meta name="description" content="个人小巢">
+  <meta name="theme-color" content="#0a0a0f">
+  <script>document.documentElement.classList.add('js');</script>
 
-    
-    
-  <meta name="twitter:card" content="summary">
-  <meta name="twitter:title" content="强化学习">
-  <meta name="twitter:description" content="强化学习 强化学习（Reinforcement Learning, RL）是机器学习的一个重要分支，通过智能体与环境的交互来学习最优策略，在游戏AI、机器人控制、自动驾驶等领域取得了显著成就。
-🎯 强化学习基础 马尔可夫决策过程 (MDP) 强化学习的核心框架是马尔可夫决策过程：
-MDP包含的元素：
-状态空间 S：环境可能的所有状态 动作空间 A：智能体可以执行的所有动作 奖励函数 R(s,a)：从状态s执行动作a后获得的奖励 状态转移概率 P(s’|s,a)：从状态s执行动作a后转移到状态s’的概率 折扣因子 γ：未来奖励的衰减因子 MDP的目标： 找到一个策略π(a|s)，使得从初始状态开始的累积折扣奖励最大化： $$\pi^* = \arg\max_\pi \mathbb{E}[\sum_{t=0}^\infty \gamma^t R(s_t, a_t)]$$
-强化学习组成 智能体 (Agent)：
-观察环境状态 选择和执行动作 接收奖励信号 学习最优策略 环境 (Environment)：
-接收智能体的动作 转移到新状态 提供奖励信号 提供状态观察 🏗️ 强化学习算法 Q-Learning算法 Q-Learning是最经典的基于值函数的强化学习算法：
-import numpy as np import random class QLearningAgent: def __init__(self, state_size, action_size, learning_rate=0.1, gamma=0.95, epsilon=1.0): self.state_size = state_size self.action_size = action_size self.learning_rate = learning_rate self.gamma = gamma # 折扣因子 self.epsilon = epsilon # 探索率 self.epsilon_min = 0.01 self.epsilon_decay = 0.995 # Q表：状态-动作值函数 self.q_table = np.zeros((state_size, action_size)) def choose_action(self, state): &#34;&#34;&#34;ε-贪心策略选择动作&#34;&#34;&#34; if random.uniform(0, 1) &lt; self.epsilon: return random.randint(0, self.action_size - 1) # 探索 else: return np.argmax(self.q_table[state]) # 利用 def learn(self, state, action, reward, next_state, done): &#34;&#34;&#34;Q-Learning更新&#34;&#34;&#34; # 当前Q值 current_q = self.q_table[state, action] # 目标Q值 if done: target_q = reward else: target_q = reward &#43; self.gamma * np.max(self.q_table[next_state]) # Q值更新 self.q_table[state, action] &#43;= self.learning_rate * (target_q - current_q) # 衰减探索率 if self.epsilon &gt; self.epsilon_min: self.epsilon *= self.epsilon_decay # 使用Q-Learning env = gym.make(&#39;FrozenLake-v1&#39;) state_size = env.observation_space.n action_size = env.action_space.n agent = QLearningAgent(state_size, action_size) # 训练 episodes = 1000 for episode in range(episodes): state = env.reset() done = False total_reward = 0 while not done: action = agent.choose_action(state) next_state, reward, done, _ = env.step(action) agent.learn(state, action, reward, next_state, done) state = next_state total_reward &#43;= reward if episode % 100 == 0: print(f&#34;Episode: {episode}, Total Reward: {total_reward}&#34;) 深度Q网络 (DQN) DQN使用深度神经网络来近似Q函数：">
+  <link rel="icon" href="/avatar/avatar.jpg" type="image/jpeg">
 
-    <meta property="og:url" content="http://localhost:1313/wiki/deep_learning/reinforcement_learning/">
-  <meta property="og:site_name" content="Yaku Makki">
-  <meta property="og:title" content="强化学习">
-  <meta property="og:description" content="强化学习 强化学习（Reinforcement Learning, RL）是机器学习的一个重要分支，通过智能体与环境的交互来学习最优策略，在游戏AI、机器人控制、自动驾驶等领域取得了显著成就。
-🎯 强化学习基础 马尔可夫决策过程 (MDP) 强化学习的核心框架是马尔可夫决策过程：
-MDP包含的元素：
-状态空间 S：环境可能的所有状态 动作空间 A：智能体可以执行的所有动作 奖励函数 R(s,a)：从状态s执行动作a后获得的奖励 状态转移概率 P(s’|s,a)：从状态s执行动作a后转移到状态s’的概率 折扣因子 γ：未来奖励的衰减因子 MDP的目标： 找到一个策略π(a|s)，使得从初始状态开始的累积折扣奖励最大化： $$\pi^* = \arg\max_\pi \mathbb{E}[\sum_{t=0}^\infty \gamma^t R(s_t, a_t)]$$
-强化学习组成 智能体 (Agent)：
-观察环境状态 选择和执行动作 接收奖励信号 学习最优策略 环境 (Environment)：
-接收智能体的动作 转移到新状态 提供奖励信号 提供状态观察 🏗️ 强化学习算法 Q-Learning算法 Q-Learning是最经典的基于值函数的强化学习算法：
-import numpy as np import random class QLearningAgent: def __init__(self, state_size, action_size, learning_rate=0.1, gamma=0.95, epsilon=1.0): self.state_size = state_size self.action_size = action_size self.learning_rate = learning_rate self.gamma = gamma # 折扣因子 self.epsilon = epsilon # 探索率 self.epsilon_min = 0.01 self.epsilon_decay = 0.995 # Q表：状态-动作值函数 self.q_table = np.zeros((state_size, action_size)) def choose_action(self, state): &#34;&#34;&#34;ε-贪心策略选择动作&#34;&#34;&#34; if random.uniform(0, 1) &lt; self.epsilon: return random.randint(0, self.action_size - 1) # 探索 else: return np.argmax(self.q_table[state]) # 利用 def learn(self, state, action, reward, next_state, done): &#34;&#34;&#34;Q-Learning更新&#34;&#34;&#34; # 当前Q值 current_q = self.q_table[state, action] # 目标Q值 if done: target_q = reward else: target_q = reward &#43; self.gamma * np.max(self.q_table[next_state]) # Q值更新 self.q_table[state, action] &#43;= self.learning_rate * (target_q - current_q) # 衰减探索率 if self.epsilon &gt; self.epsilon_min: self.epsilon *= self.epsilon_decay # 使用Q-Learning env = gym.make(&#39;FrozenLake-v1&#39;) state_size = env.observation_space.n action_size = env.action_space.n agent = QLearningAgent(state_size, action_size) # 训练 episodes = 1000 for episode in range(episodes): state = env.reset() done = False total_reward = 0 while not done: action = agent.choose_action(state) next_state, reward, done, _ = env.step(action) agent.learn(state, action, reward, next_state, done) state = next_state total_reward &#43;= reward if episode % 100 == 0: print(f&#34;Episode: {episode}, Total Reward: {total_reward}&#34;) 深度Q网络 (DQN) DQN使用深度神经网络来近似Q函数：">
-  <meta property="og:locale" content="zh">
-  <meta property="og:type" content="article">
-    <meta property="article:section" content="wiki">
-    <meta property="article:published_time" content="2025-10-25T10:00:00+08:00">
-    <meta property="article:modified_time" content="2025-10-25T10:00:00+08:00">
+  
+  <link rel="stylesheet" href="/css/main.min.b64e4527cc255b367461135391e39e321a5d86fc97defca99c7afda308ada007.css" integrity="sha256-tk5FJ8wlWzZ0YRNTkeOeMhpdhvyX3vypnHr9owitoAc=">
 
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
 
-  </head>
-  <body class="synthwave-bg">
-    <header class="app-header glass-morphism neon-border">
-      <a href="/"><img class="app-header-avatar" src="/avatar.jpg" alt="Yaku Makki" /></a>
-      <span class="app-header-title gradient-text">Yaku Makki</span>
-      <nav class="app-header-menu">
-          <a class="app-header-menu-item" href="/">首页</a>
-             | 
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/katex.min.css" crossorigin="anonymous">
+</head>
+<body>
+  <a class="skip-link" href="#main">跳到内容</a>
+
+  <div class="scene" aria-hidden="true">
+    <div class="scene-sky"></div>
+    <div class="scene-stars"></div>
+    <div class="scene-sun-halo"></div>
+    <div class="scene-sun"></div>
+    <div class="scene-mountains scene-mountains-far"></div>
+    <div class="scene-mountains scene-mountains-near"></div>
+    <div class="scene-horizon"></div>
+    <div class="scene-floor"></div>
+    <div class="scene-scanlines"></div>
+  </div>
+
+  <nav class="navbar" aria-label="主导航">
+    <div class="nav-inner">
+      <a class="logo" href="/" data-press>
+        <img class="logo-avatar" src="/avatar/avatar.jpg" alt="" width="34" height="34">
+        <span class="logo-text">Yaku Makki</span>
+      </a>
+      <div class="nav-menu-wrap">
+        <span class="nav-tick" aria-hidden="true"></span>
+        <ul class="nav-menu">
           
-          <a class="app-header-menu-item" href="/post/">博客</a>
-             | 
+          <li>
+            <a href="/" data-press>首页</a>
+          </li>
           
-          <a class="app-header-menu-item" href="/wiki/">维基</a>
-             | 
+          <li>
+            <a href="/post/" data-press>博客</a>
+          </li>
           
-          <a class="app-header-menu-item" href="/tags/">标签</a>
-             | 
+          <li>
+            <a href="/wiki/" data-press>维基</a>
+          </li>
           
-          <a class="app-header-menu-item" href="/about/">关于</a>
-      </nav>
-      <p>个人小巢</p>
-      <div class="app-header-social">
-        
-          <a href="https://github.com/makkichan947" target="_blank" rel="noreferrer noopener me" class="pulse-glow">
-            <svg class="icon icon-brand-github" viewBox="0 0 24 24" fill="currentColor"><title>GitHub</title><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg>
-          </a>
-        
-          <a href="mailto:yakumakki947@hotmail.com" target="_blank" rel="noreferrer noopener me" class="pulse-glow">
-            <svg class="icon icon-mail" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><title>mail</title><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
-          </a>
-        
-          <a href="https://x.com/Makki_Yaku947" target="_blank" rel="noreferrer noopener me" class="pulse-glow">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-link">
-  <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path>
-  <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path>
-</svg>
-          </a>
-        
-          <a href="https://www.twitch.tv/u/makkichan947" target="_blank" rel="noreferrer noopener me" class="pulse-glow">
-            <svg class="icon icon-brand-twitch" viewBox="0 0 24 24" fill="currentColor"><title>Twitch</title><path d="M11.571 4.714h1.715v5.143H11.57zm4.715 0H18v5.143h-1.714zM6 0L1.714 4.286v15.428h5.143V24l4.286-4.286h3.428L22.286 12V0zm14.571 11.143l-3.428 3.428h-3.429l-3 3v-3H6.857V1.714h13.714Z"/></svg>
-          </a>
-        
+          <li>
+            <a href="/tags/" data-press>标签</a>
+          </li>
+          
+          <li>
+            <a href="/about/" data-press>关于</a>
+          </li>
+          
+          
+          <li>
+            <button id="search-toggle" class="search-toggle" type="button" title="搜索 (Ctrl+K 或 /)" aria-haspopup="dialog" aria-expanded="false" data-press>搜索</button>
+          </li>
+          
+        </ul>
       </div>
-    </header>
-    <main class="app-container glass-morphism glow-effect">
-      <div class="floating-particles">
-        <div class="particle" style="left: 10%; animation-delay: 0s;"></div>
-        <div class="particle" style="left: 20%; animation-delay: 1s;"></div>
-        <div class="particle" style="left: 30%; animation-delay: 2s;"></div>
-        <div class="particle" style="left: 40%; animation-delay: 3s;"></div>
-        <div class="particle" style="left: 50%; animation-delay: 4s;"></div>
-        <div class="particle" style="left: 60%; animation-delay: 5s;"></div>
-        <div class="particle" style="left: 70%; animation-delay: 6s;"></div>
-        <div class="particle" style="left: 80%; animation-delay: 7s;"></div>
-        <div class="particle" style="left: 90%; animation-delay: 8s;"></div>
-      </div>
-      
-  <article class="post enhanced-card glow-effect">
-    <header class="post-header">
-      <h1 class ="post-title gradient-text">强化学习</h1>
-      <div class="post-meta">
-        <div>
-          <svg class="icon icon-calendar" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><title>calendar</title><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
-          Oct 25, 2025
+    </div>
+  </nav>
+
+  
+  <div class="sheet-scrim" id="sheet-scrim"></div>
+  <section class="sheet" id="search-sheet" role="dialog" aria-modal="true" aria-label="搜索" aria-hidden="true">
+    <div class="sheet-panel" id="sheet-panel">
+      <div class="sheet-handle" id="sheet-handle" role="presentation" aria-hidden="true"></div>
+      <div class="sheet-body">
+        <div class="search-field">
+          <input id="search-input" type="search" placeholder="搜索文章和 Wiki…"
+                 autocomplete="off" spellcheck="false" aria-controls="search-results">
+          <span class="search-key" aria-hidden="true">/</span>
         </div>
-        <div>
-          <svg class="icon icon-clock" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><title>clock</title><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
-          9 min read
-        </div>
+        <div id="search-results" class="search-results" role="listbox" aria-label="搜索结果"></div>
       </div>
-    </header>
-    <div class="post-content">
-      <h1 id="强化学习">强化学习</h1>
+    </div>
+  </section>
+  
+
+  <main class="main" id="main">
+    
+<header class="page-head">
+  <nav class="crumb" aria-label="面包屑">
+    <a href="/" data-press>首页</a>
+    <span class="sep">/</span>
+    <a href="/wiki/" data-press>维基</a>
+    
+    
+    <span class="sep">/</span>
+    <a href="/wiki/deep_learning/" data-press>深度学习</a>
+    
+    
+  </nav>
+  <h1>强化学习</h1>
+  
+</header>
+
+<div class="wiki-layout">
+  <article class="article">
+    <div class="article-content"><h1 id="强化学习">强化学习</h1>
 <p>强化学习（Reinforcement Learning, RL）是机器学习的一个重要分支，通过智能体与环境的交互来学习最优策略，在游戏AI、机器人控制、自动驾驶等领域取得了显著成就。</p>
 <h2 id="-强化学习基础">🎯 强化学习基础</h2>
 <h3 id="马尔可夫决策过程-mdp">马尔可夫决策过程 (MDP)</h3>
@@ -148,7 +145,7 @@ $$\pi^* = \arg\max_\pi \mathbb{E}[\sum_{t=0}^\infty \gamma^t R(s_t, a_t)]$$</p>
 <h2 id="-强化学习算法">🏗️ 强化学习算法</h2>
 <h3 id="q-learning算法">Q-Learning算法</h3>
 <p><strong>Q-Learning</strong>是最经典的基于值函数的强化学习算法：</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#f92672">import</span> numpy <span style="color:#66d9ef">as</span> np
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#f92672">import</span> numpy <span style="color:#66d9ef">as</span> np
 </span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> random
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">QLearningAgent</span>:
@@ -216,7 +213,7 @@ $$\pi^* = \arg\max_\pi \mathbb{E}[\sum_{t=0}^\infty \gamma^t R(s_t, a_t)]$$</p>
 </span></span><span style="display:flex;"><span>        print(<span style="color:#e6db74">f</span><span style="color:#e6db74">&#34;Episode: </span><span style="color:#e6db74">{</span>episode<span style="color:#e6db74">}</span><span style="color:#e6db74">, Total Reward: </span><span style="color:#e6db74">{</span>total_reward<span style="color:#e6db74">}</span><span style="color:#e6db74">&#34;</span>)
 </span></span></code></pre></div><h3 id="深度q网络-dqn">深度Q网络 (DQN)</h3>
 <p><strong>DQN</strong>使用深度神经网络来近似Q函数：</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#f92672">import</span> tensorflow <span style="color:#66d9ef">as</span> tf
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#f92672">import</span> tensorflow <span style="color:#66d9ef">as</span> tf
 </span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> numpy <span style="color:#66d9ef">as</span> np
 </span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> random
 </span></span><span style="display:flex;"><span><span style="color:#f92672">from</span> collections <span style="color:#f92672">import</span> deque
@@ -322,7 +319,7 @@ $$\pi^* = \arg\max_\pi \mathbb{E}[\sum_{t=0}^\infty \gamma^t R(s_t, a_t)]$$</p>
 </span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">break</span>
 </span></span></code></pre></div><h3 id="策略梯度方法">策略梯度方法</h3>
 <p><strong>REINFORCE算法</strong>：</p>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">REINFORCEAgent</span>:
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">REINFORCEAgent</span>:
 </span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">__init__</span>(self, state_size, action_size, learning_rate<span style="color:#f92672">=</span><span style="color:#ae81ff">0.01</span>, gamma<span style="color:#f92672">=</span><span style="color:#ae81ff">0.99</span>):
 </span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>state_size <span style="color:#f92672">=</span> state_size
 </span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>action_size <span style="color:#f92672">=</span> action_size
@@ -413,7 +410,7 @@ $$\pi^* = \arg\max_\pi \mathbb{E}[\sum_{t=0}^\infty \gamma^t R(s_t, a_t)]$$</p>
 </span></span><span style="display:flex;"><span>        print(<span style="color:#e6db74">f</span><span style="color:#e6db74">&#34;Episode: </span><span style="color:#e6db74">{</span>episode<span style="color:#e6db74">}</span><span style="color:#e6db74">, Loss: </span><span style="color:#e6db74">{</span>loss<span style="color:#e6db74">:</span><span style="color:#e6db74">.4f</span><span style="color:#e6db74">}</span><span style="color:#e6db74">&#34;</span>)
 </span></span></code></pre></div><h2 id="-高级强化学习算法">🎮 高级强化学习算法</h2>
 <h3 id="actor-critic方法">Actor-Critic方法</h3>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">ActorCriticAgent</span>:
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">ActorCriticAgent</span>:
 </span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">__init__</span>(self, state_size, action_size, learning_rate<span style="color:#f92672">=</span><span style="color:#ae81ff">0.001</span>):
 </span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>state_size <span style="color:#f92672">=</span> state_size
 </span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>action_size <span style="color:#f92672">=</span> action_size
@@ -480,7 +477,7 @@ $$\pi^* = \arg\max_\pi \mathbb{E}[\sum_{t=0}^\infty \gamma^t R(s_t, a_t)]$$</p>
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> critic_loss<span style="color:#f92672">.</span>numpy(), actor_loss<span style="color:#f92672">.</span>numpy()
 </span></span></code></pre></div><h3 id="近端策略优化-ppo">近端策略优化 (PPO)</h3>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">PPOAgent</span>:
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">PPOAgent</span>:
 </span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">__init__</span>(self, state_size, action_size, clip_ratio<span style="color:#f92672">=</span><span style="color:#ae81ff">0.2</span>):
 </span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>state_size <span style="color:#f92672">=</span> state_size
 </span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>action_size <span style="color:#f92672">=</span> action_size
@@ -571,7 +568,7 @@ $$\pi^* = \arg\max_\pi \mathbb{E}[\sum_{t=0}^\infty \gamma^t R(s_t, a_t)]$$</p>
 <li><strong>自我对弈</strong>：通过自我对弈提升策略</li>
 <li><strong>策略网络和价值网络</strong>：分别预测走法和局面价值</li>
 </ul>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#75715e"># 简化版AlphaGo策略</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#75715e"># 简化版AlphaGo策略</span>
 </span></span><span style="display:flex;"><span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">SimpleAlphaGo</span>:
 </span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">__init__</span>(self, board_size<span style="color:#f92672">=</span><span style="color:#ae81ff">9</span>):
 </span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>board_size <span style="color:#f92672">=</span> board_size
@@ -603,7 +600,7 @@ $$\pi^* = \arg\max_\pi \mathbb{E}[\sum_{t=0}^\infty \gamma^t R(s_t, a_t)]$$</p>
 <li><strong>TD3 (Twin Delayed DDPG)</strong>：改进的DDPG算法</li>
 <li><strong>SAC (Soft Actor-Critic)</strong>：最大化熵的强化学习</li>
 </ul>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">DDPGAgent</span>:
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">DDPGAgent</span>:
 </span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">__init__</span>(self, state_size, action_size, action_low, action_high):
 </span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>state_size <span style="color:#f92672">=</span> state_size
 </span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>action_size <span style="color:#f92672">=</span> action_size
@@ -656,7 +653,7 @@ $$\pi^* = \arg\max_\pi \mathbb{E}[\sum_{t=0}^\infty \gamma^t R(s_t, a_t)]$$</p>
 <li><strong>行为决策</strong>：在复杂交通环境中决策</li>
 <li><strong>控制优化</strong>：优化车辆控制参数</li>
 </ul>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">AutonomousDrivingAgent</span>:
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">AutonomousDrivingAgent</span>:
 </span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">__init__</span>(self, state_size, action_size):
 </span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>state_size <span style="color:#f92672">=</span> state_size
 </span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>action_size <span style="color:#f92672">=</span> action_size
@@ -690,7 +687,7 @@ $$\pi^* = \arg\max_\pi \mathbb{E}[\sum_{t=0}^\infty \gamma^t R(s_t, a_t)]$$</p>
 </span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> tf<span style="color:#f92672">.</span>keras<span style="color:#f92672">.</span>Model(inputs<span style="color:#f92672">=</span>inputs, outputs<span style="color:#f92672">=</span>outputs)
 </span></span></code></pre></div><h2 id="-评估和调试">📊 评估和调试</h2>
 <h3 id="评估指标">评估指标</h3>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">evaluate_agent</span>(agent, env, episodes<span style="color:#f92672">=</span><span style="color:#ae81ff">100</span>):
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">evaluate_agent</span>(agent, env, episodes<span style="color:#f92672">=</span><span style="color:#ae81ff">100</span>):
 </span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#34;&#34;&#34;评估智能体性能&#34;&#34;&#34;</span>
 </span></span><span style="display:flex;"><span>    total_rewards <span style="color:#f92672">=</span> []
 </span></span><span style="display:flex;"><span>    episode_lengths <span style="color:#f92672">=</span> []
@@ -727,7 +724,7 @@ $$\pi^* = \arg\max_\pi \mathbb{E}[\sum_{t=0}^\infty \gamma^t R(s_t, a_t)]$$</p>
 </span></span><span style="display:flex;"><span>print(<span style="color:#e6db74">f</span><span style="color:#e6db74">&#34;平均奖励: </span><span style="color:#e6db74">{</span>results[<span style="color:#e6db74">&#39;mean_reward&#39;</span>]<span style="color:#e6db74">:</span><span style="color:#e6db74">.2f</span><span style="color:#e6db74">}</span><span style="color:#e6db74"> ± </span><span style="color:#e6db74">{</span>results[<span style="color:#e6db74">&#39;std_reward&#39;</span>]<span style="color:#e6db74">:</span><span style="color:#e6db74">.2f</span><span style="color:#e6db74">}</span><span style="color:#e6db74">&#34;</span>)
 </span></span><span style="display:flex;"><span>print(<span style="color:#e6db74">f</span><span style="color:#e6db74">&#34;成功率: </span><span style="color:#e6db74">{</span>results[<span style="color:#e6db74">&#39;success_rate&#39;</span>]<span style="color:#e6db74">:</span><span style="color:#e6db74">.2%</span><span style="color:#e6db74">}</span><span style="color:#e6db74">&#34;</span>)
 </span></span></code></pre></div><h3 id="调试技巧">调试技巧</h3>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">DebuggingAgent</span>:
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">DebuggingAgent</span>:
 </span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">__init__</span>(self, agent):
 </span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>agent <span style="color:#f92672">=</span> agent
 </span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>episode_rewards <span style="color:#f92672">=</span> []
@@ -818,7 +815,7 @@ $$\pi^* = \arg\max_\pi \mathbb{E}[\sum_{t=0}^\infty \gamma^t R(s_t, a_t)]$$</p>
 </ul>
 <h2 id="-实际项目">🎯 实际项目</h2>
 <h3 id="智能体训练框架">智能体训练框架</h3>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">RLTrainingFramework</span>:
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">RLTrainingFramework</span>:
 </span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">__init__</span>(self, env_name, agent_class, config):
 </span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>env_name <span style="color:#f92672">=</span> env_name
 </span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>agent_class <span style="color:#f92672">=</span> agent_class
@@ -906,30 +903,89 @@ $$\pi^* = \arg\max_\pi \mathbb{E}[\sum_{t=0}^\infty \gamma^t R(s_t, a_t)]$$</p>
 </span></span><span style="display:flex;"><span>rewards <span style="color:#f92672">=</span> framework<span style="color:#f92672">.</span>train(num_episodes<span style="color:#f92672">=</span><span style="color:#ae81ff">1000</span>)
 </span></span></code></pre></div><hr>
 <p><em>最近更新: {{ .Lastmod.Format &ldquo;2006-01-02&rdquo; }}</em></p>
+</div>
+    
+<nav class="pager" aria-label="文章导航">
+  
+  <a href="/wiki/deep_learning/transfer_learning/" data-press>
+    <span class="dir">← 上一篇</span>迁移学习
+  </a>
+  
+  
+  <a href="/wiki/deep_learning/gan/" class="is-next" data-press>
+    <span class="dir">下一篇 →</span>生成对抗网络
+  </a>
+  
+</nav>
 
+
+    
+<div class="comments">
+  <h2 class="comments-title">评论</h2>
+  <div id="utterances"></div>
+  <script>
+    (function () {
+      if (window.location.protocol === 'file:') return;
+      var s = document.createElement('script');
+      s.src = 'https://utteranc.es/client.js';
+      s.async = true;
+      s.setAttribute('repo', "\"makkichan947/makkichan947.github.io\"");
+      s.setAttribute('issue-term', "\"pathname\"");
+      s.setAttribute('theme', "\"github-dark\"");
+      s.setAttribute('crossorigin', 'anonymous');
+      document.getElementById('utterances').appendChild(s);
+    })();
+  </script>
+</div>
+
+
+  </article>
+  
+</div>
+
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+      <div class="footer-links">
+        
+        <a href="https://github.com/makkichan947" target="_blank" rel="noopener" title="Github" data-press>Github</a>
+        
+        <a href="mailto:yakumakki947@hotmail.com" target="_blank" rel="noopener" title="Email" data-press>Email</a>
+        
+        <a href="https://x.com/Makki_Yaku947" target="_blank" rel="noopener" title="Twitter" data-press>Twitter</a>
+        
+        <a href="https://www.twitch.tv/u/makkichan947" target="_blank" rel="noopener" title="Twitch" data-press>Twitch</a>
+        
+      </div>
+      <p>&copy; 2026 Yaku Makki</p>
+      <p>Powered by <a href="https://gohugo.io" target="_blank" rel="noopener">Hugo</a> · Makki Theme</p>
       
-      <div class="post-separator">------------------------------------------------------------------------</div>
-      
-    </div>
-    <div class="post-footer">
-      
-      <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
-      <div class="busuanzi-container">
-        <span id="busuanzi_container_page_pv">--本文总阅读量<span id="busuanzi_value_page_pv"></span>次--</span>
+      <div class="stats">
+        <span>访客 <span id="busuanzi_value_site_uv"></span></span>
+        <span>访问 <span id="busuanzi_value_site_pv"></span></span>
+        <span>本页 <span id="busuanzi_value_page_pv"></span></span>
       </div>
       
-      
-      <script src="https://utteranc.es/client.js"
-        repo="makkichan947/makkichan947.github.io"
-        issue-term="pathname"
-        label="Utterances"
-        theme="github-dark"
-        crossorigin="anonymous"
-        async>
-      </script>
     </div>
-  </article>
+  </footer>
 
-    </main>
-  </body>
+  <button class="back-to-top" id="back-to-top" type="button" aria-label="回到顶部" data-press>
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 19V5"/><path d="M5 12l7-7 7 7"/></svg>
+  </button>
+
+  
+  <script src="/js/main.min.21b3296e340ecb2ced2fb338acc5c540b53c154fb3595e8efddf10016cc5226d.js" integrity="sha256-IbMpbjQOyyztL7M4rMXFQLU8FU&#43;zWV6O/d8QAWzFIm0=" defer></script>
+  
+  
+  <script src="/js/search.min.b2d6ba6610ce24454bc1436dc521dcfd878b2583ad9f65f77aadedaaa1e1a54c.js" integrity="sha256-sta6ZhDOJEVLwUNtxSHc/YeLJYOtn2X3eq3tqqHhpUw=" defer></script>
+  
+
+  
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+  
+
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/katex.min.js" crossorigin="anonymous"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/contrib/auto-render.min.js" crossorigin="anonymous"></script>
+</body>
 </html>

@@ -1,23 +1,19 @@
 {{ define "main" }}
-<div class="content-wrapper fade-in-up">
-    <header class="taxonomy-header">
-        <h1>{{ .Title }}</h1>
-        <p>{{ .Description }}</p>
-    </header>
+<header class="page-head">
+  <h1>标签：{{ .Title }}</h1>
+</header>
 
-    <div class="taxonomy-content">
-        {{ range .Pages }}
-        <div class="card">
-            <h3><a href="{{ .RelPermalink }}">{{ .Title }}</a></h3>
-            <p>{{ .Summary | truncate 150 }}</p>
-            <div class="meta">
-                <time>{{ .Date.Format "2006-01-02" }}</time>
-                <span class="section">{{ .Section }}</span>
-            </div>
-        </div>
-        {{ end }}
+<div class="card-grid">
+  {{ range $i, $p := .Pages }}
+  <article class="card" data-press data-reveal data-reveal-delay="{{ mod $i 6 }}45">
+    <h3><a href="{{ $p.RelPermalink }}">{{ $p.Title }}</a></h3>
+    <p>{{ $p.Summary | truncate 110 }}</p>
+    <div class="meta">
+      {{ if $p.Date }}<time datetime="{{ $p.Date.Format "2006-01-02" }}">{{ $p.Date.Format "2006-01-02" }}</time>{{ end }}
+      <span class="section">{{ $p.Section }}</span>
     </div>
-
-    {{ template "_internal/pagination.html" . }}
+  </article>
+  {{ end }}
 </div>
+{{ template "_internal/pagination.html" . }}
 {{ end }}

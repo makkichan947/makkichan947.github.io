@@ -1,106 +1,117 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="zh">
-  <head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
-    <title>临时C库 // Yaku Makki</title>
-    <link rel="shortcut icon" href="./avatar.jpg" />
-    <meta charset="utf-8" />
-    <meta name="generator" content="Hugo 0.151.2">
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="author" content="Yaku Makki" />
-    <meta name="description" content="构建LFS临时C运行时库" />
-    <link rel="stylesheet" href="/css/main.min.422840b4454cb211f5b3dab61f082cdff508e88825173c31806835cb75529734.css" />
-    
+<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>临时C库 · Yaku Makki</title>
+  <meta name="description" content="构建LFS临时C运行时库">
+  <meta name="theme-color" content="#0a0a0f">
+  <script>document.documentElement.classList.add('js');</script>
 
-    
-    
-  <meta name="twitter:card" content="summary">
-  <meta name="twitter:title" content="临时C库">
-  <meta name="twitter:description" content="构建LFS临时C运行时库">
+  <link rel="icon" href="/avatar/avatar.jpg" type="image/jpeg">
 
-    <meta property="og:url" content="http://localhost:1313/wiki/lfs/toolchain/temporary-c-library/">
-  <meta property="og:site_name" content="Yaku Makki">
-  <meta property="og:title" content="临时C库">
-  <meta property="og:description" content="构建LFS临时C运行时库">
-  <meta property="og:locale" content="zh">
-  <meta property="og:type" content="article">
-    <meta property="article:section" content="wiki">
-    <meta property="article:published_time" content="2025-10-28T00:00:00+00:00">
-    <meta property="article:modified_time" content="2025-10-28T00:00:00+00:00">
+  
+  <link rel="stylesheet" href="/css/main.min.b64e4527cc255b367461135391e39e321a5d86fc97defca99c7afda308ada007.css" integrity="sha256-tk5FJ8wlWzZ0YRNTkeOeMhpdhvyX3vypnHr9owitoAc=">
 
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
 
-  </head>
-  <body class="synthwave-bg">
-    <header class="app-header glass-morphism neon-border">
-      <a href="/"><img class="app-header-avatar" src="/avatar.jpg" alt="Yaku Makki" /></a>
-      <span class="app-header-title gradient-text">Yaku Makki</span>
-      <nav class="app-header-menu">
-          <a class="app-header-menu-item" href="/">首页</a>
-             | 
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/katex.min.css" crossorigin="anonymous">
+</head>
+<body>
+  <a class="skip-link" href="#main">跳到内容</a>
+
+  <div class="scene" aria-hidden="true">
+    <div class="scene-sky"></div>
+    <div class="scene-stars"></div>
+    <div class="scene-sun-halo"></div>
+    <div class="scene-sun"></div>
+    <div class="scene-mountains scene-mountains-far"></div>
+    <div class="scene-mountains scene-mountains-near"></div>
+    <div class="scene-horizon"></div>
+    <div class="scene-floor"></div>
+    <div class="scene-scanlines"></div>
+  </div>
+
+  <nav class="navbar" aria-label="主导航">
+    <div class="nav-inner">
+      <a class="logo" href="/" data-press>
+        <img class="logo-avatar" src="/avatar/avatar.jpg" alt="" width="34" height="34">
+        <span class="logo-text">Yaku Makki</span>
+      </a>
+      <div class="nav-menu-wrap">
+        <span class="nav-tick" aria-hidden="true"></span>
+        <ul class="nav-menu">
           
-          <a class="app-header-menu-item" href="/post/">博客</a>
-             | 
+          <li>
+            <a href="/" data-press>首页</a>
+          </li>
           
-          <a class="app-header-menu-item" href="/wiki/">维基</a>
-             | 
+          <li>
+            <a href="/post/" data-press>博客</a>
+          </li>
           
-          <a class="app-header-menu-item" href="/tags/">标签</a>
-             | 
+          <li>
+            <a href="/wiki/" data-press>维基</a>
+          </li>
           
-          <a class="app-header-menu-item" href="/about/">关于</a>
-      </nav>
-      <p>个人小巢</p>
-      <div class="app-header-social">
-        
-          <a href="https://github.com/makkichan947" target="_blank" rel="noreferrer noopener me" class="pulse-glow">
-            <svg class="icon icon-brand-github" viewBox="0 0 24 24" fill="currentColor"><title>GitHub</title><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg>
-          </a>
-        
-          <a href="mailto:yakumakki947@hotmail.com" target="_blank" rel="noreferrer noopener me" class="pulse-glow">
-            <svg class="icon icon-mail" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><title>mail</title><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
-          </a>
-        
-          <a href="https://x.com/Makki_Yaku947" target="_blank" rel="noreferrer noopener me" class="pulse-glow">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-link">
-  <path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"></path>
-  <path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"></path>
-</svg>
-          </a>
-        
-          <a href="https://www.twitch.tv/u/makkichan947" target="_blank" rel="noreferrer noopener me" class="pulse-glow">
-            <svg class="icon icon-brand-twitch" viewBox="0 0 24 24" fill="currentColor"><title>Twitch</title><path d="M11.571 4.714h1.715v5.143H11.57zm4.715 0H18v5.143h-1.714zM6 0L1.714 4.286v15.428h5.143V24l4.286-4.286h3.428L22.286 12V0zm14.571 11.143l-3.428 3.428h-3.429l-3 3v-3H6.857V1.714h13.714Z"/></svg>
-          </a>
-        
+          <li>
+            <a href="/tags/" data-press>标签</a>
+          </li>
+          
+          <li>
+            <a href="/about/" data-press>关于</a>
+          </li>
+          
+          
+          <li>
+            <button id="search-toggle" class="search-toggle" type="button" title="搜索 (Ctrl+K 或 /)" aria-haspopup="dialog" aria-expanded="false" data-press>搜索</button>
+          </li>
+          
+        </ul>
       </div>
-    </header>
-    <main class="app-container glass-morphism glow-effect">
-      <div class="floating-particles">
-        <div class="particle" style="left: 10%; animation-delay: 0s;"></div>
-        <div class="particle" style="left: 20%; animation-delay: 1s;"></div>
-        <div class="particle" style="left: 30%; animation-delay: 2s;"></div>
-        <div class="particle" style="left: 40%; animation-delay: 3s;"></div>
-        <div class="particle" style="left: 50%; animation-delay: 4s;"></div>
-        <div class="particle" style="left: 60%; animation-delay: 5s;"></div>
-        <div class="particle" style="left: 70%; animation-delay: 6s;"></div>
-        <div class="particle" style="left: 80%; animation-delay: 7s;"></div>
-        <div class="particle" style="left: 90%; animation-delay: 8s;"></div>
-      </div>
-      
-  <article class="post enhanced-card glow-effect">
-    <header class="post-header">
-      <h1 class ="post-title gradient-text">临时C库</h1>
-      <div class="post-meta">
-        <div>
-          <svg class="icon icon-calendar" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><title>calendar</title><rect x="3" y="4" width="18" height="18" rx="2" ry="2"></rect><line x1="16" y1="2" x2="16" y2="6"></line><line x1="8" y1="2" x2="8" y2="6"></line><line x1="3" y1="10" x2="21" y2="10"></line></svg>
-          Oct 28, 2025
+    </div>
+  </nav>
+
+  
+  <div class="sheet-scrim" id="sheet-scrim"></div>
+  <section class="sheet" id="search-sheet" role="dialog" aria-modal="true" aria-label="搜索" aria-hidden="true">
+    <div class="sheet-panel" id="sheet-panel">
+      <div class="sheet-handle" id="sheet-handle" role="presentation" aria-hidden="true"></div>
+      <div class="sheet-body">
+        <div class="search-field">
+          <input id="search-input" type="search" placeholder="搜索文章和 Wiki…"
+                 autocomplete="off" spellcheck="false" aria-controls="search-results">
+          <span class="search-key" aria-hidden="true">/</span>
         </div>
-        <div>
-          <svg class="icon icon-clock" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><title>clock</title><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
-          4 min read
-        </div>
+        <div id="search-results" class="search-results" role="listbox" aria-label="搜索结果"></div>
       </div>
-    </header>
-    <div class="post-content">
-      <h1 id="临时c库">临时C库</h1>
+    </div>
+  </section>
+  
+
+  <main class="main" id="main">
+    
+<header class="page-head">
+  <nav class="crumb" aria-label="面包屑">
+    <a href="/" data-press>首页</a>
+    <span class="sep">/</span>
+    <a href="/wiki/" data-press>维基</a>
+    
+    
+    <span class="sep">/</span>
+    <a href="/wiki/lfs/toolchain/" data-press>第二部分：临时工具链</a>
+    
+    
+  </nav>
+  <h1>临时C库</h1>
+  <p>构建LFS临时C运行时库</p>
+</header>
+
+<div class="wiki-layout">
+  <article class="article">
+    <div class="article-content"><h1 id="临时c库">临时C库</h1>
 <p>临时C库（Glibc）是LFS工具链的重要组成部分，它提供基本的C运行时支持。本章将详细介绍如何构建和安装临时的Glibc库。</p>
 <h2 id="-glibc的作用">🎯 Glibc的作用</h2>
 <h3 id="c库功能">C库功能</h3>
@@ -120,7 +131,7 @@
 </ul>
 <h2 id="-构建准备">🛠️ 构建准备</h2>
 <h3 id="环境检查">环境检查</h3>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># 切换到lfs用户</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># 切换到lfs用户</span>
 </span></span><span style="display:flex;"><span>su - lfs
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span><span style="color:#75715e"># 验证工具链</span>
@@ -133,7 +144,7 @@
 </span></span><span style="display:flex;"><span><span style="color:#75715e"># 检查Binutils</span>
 </span></span><span style="display:flex;"><span>$LFS/tools/bin/$LFS_TGT-ld --version
 </span></span></code></pre></div><h3 id="创建构建目录">创建构建目录</h3>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># 创建Glibc构建目录</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># 创建Glibc构建目录</span>
 </span></span><span style="display:flex;"><span>mkdir -pv $LFS/sources/glibc_build
 </span></span><span style="display:flex;"><span>cd $LFS/sources/glibc_build
 </span></span><span style="display:flex;"><span>
@@ -142,22 +153,22 @@
 </span></span><span style="display:flex;"><span>cd glibc-2.37
 </span></span></code></pre></div><h2 id="-glibc配置">🔧 Glibc配置</h2>
 <h3 id="补丁应用">补丁应用</h3>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># 应用上游补丁（如果有）</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># 应用上游补丁（如果有）</span>
 </span></span><span style="display:flex;"><span><span style="color:#75715e"># wget https://www.linuxfromscratch.org/patches/lfs/11.3/glibc-2.37-fhs-1.patch</span>
 </span></span><span style="display:flex;"><span><span style="color:#75715e"># patch -Np1 -i ../glibc-2.37-fhs-1.patch</span>
 </span></span></code></pre></div><h3 id="创建构建目录-1">创建构建目录</h3>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># 创建独立的构建目录</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># 创建独立的构建目录</span>
 </span></span><span style="display:flex;"><span>mkdir -v build
 </span></span><span style="display:flex;"><span>cd build
 </span></span></code></pre></div><h3 id="配置glibc">配置Glibc</h3>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># 配置临时Glibc</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># 配置临时Glibc</span>
 </span></span><span style="display:flex;"><span>../configure <span style="color:#ae81ff">\
-</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>    --prefix<span style="color:#f92672">=</span>/usr <span style="color:#ae81ff">\
-</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>    --host<span style="color:#f92672">=</span>$LFS_TGT <span style="color:#ae81ff">\
-</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>    --build<span style="color:#f92672">=</span><span style="color:#66d9ef">$(</span>../scripts/config.guess<span style="color:#66d9ef">)</span> <span style="color:#ae81ff">\
-</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>    --enable-kernel<span style="color:#f92672">=</span>3.2 <span style="color:#ae81ff">\
-</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>    --with-headers<span style="color:#f92672">=</span>$LFS/usr/include <span style="color:#ae81ff">\
-</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>    libc_cv_slibdir<span style="color:#f92672">=</span>/usr/lib
+</span></span></span><span style="display:flex;"><span>    --prefix<span style="color:#f92672">=</span>/usr <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span>    --host<span style="color:#f92672">=</span>$LFS_TGT <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span>    --build<span style="color:#f92672">=</span><span style="color:#66d9ef">$(</span>../scripts/config.guess<span style="color:#66d9ef">)</span> <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span>    --enable-kernel<span style="color:#f92672">=</span>3.2 <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span>    --with-headers<span style="color:#f92672">=</span>$LFS/usr/include <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span>    libc_cv_slibdir<span style="color:#f92672">=</span>/usr/lib
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span><span style="color:#75715e"># 配置选项解释：</span>
 </span></span><span style="display:flex;"><span><span style="color:#75715e"># --prefix=/usr              : 安装到/usr目录</span>
@@ -168,7 +179,7 @@
 </span></span><span style="display:flex;"><span><span style="color:#75715e"># libc_cv_slibdir=/usr/lib   : 库目录位置</span>
 </span></span></code></pre></div><h2 id="-编译glibc">📦 编译Glibc</h2>
 <h3 id="编译过程">编译过程</h3>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># 编译Glibc</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># 编译Glibc</span>
 </span></span><span style="display:flex;"><span>make $LFS_MAKEFLAGS
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span><span style="color:#75715e"># 编译可能需要较长时间，监控进度</span>
@@ -178,7 +189,7 @@
 </span></span><span style="display:flex;"><span>    echo <span style="color:#e6db74">&#34;编译进行中... </span><span style="color:#66d9ef">$(</span>date<span style="color:#66d9ef">)</span><span style="color:#e6db74">&#34;</span>
 </span></span><span style="display:flex;"><span><span style="color:#66d9ef">done</span>
 </span></span></code></pre></div><h3 id="常见编译问题">常见编译问题</h3>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># 如果编译失败，检查：</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># 如果编译失败，检查：</span>
 </span></span><span style="display:flex;"><span><span style="color:#75715e"># 1. 头文件是否正确安装</span>
 </span></span><span style="display:flex;"><span>ls -la $LFS/usr/include/linux/version.h
 </span></span><span style="display:flex;"><span>
@@ -190,14 +201,14 @@
 </span></span><span style="display:flex;"><span>df -h $LFS
 </span></span></code></pre></div><h2 id="-安装和测试">🧪 安装和测试</h2>
 <h3 id="安装glibc">安装Glibc</h3>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># 安装Glibc到临时位置</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># 安装Glibc到临时位置</span>
 </span></span><span style="display:flex;"><span>make DESTDIR<span style="color:#f92672">=</span>$LFS install
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span><span style="color:#75715e"># 验证安装</span>
 </span></span><span style="display:flex;"><span>ls -la $LFS/usr/lib/libc.so*
 </span></span><span style="display:flex;"><span>ls -la $LFS/usr/lib/libm.so*
 </span></span></code></pre></div><h3 id="调整工具链">调整工具链</h3>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># 创建必要的符号链接</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># 创建必要的符号链接</span>
 </span></span><span style="display:flex;"><span>cd $LFS/usr/lib
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span><span style="color:#75715e"># 为64位系统创建符号链接</span>
@@ -214,7 +225,7 @@
 </span></span><span style="display:flex;"><span><span style="color:#75715e"># 创建其他必要的链接</span>
 </span></span><span style="display:flex;"><span>ln -sfv ../../lib/<span style="color:#66d9ef">$(</span>readlink $LFS/usr/lib/libc.so<span style="color:#66d9ef">)</span> $LFS/usr/lib/libc.so
 </span></span></code></pre></div><h3 id="测试工具链">测试工具链</h3>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># 创建测试程序</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># 创建测试程序</span>
 </span></span><span style="display:flex;"><span>cat &gt; $LFS/test_libc.c &lt;&lt; <span style="color:#e6db74">&#34;EOF&#34;</span>
 </span></span><span style="display:flex;"><span><span style="color:#75715e">#include &lt;stdio.h&gt;</span>
 </span></span><span style="display:flex;"><span><span style="color:#75715e">#include &lt;stdlib.h&gt;</span>
@@ -247,7 +258,7 @@
 </span></span><span style="display:flex;"><span>rm -f $LFS/test_libc.c $LFS/test_libc
 </span></span></code></pre></div><h2 id="-重新编译gcc">🔄 重新编译GCC</h2>
 <h3 id="gcc第二遍编译">GCC第二遍编译</h3>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># 现在Glibc已安装，需要重新编译GCC以链接到新的C库</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># 现在Glibc已安装，需要重新编译GCC以链接到新的C库</span>
 </span></span><span style="display:flex;"><span>cd $LFS/sources
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span><span style="color:#75715e"># 清理之前的GCC构建</span>
@@ -273,20 +284,20 @@
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span><span style="color:#75715e"># 配置GCC第二遍</span>
 </span></span><span style="display:flex;"><span>../configure <span style="color:#ae81ff">\
-</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>    --target<span style="color:#f92672">=</span>$LFS_TGT <span style="color:#ae81ff">\
-</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>    --prefix<span style="color:#f92672">=</span>$LFS/tools <span style="color:#ae81ff">\
-</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>    --with-glibc-version<span style="color:#f92672">=</span>2.37 <span style="color:#ae81ff">\
-</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>    --with-sysroot<span style="color:#f92672">=</span>$LFS <span style="color:#ae81ff">\
-</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>    --enable-default-pie <span style="color:#ae81ff">\
-</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>    --enable-default-ssp <span style="color:#ae81ff">\
-</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>    --disable-nls <span style="color:#ae81ff">\
-</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>    --disable-multilib <span style="color:#ae81ff">\
-</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>    --disable-libatomic <span style="color:#ae81ff">\
-</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>    --disable-libgomp <span style="color:#ae81ff">\
-</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>    --disable-libquadmath <span style="color:#ae81ff">\
-</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>    --disable-libssp <span style="color:#ae81ff">\
-</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>    --disable-libvtv <span style="color:#ae81ff">\
-</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>    --enable-languages<span style="color:#f92672">=</span>c,c++
+</span></span></span><span style="display:flex;"><span>    --target<span style="color:#f92672">=</span>$LFS_TGT <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span>    --prefix<span style="color:#f92672">=</span>$LFS/tools <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span>    --with-glibc-version<span style="color:#f92672">=</span>2.37 <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span>    --with-sysroot<span style="color:#f92672">=</span>$LFS <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span>    --enable-default-pie <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span>    --enable-default-ssp <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span>    --disable-nls <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span>    --disable-multilib <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span>    --disable-libatomic <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span>    --disable-libgomp <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span>    --disable-libquadmath <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span>    --disable-libssp <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span>    --disable-libvtv <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span>    --enable-languages<span style="color:#f92672">=</span>c,c++
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span><span style="color:#75715e"># 编译GCC</span>
 </span></span><span style="display:flex;"><span>make $LFS_MAKEFLAGS
@@ -298,7 +309,7 @@
 </span></span><span style="display:flex;"><span>$LFS/tools/bin/$LFS_TGT-gcc --version
 </span></span></code></pre></div><h2 id="-完整工具链测试">📋 完整工具链测试</h2>
 <h3 id="综合测试">综合测试</h3>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># 创建综合测试程序</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># 创建综合测试程序</span>
 </span></span><span style="display:flex;"><span>cat &gt; $LFS/comprehensive_test.c &lt;&lt; <span style="color:#e6db74">&#34;EOF&#34;</span>
 </span></span><span style="display:flex;"><span><span style="color:#75715e">#include &lt;stdio.h&gt;</span>
 </span></span><span style="display:flex;"><span><span style="color:#75715e">#include &lt;stdlib.h&gt;</span>
@@ -359,7 +370,7 @@
 </span></span><span style="display:flex;"><span>rm -f $LFS/comprehensive_test.c $LFS/comprehensive_test
 </span></span></code></pre></div><h2 id="-故障排除">🚨 故障排除</h2>
 <h3 id="glibc编译失败">Glibc编译失败</h3>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># 检查常见问题：</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># 检查常见问题：</span>
 </span></span><span style="display:flex;"><span><span style="color:#75715e"># 1. 内核头文件</span>
 </span></span><span style="display:flex;"><span>ls -la $LFS/usr/include/linux/
 </span></span><span style="display:flex;"><span>
@@ -375,7 +386,7 @@
 </span></span><span style="display:flex;"><span>make clean
 </span></span><span style="display:flex;"><span>../configure <span style="color:#f92672">[</span>配置选项<span style="color:#f92672">]</span>
 </span></span></code></pre></div><h3 id="链接问题">链接问题</h3>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># 如果遇到链接错误：</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># 如果遇到链接错误：</span>
 </span></span><span style="display:flex;"><span><span style="color:#75715e"># 1. 检查库文件位置</span>
 </span></span><span style="display:flex;"><span>find $LFS -name <span style="color:#e6db74">&#34;libc.so*&#34;</span> -type f
 </span></span><span style="display:flex;"><span>
@@ -385,7 +396,7 @@
 </span></span><span style="display:flex;"><span><span style="color:#75715e"># 3. 验证交叉编译器</span>
 </span></span><span style="display:flex;"><span>$LFS/tools/bin/$LFS_TGT-gcc -print-file-name<span style="color:#f92672">=</span>libc.so
 </span></span></code></pre></div><h3 id="测试失败">测试失败</h3>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># 如果测试程序无法运行：</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># 如果测试程序无法运行：</span>
 </span></span><span style="display:flex;"><span><span style="color:#75715e"># 1. 检查程序格式</span>
 </span></span><span style="display:flex;"><span>file $LFS/test_libc
 </span></span><span style="display:flex;"><span>
@@ -396,25 +407,25 @@
 </span></span><span style="display:flex;"><span>$LFS/verify_toolchain.sh
 </span></span></code></pre></div><h2 id="-性能优化">📊 性能优化</h2>
 <h3 id="编译优化">编译优化</h3>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># 使用优化标志重新编译Glibc</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># 使用优化标志重新编译Glibc</span>
 </span></span><span style="display:flex;"><span>cd $LFS/sources/glibc_build/glibc-2.37/build
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span><span style="color:#75715e"># 清理并重新配置</span>
 </span></span><span style="display:flex;"><span>make clean
 </span></span><span style="display:flex;"><span>../configure <span style="color:#ae81ff">\
-</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>    --prefix<span style="color:#f92672">=</span>/usr <span style="color:#ae81ff">\
-</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>    --host<span style="color:#f92672">=</span>$LFS_TGT <span style="color:#ae81ff">\
-</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>    --build<span style="color:#f92672">=</span><span style="color:#66d9ef">$(</span>../scripts/config.guess<span style="color:#66d9ef">)</span> <span style="color:#ae81ff">\
-</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>    --enable-kernel<span style="color:#f92672">=</span>3.2 <span style="color:#ae81ff">\
-</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>    --with-headers<span style="color:#f92672">=</span>$LFS/usr/include <span style="color:#ae81ff">\
-</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>    CFLAGS<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;-O2 -march=native&#34;</span> <span style="color:#ae81ff">\
-</span></span></span><span style="display:flex;"><span><span style="color:#ae81ff"></span>    CXXFLAGS<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;-O2 -march=native&#34;</span>
+</span></span></span><span style="display:flex;"><span>    --prefix<span style="color:#f92672">=</span>/usr <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span>    --host<span style="color:#f92672">=</span>$LFS_TGT <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span>    --build<span style="color:#f92672">=</span><span style="color:#66d9ef">$(</span>../scripts/config.guess<span style="color:#66d9ef">)</span> <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span>    --enable-kernel<span style="color:#f92672">=</span>3.2 <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span>    --with-headers<span style="color:#f92672">=</span>$LFS/usr/include <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span>    CFLAGS<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;-O2 -march=native&#34;</span> <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span>    CXXFLAGS<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;-O2 -march=native&#34;</span>
 </span></span><span style="display:flex;"><span>
 </span></span><span style="display:flex;"><span><span style="color:#75715e"># 重新编译</span>
 </span></span><span style="display:flex;"><span>make $LFS_MAKEFLAGS
 </span></span><span style="display:flex;"><span>make DESTDIR<span style="color:#f92672">=</span>$LFS install
 </span></span></code></pre></div><h3 id="内存使用优化">内存使用优化</h3>
-<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># 监控编译过程中的内存使用</span>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># 监控编译过程中的内存使用</span>
 </span></span><span style="display:flex;"><span>cat &gt; $LFS/monitor_compile.sh <span style="color:#e6db74">&lt;&lt; &#39;EOF&#39;
 </span></span></span><span style="display:flex;"><span><span style="color:#e6db74">#!/bin/bash
 </span></span></span><span style="display:flex;"><span><span style="color:#e6db74"># 编译监控脚本
@@ -446,30 +457,71 @@
 </ul>
 <hr>
 <p><em>最近更新: {{ .Lastmod.Format &ldquo;2006-01-02&rdquo; }}</em></p>
+</div>
+    
+<nav class="pager" aria-label="文章导航">
+  
+  <a href="/wiki/lfs/toolchain/binutils/" data-press>
+    <span class="dir">← 上一篇</span>Binutils工具链
+  </a>
+  
+  
+  <a href="/wiki/lfs/toolchain/cross-compiler/" class="is-next" data-press>
+    <span class="dir">下一篇 →</span>交叉编译器构建
+  </a>
+  
+</nav>
 
+
+    
+
+  </article>
+  
+</div>
+
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+      <div class="footer-links">
+        
+        <a href="https://github.com/makkichan947" target="_blank" rel="noopener" title="Github" data-press>Github</a>
+        
+        <a href="mailto:yakumakki947@hotmail.com" target="_blank" rel="noopener" title="Email" data-press>Email</a>
+        
+        <a href="https://x.com/Makki_Yaku947" target="_blank" rel="noopener" title="Twitter" data-press>Twitter</a>
+        
+        <a href="https://www.twitch.tv/u/makkichan947" target="_blank" rel="noopener" title="Twitch" data-press>Twitch</a>
+        
+      </div>
+      <p>&copy; 2026 Yaku Makki</p>
+      <p>Powered by <a href="https://gohugo.io" target="_blank" rel="noopener">Hugo</a> · Makki Theme</p>
       
-      <div class="post-separator">------------------------------------------------------------------------</div>
-      
-    </div>
-    <div class="post-footer">
-      
-      <script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
-      <div class="busuanzi-container">
-        <span id="busuanzi_container_page_pv">--本文总阅读量<span id="busuanzi_value_page_pv"></span>次--</span>
+      <div class="stats">
+        <span>访客 <span id="busuanzi_value_site_uv"></span></span>
+        <span>访问 <span id="busuanzi_value_site_pv"></span></span>
+        <span>本页 <span id="busuanzi_value_page_pv"></span></span>
       </div>
       
-      
-      <script src="https://utteranc.es/client.js"
-        repo="makkichan947/makkichan947.github.io"
-        issue-term="pathname"
-        label="Utterances"
-        theme="github-dark"
-        crossorigin="anonymous"
-        async>
-      </script>
     </div>
-  </article>
+  </footer>
 
-    </main>
-  </body>
+  <button class="back-to-top" id="back-to-top" type="button" aria-label="回到顶部" data-press>
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 19V5"/><path d="M5 12l7-7 7 7"/></svg>
+  </button>
+
+  
+  <script src="/js/main.min.21b3296e340ecb2ced2fb338acc5c540b53c154fb3595e8efddf10016cc5226d.js" integrity="sha256-IbMpbjQOyyztL7M4rMXFQLU8FU&#43;zWV6O/d8QAWzFIm0=" defer></script>
+  
+  
+  <script src="/js/search.min.b2d6ba6610ce24454bc1436dc521dcfd878b2583ad9f65f77aadedaaa1e1a54c.js" integrity="sha256-sta6ZhDOJEVLwUNtxSHc/YeLJYOtn2X3eq3tqqHhpUw=" defer></script>
+  
+
+  
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+  
+
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/katex.min.js" crossorigin="anonymous"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/contrib/auto-render.min.js" crossorigin="anonymous"></script>
+</body>
 </html>

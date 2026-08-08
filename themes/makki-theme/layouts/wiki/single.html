@@ -1,49 +1,31 @@
 {{ define "main" }}
-<div class="content-wrapper fade-in-up">
-    <article class="wiki-article">
-        <header class="wiki-header">
-            <h1>{{ .Title }}</h1>
-            
-            <div class="wiki-meta">
-                <time datetime="{{ .Date.Format "2006-01-02T15:04:05Z07:00" }}">
-                    📅 {{ .Date.Format "2006年01月02日" }}
-                </time>
-                
-                {{ if .Params.weight }}
-                <span class="wiki-weight">权重: {{ .Params.weight }}</span>
-                {{ end }}
-            </div>
-        </header>
+<header class="page-head">
+  <nav class="crumb" aria-label="面包屑">
+    <a href="/" data-press>首页</a>
+    <span class="sep">/</span>
+    <a href="/wiki/" data-press>维基</a>
+    {{ with .Parent }}
+    {{ if not .IsHome }}
+    <span class="sep">/</span>
+    <a href="{{ .RelPermalink }}" data-press>{{ .Title }}</a>
+    {{ end }}
+    {{ end }}
+  </nav>
+  <h1>{{ .Title }}</h1>
+  {{ with .Description }}<p>{{ . }}</p>{{ end }}
+</header>
 
-        <div class="wiki-content">
-            {{ .Content }}
-        </div>
-
-        <div class="wiki-navigation">
-            {{ with .PrevInSection }}
-            <div class="nav-prev">
-                <a href="{{ .RelPermalink }}" class="btn btn-secondary">
-                    ← {{ .Title }}
-                </a>
-            </div>
-            {{ end }}
-            
-            {{ with .NextInSection }}
-            <div class="nav-next">
-                <a href="{{ .RelPermalink }}" class="btn">
-                    {{ .Title }} →
-                </a>
-            </div>
-            {{ end }}
-        </div>
-
-        <!-- Wiki目录 -->
-        {{ if .Params.toc }}
-        <div class="wiki-toc">
-            <h3>📋 目录</h3>
-            {{ .TableOfContents }}
-        </div>
-        {{ end }}
-    </article>
+<div class="wiki-layout">
+  <article class="article">
+    <div class="article-content">{{ .Content }}</div>
+    {{ partial "pager.html" . }}
+    {{ partial "comments.html" . }}
+  </article>
+  {{ if .Params.toc }}
+  <aside class="toc" aria-label="目录">
+    <p class="toc-title">目录</p>
+    {{ .TableOfContents }}
+  </aside>
+  {{ end }}
 </div>
 {{ end }}
