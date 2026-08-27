@@ -1,0 +1,514 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>神经网络基础 · Yaku Makki</title>
+  <meta name="description" content="个人小巢">
+  <meta name="theme-color" content="#0a0a0f">
+  <script>document.documentElement.classList.add('js');</script>
+
+  <link rel="icon" href="/avatar/avatar.jpg" type="image/jpeg">
+
+  
+  <link rel="stylesheet" href="/css/main.min.b64e4527cc255b367461135391e39e321a5d86fc97defca99c7afda308ada007.css" integrity="sha256-tk5FJ8wlWzZ0YRNTkeOeMhpdhvyX3vypnHr9owitoAc=">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/katex.min.css" crossorigin="anonymous">
+</head>
+<body>
+  <a class="skip-link" href="#main">跳到内容</a>
+
+  <div class="scene" aria-hidden="true">
+    <div class="scene-sky"></div>
+    <div class="scene-stars"></div>
+    <div class="scene-sun-halo"></div>
+    <div class="scene-sun"></div>
+    <div class="scene-mountains scene-mountains-far"></div>
+    <div class="scene-mountains scene-mountains-near"></div>
+    <div class="scene-horizon"></div>
+    <div class="scene-floor"></div>
+    <div class="scene-scanlines"></div>
+  </div>
+
+  <nav class="navbar" aria-label="主导航">
+    <div class="nav-inner">
+      <a class="logo" href="/" data-press>
+        <img class="logo-avatar" src="/avatar/avatar.jpg" alt="" width="34" height="34">
+        <span class="logo-text">Yaku Makki</span>
+      </a>
+      <div class="nav-menu-wrap">
+        <span class="nav-tick" aria-hidden="true"></span>
+        <ul class="nav-menu">
+          
+          <li>
+            <a href="/" data-press>首页</a>
+          </li>
+          
+          <li>
+            <a href="/post/" data-press>博客</a>
+          </li>
+          
+          <li>
+            <a href="/wiki/" data-press>维基</a>
+          </li>
+          
+          <li>
+            <a href="/tags/" data-press>标签</a>
+          </li>
+          
+          <li>
+            <a href="/about/" data-press>关于</a>
+          </li>
+          
+          
+          <li>
+            <button id="search-toggle" class="search-toggle" type="button" title="搜索 (Ctrl+K 或 /)" aria-haspopup="dialog" aria-expanded="false" data-press>搜索</button>
+          </li>
+          
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  
+  <div class="sheet-scrim" id="sheet-scrim"></div>
+  <section class="sheet" id="search-sheet" role="dialog" aria-modal="true" aria-label="搜索" aria-hidden="true">
+    <div class="sheet-panel" id="sheet-panel">
+      <div class="sheet-handle" id="sheet-handle" role="presentation" aria-hidden="true"></div>
+      <div class="sheet-body">
+        <div class="search-field">
+          <input id="search-input" type="search" placeholder="搜索文章和 Wiki…"
+                 autocomplete="off" spellcheck="false" aria-controls="search-results">
+          <span class="search-key" aria-hidden="true">/</span>
+        </div>
+        <div id="search-results" class="search-results" role="listbox" aria-label="搜索结果"></div>
+      </div>
+    </div>
+  </section>
+  
+
+  <main class="main" id="main">
+    
+<header class="page-head">
+  <nav class="crumb" aria-label="面包屑">
+    <a href="/" data-press>首页</a>
+    <span class="sep">/</span>
+    <a href="/wiki/" data-press>维基</a>
+    
+    
+    <span class="sep">/</span>
+    <a href="/wiki/deep_learning/" data-press>深度学习</a>
+    
+    
+  </nav>
+  <h1>神经网络基础</h1>
+  
+</header>
+
+<div class="wiki-layout">
+  <article class="article">
+    <div class="article-content"><h1 id="神经网络基础">神经网络基础</h1>
+<p>神经网络（Neural Networks）是深度学习的基础，模拟了人脑神经元的工作方式。本章详细介绍神经网络的基本概念、结构和训练方法。</p>
+<h2 id="-神经元模型">🧠 神经元模型</h2>
+<h3 id="生物神经元">生物神经元</h3>
+<p>人脑中的神经元通过突触接收和处理信号，神经网络中的人工神经元模仿了这一过程。</p>
+<h3 id="人工神经元">人工神经元</h3>
+<p>人工神经元（Artificial Neuron）是神经网络的基本单元：</p>
+<p><strong>数学模型</strong>：
+$$z = \sum_{i=1}^{n} w_i x_i + b$$
+$$a = g(z)$$</p>
+<p>其中：</p>
+<ul>
+<li>$x_i$：输入特征</li>
+<li>$w_i$：权重参数</li>
+<li>$b$：偏置项</li>
+<li>$g(\cdot)$：激活函数</li>
+<li>$a$：神经元输出</li>
+</ul>
+<h3 id="神经网络结构">神经网络结构</h3>
+<p><strong>单层神经网络</strong>：</p>
+<pre tabindex="0"><code>输入层 → 输出层
+</code></pre><p><strong>多层神经网络</strong>：</p>
+<pre tabindex="0"><code>输入层 → 隐藏层1 → 隐藏层2 → ... → 输出层
+</code></pre><h2 id="-前向传播">🔄 前向传播</h2>
+<h3 id="计算过程">计算过程</h3>
+<p><strong>第一层</strong>：
+$$z^{(1)} = W^{(1)} x + b^{(1)}$$
+$$a^{(1)} = g^{(1)}(z^{(1)})$$</p>
+<p><strong>第l层</strong>：
+$$z^{(l)} = W^{(l)} a^{(l-1)} + b^{(l)}$$
+$$a^{(l)} = g^{(l)}(z^{(l)})$$</p>
+<h3 id="向量表示">向量表示</h3>
+<p>使用矩阵运算提高效率：
+$$Z = W \cdot A + b$$
+$$A = g(Z)$$</p>
+<h2 id="-反向传播">📉 反向传播</h2>
+<h3 id="损失函数">损失函数</h3>
+<p><strong>均方误差 (MSE)</strong>：
+$$J = \frac{1}{m} \sum_{i=1}^{m} (y_i - \hat{y}_i)^2$$</p>
+<p><strong>交叉熵损失</strong>：
+$$J = -\frac{1}{m} \sum_{i=1}^{m} [y_i \log \hat{y}_i + (1-y_i) \log (1-\hat{y}_i)]$$</p>
+<h3 id="梯度计算">梯度计算</h3>
+<p><strong>输出层梯度</strong>：
+$$\frac{\partial J}{\partial z^{(L)}} = a^{(L)} - y$$</p>
+<p><strong>隐藏层梯度</strong>：
+$$\frac{\partial J}{\partial z^{(l)}} = \frac{\partial J}{\partial z^{(l+1)}} \cdot (W^{(l+1)})^T \odot g&rsquo;(z^{(l)})$$</p>
+<h2 id="-激活函数">⚡ 激活函数</h2>
+<h3 id="sigmoid函数">Sigmoid函数</h3>
+<p>$$\sigma(z) = \frac{1}{1 + e^{-z}}$$</p>
+<p><strong>导数</strong>：
+$$\sigma&rsquo;(z) = \sigma(z) (1 - \sigma(z))$$</p>
+<h3 id="relu函数">ReLU函数</h3>
+<p>$$ReLU(z) = \max(0, z)$$</p>
+<p><strong>导数</strong>：
+$$ReLU&rsquo;(z) = \begin{cases}
+1 &amp; z &gt; 0 \
+0 &amp; z \leq 0
+\end{cases}$$</p>
+<h3 id="tanh函数">Tanh函数</h3>
+<p>$$\tanh(z) = \frac{e^z - e^{-z}}{e^z + e^{-z}}$$</p>
+<p><strong>导数</strong>：
+$$\tanh&rsquo;(z) = 1 - \tanh^2(z)$$</p>
+<h2 id="-梯度下降">🎯 梯度下降</h2>
+<h3 id="批量梯度下降-bgd">批量梯度下降 (BGD)</h3>
+<p><strong>参数更新</strong>：
+$$W = W - \alpha \frac{\partial J}{\partial W}$$
+$$b = b - \alpha \frac{\partial J}{\partial b}$$</p>
+<h3 id="随机梯度下降-sgd">随机梯度下降 (SGD)</h3>
+<p><strong>参数更新</strong>：
+$$W = W - \alpha \frac{\partial J^{(i)}}{\partial W}$$
+$$b = b - \alpha \frac{\partial J^{(i)}}{\partial b}$$</p>
+<h3 id="小批量梯度下降-mini-batch-sgd">小批量梯度下降 (Mini-batch SGD)</h3>
+<p>结合BGD和SGD的优点：</p>
+<ul>
+<li>每次使用一小批样本计算梯度</li>
+<li>收敛速度快且更稳定</li>
+</ul>
+<h2 id="-网络架构">🏗️ 网络架构</h2>
+<h3 id="前馈神经网络-fnn">前馈神经网络 (FNN)</h3>
+<p><strong>特点</strong>：</p>
+<ul>
+<li>信息单向流动</li>
+<li>没有循环连接</li>
+<li>适合分类和回归任务</li>
+</ul>
+<h3 id="深度神经网络-dnn">深度神经网络 (DNN)</h3>
+<p><strong>深度</strong>：通常指具有多个隐藏层的网络
+<strong>优势</strong>：</p>
+<ul>
+<li>学习更复杂的特征表示</li>
+<li>解决更复杂的实际问题</li>
+</ul>
+<h2 id="-过拟合与正则化">📊 过拟合与正则化</h2>
+<h3 id="过拟合问题">过拟合问题</h3>
+<p><strong>表现</strong>：</p>
+<ul>
+<li>训练误差低，测试误差高</li>
+<li>模型在训练数据上表现很好</li>
+<li>在新数据上表现很差</li>
+</ul>
+<h3 id="l2正则化">L2正则化</h3>
+<p><strong>损失函数</strong>：
+$$J_{regularized} = J + \frac{\lambda}{2m} \sum_{l=1}^{L} |W^{(l)}|_F^2$$</p>
+<p><strong>梯度</strong>：
+$$\frac{\partial J_{regularized}}{\partial W} = \frac{\partial J}{\partial W} + \frac{\lambda}{m} W$$</p>
+<h3 id="dropout">Dropout</h3>
+<p><strong>训练时</strong>：随机丢弃部分神经元
+<strong>测试时</strong>：使用所有神经元但权重缩放</p>
+<h2 id="-编程实现">🚀 编程实现</h2>
+<h3 id="pytorch实现">PyTorch实现</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#f92672">import</span> torch
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> torch.nn <span style="color:#66d9ef">as</span> nn
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> torch.optim <span style="color:#66d9ef">as</span> optim
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">NeuralNetwork</span>(nn<span style="color:#f92672">.</span>Module):
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">__init__</span>(self, input_size, hidden_size, output_size):
+</span></span><span style="display:flex;"><span>        super(NeuralNetwork, self)<span style="color:#f92672">.</span><span style="color:#a6e22e">__init__</span>()
+</span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>layer1 <span style="color:#f92672">=</span> nn<span style="color:#f92672">.</span>Linear(input_size, hidden_size)
+</span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>layer2 <span style="color:#f92672">=</span> nn<span style="color:#f92672">.</span>Linear(hidden_size, output_size)
+</span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>relu <span style="color:#f92672">=</span> nn<span style="color:#f92672">.</span>ReLU()
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">forward</span>(self, x):
+</span></span><span style="display:flex;"><span>        x <span style="color:#f92672">=</span> self<span style="color:#f92672">.</span>relu(self<span style="color:#f92672">.</span>layer1(x))
+</span></span><span style="display:flex;"><span>        x <span style="color:#f92672">=</span> self<span style="color:#f92672">.</span>layer2(x)
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> x
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 模型初始化</span>
+</span></span><span style="display:flex;"><span>model <span style="color:#f92672">=</span> NeuralNetwork(<span style="color:#ae81ff">784</span>, <span style="color:#ae81ff">128</span>, <span style="color:#ae81ff">10</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 损失函数和优化器</span>
+</span></span><span style="display:flex;"><span>criterion <span style="color:#f92672">=</span> nn<span style="color:#f92672">.</span>CrossEntropyLoss()
+</span></span><span style="display:flex;"><span>optimizer <span style="color:#f92672">=</span> optim<span style="color:#f92672">.</span>Adam(model<span style="color:#f92672">.</span>parameters(), lr<span style="color:#f92672">=</span><span style="color:#ae81ff">0.001</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 训练过程</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">for</span> epoch <span style="color:#f92672">in</span> range(num_epochs):
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">for</span> data, target <span style="color:#f92672">in</span> dataloader:
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e"># 前向传播</span>
+</span></span><span style="display:flex;"><span>        output <span style="color:#f92672">=</span> model(data)
+</span></span><span style="display:flex;"><span>        loss <span style="color:#f92672">=</span> criterion(output, target)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e"># 反向传播</span>
+</span></span><span style="display:flex;"><span>        optimizer<span style="color:#f92672">.</span>zero_grad()
+</span></span><span style="display:flex;"><span>        loss<span style="color:#f92672">.</span>backward()
+</span></span><span style="display:flex;"><span>        optimizer<span style="color:#f92672">.</span>step()
+</span></span></code></pre></div><h3 id="手动实现反向传播">手动实现反向传播</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">forward_propagation</span>(X, parameters):
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#34;&#34;&#34;前向传播&#34;&#34;&#34;</span>
+</span></span><span style="display:flex;"><span>    W1, b1, W2, b2 <span style="color:#f92672">=</span> parameters
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># 第一层</span>
+</span></span><span style="display:flex;"><span>    Z1 <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>dot(W1, X) <span style="color:#f92672">+</span> b1
+</span></span><span style="display:flex;"><span>    A1 <span style="color:#f92672">=</span> relu(Z1)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># 第二层</span>
+</span></span><span style="display:flex;"><span>    Z2 <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>dot(W2, A1) <span style="color:#f92672">+</span> b2
+</span></span><span style="display:flex;"><span>    A2 <span style="color:#f92672">=</span> softmax(Z2)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    cache <span style="color:#f92672">=</span> {<span style="color:#e6db74">&#34;Z1&#34;</span>: Z1, <span style="color:#e6db74">&#34;A1&#34;</span>: A1, <span style="color:#e6db74">&#34;Z2&#34;</span>: Z2, <span style="color:#e6db74">&#34;A2&#34;</span>: A2}
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> A2, cache
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">backward_propagation</span>(parameters, cache, X, Y):
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#34;&#34;&#34;反向传播&#34;&#34;&#34;</span>
+</span></span><span style="display:flex;"><span>    W1, b1, W2, b2 <span style="color:#f92672">=</span> parameters
+</span></span><span style="display:flex;"><span>    Z1, A1, Z2, A2 <span style="color:#f92672">=</span> cache<span style="color:#f92672">.</span>values()
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    m <span style="color:#f92672">=</span> X<span style="color:#f92672">.</span>shape[<span style="color:#ae81ff">1</span>]
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># 输出层梯度</span>
+</span></span><span style="display:flex;"><span>    dZ2 <span style="color:#f92672">=</span> A2 <span style="color:#f92672">-</span> Y
+</span></span><span style="display:flex;"><span>    dW2 <span style="color:#f92672">=</span> (<span style="color:#ae81ff">1</span><span style="color:#f92672">/</span>m) <span style="color:#f92672">*</span> np<span style="color:#f92672">.</span>dot(dZ2, A1<span style="color:#f92672">.</span>T)
+</span></span><span style="display:flex;"><span>    db2 <span style="color:#f92672">=</span> (<span style="color:#ae81ff">1</span><span style="color:#f92672">/</span>m) <span style="color:#f92672">*</span> np<span style="color:#f92672">.</span>sum(dZ2, axis<span style="color:#f92672">=</span><span style="color:#ae81ff">1</span>, keepdims<span style="color:#f92672">=</span><span style="color:#66d9ef">True</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># 隐藏层梯度</span>
+</span></span><span style="display:flex;"><span>    dZ1 <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>dot(W2<span style="color:#f92672">.</span>T, dZ2) <span style="color:#f92672">*</span> relu_derivative(Z1)
+</span></span><span style="display:flex;"><span>    dW1 <span style="color:#f92672">=</span> (<span style="color:#ae81ff">1</span><span style="color:#f92672">/</span>m) <span style="color:#f92672">*</span> np<span style="color:#f92672">.</span>dot(dZ1, X<span style="color:#f92672">.</span>T)
+</span></span><span style="display:flex;"><span>    db1 <span style="color:#f92672">=</span> (<span style="color:#ae81ff">1</span><span style="color:#f92672">/</span>m) <span style="color:#f92672">*</span> np<span style="color:#f92672">.</span>sum(dZ1, axis<span style="color:#f92672">=</span><span style="color:#ae81ff">1</span>, keepdims<span style="color:#f92672">=</span><span style="color:#66d9ef">True</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    gradients <span style="color:#f92672">=</span> {<span style="color:#e6db74">&#34;dW1&#34;</span>: dW1, <span style="color:#e6db74">&#34;db1&#34;</span>: db1, <span style="color:#e6db74">&#34;dW2&#34;</span>: dW2, <span style="color:#e6db74">&#34;db2&#34;</span>: db2}
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> gradients
+</span></span></code></pre></div><h2 id="-激活函数可视化">🎨 激活函数可视化</h2>
+<h3 id="sigmoid函数-1">Sigmoid函数</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">sigmoid</span>(z):
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> <span style="color:#ae81ff">1</span> <span style="color:#f92672">/</span> (<span style="color:#ae81ff">1</span> <span style="color:#f92672">+</span> np<span style="color:#f92672">.</span>exp(<span style="color:#f92672">-</span>z))
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">sigmoid_derivative</span>(z):
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> sigmoid(z) <span style="color:#f92672">*</span> (<span style="color:#ae81ff">1</span> <span style="color:#f92672">-</span> sigmoid(z))
+</span></span></code></pre></div><h3 id="relu函数-1">ReLU函数</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">relu</span>(z):
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> np<span style="color:#f92672">.</span>maximum(<span style="color:#ae81ff">0</span>, z)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">relu_derivative</span>(z):
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> np<span style="color:#f92672">.</span>where(z <span style="color:#f92672">&gt;</span> <span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">0</span>)
+</span></span></code></pre></div><h2 id="-训练技巧">📈 训练技巧</h2>
+<h3 id="权重初始化">权重初始化</h3>
+<p><strong>Xavier初始化</strong>：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">xavier_init</span>(fan_in, fan_out):
+</span></span><span style="display:flex;"><span>    limit <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>sqrt(<span style="color:#ae81ff">6</span> <span style="color:#f92672">/</span> (fan_in <span style="color:#f92672">+</span> fan_out))
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> np<span style="color:#f92672">.</span>random<span style="color:#f92672">.</span>uniform(<span style="color:#f92672">-</span>limit, limit, (fan_out, fan_in))
+</span></span></code></pre></div><h3 id="学习率衰减">学习率衰减</h3>
+<p><strong>指数衰减</strong>：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>learning_rate <span style="color:#f92672">=</span> initial_lr <span style="color:#f92672">*</span> decay_rate <span style="color:#f92672">**</span> epoch
+</span></span></code></pre></div><h3 id="梯度检查">梯度检查</h3>
+<p>验证反向传播的正确性：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">gradient_check</span>(parameters, gradients, X, Y, epsilon<span style="color:#f92672">=</span><span style="color:#ae81ff">1e-7</span>):
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">for</span> param_name <span style="color:#f92672">in</span> parameters:
+</span></span><span style="display:flex;"><span>        param <span style="color:#f92672">=</span> parameters[param_name]
+</span></span><span style="display:flex;"><span>        grad <span style="color:#f92672">=</span> gradients[<span style="color:#e6db74">&#34;d&#34;</span> <span style="color:#f92672">+</span> param_name]
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e"># 计算数值梯度</span>
+</span></span><span style="display:flex;"><span>        numerical_grad <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>zeros_like(param)
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">for</span> i <span style="color:#f92672">in</span> range(param<span style="color:#f92672">.</span>shape[<span style="color:#ae81ff">0</span>]):
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">for</span> j <span style="color:#f92672">in</span> range(param<span style="color:#f92672">.</span>shape[<span style="color:#ae81ff">1</span>]):
+</span></span><span style="display:flex;"><span>                param_plus <span style="color:#f92672">=</span> param<span style="color:#f92672">.</span>copy()
+</span></span><span style="display:flex;"><span>                param_minus <span style="color:#f92672">=</span> param<span style="color:#f92672">.</span>copy()
+</span></span><span style="display:flex;"><span>                param_plus[i,j] <span style="color:#f92672">+=</span> epsilon
+</span></span><span style="display:flex;"><span>                param_minus[i,j] <span style="color:#f92672">-=</span> epsilon
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>                loss_plus <span style="color:#f92672">=</span> compute_loss(param_plus)
+</span></span><span style="display:flex;"><span>                loss_minus <span style="color:#f92672">=</span> compute_loss(param_minus)
+</span></span><span style="display:flex;"><span>                numerical_grad[i,j] <span style="color:#f92672">=</span> (loss_plus <span style="color:#f92672">-</span> loss_minus) <span style="color:#f92672">/</span> (<span style="color:#ae81ff">2</span> <span style="color:#f92672">*</span> epsilon)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e"># 比较梯度</span>
+</span></span><span style="display:flex;"><span>        diff <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>linalg<span style="color:#f92672">.</span>norm(grad <span style="color:#f92672">-</span> numerical_grad) <span style="color:#f92672">/</span> np<span style="color:#f92672">.</span>linalg<span style="color:#f92672">.</span>norm(grad <span style="color:#f92672">+</span> numerical_grad)
+</span></span><span style="display:flex;"><span>        print(<span style="color:#e6db74">f</span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">{</span>param_name<span style="color:#e6db74">}</span><span style="color:#e6db74"> gradient check: </span><span style="color:#e6db74">{</span>diff<span style="color:#e6db74">}</span><span style="color:#e6db74">&#34;</span>)
+</span></span></code></pre></div><h2 id="-超参数调优">🔧 超参数调优</h2>
+<h3 id="网格搜索">网格搜索</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>learning_rates <span style="color:#f92672">=</span> [<span style="color:#ae81ff">0.001</span>, <span style="color:#ae81ff">0.01</span>, <span style="color:#ae81ff">0.1</span>]
+</span></span><span style="display:flex;"><span>hidden_sizes <span style="color:#f92672">=</span> [<span style="color:#ae81ff">64</span>, <span style="color:#ae81ff">128</span>, <span style="color:#ae81ff">256</span>]
+</span></span><span style="display:flex;"><span>batch_sizes <span style="color:#f92672">=</span> [<span style="color:#ae81ff">32</span>, <span style="color:#ae81ff">64</span>, <span style="color:#ae81ff">128</span>]
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>best_accuracy <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>
+</span></span><span style="display:flex;"><span>best_params <span style="color:#f92672">=</span> {}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">for</span> lr <span style="color:#f92672">in</span> learning_rates:
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">for</span> hidden_size <span style="color:#f92672">in</span> hidden_sizes:
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">for</span> batch_size <span style="color:#f92672">in</span> batch_sizes:
+</span></span><span style="display:flex;"><span>            <span style="color:#75715e"># 训练模型</span>
+</span></span><span style="display:flex;"><span>            accuracy <span style="color:#f92672">=</span> train_model(lr, hidden_size, batch_size)
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">if</span> accuracy <span style="color:#f92672">&gt;</span> best_accuracy:
+</span></span><span style="display:flex;"><span>                best_accuracy <span style="color:#f92672">=</span> accuracy
+</span></span><span style="display:flex;"><span>                best_params <span style="color:#f92672">=</span> {<span style="color:#e6db74">&#39;lr&#39;</span>: lr, <span style="color:#e6db74">&#39;hidden_size&#39;</span>: hidden_size, <span style="color:#e6db74">&#39;batch_size&#39;</span>: batch_size}
+</span></span></code></pre></div><h3 id="随机搜索">随机搜索</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">random_search</span>(num_trials<span style="color:#f92672">=</span><span style="color:#ae81ff">100</span>):
+</span></span><span style="display:flex;"><span>    best_accuracy <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>
+</span></span><span style="display:flex;"><span>    best_params <span style="color:#f92672">=</span> {}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">for</span> _ <span style="color:#f92672">in</span> range(num_trials):
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e"># 随机采样超参数</span>
+</span></span><span style="display:flex;"><span>        lr <span style="color:#f92672">=</span> <span style="color:#ae81ff">10</span> <span style="color:#f92672">**</span> np<span style="color:#f92672">.</span>random<span style="color:#f92672">.</span>uniform(<span style="color:#f92672">-</span><span style="color:#ae81ff">5</span>, <span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>)
+</span></span><span style="display:flex;"><span>        hidden_size <span style="color:#f92672">=</span> <span style="color:#ae81ff">2</span> <span style="color:#f92672">**</span> np<span style="color:#f92672">.</span>random<span style="color:#f92672">.</span>randint(<span style="color:#ae81ff">5</span>, <span style="color:#ae81ff">9</span>)
+</span></span><span style="display:flex;"><span>        batch_size <span style="color:#f92672">=</span> <span style="color:#ae81ff">2</span> <span style="color:#f92672">**</span> np<span style="color:#f92672">.</span>random<span style="color:#f92672">.</span>randint(<span style="color:#ae81ff">4</span>, <span style="color:#ae81ff">8</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e"># 训练并评估</span>
+</span></span><span style="display:flex;"><span>        accuracy <span style="color:#f92672">=</span> train_model(lr, hidden_size, batch_size)
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> accuracy <span style="color:#f92672">&gt;</span> best_accuracy:
+</span></span><span style="display:flex;"><span>            best_accuracy <span style="color:#f92672">=</span> accuracy
+</span></span><span style="display:flex;"><span>            best_params <span style="color:#f92672">=</span> {<span style="color:#e6db74">&#39;lr&#39;</span>: lr, <span style="color:#e6db74">&#39;hidden_size&#39;</span>: hidden_size, <span style="color:#e6db74">&#39;batch_size&#39;</span>: batch_size}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> best_params
+</span></span></code></pre></div><h2 id="-评估指标">📊 评估指标</h2>
+<h3 id="分类任务">分类任务</h3>
+<p><strong>准确率 (Accuracy)</strong>：
+$$Accuracy = \frac{TP + TN}{TP + TN + FP + FN}$$</p>
+<p><strong>精确率 (Precision)</strong>：
+$$Precision = \frac{TP}{TP + FP}$$</p>
+<p><strong>召回率 (Recall)</strong>：
+$$Recall = \frac{TP}{TP + FN}$$</p>
+<p><strong>F1分数</strong>：
+$$F1 = 2 \times \frac{Precision \times Recall}{Precision + Recall}$$</p>
+<h3 id="回归任务">回归任务</h3>
+<p><strong>均方误差 (MSE)</strong>：
+$$MSE = \frac{1}{n} \sum_{i=1}^{n} (y_i - \hat{y}_i)^2$$</p>
+<p><strong>平均绝对误差 (MAE)</strong>：
+$$MAE = \frac{1}{n} \sum_{i=1}^{n} |y_i - \hat{y}_i|$$</p>
+<h2 id="-应用实例">🎯 应用实例</h2>
+<h3 id="手写数字识别">手写数字识别</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#75715e"># 加载MNIST数据集</span>
+</span></span><span style="display:flex;"><span>transform <span style="color:#f92672">=</span> transforms<span style="color:#f92672">.</span>Compose([
+</span></span><span style="display:flex;"><span>    transforms<span style="color:#f92672">.</span>ToTensor(),
+</span></span><span style="display:flex;"><span>    transforms<span style="color:#f92672">.</span>Normalize((<span style="color:#ae81ff">0.5</span>,), (<span style="color:#ae81ff">0.5</span>,))
+</span></span><span style="display:flex;"><span>])
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>trainset <span style="color:#f92672">=</span> torchvision<span style="color:#f92672">.</span>datasets<span style="color:#f92672">.</span>MNIST(root<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;./data&#39;</span>, train<span style="color:#f92672">=</span><span style="color:#66d9ef">True</span>, download<span style="color:#f92672">=</span><span style="color:#66d9ef">True</span>, transform<span style="color:#f92672">=</span>transform)
+</span></span><span style="display:flex;"><span>trainloader <span style="color:#f92672">=</span> torch<span style="color:#f92672">.</span>utils<span style="color:#f92672">.</span>data<span style="color:#f92672">.</span>DataLoader(trainset, batch_size<span style="color:#f92672">=</span><span style="color:#ae81ff">64</span>, shuffle<span style="color:#f92672">=</span><span style="color:#66d9ef">True</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 模型定义</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">MNISTNet</span>(nn<span style="color:#f92672">.</span>Module):
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">__init__</span>(self):
+</span></span><span style="display:flex;"><span>        super(MNISTNet, self)<span style="color:#f92672">.</span><span style="color:#a6e22e">__init__</span>()
+</span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>fc1 <span style="color:#f92672">=</span> nn<span style="color:#f92672">.</span>Linear(<span style="color:#ae81ff">28</span><span style="color:#f92672">*</span><span style="color:#ae81ff">28</span>, <span style="color:#ae81ff">128</span>)
+</span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>fc2 <span style="color:#f92672">=</span> nn<span style="color:#f92672">.</span>Linear(<span style="color:#ae81ff">128</span>, <span style="color:#ae81ff">64</span>)
+</span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>fc3 <span style="color:#f92672">=</span> nn<span style="color:#f92672">.</span>Linear(<span style="color:#ae81ff">64</span>, <span style="color:#ae81ff">10</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">forward</span>(self, x):
+</span></span><span style="display:flex;"><span>        x <span style="color:#f92672">=</span> x<span style="color:#f92672">.</span>view(<span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">28</span><span style="color:#f92672">*</span><span style="color:#ae81ff">28</span>)
+</span></span><span style="display:flex;"><span>        x <span style="color:#f92672">=</span> torch<span style="color:#f92672">.</span>relu(self<span style="color:#f92672">.</span>fc1(x))
+</span></span><span style="display:flex;"><span>        x <span style="color:#f92672">=</span> torch<span style="color:#f92672">.</span>relu(self<span style="color:#f92672">.</span>fc2(x))
+</span></span><span style="display:flex;"><span>        x <span style="color:#f92672">=</span> self<span style="color:#f92672">.</span>fc3(x)
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> x
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 训练模型</span>
+</span></span><span style="display:flex;"><span>model <span style="color:#f92672">=</span> MNISTNet()
+</span></span><span style="display:flex;"><span>criterion <span style="color:#f92672">=</span> nn<span style="color:#f92672">.</span>CrossEntropyLoss()
+</span></span><span style="display:flex;"><span>optimizer <span style="color:#f92672">=</span> optim<span style="color:#f92672">.</span>Adam(model<span style="color:#f92672">.</span>parameters(), lr<span style="color:#f92672">=</span><span style="color:#ae81ff">0.001</span>)
+</span></span></code></pre></div><h2 id="-学习资源">📚 学习资源</h2>
+<h3 id="吴恩达课程">吴恩达课程</h3>
+<ul>
+<li><a href="https://www.coursera.org/learn/neural-networks-deep-learning">第一周：神经网络和深度学习基础</a></li>
+</ul>
+<h3 id="经典论文">经典论文</h3>
+<ul>
+<li><a href="https://www.cs.cmu.edu/~./epxing/Class/10715/reading/McCulloch.and.Pitts.pdf">A Logical Calculus of the Ideas Immanent in Nervous Activity</a> - McCulloch &amp; Pitts (1943)</li>
+<li><a href="https://www.iro.umontreal.ca/~pift6266/A06/refs/backprop.pdf">Learning Internal Representations by Error Propagation</a> - Rumelhart et al. (1986)</li>
+</ul>
+<h3 id="在线资源">在线资源</h3>
+<ul>
+<li><a href="http://neuralnetworksanddeeplearning.com/">Neural Networks and Deep Learning</a></li>
+<li><a href="https://cs231n.github.io/">CS231n: Convolutional Neural Networks</a></li>
+</ul>
+</div>
+    
+<nav class="pager" aria-label="文章导航">
+  
+  <a href="/wiki/deep_learning/cnn/" data-press>
+    <span class="dir">← 上一篇</span>卷积神经网络
+  </a>
+  
+  
+</nav>
+
+
+    
+<div class="comments">
+  <h2 class="comments-title">评论</h2>
+  <div id="utterances"></div>
+  <script>
+    (function () {
+      if (window.location.protocol === 'file:') return;
+      var s = document.createElement('script');
+      s.src = 'https://utteranc.es/client.js';
+      s.async = true;
+      s.setAttribute('repo', "makkichan947/makkichan947.github.io");
+      s.setAttribute('issue-term', "pathname");
+      s.setAttribute('theme', "github-dark");
+      s.setAttribute('crossorigin', 'anonymous');
+      document.getElementById('utterances').appendChild(s);
+    })();
+  </script>
+</div>
+
+
+  </article>
+  
+</div>
+
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+      <div class="footer-links">
+        
+        <a href="https://github.com/makkichan947" target="_blank" rel="noopener" title="Github" data-press>Github</a>
+        
+        <a href="mailto:yakumakki947@hotmail.com" target="_blank" rel="noopener" title="Email" data-press>Email</a>
+        
+        <a href="https://x.com/Makki_Yaku947" target="_blank" rel="noopener" title="Twitter" data-press>Twitter</a>
+        
+        <a href="https://www.twitch.tv/u/makkichan947" target="_blank" rel="noopener" title="Twitch" data-press>Twitch</a>
+        
+      </div>
+      <p>&copy; 2026 Yaku Makki</p>
+      <p>Powered by <a href="https://gohugo.io" target="_blank" rel="noopener">Hugo</a> · Makki Theme</p>
+      
+      <div class="stats">
+        <span>访客 <span id="busuanzi_value_site_uv"></span></span>
+        <span>访问 <span id="busuanzi_value_site_pv"></span></span>
+        <span>本页 <span id="busuanzi_value_page_pv"></span></span>
+      </div>
+      
+    </div>
+  </footer>
+
+  <button class="back-to-top" id="back-to-top" type="button" aria-label="回到顶部" data-press>
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 19V5"/><path d="M5 12l7-7 7 7"/></svg>
+  </button>
+
+  
+  <script src="/js/main.min.2e977141114ec7890ffee2c35e08034683543cfe8ef98dd4af5effb3b37a3345.js" integrity="sha256-LpdxQRFOx4kP/uLDXggDRoNUPP6O&#43;Y3Ur17/s7N6M0U=" defer></script>
+  
+  
+  <script src="/js/search.min.b2d6ba6610ce24454bc1436dc521dcfd878b2583ad9f65f77aadedaaa1e1a54c.js" integrity="sha256-sta6ZhDOJEVLwUNtxSHc/YeLJYOtn2X3eq3tqqHhpUw=" defer></script>
+  
+
+  
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+  
+
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/katex.min.js" crossorigin="anonymous"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/contrib/auto-render.min.js" crossorigin="anonymous"></script>
+</body>
+</html>

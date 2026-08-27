@@ -1,0 +1,565 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>深度学习 · Yaku Makki</title>
+  <meta name="description" content="个人小巢">
+  <meta name="theme-color" content="#0a0a0f">
+  <script>document.documentElement.classList.add('js');</script>
+
+  <link rel="icon" href="/avatar/avatar.jpg" type="image/jpeg">
+
+  
+  <link rel="stylesheet" href="/css/main.min.b64e4527cc255b367461135391e39e321a5d86fc97defca99c7afda308ada007.css" integrity="sha256-tk5FJ8wlWzZ0YRNTkeOeMhpdhvyX3vypnHr9owitoAc=">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/katex.min.css" crossorigin="anonymous">
+</head>
+<body>
+  <a class="skip-link" href="#main">跳到内容</a>
+
+  <div class="scene" aria-hidden="true">
+    <div class="scene-sky"></div>
+    <div class="scene-stars"></div>
+    <div class="scene-sun-halo"></div>
+    <div class="scene-sun"></div>
+    <div class="scene-mountains scene-mountains-far"></div>
+    <div class="scene-mountains scene-mountains-near"></div>
+    <div class="scene-horizon"></div>
+    <div class="scene-floor"></div>
+    <div class="scene-scanlines"></div>
+  </div>
+
+  <nav class="navbar" aria-label="主导航">
+    <div class="nav-inner">
+      <a class="logo" href="/" data-press>
+        <img class="logo-avatar" src="/avatar/avatar.jpg" alt="" width="34" height="34">
+        <span class="logo-text">Yaku Makki</span>
+      </a>
+      <div class="nav-menu-wrap">
+        <span class="nav-tick" aria-hidden="true"></span>
+        <ul class="nav-menu">
+          
+          <li>
+            <a href="/" data-press>首页</a>
+          </li>
+          
+          <li>
+            <a href="/post/" data-press>博客</a>
+          </li>
+          
+          <li>
+            <a href="/wiki/" data-press>维基</a>
+          </li>
+          
+          <li>
+            <a href="/tags/" data-press>标签</a>
+          </li>
+          
+          <li>
+            <a href="/about/" data-press>关于</a>
+          </li>
+          
+          
+          <li>
+            <button id="search-toggle" class="search-toggle" type="button" title="搜索 (Ctrl+K 或 /)" aria-haspopup="dialog" aria-expanded="false" data-press>搜索</button>
+          </li>
+          
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  
+  <div class="sheet-scrim" id="sheet-scrim"></div>
+  <section class="sheet" id="search-sheet" role="dialog" aria-modal="true" aria-label="搜索" aria-hidden="true">
+    <div class="sheet-panel" id="sheet-panel">
+      <div class="sheet-handle" id="sheet-handle" role="presentation" aria-hidden="true"></div>
+      <div class="sheet-body">
+        <div class="search-field">
+          <input id="search-input" type="search" placeholder="搜索文章和 Wiki…"
+                 autocomplete="off" spellcheck="false" aria-controls="search-results">
+          <span class="search-key" aria-hidden="true">/</span>
+        </div>
+        <div id="search-results" class="search-results" role="listbox" aria-label="搜索结果"></div>
+      </div>
+    </div>
+  </section>
+  
+
+  <main class="main" id="main">
+    
+<header class="page-head">
+  <h1>深度学习</h1>
+  
+</header>
+
+
+<div class="article article-content"><h1 id="深度学习">深度学习</h1>
+<p>深度学习（Deep Learning）是机器学习的一个子集，使用多层神经网络来模拟人脑的学习过程。本章基于吴恩达的深度学习课程，系统地介绍深度学习的核心概念和实践方法。</p>
+<h2 id="-学习目标">🎯 学习目标</h2>
+<p>通过本章学习，你将掌握：</p>
+<ul>
+<li>神经网络的基础原理</li>
+<li>深度学习的核心概念</li>
+<li>各种网络架构的设计思路</li>
+<li>实际项目的开发经验</li>
+</ul>
+<h2 id="-课程结构">📚 课程结构</h2>
+<h3 id="神经网络基础"><a href="./neural-networks/">神经网络基础</a></h3>
+<ul>
+<li>神经元模型与感知机</li>
+<li>前向传播与反向传播</li>
+<li>激活函数与损失函数</li>
+<li>梯度下降优化算法</li>
+</ul>
+<h3 id="卷积神经网络"><a href="./cnn/">卷积神经网络</a></h3>
+<ul>
+<li>卷积层与池化层</li>
+<li>经典CNN架构（AlexNet、VGG、ResNet）</li>
+<li>图像分类与目标检测</li>
+<li>计算机视觉应用</li>
+</ul>
+<h3 id="循环神经网络"><a href="./rnn/">循环神经网络</a></h3>
+<ul>
+<li>序列数据处理</li>
+<li>LSTM与GRU机制</li>
+<li>自然语言处理应用</li>
+<li>时间序列预测</li>
+</ul>
+<h3 id="transformer架构"><a href="./transformer/">Transformer架构</a></h3>
+<ul>
+<li>自注意力机制</li>
+<li>Transformer模型详解</li>
+<li>BERT与GPT系列</li>
+<li>大语言模型应用</li>
+</ul>
+<h3 id="生成对抗网络"><a href="./gan/">生成对抗网络</a></h3>
+<ul>
+<li>GAN基本原理与架构</li>
+<li>经典GAN变种（DCGAN、WGAN、CycleGAN）</li>
+<li>图像生成与风格迁移</li>
+<li>生成模型应用</li>
+</ul>
+<h3 id="tensorflow框架"><a href="./tensorflow/">TensorFlow框架</a></h3>
+<ul>
+<li>TensorFlow基础教程</li>
+<li>高级特性和自定义训练</li>
+<li>计算机视觉与NLP应用</li>
+<li>模型部署与生产化</li>
+</ul>
+<h3 id="强化学习"><a href="./reinforcement_learning/">强化学习</a></h3>
+<ul>
+<li>马尔可夫决策过程</li>
+<li>Q-Learning与深度Q网络</li>
+<li>策略梯度与Actor-Critic</li>
+<li>游戏AI与机器人控制</li>
+</ul>
+<h3 id="迁移学习"><a href="./transfer_learning/">迁移学习</a></h3>
+<ul>
+<li>特征提取与微调</li>
+<li>预训练模型应用</li>
+<li>领域自适应</li>
+<li>实际项目案例</li>
+</ul>
+<h2 id="-数学基础">🧮 数学基础</h2>
+<h3 id="线性代数">线性代数</h3>
+<ul>
+<li>向量与矩阵运算</li>
+<li>特征值与奇异值分解</li>
+<li>主成分分析（PCA）</li>
+</ul>
+<h3 id="概率统计">概率统计</h3>
+<ul>
+<li>最大似然估计</li>
+<li>贝叶斯推理</li>
+<li>信息论基础</li>
+</ul>
+<h3 id="优化理论">优化理论</h3>
+<ul>
+<li>梯度下降算法</li>
+<li>动量与自适应优化</li>
+<li>正则化技术</li>
+</ul>
+<h2 id="-实践项目">💻 实践项目</h2>
+<h3 id="图像处理">图像处理</h3>
+<ul>
+<li>MNIST手写数字识别</li>
+<li>CIFAR-10/100图像分类</li>
+<li>迁移学习应用</li>
+<li>GAN图像生成</li>
+<li>目标检测与分割</li>
+</ul>
+<h3 id="自然语言处理">自然语言处理</h3>
+<ul>
+<li>文本分类与情感分析</li>
+<li>机器翻译系统</li>
+<li>问答系统开发</li>
+<li>BERT微调应用</li>
+<li>Transformer文本生成</li>
+</ul>
+<h3 id="强化学习-1">强化学习</h3>
+<ul>
+<li>Q-Learning算法</li>
+<li>深度Q网络（DQN）</li>
+<li>策略梯度方法</li>
+<li>游戏AI开发</li>
+<li>机器人控制</li>
+</ul>
+<h3 id="模型部署">模型部署</h3>
+<ul>
+<li>TensorFlow Serving部署</li>
+<li>TensorFlow Lite移动端部署</li>
+<li>模型压缩与优化</li>
+<li>A/B测试框架</li>
+</ul>
+<h2 id="-开发环境">🔧 开发环境</h2>
+<h3 id="推荐配置">推荐配置</h3>
+<ul>
+<li>Python 3.8+</li>
+<li>PyTorch 1.12+ / TensorFlow 2.8+</li>
+<li>CUDA 11.6+ (GPU加速)</li>
+<li>Jupyter Notebook/Lab</li>
+<li>GPU内存 4GB+ (推荐8GB+)</li>
+</ul>
+<h3 id="环境搭建">环境搭建</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># 创建虚拟环境</span>
+</span></span><span style="display:flex;"><span>conda create -n deeplearning python<span style="color:#f92672">=</span>3.9
+</span></span><span style="display:flex;"><span>conda activate deeplearning
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 安装PyTorch (推荐)</span>
+</span></span><span style="display:flex;"><span>pip install torch torchvision torchaudio
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 或 conda install pytorch torchvision torchaudio -c pytorch</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 安装TensorFlow</span>
+</span></span><span style="display:flex;"><span>pip install tensorflow<span style="color:#f92672">[</span>and-cuda<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 或 conda install tensorflow-gpu</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 安装其他依赖</span>
+</span></span><span style="display:flex;"><span>pip install numpy pandas matplotlib scikit-learn jupyter jupyterlab
+</span></span><span style="display:flex;"><span>pip install opencv-python pillow tqdm tensorboard
+</span></span><span style="display:flex;"><span>pip install transformers datasets torchtext torchvision
+</span></span><span style="display:flex;"><span>pip install gym stable-baselines3 optuna
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 启动Jupyter Lab</span>
+</span></span><span style="display:flex;"><span>jupyter lab
+</span></span></code></pre></div><h3 id="gpu配置">GPU配置</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># 检查GPU可用性</span>
+</span></span><span style="display:flex;"><span>python -c <span style="color:#e6db74">&#34;import torch; print(&#39;CUDA available:&#39;, torch.cuda.is_available())&#34;</span>
+</span></span><span style="display:flex;"><span>python -c <span style="color:#e6db74">&#34;import tensorflow as tf; print(&#39;GPU devices:&#39;, tf.config.list_physical_devices(&#39;GPU&#39;))&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 设置GPU内存增长</span>
+</span></span><span style="display:flex;"><span>import tensorflow as tf
+</span></span><span style="display:flex;"><span>gpus <span style="color:#f92672">=</span> tf.config.experimental.list_physical_devices<span style="color:#f92672">(</span><span style="color:#e6db74">&#39;GPU&#39;</span><span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">if</span> gpus:
+</span></span><span style="display:flex;"><span>    try:
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">for</span> gpu in gpus:
+</span></span><span style="display:flex;"><span>            tf.config.experimental.set_memory_growth<span style="color:#f92672">(</span>gpu, True<span style="color:#f92672">)</span>
+</span></span><span style="display:flex;"><span>    except RuntimeError as e:
+</span></span><span style="display:flex;"><span>        print<span style="color:#f92672">(</span>e<span style="color:#f92672">)</span>
+</span></span></code></pre></div><h2 id="-学习资源">📖 学习资源</h2>
+<h3 id="吴恩达深度学习课程">吴恩达深度学习课程</h3>
+<ul>
+<li><a href="https://mooc.study.163.com/university/deeplearning">网易云课堂：深度学习工程师</a></li>
+<li><a href="https://www.coursera.org/specializations/deep-learning">Coursera: Deep Learning Specialization</a></li>
+<li><a href="https://mooc.study.163.com/course/2001281002">网易云课堂：机器学习</a></li>
+</ul>
+<h3 id="经典教材">经典教材</h3>
+<ul>
+<li>《深度学习》（Goodfellow, Bengio, Courville）</li>
+<li>《神经网络与深度学习》（邱锡鹏）</li>
+<li>《动手学深度学习》（李沐等）</li>
+<li>《统计学习方法》（李航）</li>
+</ul>
+<h3 id="在线资源">在线资源</h3>
+<ul>
+<li><a href="https://pytorch.org/docs/">PyTorch官方文档</a></li>
+<li><a href="https://www.tensorflow.org/api_docs">TensorFlow官方文档</a></li>
+<li><a href="https://paperswithcode.com/">Papers with Code</a></li>
+<li><a href="https://tfhub.dev/">TensorFlow Hub</a></li>
+<li><a href="https://huggingface.co/">Hugging Face</a></li>
+</ul>
+<h3 id="实践平台">实践平台</h3>
+<ul>
+<li><a href="https://colab.research.google.com/">Google Colab</a> - 免费GPU计算</li>
+<li><a href="https://www.kaggle.com/">Kaggle</a> - 数据科学竞赛平台</li>
+<li><a href="https://gym.openai.com/">OpenAI Gym</a> - 强化学习环境</li>
+<li><a href="https://wandb.ai/">Weights &amp; Biases</a> - 实验跟踪工具</li>
+</ul>
+<h3 id="论文资源">论文资源</h3>
+<ul>
+<li><a href="https://arxiv.org/">arXiv</a> - 最新论文预印本</li>
+<li><a href="https://distill.pub/">Distill</a> - 深度学习可视化解释</li>
+<li><a href="https://openreview.net/">OpenReview</a> - 会议论文评审</li>
+</ul>
+<h2 id="-快速开始">🚀 快速开始</h2>
+<h3 id="第一个神经网络">第一个神经网络</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#f92672">import</span> torch
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> torch.nn <span style="color:#66d9ef">as</span> nn
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">SimpleNet</span>(nn<span style="color:#f92672">.</span>Module):
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">__init__</span>(self):
+</span></span><span style="display:flex;"><span>        super(SimpleNet, self)<span style="color:#f92672">.</span><span style="color:#a6e22e">__init__</span>()
+</span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>fc1 <span style="color:#f92672">=</span> nn<span style="color:#f92672">.</span>Linear(<span style="color:#ae81ff">784</span>, <span style="color:#ae81ff">128</span>)
+</span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>fc2 <span style="color:#f92672">=</span> nn<span style="color:#f92672">.</span>Linear(<span style="color:#ae81ff">128</span>, <span style="color:#ae81ff">10</span>)
+</span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>relu <span style="color:#f92672">=</span> nn<span style="color:#f92672">.</span>ReLU()
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">forward</span>(self, x):
+</span></span><span style="display:flex;"><span>        x <span style="color:#f92672">=</span> self<span style="color:#f92672">.</span>relu(self<span style="color:#f92672">.</span>fc1(x))
+</span></span><span style="display:flex;"><span>        x <span style="color:#f92672">=</span> self<span style="color:#f92672">.</span>fc2(x)
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> x
+</span></span></code></pre></div><h3 id="模型训练">模型训练</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#75715e"># 损失函数和优化器</span>
+</span></span><span style="display:flex;"><span>criterion <span style="color:#f92672">=</span> nn<span style="color:#f92672">.</span>CrossEntropyLoss()
+</span></span><span style="display:flex;"><span>optimizer <span style="color:#f92672">=</span> torch<span style="color:#f92672">.</span>optim<span style="color:#f92672">.</span>Adam(model<span style="color:#f92672">.</span>parameters(), lr<span style="color:#f92672">=</span><span style="color:#ae81ff">0.001</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 训练循环</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">for</span> epoch <span style="color:#f92672">in</span> range(num_epochs):
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">for</span> data, target <span style="color:#f92672">in</span> dataloader:
+</span></span><span style="display:flex;"><span>        optimizer<span style="color:#f92672">.</span>zero_grad()
+</span></span><span style="display:flex;"><span>        output <span style="color:#f92672">=</span> model(data)
+</span></span><span style="display:flex;"><span>        loss <span style="color:#f92672">=</span> criterion(output, target)
+</span></span><span style="display:flex;"><span>        loss<span style="color:#f92672">.</span>backward()
+</span></span><span style="display:flex;"><span>        optimizer<span style="color:#f92672">.</span>step()
+</span></span></code></pre></div><h2 id="-应用领域">🎨 应用领域</h2>
+<h3 id="计算机视觉">计算机视觉</h3>
+<ul>
+<li>图像分类与识别</li>
+<li>目标检测与跟踪</li>
+<li>图像生成与风格迁移</li>
+<li>医学图像分析</li>
+<li>图像分割与修复</li>
+<li>视频理解与分析</li>
+</ul>
+<h3 id="自然语言处理-1">自然语言处理</h3>
+<ul>
+<li>机器翻译</li>
+<li>文本生成</li>
+<li>情感分析</li>
+<li>问答系统</li>
+<li>文本摘要</li>
+<li>对话系统</li>
+</ul>
+<h3 id="语音识别">语音识别</h3>
+<ul>
+<li>语音转文本</li>
+<li>语音合成</li>
+<li>声纹识别</li>
+<li>多语言语音处理</li>
+<li>语音情感分析</li>
+</ul>
+<h3 id="强化学习-2">强化学习</h3>
+<ul>
+<li>游戏AI</li>
+<li>机器人控制</li>
+<li>自动驾驶</li>
+<li>推荐系统</li>
+<li>智能体训练</li>
+<li>决策优化</li>
+</ul>
+<h3 id="生成模型">生成模型</h3>
+<ul>
+<li>图像生成（GAN、Diffusion）</li>
+<li>文本生成（GPT系列）</li>
+<li>音乐生成</li>
+<li>视频生成</li>
+<li>多模态生成</li>
+</ul>
+<h3 id="模型部署-1">模型部署</h3>
+<ul>
+<li>边缘计算部署</li>
+<li>移动端部署</li>
+<li>云端服务部署</li>
+<li>模型优化与压缩</li>
+</ul>
+<h2 id="-学习建议">💡 学习建议</h2>
+<blockquote>
+<p>深度学习是一门理论与实践并重的学科，多动手实践才能真正掌握。</p>
+</blockquote>
+<h3 id="学习路径">学习路径</h3>
+<ol>
+<li><strong>数学基础</strong>：线性代数、概率统计、优化理论</li>
+<li><strong>编程基础</strong>：Python、NumPy、Pandas</li>
+<li><strong>机器学习基础</strong>：监督学习、无监督学习</li>
+<li><strong>深度学习核心</strong>：神经网络、CNN、RNN、Transformer</li>
+<li><strong>高级主题</strong>：GAN、强化学习、迁移学习</li>
+<li><strong>框架学习</strong>：PyTorch或TensorFlow</li>
+<li><strong>项目实践</strong>：从简单分类开始，逐步深入</li>
+<li><strong>论文阅读</strong>：关注最新研究进展</li>
+</ol>
+<h3 id="实践技巧">实践技巧</h3>
+<ul>
+<li>从经典数据集开始（MNIST、CIFAR-10、ImageNet）</li>
+<li>理解模型的输入输出和数据流</li>
+<li>学会调试和可视化（TensorBoard、Weights &amp; Biases）</li>
+<li>关注模型的泛化能力和过拟合</li>
+<li>掌握迁移学习和预训练模型使用</li>
+<li>学习模型部署和生产化技能</li>
+</ul>
+<h3 id="进阶建议">进阶建议</h3>
+<ul>
+<li><strong>参与竞赛</strong>：Kaggle、阿里天池等平台</li>
+<li><strong>开源贡献</strong>：GitHub上的深度学习项目</li>
+<li><strong>论文复现</strong>：复现经典论文加深理解</li>
+<li><strong>关注前沿</strong>：GAN、Transformer、强化学习最新进展</li>
+<li><strong>工程能力</strong>：学会模型优化、分布式训练、部署</li>
+</ul>
+<hr>
+<p><em>最近更新: {{ .Lastmod.Format &ldquo;2006-01-02&rdquo; }}</em></p>
+</div>
+
+
+
+<div class="card-grid">
+  
+  <article class="card" data-press data-reveal data-reveal-delay="045">
+    <h3><a href="/wiki/deep_learning/neural_networks/">神经网络基础</a></h3>
+    <p><h1 id="神经网络基础">神经网络基础</h1>
+<p>神经网络（Neural Networks）是深度学习的基础，模拟了人脑神经元的工作方式。本章详细介绍神经网络的基本概念、结构和训练方法。</p>
+<h2 id="-神经元模型">🧠 神经元模型</h2>
+<h3 id="生物神经元">生物神经元</h3>
+<p>人脑中的神经元通过突触接收和处理信号，神 …</p></p>
+    <div class="meta">
+      <time datetime="2025-10-19">2025-10-19</time>
+      
+    </div>
+  </article>
+  
+  <article class="card" data-press data-reveal data-reveal-delay="145">
+    <h3><a href="/wiki/deep_learning/cnn/">卷积神经网络</a></h3>
+    <p><h1 id="卷积神经网络">卷积神经网络</h1>
+<p>卷积神经网络（Convolutional Neural Networks, CNN）是深度学习中专门用于处理图像数据的神经网络架构，在计算机视觉领域取得了巨大成功。</p>
+<h2 id="-图像处理基础">🖼️ 图像处理基础</h2>
+<h3 id="图像表示">图像表示</h3>
+<p>图像可以表 …</p></p>
+    <div class="meta">
+      <time datetime="2025-10-20">2025-10-20</time>
+      
+    </div>
+  </article>
+  
+  <article class="card" data-press data-reveal data-reveal-delay="245">
+    <h3><a href="/wiki/deep_learning/rnn/">循环神经网络</a></h3>
+    <p><h1 id="循环神经网络">循环神经网络</h1>
+<p>循环神经网络（Recurrent Neural Networks, RNN）是专门用于处理序列数据的神经网络架构，能够记忆历史信息并用于当前预测。</p>
+<h2 id="-序列数据处理">⏰ 序列数据处理</h2>
+<h3 id="序列数据特点">序列数据特点</h3>
+<ul>
+<li><strong>时间依赖</strong>：当前状态依赖于 …</li></ul></p>
+    <div class="meta">
+      <time datetime="2025-10-20">2025-10-20</time>
+      
+    </div>
+  </article>
+  
+  <article class="card" data-press data-reveal data-reveal-delay="345">
+    <h3><a href="/wiki/deep_learning/transformer/">Transformer架构</a></h3>
+    <p><h1 id="transformer架构">Transformer架构</h1>
+<p>Transformer是2017年由Google提出的革命性架构，完全基于注意力机制，彻底改变了深度学习领域。本章详细介绍Transformer的核心概念和实现细节。</p>
+<h2 id="-注意力机制">🎯 注意力机制</h2>
+<h3 id="基本注意力">基本注意 …</h3></p>
+    <div class="meta">
+      <time datetime="2025-10-25">2025-10-25</time>
+      
+    </div>
+  </article>
+  
+  <article class="card" data-press data-reveal data-reveal-delay="445">
+    <h3><a href="/wiki/deep_learning/gan/">生成对抗网络</a></h3>
+    <p><h1 id="生成对抗网络">生成对抗网络</h1>
+<p>生成对抗网络（Generative Adversarial Networks, GAN）是由Ian Goodfellow在2014年提出的深度学习架构，通过对抗训练的方式生成高质量的合成数据，在图像生成、风 …</p></p>
+    <div class="meta">
+      <time datetime="2025-10-24">2025-10-24</time>
+      
+    </div>
+  </article>
+  
+  <article class="card" data-press data-reveal data-reveal-delay="545">
+    <h3><a href="/wiki/deep_learning/tensorflow/">TensorFlow框架</a></h3>
+    <p><h1 id="tensorflow框架">TensorFlow框架</h1>
+<p>TensorFlow是Google开发的开源机器学习框架，以其强大的计算图、灵活的API和丰富的生态系统而闻名。本章系统介绍TensorFlow的核心概念、API设计和实际应用。</p>
+<h2 id="-tensorflow概述">🎯 …</h2></p>
+    <div class="meta">
+      <time datetime="2025-10-24">2025-10-24</time>
+      
+    </div>
+  </article>
+  
+  <article class="card" data-press data-reveal data-reveal-delay="045">
+    <h3><a href="/wiki/deep_learning/reinforcement_learning/">强化学习</a></h3>
+    <p><h1 id="强化学习">强化学习</h1>
+<p>强化学习（Reinforcement Learning, RL）是机器学习的一个重要分支，通过智能体与环境的交互来学习最优策略，在游戏AI、机器人控制、自动驾驶等领域取得了显著成就。</p>
+<h2 id="-强化学习基础">🎯 强化学习基础</h2>
+<h3 id="马尔可夫决策过程-mdp">马尔可夫 …</h3></p>
+    <div class="meta">
+      <time datetime="2025-10-25">2025-10-25</time>
+      
+    </div>
+  </article>
+  
+  <article class="card" data-press data-reveal data-reveal-delay="145">
+    <h3><a href="/wiki/deep_learning/transfer_learning/">迁移学习</a></h3>
+    <p><h1 id="迁移学习">迁移学习</h1>
+<p>迁移学习（Transfer Learning）是深度学习中的重要技术，通过将在一个任务上学到的知识应用到另一个相关任务中，显著减少训练时间并提高模型性能，特别适用于数据量有限的场景。</p>
+<h2 id="-迁移学习基础">🎯 迁移学习基础</h2>
+<h3 id="迁移学习概念">迁移学习 …</h3></p>
+    <div class="meta">
+      <time datetime="2025-10-20">2025-10-20</time>
+      
+    </div>
+  </article>
+  
+</div>
+
+
+
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+      <div class="footer-links">
+        
+        <a href="https://github.com/makkichan947" target="_blank" rel="noopener" title="Github" data-press>Github</a>
+        
+        <a href="mailto:yakumakki947@hotmail.com" target="_blank" rel="noopener" title="Email" data-press>Email</a>
+        
+        <a href="https://x.com/Makki_Yaku947" target="_blank" rel="noopener" title="Twitter" data-press>Twitter</a>
+        
+        <a href="https://www.twitch.tv/u/makkichan947" target="_blank" rel="noopener" title="Twitch" data-press>Twitch</a>
+        
+      </div>
+      <p>&copy; 2026 Yaku Makki</p>
+      <p>Powered by <a href="https://gohugo.io" target="_blank" rel="noopener">Hugo</a> · Makki Theme</p>
+      
+      <div class="stats">
+        <span>访客 <span id="busuanzi_value_site_uv"></span></span>
+        <span>访问 <span id="busuanzi_value_site_pv"></span></span>
+        <span>本页 <span id="busuanzi_value_page_pv"></span></span>
+      </div>
+      
+    </div>
+  </footer>
+
+  <button class="back-to-top" id="back-to-top" type="button" aria-label="回到顶部" data-press>
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 19V5"/><path d="M5 12l7-7 7 7"/></svg>
+  </button>
+
+  
+  <script src="/js/main.min.2e977141114ec7890ffee2c35e08034683543cfe8ef98dd4af5effb3b37a3345.js" integrity="sha256-LpdxQRFOx4kP/uLDXggDRoNUPP6O&#43;Y3Ur17/s7N6M0U=" defer></script>
+  
+  
+  <script src="/js/search.min.b2d6ba6610ce24454bc1436dc521dcfd878b2583ad9f65f77aadedaaa1e1a54c.js" integrity="sha256-sta6ZhDOJEVLwUNtxSHc/YeLJYOtn2X3eq3tqqHhpUw=" defer></script>
+  
+
+  
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+  
+
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/katex.min.js" crossorigin="anonymous"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/contrib/auto-render.min.js" crossorigin="anonymous"></script>
+</body>
+</html>

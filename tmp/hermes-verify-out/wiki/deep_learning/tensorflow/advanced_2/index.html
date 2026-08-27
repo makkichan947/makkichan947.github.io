@@ -1,0 +1,1003 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>TensorFlow高级应用 · Yaku Makki</title>
+  <meta name="description" content="个人小巢">
+  <meta name="theme-color" content="#0a0a0f">
+  <script>document.documentElement.classList.add('js');</script>
+
+  <link rel="icon" href="/avatar/avatar.jpg" type="image/jpeg">
+
+  
+  <link rel="stylesheet" href="/css/main.min.b64e4527cc255b367461135391e39e321a5d86fc97defca99c7afda308ada007.css" integrity="sha256-tk5FJ8wlWzZ0YRNTkeOeMhpdhvyX3vypnHr9owitoAc=">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/katex.min.css" crossorigin="anonymous">
+</head>
+<body>
+  <a class="skip-link" href="#main">跳到内容</a>
+
+  <div class="scene" aria-hidden="true">
+    <div class="scene-sky"></div>
+    <div class="scene-stars"></div>
+    <div class="scene-sun-halo"></div>
+    <div class="scene-sun"></div>
+    <div class="scene-mountains scene-mountains-far"></div>
+    <div class="scene-mountains scene-mountains-near"></div>
+    <div class="scene-horizon"></div>
+    <div class="scene-floor"></div>
+    <div class="scene-scanlines"></div>
+  </div>
+
+  <nav class="navbar" aria-label="主导航">
+    <div class="nav-inner">
+      <a class="logo" href="/" data-press>
+        <img class="logo-avatar" src="/avatar/avatar.jpg" alt="" width="34" height="34">
+        <span class="logo-text">Yaku Makki</span>
+      </a>
+      <div class="nav-menu-wrap">
+        <span class="nav-tick" aria-hidden="true"></span>
+        <ul class="nav-menu">
+          
+          <li>
+            <a href="/" data-press>首页</a>
+          </li>
+          
+          <li>
+            <a href="/post/" data-press>博客</a>
+          </li>
+          
+          <li>
+            <a href="/wiki/" data-press>维基</a>
+          </li>
+          
+          <li>
+            <a href="/tags/" data-press>标签</a>
+          </li>
+          
+          <li>
+            <a href="/about/" data-press>关于</a>
+          </li>
+          
+          
+          <li>
+            <button id="search-toggle" class="search-toggle" type="button" title="搜索 (Ctrl+K 或 /)" aria-haspopup="dialog" aria-expanded="false" data-press>搜索</button>
+          </li>
+          
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  
+  <div class="sheet-scrim" id="sheet-scrim"></div>
+  <section class="sheet" id="search-sheet" role="dialog" aria-modal="true" aria-label="搜索" aria-hidden="true">
+    <div class="sheet-panel" id="sheet-panel">
+      <div class="sheet-handle" id="sheet-handle" role="presentation" aria-hidden="true"></div>
+      <div class="sheet-body">
+        <div class="search-field">
+          <input id="search-input" type="search" placeholder="搜索文章和 Wiki…"
+                 autocomplete="off" spellcheck="false" aria-controls="search-results">
+          <span class="search-key" aria-hidden="true">/</span>
+        </div>
+        <div id="search-results" class="search-results" role="listbox" aria-label="搜索结果"></div>
+      </div>
+    </div>
+  </section>
+  
+
+  <main class="main" id="main">
+    
+<header class="page-head">
+  <nav class="crumb" aria-label="面包屑">
+    <a href="/" data-press>首页</a>
+    <span class="sep">/</span>
+    <a href="/wiki/" data-press>维基</a>
+    
+    
+    <span class="sep">/</span>
+    <a href="/wiki/deep_learning/tensorflow/" data-press>TensorFlow框架</a>
+    
+    
+  </nav>
+  <h1>TensorFlow高级应用</h1>
+  
+</header>
+
+<div class="wiki-layout">
+  <article class="article">
+    <div class="article-content"><h1 id="tensorflow高级应用">TensorFlow高级应用</h1>
+<p>本章介绍TensorFlow在实际项目中的高级应用，包括计算机视觉、自然语言处理、强化学习、模型部署等领域的完整解决方案和最佳实践。</p>
+<h2 id="-计算机视觉应用">🎨 计算机视觉应用</h2>
+<h3 id="目标检测---yolo实现">目标检测 - YOLO实现</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#f92672">import</span> tensorflow <span style="color:#66d9ef">as</span> tf
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> numpy <span style="color:#66d9ef">as</span> np
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> cv2
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">create_yolo_model</span>(num_classes, input_shape<span style="color:#f92672">=</span>(<span style="color:#ae81ff">416</span>, <span style="color:#ae81ff">416</span>, <span style="color:#ae81ff">3</span>)):
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#34;&#34;&#34;创建YOLO模型&#34;&#34;&#34;</span>
+</span></span><span style="display:flex;"><span>    inputs <span style="color:#f92672">=</span> tf<span style="color:#f92672">.</span>keras<span style="color:#f92672">.</span>Input(shape<span style="color:#f92672">=</span>input_shape)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># 特征提取网络</span>
+</span></span><span style="display:flex;"><span>    x <span style="color:#f92672">=</span> tf<span style="color:#f92672">.</span>keras<span style="color:#f92672">.</span>layers<span style="color:#f92672">.</span>Conv2D(<span style="color:#ae81ff">32</span>, <span style="color:#ae81ff">3</span>, strides<span style="color:#f92672">=</span><span style="color:#ae81ff">1</span>, padding<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;same&#39;</span>, activation<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;relu&#39;</span>)(inputs)
+</span></span><span style="display:flex;"><span>    x <span style="color:#f92672">=</span> tf<span style="color:#f92672">.</span>keras<span style="color:#f92672">.</span>layers<span style="color:#f92672">.</span>BatchNormalization()(x)
+</span></span><span style="display:flex;"><span>    x <span style="color:#f92672">=</span> tf<span style="color:#f92672">.</span>keras<span style="color:#f92672">.</span>layers<span style="color:#f92672">.</span>MaxPooling2D(pool_size<span style="color:#f92672">=</span><span style="color:#ae81ff">2</span>)(x)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    x <span style="color:#f92672">=</span> tf<span style="color:#f92672">.</span>keras<span style="color:#f92672">.</span>layers<span style="color:#f92672">.</span>Conv2D(<span style="color:#ae81ff">64</span>, <span style="color:#ae81ff">3</span>, strides<span style="color:#f92672">=</span><span style="color:#ae81ff">1</span>, padding<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;same&#39;</span>, activation<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;relu&#39;</span>)(x)
+</span></span><span style="display:flex;"><span>    x <span style="color:#f92672">=</span> tf<span style="color:#f92672">.</span>keras<span style="color:#f92672">.</span>layers<span style="color:#f92672">.</span>BatchNormalization()(x)
+</span></span><span style="display:flex;"><span>    x <span style="color:#f92672">=</span> tf<span style="color:#f92672">.</span>keras<span style="color:#f92672">.</span>layers<span style="color:#f92672">.</span>MaxPooling2D(pool_size<span style="color:#f92672">=</span><span style="color:#ae81ff">2</span>)(x)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    x <span style="color:#f92672">=</span> tf<span style="color:#f92672">.</span>keras<span style="color:#f92672">.</span>layers<span style="color:#f92672">.</span>Conv2D(<span style="color:#ae81ff">128</span>, <span style="color:#ae81ff">3</span>, strides<span style="color:#f92672">=</span><span style="color:#ae81ff">1</span>, padding<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;same&#39;</span>, activation<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;relu&#39;</span>)(x)
+</span></span><span style="display:flex;"><span>    x <span style="color:#f92672">=</span> tf<span style="color:#f92672">.</span>keras<span style="color:#f92672">.</span>layers<span style="color:#f92672">.</span>BatchNormalization()(x)
+</span></span><span style="display:flex;"><span>    x <span style="color:#f92672">=</span> tf<span style="color:#f92672">.</span>keras<span style="color:#f92672">.</span>layers<span style="color:#f92672">.</span>MaxPooling2D(pool_size<span style="color:#f92672">=</span><span style="color:#ae81ff">2</span>)(x)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># 检测头</span>
+</span></span><span style="display:flex;"><span>    x <span style="color:#f92672">=</span> tf<span style="color:#f92672">.</span>keras<span style="color:#f92672">.</span>layers<span style="color:#f92672">.</span>Conv2D(<span style="color:#ae81ff">256</span>, <span style="color:#ae81ff">3</span>, strides<span style="color:#f92672">=</span><span style="color:#ae81ff">1</span>, padding<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;same&#39;</span>, activation<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;relu&#39;</span>)(x)
+</span></span><span style="display:flex;"><span>    x <span style="color:#f92672">=</span> tf<span style="color:#f92672">.</span>keras<span style="color:#f92672">.</span>layers<span style="color:#f92672">.</span>Conv2D(<span style="color:#ae81ff">512</span>, <span style="color:#ae81ff">3</span>, strides<span style="color:#f92672">=</span><span style="color:#ae81ff">1</span>, padding<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;same&#39;</span>, activation<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;relu&#39;</span>)(x)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># 输出层：边界框、置信度和类别预测</span>
+</span></span><span style="display:flex;"><span>    output <span style="color:#f92672">=</span> tf<span style="color:#f92672">.</span>keras<span style="color:#f92672">.</span>layers<span style="color:#f92672">.</span>Conv2D(
+</span></span><span style="display:flex;"><span>        num_classes <span style="color:#f92672">+</span> <span style="color:#ae81ff">5</span>, <span style="color:#ae81ff">1</span>, strides<span style="color:#f92672">=</span><span style="color:#ae81ff">1</span>, padding<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;same&#39;</span>, activation<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;linear&#39;</span>
+</span></span><span style="display:flex;"><span>    )(x)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> tf<span style="color:#f92672">.</span>keras<span style="color:#f92672">.</span>Model(inputs<span style="color:#f92672">=</span>inputs, outputs<span style="color:#f92672">=</span>output)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># YOLO损失函数</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">YOLOLoss</span>(tf<span style="color:#f92672">.</span>keras<span style="color:#f92672">.</span>losses<span style="color:#f92672">.</span>Loss):
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">__init__</span>(self, num_classes, grid_size<span style="color:#f92672">=</span><span style="color:#ae81ff">13</span>, <span style="color:#f92672">**</span>kwargs):
+</span></span><span style="display:flex;"><span>        super(YOLOLoss, self)<span style="color:#f92672">.</span><span style="color:#a6e22e">__init__</span>(<span style="color:#f92672">**</span>kwargs)
+</span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>num_classes <span style="color:#f92672">=</span> num_classes
+</span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>grid_size <span style="color:#f92672">=</span> grid_size
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">call</span>(self, y_true, y_pred):
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e"># 实现YOLO损失函数</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e"># 包括边界框回归损失、置信度损失和分类损失</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> total_loss
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 创建和训练YOLO模型</span>
+</span></span><span style="display:flex;"><span>model <span style="color:#f92672">=</span> create_yolo_model(num_classes<span style="color:#f92672">=</span><span style="color:#ae81ff">20</span>)
+</span></span><span style="display:flex;"><span>model<span style="color:#f92672">.</span>compile(
+</span></span><span style="display:flex;"><span>    optimizer<span style="color:#f92672">=</span>tf<span style="color:#f92672">.</span>keras<span style="color:#f92672">.</span>optimizers<span style="color:#f92672">.</span>Adam(learning_rate<span style="color:#f92672">=</span><span style="color:#ae81ff">0.001</span>),
+</span></span><span style="display:flex;"><span>    loss<span style="color:#f92672">=</span>YOLOLoss(num_classes<span style="color:#f92672">=</span><span style="color:#ae81ff">20</span>),
+</span></span><span style="display:flex;"><span>    metrics<span style="color:#f92672">=</span>[<span style="color:#e6db74">&#39;accuracy&#39;</span>]
+</span></span><span style="display:flex;"><span>)
+</span></span></code></pre></div><h3 id="图像分割---u-net实现">图像分割 - U-Net实现</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">create_unet_model</span>(input_shape<span style="color:#f92672">=</span>(<span style="color:#ae81ff">256</span>, <span style="color:#ae81ff">256</span>, <span style="color:#ae81ff">3</span>), num_classes<span style="color:#f92672">=</span><span style="color:#ae81ff">1</span>):
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#34;&#34;&#34;创建U-Net模型&#34;&#34;&#34;</span>
+</span></span><span style="display:flex;"><span>    inputs <span style="color:#f92672">=</span> tf<span style="color:#f92672">.</span>keras<span style="color:#f92672">.</span>Input(shape<span style="color:#f92672">=</span>input_shape)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># 编码器</span>
+</span></span><span style="display:flex;"><span>    c1 <span style="color:#f92672">=</span> tf<span style="color:#f92672">.</span>keras<span style="color:#f92672">.</span>layers<span style="color:#f92672">.</span>Conv2D(<span style="color:#ae81ff">64</span>, <span style="color:#ae81ff">3</span>, padding<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;same&#39;</span>, activation<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;relu&#39;</span>)(inputs)
+</span></span><span style="display:flex;"><span>    c1 <span style="color:#f92672">=</span> tf<span style="color:#f92672">.</span>keras<span style="color:#f92672">.</span>layers<span style="color:#f92672">.</span>Conv2D(<span style="color:#ae81ff">64</span>, <span style="color:#ae81ff">3</span>, padding<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;same&#39;</span>, activation<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;relu&#39;</span>)(c1)
+</span></span><span style="display:flex;"><span>    p1 <span style="color:#f92672">=</span> tf<span style="color:#f92672">.</span>keras<span style="color:#f92672">.</span>layers<span style="color:#f92672">.</span>MaxPooling2D(pool_size<span style="color:#f92672">=</span><span style="color:#ae81ff">2</span>)(c1)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    c2 <span style="color:#f92672">=</span> tf<span style="color:#f92672">.</span>keras<span style="color:#f92672">.</span>layers<span style="color:#f92672">.</span>Conv2D(<span style="color:#ae81ff">128</span>, <span style="color:#ae81ff">3</span>, padding<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;same&#39;</span>, activation<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;relu&#39;</span>)(p1)
+</span></span><span style="display:flex;"><span>    c2 <span style="color:#f92672">=</span> tf<span style="color:#f92672">.</span>keras<span style="color:#f92672">.</span>layers<span style="color:#f92672">.</span>Conv2D(<span style="color:#ae81ff">128</span>, <span style="color:#ae81ff">3</span>, padding<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;same&#39;</span>, activation<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;relu&#39;</span>)(c2)
+</span></span><span style="display:flex;"><span>    p2 <span style="color:#f92672">=</span> tf<span style="color:#f92672">.</span>keras<span style="color:#f92672">.</span>layers<span style="color:#f92672">.</span>MaxPooling2D(pool_size<span style="color:#f92672">=</span><span style="color:#ae81ff">2</span>)(c2)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    c3 <span style="color:#f92672">=</span> tf<span style="color:#f92672">.</span>keras<span style="color:#f92672">.</span>layers<span style="color:#f92672">.</span>Conv2D(<span style="color:#ae81ff">256</span>, <span style="color:#ae81ff">3</span>, padding<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;same&#39;</span>, activation<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;relu&#39;</span>)(p2)
+</span></span><span style="display:flex;"><span>    c3 <span style="color:#f92672">=</span> tf<span style="color:#f92672">.</span>keras<span style="color:#f92672">.</span>layers<span style="color:#f92672">.</span>Conv2D(<span style="color:#ae81ff">256</span>, <span style="color:#ae81ff">3</span>, padding<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;same&#39;</span>, activation<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;relu&#39;</span>)(c3)
+</span></span><span style="display:flex;"><span>    p3 <span style="color:#f92672">=</span> tf<span style="color:#f92672">.</span>keras<span style="color:#f92672">.</span>layers<span style="color:#f92672">.</span>MaxPooling2D(pool_size<span style="color:#f92672">=</span><span style="color:#ae81ff">2</span>)(c3)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># 瓶颈层</span>
+</span></span><span style="display:flex;"><span>    c4 <span style="color:#f92672">=</span> tf<span style="color:#f92672">.</span>keras<span style="color:#f92672">.</span>layers<span style="color:#f92672">.</span>Conv2D(<span style="color:#ae81ff">512</span>, <span style="color:#ae81ff">3</span>, padding<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;same&#39;</span>, activation<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;relu&#39;</span>)(p3)
+</span></span><span style="display:flex;"><span>    c4 <span style="color:#f92672">=</span> tf<span style="color:#f92672">.</span>keras<span style="color:#f92672">.</span>layers<span style="color:#f92672">.</span>Conv2D(<span style="color:#ae81ff">512</span>, <span style="color:#ae81ff">3</span>, padding<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;same&#39;</span>, activation<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;relu&#39;</span>)(c4)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># 解码器</span>
+</span></span><span style="display:flex;"><span>    u5 <span style="color:#f92672">=</span> tf<span style="color:#f92672">.</span>keras<span style="color:#f92672">.</span>layers<span style="color:#f92672">.</span>Conv2DTranspose(<span style="color:#ae81ff">256</span>, <span style="color:#ae81ff">2</span>, strides<span style="color:#f92672">=</span><span style="color:#ae81ff">2</span>, padding<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;same&#39;</span>)(c4)
+</span></span><span style="display:flex;"><span>    u5 <span style="color:#f92672">=</span> tf<span style="color:#f92672">.</span>keras<span style="color:#f92672">.</span>layers<span style="color:#f92672">.</span>concatenate([u5, c3])
+</span></span><span style="display:flex;"><span>    c5 <span style="color:#f92672">=</span> tf<span style="color:#f92672">.</span>keras<span style="color:#f92672">.</span>layers<span style="color:#f92672">.</span>Conv2D(<span style="color:#ae81ff">256</span>, <span style="color:#ae81ff">3</span>, padding<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;same&#39;</span>, activation<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;relu&#39;</span>)(u5)
+</span></span><span style="display:flex;"><span>    c5 <span style="color:#f92672">=</span> tf<span style="color:#f92672">.</span>keras<span style="color:#f92672">.</span>layers<span style="color:#f92672">.</span>Conv2D(<span style="color:#ae81ff">256</span>, <span style="color:#ae81ff">3</span>, padding<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;same&#39;</span>, activation<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;relu&#39;</span>)(c5)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    u6 <span style="color:#f92672">=</span> tf<span style="color:#f92672">.</span>keras<span style="color:#f92672">.</span>layers<span style="color:#f92672">.</span>Conv2DTranspose(<span style="color:#ae81ff">128</span>, <span style="color:#ae81ff">2</span>, strides<span style="color:#f92672">=</span><span style="color:#ae81ff">2</span>, padding<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;same&#39;</span>)(c5)
+</span></span><span style="display:flex;"><span>    u6 <span style="color:#f92672">=</span> tf<span style="color:#f92672">.</span>keras<span style="color:#f92672">.</span>layers<span style="color:#f92672">.</span>concatenate([u6, c2])
+</span></span><span style="display:flex;"><span>    c6 <span style="color:#f92672">=</span> tf<span style="color:#f92672">.</span>keras<span style="color:#f92672">.</span>layers<span style="color:#f92672">.</span>Conv2D(<span style="color:#ae81ff">128</span>, <span style="color:#ae81ff">3</span>, padding<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;same&#39;</span>, activation<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;relu&#39;</span>)(u6)
+</span></span><span style="display:flex;"><span>    c6 <span style="color:#f92672">=</span> tf<span style="color:#f92672">.</span>keras<span style="color:#f92672">.</span>layers<span style="color:#f92672">.</span>Conv2D(<span style="color:#ae81ff">128</span>, <span style="color:#ae81ff">3</span>, padding<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;same&#39;</span>, activation<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;relu&#39;</span>)(c6)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    u7 <span style="color:#f92672">=</span> tf<span style="color:#f92672">.</span>keras<span style="color:#f92672">.</span>layers<span style="color:#f92672">.</span>Conv2DTranspose(<span style="color:#ae81ff">64</span>, <span style="color:#ae81ff">2</span>, strides<span style="color:#f92672">=</span><span style="color:#ae81ff">2</span>, padding<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;same&#39;</span>)(c6)
+</span></span><span style="display:flex;"><span>    u7 <span style="color:#f92672">=</span> tf<span style="color:#f92672">.</span>keras<span style="color:#f92672">.</span>layers<span style="color:#f92672">.</span>concatenate([u7, c1])
+</span></span><span style="display:flex;"><span>    c7 <span style="color:#f92672">=</span> tf<span style="color:#f92672">.</span>keras<span style="color:#f92672">.</span>layers<span style="color:#f92672">.</span>Conv2D(<span style="color:#ae81ff">64</span>, <span style="color:#ae81ff">3</span>, padding<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;same&#39;</span>, activation<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;relu&#39;</span>)(u7)
+</span></span><span style="display:flex;"><span>    c7 <span style="color:#f92672">=</span> tf<span style="color:#f92672">.</span>keras<span style="color:#f92672">.</span>layers<span style="color:#f92672">.</span>Conv2D(<span style="color:#ae81ff">64</span>, <span style="color:#ae81ff">3</span>, padding<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;same&#39;</span>, activation<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;relu&#39;</span>)(c7)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># 输出层</span>
+</span></span><span style="display:flex;"><span>    outputs <span style="color:#f92672">=</span> tf<span style="color:#f92672">.</span>keras<span style="color:#f92672">.</span>layers<span style="color:#f92672">.</span>Conv2D(num_classes, <span style="color:#ae81ff">1</span>, activation<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;sigmoid&#39;</span>)(c7)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> tf<span style="color:#f92672">.</span>keras<span style="color:#f92672">.</span>Model(inputs<span style="color:#f92672">=</span>inputs, outputs<span style="color:#f92672">=</span>outputs)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Dice损失函数</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">dice_loss</span>(y_true, y_pred):
+</span></span><span style="display:flex;"><span>    smooth <span style="color:#f92672">=</span> <span style="color:#ae81ff">1e-15</span>
+</span></span><span style="display:flex;"><span>    intersection <span style="color:#f92672">=</span> tf<span style="color:#f92672">.</span>reduce_sum(y_true <span style="color:#f92672">*</span> y_pred)
+</span></span><span style="display:flex;"><span>    union <span style="color:#f92672">=</span> tf<span style="color:#f92672">.</span>reduce_sum(y_true) <span style="color:#f92672">+</span> tf<span style="color:#f92672">.</span>reduce_sum(y_pred)
+</span></span><span style="display:flex;"><span>    dice <span style="color:#f92672">=</span> (<span style="color:#ae81ff">2.0</span> <span style="color:#f92672">*</span> intersection <span style="color:#f92672">+</span> smooth) <span style="color:#f92672">/</span> (union <span style="color:#f92672">+</span> smooth)
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> <span style="color:#ae81ff">1.0</span> <span style="color:#f92672">-</span> dice
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 创建和训练U-Net</span>
+</span></span><span style="display:flex;"><span>model <span style="color:#f92672">=</span> create_unet_model()
+</span></span><span style="display:flex;"><span>model<span style="color:#f92672">.</span>compile(
+</span></span><span style="display:flex;"><span>    optimizer<span style="color:#f92672">=</span>tf<span style="color:#f92672">.</span>keras<span style="color:#f92672">.</span>optimizers<span style="color:#f92672">.</span>Adam(learning_rate<span style="color:#f92672">=</span><span style="color:#ae81ff">0.001</span>),
+</span></span><span style="display:flex;"><span>    loss<span style="color:#f92672">=</span>dice_loss,
+</span></span><span style="display:flex;"><span>    metrics<span style="color:#f92672">=</span>[tf<span style="color:#f92672">.</span>keras<span style="color:#f92672">.</span>metrics<span style="color:#f92672">.</span>MeanIoU(num_classes<span style="color:#f92672">=</span><span style="color:#ae81ff">2</span>)]
+</span></span><span style="display:flex;"><span>)
+</span></span></code></pre></div><h2 id="-自然语言处理应用">📝 自然语言处理应用</h2>
+<h3 id="transformer模型实现">Transformer模型实现</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">TransformerModel</span>(tf<span style="color:#f92672">.</span>keras<span style="color:#f92672">.</span>Model):
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">__init__</span>(self, vocab_size, d_model, num_heads, num_layers, d_ff, max_len):
+</span></span><span style="display:flex;"><span>        super(TransformerModel, self)<span style="color:#f92672">.</span><span style="color:#a6e22e">__init__</span>()
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>embedding <span style="color:#f92672">=</span> tf<span style="color:#f92672">.</span>keras<span style="color:#f92672">.</span>layers<span style="color:#f92672">.</span>Embedding(vocab_size, d_model)
+</span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>pos_encoding <span style="color:#f92672">=</span> self<span style="color:#f92672">.</span>positional_encoding(max_len, d_model)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>encoder_layers <span style="color:#f92672">=</span> [
+</span></span><span style="display:flex;"><span>            self<span style="color:#f92672">.</span>encoder_layer(d_model, num_heads, d_ff) <span style="color:#66d9ef">for</span> _ <span style="color:#f92672">in</span> range(num_layers)
+</span></span><span style="display:flex;"><span>        ]
+</span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>decoder_layers <span style="color:#f92672">=</span> [
+</span></span><span style="display:flex;"><span>            self<span style="color:#f92672">.</span>decoder_layer(d_model, num_heads, d_ff) <span style="color:#66d9ef">for</span> _ <span style="color:#f92672">in</span> range(num_layers)
+</span></span><span style="display:flex;"><span>        ]
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>final_layer <span style="color:#f92672">=</span> tf<span style="color:#f92672">.</span>keras<span style="color:#f92672">.</span>layers<span style="color:#f92672">.</span>Dense(vocab_size)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">positional_encoding</span>(self, max_len, d_model):
+</span></span><span style="display:flex;"><span>        pos <span style="color:#f92672">=</span> tf<span style="color:#f92672">.</span>range(max_len, dtype<span style="color:#f92672">=</span>tf<span style="color:#f92672">.</span>float32)[:, tf<span style="color:#f92672">.</span>newaxis]
+</span></span><span style="display:flex;"><span>        i <span style="color:#f92672">=</span> tf<span style="color:#f92672">.</span>range(d_model, dtype<span style="color:#f92672">=</span>tf<span style="color:#f92672">.</span>float32)[tf<span style="color:#f92672">.</span>newaxis, :]
+</span></span><span style="display:flex;"><span>        angle_rates <span style="color:#f92672">=</span> <span style="color:#ae81ff">1</span> <span style="color:#f92672">/</span> tf<span style="color:#f92672">.</span>pow(<span style="color:#ae81ff">10000</span>, (<span style="color:#ae81ff">2</span> <span style="color:#f92672">*</span> (i <span style="color:#f92672">//</span> <span style="color:#ae81ff">2</span>)) <span style="color:#f92672">/</span> tf<span style="color:#f92672">.</span>cast(d_model, tf<span style="color:#f92672">.</span>float32))
+</span></span><span style="display:flex;"><span>        angle_rads <span style="color:#f92672">=</span> pos <span style="color:#f92672">*</span> angle_rates
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        angle_rads <span style="color:#f92672">=</span> tf<span style="color:#f92672">.</span>where(i <span style="color:#f92672">%</span> <span style="color:#ae81ff">2</span> <span style="color:#f92672">==</span> <span style="color:#ae81ff">0</span>, tf<span style="color:#f92672">.</span>sin(angle_rads), tf<span style="color:#f92672">.</span>cos(angle_rads))
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> angle_rads[tf<span style="color:#f92672">.</span>newaxis, <span style="color:#f92672">...</span>]
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">encoder_layer</span>(self, d_model, num_heads, d_ff):
+</span></span><span style="display:flex;"><span>        inputs <span style="color:#f92672">=</span> tf<span style="color:#f92672">.</span>keras<span style="color:#f92672">.</span>Input(shape<span style="color:#f92672">=</span>(<span style="color:#66d9ef">None</span>, d_model))
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e"># 多头注意力</span>
+</span></span><span style="display:flex;"><span>        attn_output <span style="color:#f92672">=</span> tf<span style="color:#f92672">.</span>keras<span style="color:#f92672">.</span>layers<span style="color:#f92672">.</span>MultiHeadAttention(num_heads, d_model)(inputs, inputs)
+</span></span><span style="display:flex;"><span>        attn_output <span style="color:#f92672">=</span> tf<span style="color:#f92672">.</span>keras<span style="color:#f92672">.</span>layers<span style="color:#f92672">.</span>Dropout(<span style="color:#ae81ff">0.1</span>)(attn_output)
+</span></span><span style="display:flex;"><span>        out1 <span style="color:#f92672">=</span> tf<span style="color:#f92672">.</span>keras<span style="color:#f92672">.</span>layers<span style="color:#f92672">.</span>LayerNormalization(epsilon<span style="color:#f92672">=</span><span style="color:#ae81ff">1e-6</span>)(inputs <span style="color:#f92672">+</span> attn_output)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e"># 前馈网络</span>
+</span></span><span style="display:flex;"><span>        ffn_output <span style="color:#f92672">=</span> tf<span style="color:#f92672">.</span>keras<span style="color:#f92672">.</span>layers<span style="color:#f92672">.</span>Dense(d_ff, activation<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;relu&#39;</span>)(out1)
+</span></span><span style="display:flex;"><span>        ffn_output <span style="color:#f92672">=</span> tf<span style="color:#f92672">.</span>keras<span style="color:#f92672">.</span>layers<span style="color:#f92672">.</span>Dense(d_model)(ffn_output)
+</span></span><span style="display:flex;"><span>        ffn_output <span style="color:#f92672">=</span> tf<span style="color:#f92672">.</span>keras<span style="color:#f92672">.</span>layers<span style="color:#f92672">.</span>Dropout(<span style="color:#ae81ff">0.1</span>)(ffn_output)
+</span></span><span style="display:flex;"><span>        out2 <span style="color:#f92672">=</span> tf<span style="color:#f92672">.</span>keras<span style="color:#f92672">.</span>layers<span style="color:#f92672">.</span>LayerNormalization(epsilon<span style="color:#f92672">=</span><span style="color:#ae81ff">1e-6</span>)(out1 <span style="color:#f92672">+</span> ffn_output)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> tf<span style="color:#f92672">.</span>keras<span style="color:#f92672">.</span>Model(inputs<span style="color:#f92672">=</span>inputs, outputs<span style="color:#f92672">=</span>out2)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">decoder_layer</span>(self, d_model, num_heads, d_ff):
+</span></span><span style="display:flex;"><span>        inputs <span style="color:#f92672">=</span> tf<span style="color:#f92672">.</span>keras<span style="color:#f92672">.</span>Input(shape<span style="color:#f92672">=</span>(<span style="color:#66d9ef">None</span>, d_model))
+</span></span><span style="display:flex;"><span>        enc_output <span style="color:#f92672">=</span> tf<span style="color:#f92672">.</span>keras<span style="color:#f92672">.</span>Input(shape<span style="color:#f92672">=</span>(<span style="color:#66d9ef">None</span>, d_model))
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e"># 掩码多头注意力</span>
+</span></span><span style="display:flex;"><span>        attn1 <span style="color:#f92672">=</span> tf<span style="color:#f92672">.</span>keras<span style="color:#f92672">.</span>layers<span style="color:#f92672">.</span>MultiHeadAttention(num_heads, d_model)(inputs, inputs)
+</span></span><span style="display:flex;"><span>        attn1 <span style="color:#f92672">=</span> tf<span style="color:#f92672">.</span>keras<span style="color:#f92672">.</span>layers<span style="color:#f92672">.</span>Dropout(<span style="color:#ae81ff">0.1</span>)(attn1)
+</span></span><span style="display:flex;"><span>        out1 <span style="color:#f92672">=</span> tf<span style="color:#f92672">.</span>keras<span style="color:#f92672">.</span>layers<span style="color:#f92672">.</span>LayerNormalization(epsilon<span style="color:#f92672">=</span><span style="color:#ae81ff">1e-6</span>)(inputs <span style="color:#f92672">+</span> attn1)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e"># 编码器-解码器注意力</span>
+</span></span><span style="display:flex;"><span>        attn2 <span style="color:#f92672">=</span> tf<span style="color:#f92672">.</span>keras<span style="color:#f92672">.</span>layers<span style="color:#f92672">.</span>MultiHeadAttention(num_heads, d_model)(out1, enc_output)
+</span></span><span style="display:flex;"><span>        attn2 <span style="color:#f92672">=</span> tf<span style="color:#f92672">.</span>keras<span style="color:#f92672">.</span>layers<span style="color:#f92672">.</span>Dropout(<span style="color:#ae81ff">0.1</span>)(attn2)
+</span></span><span style="display:flex;"><span>        out2 <span style="color:#f92672">=</span> tf<span style="color:#f92672">.</span>keras<span style="color:#f92672">.</span>layers<span style="color:#f92672">.</span>LayerNormalization(epsilon<span style="color:#f92672">=</span><span style="color:#ae81ff">1e-6</span>)(out1 <span style="color:#f92672">+</span> attn2)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e"># 前馈网络</span>
+</span></span><span style="display:flex;"><span>        ffn_output <span style="color:#f92672">=</span> tf<span style="color:#f92672">.</span>keras<span style="color:#f92672">.</span>layers<span style="color:#f92672">.</span>Dense(d_ff, activation<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;relu&#39;</span>)(out2)
+</span></span><span style="display:flex;"><span>        ffn_output <span style="color:#f92672">=</span> tf<span style="color:#f92672">.</span>keras<span style="color:#f92672">.</span>layers<span style="color:#f92672">.</span>Dense(d_model)(ffn_output)
+</span></span><span style="display:flex;"><span>        ffn_output <span style="color:#f92672">=</span> tf<span style="color:#f92672">.</span>keras<span style="color:#f92672">.</span>layers<span style="color:#f92672">.</span>Dropout(<span style="color:#ae81ff">0.1</span>)(ffn_output)
+</span></span><span style="display:flex;"><span>        out3 <span style="color:#f92672">=</span> tf<span style="color:#f92672">.</span>keras<span style="color:#f92672">.</span>layers<span style="color:#f92672">.</span>LayerNormalization(epsilon<span style="color:#f92672">=</span><span style="color:#ae81ff">1e-6</span>)(out2 <span style="color:#f92672">+</span> ffn_output)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> tf<span style="color:#f92672">.</span>keras<span style="color:#f92672">.</span>Model(inputs<span style="color:#f92672">=</span>[inputs, enc_output], outputs<span style="color:#f92672">=</span>out3)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">call</span>(self, inputs, targets<span style="color:#f92672">=</span><span style="color:#66d9ef">None</span>, training<span style="color:#f92672">=</span><span style="color:#66d9ef">False</span>):
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e"># 词嵌入 + 位置编码</span>
+</span></span><span style="display:flex;"><span>        x <span style="color:#f92672">=</span> self<span style="color:#f92672">.</span>embedding(inputs)
+</span></span><span style="display:flex;"><span>        x <span style="color:#f92672">*=</span> tf<span style="color:#f92672">.</span>math<span style="color:#f92672">.</span>sqrt(tf<span style="color:#f92672">.</span>cast(tf<span style="color:#f92672">.</span>shape(x)[<span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>], tf<span style="color:#f92672">.</span>float32))
+</span></span><span style="display:flex;"><span>        x <span style="color:#f92672">+=</span> self<span style="color:#f92672">.</span>pos_encoding[:, :tf<span style="color:#f92672">.</span>shape(x)[<span style="color:#ae81ff">1</span>], :]
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e"># 编码器</span>
+</span></span><span style="display:flex;"><span>        enc_output <span style="color:#f92672">=</span> x
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">for</span> layer <span style="color:#f92672">in</span> self<span style="color:#f92672">.</span>encoder_layers:
+</span></span><span style="display:flex;"><span>            enc_output <span style="color:#f92672">=</span> layer(enc_output)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e"># 解码器</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> targets <span style="color:#f92672">is</span> <span style="color:#f92672">not</span> <span style="color:#66d9ef">None</span>:
+</span></span><span style="display:flex;"><span>            y <span style="color:#f92672">=</span> self<span style="color:#f92672">.</span>embedding(targets)
+</span></span><span style="display:flex;"><span>            y <span style="color:#f92672">*=</span> tf<span style="color:#f92672">.</span>math<span style="color:#f92672">.</span>sqrt(tf<span style="color:#f92672">.</span>cast(tf<span style="color:#f92672">.</span>shape(y)[<span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>], tf<span style="color:#f92672">.</span>float32))
+</span></span><span style="display:flex;"><span>            y <span style="color:#f92672">+=</span> self<span style="color:#f92672">.</span>pos_encoding[:, :tf<span style="color:#f92672">.</span>shape(y)[<span style="color:#ae81ff">1</span>], :]
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">for</span> layer <span style="color:#f92672">in</span> self<span style="color:#f92672">.</span>decoder_layers:
+</span></span><span style="display:flex;"><span>                y <span style="color:#f92672">=</span> layer([y, enc_output])
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>            outputs <span style="color:#f92672">=</span> self<span style="color:#f92672">.</span>final_layer(y)
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">else</span>:
+</span></span><span style="display:flex;"><span>            outputs <span style="color:#f92672">=</span> <span style="color:#66d9ef">None</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> outputs, enc_output
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 创建Transformer模型</span>
+</span></span><span style="display:flex;"><span>model <span style="color:#f92672">=</span> TransformerModel(
+</span></span><span style="display:flex;"><span>    vocab_size<span style="color:#f92672">=</span><span style="color:#ae81ff">10000</span>,
+</span></span><span style="display:flex;"><span>    d_model<span style="color:#f92672">=</span><span style="color:#ae81ff">512</span>,
+</span></span><span style="display:flex;"><span>    num_heads<span style="color:#f92672">=</span><span style="color:#ae81ff">8</span>,
+</span></span><span style="display:flex;"><span>    num_layers<span style="color:#f92672">=</span><span style="color:#ae81ff">6</span>,
+</span></span><span style="display:flex;"><span>    d_ff<span style="color:#f92672">=</span><span style="color:#ae81ff">2048</span>,
+</span></span><span style="display:flex;"><span>    max_len<span style="color:#f92672">=</span><span style="color:#ae81ff">100</span>
+</span></span><span style="display:flex;"><span>)
+</span></span></code></pre></div><h3 id="bert预训练模型">BERT预训练模型</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">BERTModel</span>(tf<span style="color:#f92672">.</span>keras<span style="color:#f92672">.</span>Model):
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">__init__</span>(self, vocab_size, d_model, num_heads, num_layers, d_ff, max_len):
+</span></span><span style="display:flex;"><span>        super(BERTModel, self)<span style="color:#f92672">.</span><span style="color:#a6e22e">__init__</span>()
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>embedding <span style="color:#f92672">=</span> tf<span style="color:#f92672">.</span>keras<span style="color:#f92672">.</span>layers<span style="color:#f92672">.</span>Embedding(vocab_size, d_model)
+</span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>pos_encoding <span style="color:#f92672">=</span> self<span style="color:#f92672">.</span>positional_encoding(max_len, d_model)
+</span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>segment_embedding <span style="color:#f92672">=</span> tf<span style="color:#f92672">.</span>keras<span style="color:#f92672">.</span>layers<span style="color:#f92672">.</span>Embedding(<span style="color:#ae81ff">2</span>, d_model)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>transformer_layers <span style="color:#f92672">=</span> [
+</span></span><span style="display:flex;"><span>            self<span style="color:#f92672">.</span>transformer_layer(d_model, num_heads, d_ff) <span style="color:#66d9ef">for</span> _ <span style="color:#f92672">in</span> range(num_layers)
+</span></span><span style="display:flex;"><span>        ]
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>mlm_head <span style="color:#f92672">=</span> tf<span style="color:#f92672">.</span>keras<span style="color:#f92672">.</span>layers<span style="color:#f92672">.</span>Dense(vocab_size, activation<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;softmax&#39;</span>)
+</span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>nsp_head <span style="color:#f92672">=</span> tf<span style="color:#f92672">.</span>keras<span style="color:#f92672">.</span>layers<span style="color:#f92672">.</span>Dense(<span style="color:#ae81ff">2</span>, activation<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;softmax&#39;</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">transformer_layer</span>(self, d_model, num_heads, d_ff):
+</span></span><span style="display:flex;"><span>        inputs <span style="color:#f92672">=</span> tf<span style="color:#f92672">.</span>keras<span style="color:#f92672">.</span>Input(shape<span style="color:#f92672">=</span>(<span style="color:#66d9ef">None</span>, d_model))
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e"># 多头注意力</span>
+</span></span><span style="display:flex;"><span>        attn_output <span style="color:#f92672">=</span> tf<span style="color:#f92672">.</span>keras<span style="color:#f92672">.</span>layers<span style="color:#f92672">.</span>MultiHeadAttention(num_heads, d_model)(inputs, inputs)
+</span></span><span style="display:flex;"><span>        attn_output <span style="color:#f92672">=</span> tf<span style="color:#f92672">.</span>keras<span style="color:#f92672">.</span>layers<span style="color:#f92672">.</span>Dropout(<span style="color:#ae81ff">0.1</span>)(attn_output)
+</span></span><span style="display:flex;"><span>        out1 <span style="color:#f92672">=</span> tf<span style="color:#f92672">.</span>keras<span style="color:#f92672">.</span>layers<span style="color:#f92672">.</span>LayerNormalization(epsilon<span style="color:#f92672">=</span><span style="color:#ae81ff">1e-6</span>)(inputs <span style="color:#f92672">+</span> attn_output)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e"># 前馈网络</span>
+</span></span><span style="display:flex;"><span>        ffn_output <span style="color:#f92672">=</span> tf<span style="color:#f92672">.</span>keras<span style="color:#f92672">.</span>layers<span style="color:#f92672">.</span>Dense(d_ff, activation<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;relu&#39;</span>)(out1)
+</span></span><span style="display:flex;"><span>        ffn_output <span style="color:#f92672">=</span> tf<span style="color:#f92672">.</span>keras<span style="color:#f92672">.</span>layers<span style="color:#f92672">.</span>Dense(d_model)(ffn_output)
+</span></span><span style="display:flex;"><span>        ffn_output <span style="color:#f92672">=</span> tf<span style="color:#f92672">.</span>keras<span style="color:#f92672">.</span>layers<span style="color:#f92672">.</span>Dropout(<span style="color:#ae81ff">0.1</span>)(ffn_output)
+</span></span><span style="display:flex;"><span>        out2 <span style="color:#f92672">=</span> tf<span style="color:#f92672">.</span>keras<span style="color:#f92672">.</span>layers<span style="color:#f92672">.</span>LayerNormalization(epsilon<span style="color:#f92672">=</span><span style="color:#ae81ff">1e-6</span>)(out1 <span style="color:#f92672">+</span> ffn_output)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> tf<span style="color:#f92672">.</span>keras<span style="color:#f92672">.</span>Model(inputs<span style="color:#f92672">=</span>inputs, outputs<span style="color:#f92672">=</span>out2)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">call</span>(self, inputs, segment_ids<span style="color:#f92672">=</span><span style="color:#66d9ef">None</span>, masked_positions<span style="color:#f92672">=</span><span style="color:#66d9ef">None</span>):
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e"># 词嵌入 + 位置编码 + 段编码</span>
+</span></span><span style="display:flex;"><span>        x <span style="color:#f92672">=</span> self<span style="color:#f92672">.</span>embedding(inputs)
+</span></span><span style="display:flex;"><span>        x <span style="color:#f92672">+=</span> self<span style="color:#f92672">.</span>pos_encoding[:, :tf<span style="color:#f92672">.</span>shape(x)[<span style="color:#ae81ff">1</span>], :]
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> segment_ids <span style="color:#f92672">is</span> <span style="color:#f92672">not</span> <span style="color:#66d9ef">None</span>:
+</span></span><span style="display:flex;"><span>            x <span style="color:#f92672">+=</span> self<span style="color:#f92672">.</span>segment_embedding(segment_ids)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e"># Transformer层</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">for</span> layer <span style="color:#f92672">in</span> self<span style="color:#f92672">.</span>transformer_layers:
+</span></span><span style="display:flex;"><span>            x <span style="color:#f92672">=</span> layer(x)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e"># 掩码语言模型预测</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> masked_positions <span style="color:#f92672">is</span> <span style="color:#f92672">not</span> <span style="color:#66d9ef">None</span>:
+</span></span><span style="display:flex;"><span>            masked_outputs <span style="color:#f92672">=</span> tf<span style="color:#f92672">.</span>gather(x, masked_positions, axis<span style="color:#f92672">=</span><span style="color:#ae81ff">1</span>, batch_dims<span style="color:#f92672">=</span><span style="color:#ae81ff">1</span>)
+</span></span><span style="display:flex;"><span>            mlm_logits <span style="color:#f92672">=</span> self<span style="color:#f92672">.</span>mlm_head(masked_outputs)
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">else</span>:
+</span></span><span style="display:flex;"><span>            mlm_logits <span style="color:#f92672">=</span> <span style="color:#66d9ef">None</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e"># 下一句预测</span>
+</span></span><span style="display:flex;"><span>        cls_token <span style="color:#f92672">=</span> x[:, <span style="color:#ae81ff">0</span>, :]  <span style="color:#75715e"># [CLS] token</span>
+</span></span><span style="display:flex;"><span>        nsp_logits <span style="color:#f92672">=</span> self<span style="color:#f92672">.</span>nsp_head(cls_token)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> mlm_logits, nsp_logits
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 创建BERT模型</span>
+</span></span><span style="display:flex;"><span>bert_model <span style="color:#f92672">=</span> BERTModel(
+</span></span><span style="display:flex;"><span>    vocab_size<span style="color:#f92672">=</span><span style="color:#ae81ff">30000</span>,
+</span></span><span style="display:flex;"><span>    d_model<span style="color:#f92672">=</span><span style="color:#ae81ff">768</span>,
+</span></span><span style="display:flex;"><span>    num_heads<span style="color:#f92672">=</span><span style="color:#ae81ff">12</span>,
+</span></span><span style="display:flex;"><span>    num_layers<span style="color:#f92672">=</span><span style="color:#ae81ff">12</span>,
+</span></span><span style="display:flex;"><span>    d_ff<span style="color:#f92672">=</span><span style="color:#ae81ff">3072</span>,
+</span></span><span style="display:flex;"><span>    max_len<span style="color:#f92672">=</span><span style="color:#ae81ff">512</span>
+</span></span><span style="display:flex;"><span>)
+</span></span></code></pre></div><h2 id="-强化学习应用">🎮 强化学习应用</h2>
+<h3 id="dqn实现">DQN实现</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#f92672">import</span> tensorflow <span style="color:#66d9ef">as</span> tf
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> numpy <span style="color:#66d9ef">as</span> np
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> random
+</span></span><span style="display:flex;"><span><span style="color:#f92672">from</span> collections <span style="color:#f92672">import</span> deque
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">DQNAgent</span>:
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">__init__</span>(self, state_size, action_size):
+</span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>state_size <span style="color:#f92672">=</span> state_size
+</span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>action_size <span style="color:#f92672">=</span> action_size
+</span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>memory <span style="color:#f92672">=</span> deque(maxlen<span style="color:#f92672">=</span><span style="color:#ae81ff">2000</span>)
+</span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>gamma <span style="color:#f92672">=</span> <span style="color:#ae81ff">0.95</span>  <span style="color:#75715e"># 折扣因子</span>
+</span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>epsilon <span style="color:#f92672">=</span> <span style="color:#ae81ff">1.0</span>  <span style="color:#75715e"># 探索率</span>
+</span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>epsilon_min <span style="color:#f92672">=</span> <span style="color:#ae81ff">0.01</span>
+</span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>epsilon_decay <span style="color:#f92672">=</span> <span style="color:#ae81ff">0.995</span>
+</span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>learning_rate <span style="color:#f92672">=</span> <span style="color:#ae81ff">0.001</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>model <span style="color:#f92672">=</span> self<span style="color:#f92672">.</span>_build_model()
+</span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>target_model <span style="color:#f92672">=</span> self<span style="color:#f92672">.</span>_build_model()
+</span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>update_target_model()
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">_build_model</span>(self):
+</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#34;&#34;&#34;构建DQN网络&#34;&#34;&#34;</span>
+</span></span><span style="display:flex;"><span>        model <span style="color:#f92672">=</span> tf<span style="color:#f92672">.</span>keras<span style="color:#f92672">.</span>Sequential([
+</span></span><span style="display:flex;"><span>            tf<span style="color:#f92672">.</span>keras<span style="color:#f92672">.</span>layers<span style="color:#f92672">.</span>Dense(<span style="color:#ae81ff">24</span>, input_dim<span style="color:#f92672">=</span>self<span style="color:#f92672">.</span>state_size, activation<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;relu&#39;</span>),
+</span></span><span style="display:flex;"><span>            tf<span style="color:#f92672">.</span>keras<span style="color:#f92672">.</span>layers<span style="color:#f92672">.</span>Dense(<span style="color:#ae81ff">24</span>, activation<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;relu&#39;</span>),
+</span></span><span style="display:flex;"><span>            tf<span style="color:#f92672">.</span>keras<span style="color:#f92672">.</span>layers<span style="color:#f92672">.</span>Dense(self<span style="color:#f92672">.</span>action_size, activation<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;linear&#39;</span>)
+</span></span><span style="display:flex;"><span>        ])
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        model<span style="color:#f92672">.</span>compile(
+</span></span><span style="display:flex;"><span>            optimizer<span style="color:#f92672">=</span>tf<span style="color:#f92672">.</span>keras<span style="color:#f92672">.</span>optimizers<span style="color:#f92672">.</span>Adam(learning_rate<span style="color:#f92672">=</span>self<span style="color:#f92672">.</span>learning_rate),
+</span></span><span style="display:flex;"><span>            loss<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;mse&#39;</span>
+</span></span><span style="display:flex;"><span>        )
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> model
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">update_target_model</span>(self):
+</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#34;&#34;&#34;更新目标网络&#34;&#34;&#34;</span>
+</span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>target_model<span style="color:#f92672">.</span>set_weights(self<span style="color:#f92672">.</span>model<span style="color:#f92672">.</span>get_weights())
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">remember</span>(self, state, action, reward, next_state, done):
+</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#34;&#34;&#34;存储经验&#34;&#34;&#34;</span>
+</span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>memory<span style="color:#f92672">.</span>append((state, action, reward, next_state, done))
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">act</span>(self, state):
+</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#34;&#34;&#34;选择动作&#34;&#34;&#34;</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> np<span style="color:#f92672">.</span>random<span style="color:#f92672">.</span>rand() <span style="color:#f92672">&lt;=</span> self<span style="color:#f92672">.</span>epsilon:
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">return</span> random<span style="color:#f92672">.</span>randrange(self<span style="color:#f92672">.</span>action_size)  <span style="color:#75715e"># 随机探索</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        act_values <span style="color:#f92672">=</span> self<span style="color:#f92672">.</span>model<span style="color:#f92672">.</span>predict(state, verbose<span style="color:#f92672">=</span><span style="color:#ae81ff">0</span>)
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> np<span style="color:#f92672">.</span>argmax(act_values[<span style="color:#ae81ff">0</span>])  <span style="color:#75715e"># 利用</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">replay</span>(self, batch_size):
+</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#34;&#34;&#34;经验回放&#34;&#34;&#34;</span>
+</span></span><span style="display:flex;"><span>        minibatch <span style="color:#f92672">=</span> random<span style="color:#f92672">.</span>sample(self<span style="color:#f92672">.</span>memory, batch_size)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">for</span> state, action, reward, next_state, done <span style="color:#f92672">in</span> minibatch:
+</span></span><span style="display:flex;"><span>            target <span style="color:#f92672">=</span> self<span style="color:#f92672">.</span>model<span style="color:#f92672">.</span>predict(state, verbose<span style="color:#f92672">=</span><span style="color:#ae81ff">0</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">if</span> done:
+</span></span><span style="display:flex;"><span>                target[<span style="color:#ae81ff">0</span>][action] <span style="color:#f92672">=</span> reward
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">else</span>:
+</span></span><span style="display:flex;"><span>                t <span style="color:#f92672">=</span> self<span style="color:#f92672">.</span>target_model<span style="color:#f92672">.</span>predict(next_state, verbose<span style="color:#f92672">=</span><span style="color:#ae81ff">0</span>)
+</span></span><span style="display:flex;"><span>                target[<span style="color:#ae81ff">0</span>][action] <span style="color:#f92672">=</span> reward <span style="color:#f92672">+</span> self<span style="color:#f92672">.</span>gamma <span style="color:#f92672">*</span> np<span style="color:#f92672">.</span>amax(t[<span style="color:#ae81ff">0</span>])
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>            self<span style="color:#f92672">.</span>model<span style="color:#f92672">.</span>fit(state, target, epochs<span style="color:#f92672">=</span><span style="color:#ae81ff">1</span>, verbose<span style="color:#f92672">=</span><span style="color:#ae81ff">0</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> self<span style="color:#f92672">.</span>epsilon <span style="color:#f92672">&gt;</span> self<span style="color:#f92672">.</span>epsilon_min:
+</span></span><span style="display:flex;"><span>            self<span style="color:#f92672">.</span>epsilon <span style="color:#f92672">*=</span> self<span style="color:#f92672">.</span>epsilon_decay
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 使用DQN代理</span>
+</span></span><span style="display:flex;"><span>env <span style="color:#f92672">=</span> gym<span style="color:#f92672">.</span>make(<span style="color:#e6db74">&#39;CartPole-v1&#39;</span>)
+</span></span><span style="display:flex;"><span>state_size <span style="color:#f92672">=</span> env<span style="color:#f92672">.</span>observation_space<span style="color:#f92672">.</span>shape[<span style="color:#ae81ff">0</span>]
+</span></span><span style="display:flex;"><span>action_size <span style="color:#f92672">=</span> env<span style="color:#f92672">.</span>action_space<span style="color:#f92672">.</span>n
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>agent <span style="color:#f92672">=</span> DQNAgent(state_size, action_size)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 训练DQN</span>
+</span></span><span style="display:flex;"><span>episodes <span style="color:#f92672">=</span> <span style="color:#ae81ff">1000</span>
+</span></span><span style="display:flex;"><span>batch_size <span style="color:#f92672">=</span> <span style="color:#ae81ff">32</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">for</span> e <span style="color:#f92672">in</span> range(episodes):
+</span></span><span style="display:flex;"><span>    state <span style="color:#f92672">=</span> env<span style="color:#f92672">.</span>reset()
+</span></span><span style="display:flex;"><span>    state <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>reshape(state, [<span style="color:#ae81ff">1</span>, state_size])
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">for</span> time <span style="color:#f92672">in</span> range(<span style="color:#ae81ff">500</span>):
+</span></span><span style="display:flex;"><span>        action <span style="color:#f92672">=</span> agent<span style="color:#f92672">.</span>act(state)
+</span></span><span style="display:flex;"><span>        next_state, reward, done, _ <span style="color:#f92672">=</span> env<span style="color:#f92672">.</span>step(action)
+</span></span><span style="display:flex;"><span>        next_state <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>reshape(next_state, [<span style="color:#ae81ff">1</span>, state_size])
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        agent<span style="color:#f92672">.</span>remember(state, action, reward, next_state, done)
+</span></span><span style="display:flex;"><span>        state <span style="color:#f92672">=</span> next_state
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> done:
+</span></span><span style="display:flex;"><span>            agent<span style="color:#f92672">.</span>update_target_model()
+</span></span><span style="display:flex;"><span>            print(<span style="color:#e6db74">f</span><span style="color:#e6db74">&#34;Episode: </span><span style="color:#e6db74">{</span>e<span style="color:#e6db74">}</span><span style="color:#e6db74">/</span><span style="color:#e6db74">{</span>episodes<span style="color:#e6db74">}</span><span style="color:#e6db74">, Score: </span><span style="color:#e6db74">{</span>time<span style="color:#e6db74">}</span><span style="color:#e6db74">&#34;</span>)
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">break</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> len(agent<span style="color:#f92672">.</span>memory) <span style="color:#f92672">&gt;</span> batch_size:
+</span></span><span style="display:flex;"><span>            agent<span style="color:#f92672">.</span>replay(batch_size)
+</span></span></code></pre></div><h3 id="ppo实现">PPO实现</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">PPOAgent</span>:
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">__init__</span>(self, state_size, action_size, clip_ratio<span style="color:#f92672">=</span><span style="color:#ae81ff">0.2</span>):
+</span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>state_size <span style="color:#f92672">=</span> state_size
+</span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>action_size <span style="color:#f92672">=</span> action_size
+</span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>clip_ratio <span style="color:#f92672">=</span> clip_ratio
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e"># Actor网络</span>
+</span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>actor <span style="color:#f92672">=</span> self<span style="color:#f92672">.</span>_build_actor()
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e"># Critic网络</span>
+</span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>critic <span style="color:#f92672">=</span> self<span style="color:#f92672">.</span>_build_critic()
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>actor_optimizer <span style="color:#f92672">=</span> tf<span style="color:#f92672">.</span>keras<span style="color:#f92672">.</span>optimizers<span style="color:#f92672">.</span>Adam(learning_rate<span style="color:#f92672">=</span><span style="color:#ae81ff">0.0003</span>)
+</span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>critic_optimizer <span style="color:#f92672">=</span> tf<span style="color:#f92672">.</span>keras<span style="color:#f92672">.</span>optimizers<span style="color:#f92672">.</span>Adam(learning_rate<span style="color:#f92672">=</span><span style="color:#ae81ff">0.001</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">_build_actor</span>(self):
+</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#34;&#34;&#34;构建策略网络&#34;&#34;&#34;</span>
+</span></span><span style="display:flex;"><span>        inputs <span style="color:#f92672">=</span> tf<span style="color:#f92672">.</span>keras<span style="color:#f92672">.</span>Input(shape<span style="color:#f92672">=</span>(self<span style="color:#f92672">.</span>state_size,))
+</span></span><span style="display:flex;"><span>        x <span style="color:#f92672">=</span> tf<span style="color:#f92672">.</span>keras<span style="color:#f92672">.</span>layers<span style="color:#f92672">.</span>Dense(<span style="color:#ae81ff">64</span>, activation<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;relu&#39;</span>)(inputs)
+</span></span><span style="display:flex;"><span>        x <span style="color:#f92672">=</span> tf<span style="color:#f92672">.</span>keras<span style="color:#f92672">.</span>layers<span style="color:#f92672">.</span>Dense(<span style="color:#ae81ff">64</span>, activation<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;relu&#39;</span>)(x)
+</span></span><span style="display:flex;"><span>        outputs <span style="color:#f92672">=</span> tf<span style="color:#f92672">.</span>keras<span style="color:#f92672">.</span>layers<span style="color:#f92672">.</span>Dense(self<span style="color:#f92672">.</span>action_size, activation<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;softmax&#39;</span>)(x)
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> tf<span style="color:#f92672">.</span>keras<span style="color:#f92672">.</span>Model(inputs<span style="color:#f92672">=</span>inputs, outputs<span style="color:#f92672">=</span>outputs)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">_build_critic</span>(self):
+</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#34;&#34;&#34;构建价值网络&#34;&#34;&#34;</span>
+</span></span><span style="display:flex;"><span>        inputs <span style="color:#f92672">=</span> tf<span style="color:#f92672">.</span>keras<span style="color:#f92672">.</span>Input(shape<span style="color:#f92672">=</span>(self<span style="color:#f92672">.</span>state_size,))
+</span></span><span style="display:flex;"><span>        x <span style="color:#f92672">=</span> tf<span style="color:#f92672">.</span>keras<span style="color:#f92672">.</span>layers<span style="color:#f92672">.</span>Dense(<span style="color:#ae81ff">64</span>, activation<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;relu&#39;</span>)(inputs)
+</span></span><span style="display:flex;"><span>        x <span style="color:#f92672">=</span> tf<span style="color:#f92672">.</span>keras<span style="color:#f92672">.</span>layers<span style="color:#f92672">.</span>Dense(<span style="color:#ae81ff">64</span>, activation<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;relu&#39;</span>)(x)
+</span></span><span style="display:flex;"><span>        outputs <span style="color:#f92672">=</span> tf<span style="color:#f92672">.</span>keras<span style="color:#f92672">.</span>layers<span style="color:#f92672">.</span>Dense(<span style="color:#ae81ff">1</span>)(x)
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> tf<span style="color:#f92672">.</span>keras<span style="color:#f92672">.</span>Model(inputs<span style="color:#f92672">=</span>inputs, outputs<span style="color:#f92672">=</span>outputs)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">get_action</span>(self, state):
+</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#34;&#34;&#34;获取动作&#34;&#34;&#34;</span>
+</span></span><span style="display:flex;"><span>        state <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>reshape(state, [<span style="color:#ae81ff">1</span>, self<span style="color:#f92672">.</span>state_size])
+</span></span><span style="display:flex;"><span>        probs <span style="color:#f92672">=</span> self<span style="color:#f92672">.</span>actor<span style="color:#f92672">.</span>predict(state, verbose<span style="color:#f92672">=</span><span style="color:#ae81ff">0</span>)[<span style="color:#ae81ff">0</span>]
+</span></span><span style="display:flex;"><span>        action <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>random<span style="color:#f92672">.</span>choice(self<span style="color:#f92672">.</span>action_size, p<span style="color:#f92672">=</span>probs)
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> action, probs[action]
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">compute_advantages</span>(self, rewards, values, next_values, dones):
+</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#34;&#34;&#34;计算优势函数&#34;&#34;&#34;</span>
+</span></span><span style="display:flex;"><span>        advantages <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>zeros_like(rewards)
+</span></span><span style="display:flex;"><span>        last_gae_lam <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">for</span> t <span style="color:#f92672">in</span> reversed(range(len(rewards))):
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">if</span> t <span style="color:#f92672">==</span> len(rewards) <span style="color:#f92672">-</span> <span style="color:#ae81ff">1</span>:
+</span></span><span style="display:flex;"><span>                next_non_terminal <span style="color:#f92672">=</span> <span style="color:#ae81ff">1.0</span> <span style="color:#f92672">-</span> dones[t]
+</span></span><span style="display:flex;"><span>                next_values <span style="color:#f92672">=</span> next_values[t]
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">else</span>:
+</span></span><span style="display:flex;"><span>                next_non_terminal <span style="color:#f92672">=</span> <span style="color:#ae81ff">1.0</span> <span style="color:#f92672">-</span> dones[t]
+</span></span><span style="display:flex;"><span>                next_values <span style="color:#f92672">=</span> values[t <span style="color:#f92672">+</span> <span style="color:#ae81ff">1</span>]
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>            delta <span style="color:#f92672">=</span> rewards[t] <span style="color:#f92672">+</span> <span style="color:#ae81ff">0.99</span> <span style="color:#f92672">*</span> next_values <span style="color:#f92672">*</span> next_non_terminal <span style="color:#f92672">-</span> values[t]
+</span></span><span style="display:flex;"><span>            advantages[t] <span style="color:#f92672">=</span> last_gae_lam <span style="color:#f92672">=</span> delta <span style="color:#f92672">+</span> <span style="color:#ae81ff">0.99</span> <span style="color:#f92672">*</span> <span style="color:#ae81ff">0.95</span> <span style="color:#f92672">*</span> next_non_terminal <span style="color:#f92672">*</span> last_gae_lam
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> advantages
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">train</span>(self, states, actions, old_probs, advantages, returns):
+</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#34;&#34;&#34;PPO训练&#34;&#34;&#34;</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">with</span> tf<span style="color:#f92672">.</span>GradientTape() <span style="color:#66d9ef">as</span> tape:
+</span></span><span style="display:flex;"><span>            probs <span style="color:#f92672">=</span> self<span style="color:#f92672">.</span>actor(states)
+</span></span><span style="display:flex;"><span>            values <span style="color:#f92672">=</span> self<span style="color:#f92672">.</span>critic(states)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>            <span style="color:#75715e"># 计算策略损失</span>
+</span></span><span style="display:flex;"><span>            new_probs <span style="color:#f92672">=</span> tf<span style="color:#f92672">.</span>gather(probs, actions, axis<span style="color:#f92672">=</span><span style="color:#ae81ff">1</span>, batch_dims<span style="color:#f92672">=</span><span style="color:#ae81ff">1</span>)
+</span></span><span style="display:flex;"><span>            ratio <span style="color:#f92672">=</span> new_probs <span style="color:#f92672">/</span> old_probs
+</span></span><span style="display:flex;"><span>            clipped_ratio <span style="color:#f92672">=</span> tf<span style="color:#f92672">.</span>clip_by_value(ratio, <span style="color:#ae81ff">1</span> <span style="color:#f92672">-</span> self<span style="color:#f92672">.</span>clip_ratio, <span style="color:#ae81ff">1</span> <span style="color:#f92672">+</span> self<span style="color:#f92672">.</span>clip_ratio)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>            policy_loss <span style="color:#f92672">=</span> <span style="color:#f92672">-</span>tf<span style="color:#f92672">.</span>reduce_mean(tf<span style="color:#f92672">.</span>minimum(ratio <span style="color:#f92672">*</span> advantages, clipped_ratio <span style="color:#f92672">*</span> advantages))
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>            <span style="color:#75715e"># 计算价值损失</span>
+</span></span><span style="display:flex;"><span>            value_loss <span style="color:#f92672">=</span> tf<span style="color:#f92672">.</span>reduce_mean(tf<span style="color:#f92672">.</span>square(returns <span style="color:#f92672">-</span> values))
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>            <span style="color:#75715e"># 总损失</span>
+</span></span><span style="display:flex;"><span>            loss <span style="color:#f92672">=</span> policy_loss <span style="color:#f92672">+</span> <span style="color:#ae81ff">0.5</span> <span style="color:#f92672">*</span> value_loss
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e"># 更新Actor</span>
+</span></span><span style="display:flex;"><span>        actor_grads <span style="color:#f92672">=</span> tape<span style="color:#f92672">.</span>gradient(policy_loss, self<span style="color:#f92672">.</span>actor<span style="color:#f92672">.</span>trainable_variables)
+</span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>actor_optimizer<span style="color:#f92672">.</span>apply_gradients(zip(actor_grads, self<span style="color:#f92672">.</span>actor<span style="color:#f92672">.</span>trainable_variables))
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e"># 更新Critic</span>
+</span></span><span style="display:flex;"><span>        critic_grads <span style="color:#f92672">=</span> tape<span style="color:#f92672">.</span>gradient(value_loss, self<span style="color:#f92672">.</span>critic<span style="color:#f92672">.</span>trainable_variables)
+</span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>critic_optimizer<span style="color:#f92672">.</span>apply_gradients(zip(critic_grads, self<span style="color:#f92672">.</span>critic<span style="color:#f92672">.</span>trainable_variables))
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> loss
+</span></span></code></pre></div><h2 id="-模型部署">🚀 模型部署</h2>
+<h3 id="tensorflow-serving">TensorFlow Serving</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#75715e"># 保存模型用于Serving</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> tensorflow <span style="color:#66d9ef">as</span> tf
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 创建模型</span>
+</span></span><span style="display:flex;"><span>model <span style="color:#f92672">=</span> tf<span style="color:#f92672">.</span>keras<span style="color:#f92672">.</span>Sequential([
+</span></span><span style="display:flex;"><span>    tf<span style="color:#f92672">.</span>keras<span style="color:#f92672">.</span>layers<span style="color:#f92672">.</span>Dense(<span style="color:#ae81ff">64</span>, activation<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;relu&#39;</span>, input_shape<span style="color:#f92672">=</span>(<span style="color:#ae81ff">10</span>,)),
+</span></span><span style="display:flex;"><span>    tf<span style="color:#f92672">.</span>keras<span style="color:#f92672">.</span>layers<span style="color:#f92672">.</span>Dense(<span style="color:#ae81ff">1</span>, activation<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;sigmoid&#39;</span>)
+</span></span><span style="display:flex;"><span>])
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 训练模型（示例）</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># model.fit(...)</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 保存模型</span>
+</span></span><span style="display:flex;"><span>model<span style="color:#f92672">.</span>save(<span style="color:#e6db74">&#39;model/1&#39;</span>)  <span style="color:#75715e"># TensorFlow Serving格式</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 启动TensorFlow Serving</span>
+</span></span><span style="display:flex;"><span><span style="color:#e6db74">&#34;&#34;&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">tensorflow_model_server </span><span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    --rest_api_port=8501 </span><span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    --model_name=my_model </span><span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    --model_base_path=/path/to/model
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">&#34;&#34;&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 使用REST API进行预测</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> requests
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> json
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>data <span style="color:#f92672">=</span> json<span style="color:#f92672">.</span>dumps({
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#34;signature_name&#34;</span>: <span style="color:#e6db74">&#34;serving_default&#34;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#34;inputs&#34;</span>: {
+</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#34;dense_input&#34;</span>: [[<span style="color:#ae81ff">1.0</span>, <span style="color:#ae81ff">2.0</span>, <span style="color:#ae81ff">3.0</span>, <span style="color:#ae81ff">4.0</span>, <span style="color:#ae81ff">5.0</span>, <span style="color:#ae81ff">6.0</span>, <span style="color:#ae81ff">7.0</span>, <span style="color:#ae81ff">8.0</span>, <span style="color:#ae81ff">9.0</span>, <span style="color:#ae81ff">10.0</span>]]
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>})
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>headers <span style="color:#f92672">=</span> {<span style="color:#e6db74">&#34;content-type&#34;</span>: <span style="color:#e6db74">&#34;application/json&#34;</span>}
+</span></span><span style="display:flex;"><span>response <span style="color:#f92672">=</span> requests<span style="color:#f92672">.</span>post(<span style="color:#e6db74">&#39;http://localhost:8501/v1/models/my_model:predict&#39;</span>, data<span style="color:#f92672">=</span>data, headers<span style="color:#f92672">=</span>headers)
+</span></span><span style="display:flex;"><span>print(response<span style="color:#f92672">.</span>json())
+</span></span></code></pre></div><h3 id="tensorflow-lite转换和部署">TensorFlow Lite转换和部署</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#75715e"># 转换为TensorFlow Lite</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">convert_to_tflite</span>(model, quantization<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;float32&#39;</span>):
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#34;&#34;&#34;转换为TensorFlow Lite格式&#34;&#34;&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># 创建转换器</span>
+</span></span><span style="display:flex;"><span>    converter <span style="color:#f92672">=</span> tf<span style="color:#f92672">.</span>lite<span style="color:#f92672">.</span>TFLiteConverter<span style="color:#f92672">.</span>from_keras_model(model)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> quantization <span style="color:#f92672">==</span> <span style="color:#e6db74">&#39;float16&#39;</span>:
+</span></span><span style="display:flex;"><span>        converter<span style="color:#f92672">.</span>optimizations <span style="color:#f92672">=</span> [tf<span style="color:#f92672">.</span>lite<span style="color:#f92672">.</span>Optimize<span style="color:#f92672">.</span>DEFAULT]
+</span></span><span style="display:flex;"><span>        converter<span style="color:#f92672">.</span>target_spec<span style="color:#f92672">.</span>supported_types <span style="color:#f92672">=</span> [tf<span style="color:#f92672">.</span>float16]
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">elif</span> quantization <span style="color:#f92672">==</span> <span style="color:#e6db74">&#39;int8&#39;</span>:
+</span></span><span style="display:flex;"><span>        converter<span style="color:#f92672">.</span>optimizations <span style="color:#f92672">=</span> [tf<span style="color:#f92672">.</span>lite<span style="color:#f92672">.</span>Optimize<span style="color:#f92672">.</span>DEFAULT]
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e"># 提供代表性数据集用于量化</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">representative_data_gen</span>():
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">for</span> input_value <span style="color:#f92672">in</span> tf<span style="color:#f92672">.</span>data<span style="color:#f92672">.</span>Dataset<span style="color:#f92672">.</span>from_tensor_slices(x_train)<span style="color:#f92672">.</span>batch(<span style="color:#ae81ff">1</span>)<span style="color:#f92672">.</span>take(<span style="color:#ae81ff">100</span>):
+</span></span><span style="display:flex;"><span>                <span style="color:#66d9ef">yield</span> [input_value]
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        converter<span style="color:#f92672">.</span>representative_dataset <span style="color:#f92672">=</span> representative_data_gen
+</span></span><span style="display:flex;"><span>        converter<span style="color:#f92672">.</span>target_spec<span style="color:#f92672">.</span>supported_ops <span style="color:#f92672">=</span> [tf<span style="color:#f92672">.</span>lite<span style="color:#f92672">.</span>OpsSet<span style="color:#f92672">.</span>TFLITE_BUILTINS_INT8]
+</span></span><span style="display:flex;"><span>        converter<span style="color:#f92672">.</span>inference_input_type <span style="color:#f92672">=</span> tf<span style="color:#f92672">.</span>int8
+</span></span><span style="display:flex;"><span>        converter<span style="color:#f92672">.</span>inference_output_type <span style="color:#f92672">=</span> tf<span style="color:#f92672">.</span>int8
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># 转换模型</span>
+</span></span><span style="display:flex;"><span>    tflite_model <span style="color:#f92672">=</span> converter<span style="color:#f92672">.</span>convert()
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># 保存模型</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">with</span> open(<span style="color:#e6db74">f</span><span style="color:#e6db74">&#39;model_</span><span style="color:#e6db74">{</span>quantization<span style="color:#e6db74">}</span><span style="color:#e6db74">.tflite&#39;</span>, <span style="color:#e6db74">&#39;wb&#39;</span>) <span style="color:#66d9ef">as</span> f:
+</span></span><span style="display:flex;"><span>        f<span style="color:#f92672">.</span>write(tflite_model)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> tflite_model
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 转换不同精度版本</span>
+</span></span><span style="display:flex;"><span>model <span style="color:#f92672">=</span> create_model()  <span style="color:#75715e"># 假设的模型创建函数</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 转换为不同精度</span>
+</span></span><span style="display:flex;"><span>convert_to_tflite(model, <span style="color:#e6db74">&#39;float32&#39;</span>)
+</span></span><span style="display:flex;"><span>convert_to_tflite(model, <span style="color:#e6db74">&#39;float16&#39;</span>)
+</span></span><span style="display:flex;"><span>convert_to_tflite(model, <span style="color:#e6db74">&#39;int8&#39;</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 评估模型大小和性能</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> os
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">for</span> precision <span style="color:#f92672">in</span> [<span style="color:#e6db74">&#39;float32&#39;</span>, <span style="color:#e6db74">&#39;float16&#39;</span>, <span style="color:#e6db74">&#39;int8&#39;</span>]:
+</span></span><span style="display:flex;"><span>    model_path <span style="color:#f92672">=</span> <span style="color:#e6db74">f</span><span style="color:#e6db74">&#39;model_</span><span style="color:#e6db74">{</span>precision<span style="color:#e6db74">}</span><span style="color:#e6db74">.tflite&#39;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> os<span style="color:#f92672">.</span>path<span style="color:#f92672">.</span>exists(model_path):
+</span></span><span style="display:flex;"><span>        size <span style="color:#f92672">=</span> os<span style="color:#f92672">.</span>path<span style="color:#f92672">.</span>getsize(model_path) <span style="color:#f92672">/</span> <span style="color:#ae81ff">1024</span> <span style="color:#f92672">/</span> <span style="color:#ae81ff">1024</span>  <span style="color:#75715e"># MB</span>
+</span></span><span style="display:flex;"><span>        print(<span style="color:#e6db74">f</span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">{</span>precision<span style="color:#e6db74">}</span><span style="color:#e6db74">模型大小: </span><span style="color:#e6db74">{</span>size<span style="color:#e6db74">:</span><span style="color:#e6db74">.2f</span><span style="color:#e6db74">}</span><span style="color:#e6db74"> MB&#34;</span>)
+</span></span></code></pre></div><h3 id="tensorflowjs转换">TensorFlow.js转换</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#75715e"># 转换为TensorFlow.js格式</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> tensorflowjs <span style="color:#66d9ef">as</span> tfjs
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 保存为TensorFlow.js格式</span>
+</span></span><span style="display:flex;"><span>tfjs<span style="color:#f92672">.</span>converters<span style="color:#f92672">.</span>save_keras_model(model, <span style="color:#e6db74">&#39;tfjs_model/&#39;</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 或者转换为分层格式</span>
+</span></span><span style="display:flex;"><span>tfjs<span style="color:#f92672">.</span>converters<span style="color:#f92672">.</span>save_keras_model(model, <span style="color:#e6db74">&#39;tfjs_model/&#39;</span>, quantization_dtype<span style="color:#f92672">=</span>tfjs<span style="color:#f92672">.</span>quantization_config<span style="color:#f92672">.</span>INT8)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># HTML中使用模型</span>
+</span></span><span style="display:flex;"><span><span style="color:#e6db74">&#34;&#34;&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">&lt;html&gt;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">&lt;head&gt;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    &lt;script src=&#34;https://cdn.jsdelivr.net/npm/@tensorflow/tfjs&#34;&gt;&lt;/script&gt;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">&lt;/head&gt;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">&lt;body&gt;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    &lt;script&gt;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        async function loadModel() {
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            // 加载模型
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            const model = await tf.loadLayersModel(&#39;tfjs_model/model.json&#39;);
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            // 准备输入数据
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            const input = tf.tensor2d([[1, 2, 3, 4, 5, 6, 7, 8, 9, 10]]);
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            // 进行预测
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            const prediction = model.predict(input);
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            prediction.print();
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        }
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        loadModel();
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    &lt;/script&gt;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">&lt;/body&gt;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">&lt;/html&gt;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">&#34;&#34;&#34;</span>
+</span></span></code></pre></div><h2 id="-生产环境最佳实践">📊 生产环境最佳实践</h2>
+<h3 id="模型监控">模型监控</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">ModelMonitor</span>:
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">__init__</span>(self, model, metrics<span style="color:#f92672">=</span>[<span style="color:#e6db74">&#39;accuracy&#39;</span>, <span style="color:#e6db74">&#39;latency&#39;</span>, <span style="color:#e6db74">&#39;throughput&#39;</span>]):
+</span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>model <span style="color:#f92672">=</span> model
+</span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>metrics <span style="color:#f92672">=</span> metrics
+</span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>predictions <span style="color:#f92672">=</span> []
+</span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>true_labels <span style="color:#f92672">=</span> []
+</span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>latencies <span style="color:#f92672">=</span> []
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">predict_with_monitoring</span>(self, inputs, true_labels<span style="color:#f92672">=</span><span style="color:#66d9ef">None</span>):
+</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#34;&#34;&#34;带监控的预测&#34;&#34;&#34;</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">import</span> time
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        start_time <span style="color:#f92672">=</span> time<span style="color:#f92672">.</span>time()
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e"># 进行预测</span>
+</span></span><span style="display:flex;"><span>        predictions <span style="color:#f92672">=</span> self<span style="color:#f92672">.</span>model<span style="color:#f92672">.</span>predict(inputs)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        end_time <span style="color:#f92672">=</span> time<span style="color:#f92672">.</span>time()
+</span></span><span style="display:flex;"><span>        latency <span style="color:#f92672">=</span> end_time <span style="color:#f92672">-</span> start_time
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e"># 记录指标</span>
+</span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>latencies<span style="color:#f92672">.</span>append(latency)
+</span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>predictions<span style="color:#f92672">.</span>extend(predictions)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> true_labels <span style="color:#f92672">is</span> <span style="color:#f92672">not</span> <span style="color:#66d9ef">None</span>:
+</span></span><span style="display:flex;"><span>            self<span style="color:#f92672">.</span>true_labels<span style="color:#f92672">.</span>extend(true_labels)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> predictions
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">generate_report</span>(self):
+</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#34;&#34;&#34;生成监控报告&#34;&#34;&#34;</span>
+</span></span><span style="display:flex;"><span>        report <span style="color:#f92672">=</span> {}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> self<span style="color:#f92672">.</span>latencies:
+</span></span><span style="display:flex;"><span>            report[<span style="color:#e6db74">&#39;avg_latency&#39;</span>] <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>mean(self<span style="color:#f92672">.</span>latencies)
+</span></span><span style="display:flex;"><span>            report[<span style="color:#e6db74">&#39;p95_latency&#39;</span>] <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>percentile(self<span style="color:#f92672">.</span>latencies, <span style="color:#ae81ff">95</span>)
+</span></span><span style="display:flex;"><span>            report[<span style="color:#e6db74">&#39;throughput&#39;</span>] <span style="color:#f92672">=</span> len(self<span style="color:#f92672">.</span>latencies) <span style="color:#f92672">/</span> sum(self<span style="color:#f92672">.</span>latencies)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> self<span style="color:#f92672">.</span>true_labels <span style="color:#f92672">and</span> self<span style="color:#f92672">.</span>predictions:
+</span></span><span style="display:flex;"><span>            predictions <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>array(self<span style="color:#f92672">.</span>predictions)
+</span></span><span style="display:flex;"><span>            true_labels <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>array(self<span style="color:#f92672">.</span>true_labels)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">if</span> len(predictions<span style="color:#f92672">.</span>shape) <span style="color:#f92672">&gt;</span> <span style="color:#ae81ff">1</span>:
+</span></span><span style="display:flex;"><span>                pred_classes <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>argmax(predictions, axis<span style="color:#f92672">=</span><span style="color:#ae81ff">1</span>)
+</span></span><span style="display:flex;"><span>                true_classes <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>argmax(true_labels, axis<span style="color:#f92672">=</span><span style="color:#ae81ff">1</span>)
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">else</span>:
+</span></span><span style="display:flex;"><span>                pred_classes <span style="color:#f92672">=</span> (predictions <span style="color:#f92672">&gt;</span> <span style="color:#ae81ff">0.5</span>)<span style="color:#f92672">.</span>astype(int)
+</span></span><span style="display:flex;"><span>                true_classes <span style="color:#f92672">=</span> true_labels
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>            report[<span style="color:#e6db74">&#39;accuracy&#39;</span>] <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>mean(pred_classes <span style="color:#f92672">==</span> true_classes)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> report
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 使用模型监控</span>
+</span></span><span style="display:flex;"><span>monitor <span style="color:#f92672">=</span> ModelMonitor(model)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 模拟生产环境预测</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">for</span> i <span style="color:#f92672">in</span> range(<span style="color:#ae81ff">100</span>):
+</span></span><span style="display:flex;"><span>    test_input <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>random<span style="color:#f92672">.</span>rand(<span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">10</span>)
+</span></span><span style="display:flex;"><span>    true_label <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>random<span style="color:#f92672">.</span>randint(<span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">2</span>, <span style="color:#ae81ff">1</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    prediction <span style="color:#f92672">=</span> monitor<span style="color:#f92672">.</span>predict_with_monitoring(test_input, true_label)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 生成报告</span>
+</span></span><span style="display:flex;"><span>report <span style="color:#f92672">=</span> monitor<span style="color:#f92672">.</span>generate_report()
+</span></span><span style="display:flex;"><span>print(<span style="color:#e6db74">&#34;模型监控报告:&#34;</span>, report)
+</span></span></code></pre></div><h3 id="ab测试框架">A/B测试框架</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">ABTestFramework</span>:
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">__init__</span>(self, model_a, model_b, traffic_split<span style="color:#f92672">=</span><span style="color:#ae81ff">0.5</span>):
+</span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>model_a <span style="color:#f92672">=</span> model_a
+</span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>model_b <span style="color:#f92672">=</span> model_b
+</span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>traffic_split <span style="color:#f92672">=</span> traffic_split
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>model_a_metrics <span style="color:#f92672">=</span> []
+</span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>model_b_metrics <span style="color:#f92672">=</span> []
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">predict</span>(self, inputs, true_labels<span style="color:#f92672">=</span><span style="color:#66d9ef">None</span>):
+</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#34;&#34;&#34;A/B测试预测&#34;&#34;&#34;</span>
+</span></span><span style="display:flex;"><span>        results <span style="color:#f92672">=</span> []
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">for</span> i, (input_data, true_label) <span style="color:#f92672">in</span> enumerate(zip(inputs, true_labels <span style="color:#f92672">or</span> [])):
+</span></span><span style="display:flex;"><span>            <span style="color:#75715e"># 随机分配流量</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">if</span> np<span style="color:#f92672">.</span>random<span style="color:#f92672">.</span>random() <span style="color:#f92672">&lt;</span> self<span style="color:#f92672">.</span>traffic_split:
+</span></span><span style="display:flex;"><span>                model <span style="color:#f92672">=</span> self<span style="color:#f92672">.</span>model_a
+</span></span><span style="display:flex;"><span>                model_name <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;A&#39;</span>
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">else</span>:
+</span></span><span style="display:flex;"><span>                model <span style="color:#f92672">=</span> self<span style="color:#f92672">.</span>model_b
+</span></span><span style="display:flex;"><span>                model_name <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;B&#39;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>            <span style="color:#75715e"># 进行预测</span>
+</span></span><span style="display:flex;"><span>            prediction <span style="color:#f92672">=</span> model<span style="color:#f92672">.</span>predict(np<span style="color:#f92672">.</span>expand_dims(input_data, <span style="color:#ae81ff">0</span>))[<span style="color:#ae81ff">0</span>]
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>            results<span style="color:#f92672">.</span>append({
+</span></span><span style="display:flex;"><span>                <span style="color:#e6db74">&#39;model&#39;</span>: model_name,
+</span></span><span style="display:flex;"><span>                <span style="color:#e6db74">&#39;prediction&#39;</span>: prediction,
+</span></span><span style="display:flex;"><span>                <span style="color:#e6db74">&#39;true_label&#39;</span>: true_label
+</span></span><span style="display:flex;"><span>            })
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> results
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">evaluate_models</span>(self, results):
+</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#34;&#34;&#34;评估模型性能&#34;&#34;&#34;</span>
+</span></span><span style="display:flex;"><span>        model_a_results <span style="color:#f92672">=</span> [r <span style="color:#66d9ef">for</span> r <span style="color:#f92672">in</span> results <span style="color:#66d9ef">if</span> r[<span style="color:#e6db74">&#39;model&#39;</span>] <span style="color:#f92672">==</span> <span style="color:#e6db74">&#39;A&#39;</span>]
+</span></span><span style="display:flex;"><span>        model_b_results <span style="color:#f92672">=</span> [r <span style="color:#66d9ef">for</span> r <span style="color:#f92672">in</span> results <span style="color:#66d9ef">if</span> r[<span style="color:#e6db74">&#39;model&#39;</span>] <span style="color:#f92672">==</span> <span style="color:#e6db74">&#39;B&#39;</span>]
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">calculate_metrics</span>(results):
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">if</span> <span style="color:#f92672">not</span> results:
+</span></span><span style="display:flex;"><span>                <span style="color:#66d9ef">return</span> {}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>            predictions <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>array([r[<span style="color:#e6db74">&#39;prediction&#39;</span>] <span style="color:#66d9ef">for</span> r <span style="color:#f92672">in</span> results])
+</span></span><span style="display:flex;"><span>            true_labels <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>array([r[<span style="color:#e6db74">&#39;true_label&#39;</span>] <span style="color:#66d9ef">for</span> r <span style="color:#f92672">in</span> results])
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>            pred_classes <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>argmax(predictions, axis<span style="color:#f92672">=</span><span style="color:#ae81ff">1</span>)
+</span></span><span style="display:flex;"><span>            true_classes <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>argmax(true_labels, axis<span style="color:#f92672">=</span><span style="color:#ae81ff">1</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>            accuracy <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>mean(pred_classes <span style="color:#f92672">==</span> true_classes)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">return</span> {<span style="color:#e6db74">&#39;accuracy&#39;</span>: accuracy, <span style="color:#e6db74">&#39;sample_size&#39;</span>: len(results)}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        metrics_a <span style="color:#f92672">=</span> calculate_metrics(model_a_results)
+</span></span><span style="display:flex;"><span>        metrics_b <span style="color:#f92672">=</span> calculate_metrics(model_b_results)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> {<span style="color:#e6db74">&#39;model_a&#39;</span>: metrics_a, <span style="color:#e6db74">&#39;model_b&#39;</span>: metrics_b}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 使用A/B测试框架</span>
+</span></span><span style="display:flex;"><span>ab_test <span style="color:#f92672">=</span> ABTestFramework(model_v1, model_v2, traffic_split<span style="color:#f92672">=</span><span style="color:#ae81ff">0.5</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 模拟A/B测试</span>
+</span></span><span style="display:flex;"><span>test_inputs <span style="color:#f92672">=</span> [np<span style="color:#f92672">.</span>random<span style="color:#f92672">.</span>rand(<span style="color:#ae81ff">10</span>) <span style="color:#66d9ef">for</span> _ <span style="color:#f92672">in</span> range(<span style="color:#ae81ff">1000</span>)]
+</span></span><span style="display:flex;"><span>test_labels <span style="color:#f92672">=</span> [np<span style="color:#f92672">.</span>random<span style="color:#f92672">.</span>randint(<span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">2</span>, <span style="color:#ae81ff">10</span>) <span style="color:#66d9ef">for</span> _ <span style="color:#f92672">in</span> range(<span style="color:#ae81ff">1000</span>)]
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>results <span style="color:#f92672">=</span> ab_test<span style="color:#f92672">.</span>predict(test_inputs, test_labels)
+</span></span><span style="display:flex;"><span>metrics <span style="color:#f92672">=</span> ab_test<span style="color:#f92672">.</span>evaluate_models(results)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>print(<span style="color:#e6db74">&#34;A/B测试结果:&#34;</span>, metrics)
+</span></span></code></pre></div><h2 id="-学习资源">📚 学习资源</h2>
+<h3 id="官方文档">官方文档</h3>
+<ul>
+<li><a href="https://www.tensorflow.org/tfx/guide/serving">TensorFlow Serving文档</a></li>
+<li><a href="https://www.tensorflow.org/lite">TensorFlow Lite文档</a></li>
+<li><a href="https://www.tensorflow.org/js">TensorFlow.js文档</a></li>
+</ul>
+<h3 id="吴恩达课程">吴恩达课程</h3>
+<ul>
+<li>深度学习课程中关于实际应用的部分</li>
+</ul>
+<h3 id="经典项目">经典项目</h3>
+<ul>
+<li><a href="https://github.com/tensorflow/models">TensorFlow Models</a> - 官方模型库</li>
+<li><a href="https://tfhub.dev/">TensorFlow Hub</a> - 预训练模型仓库</li>
+<li><a href="https://www.kaggle.com/competitions">Kaggle竞赛</a> - 实践项目</li>
+</ul>
+<h2 id="-部署最佳实践">🔧 部署最佳实践</h2>
+<h3 id="容器化部署">容器化部署</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-dockerfile" data-lang="dockerfile"><span style="display:flex;"><span><span style="color:#75715e"># Dockerfile</span><span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#66d9ef">FROM</span> <span style="color:#e6db74">tensorflow/serving:latest</span><span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#66d9ef">COPY</span> model/ /models/my_model<span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#66d9ef">ENV</span> MODEL_NAME<span style="color:#f92672">=</span>my_model
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 启动命令</span><span style="color:#960050;background-color:#1e0010">
+</span></span></span><span style="display:flex;"><span><span style="color:#66d9ef">CMD</span> [<span style="color:#e6db74">&#34;tensorflow_model_server&#34;</span>, <span style="color:#e6db74">&#34;--rest_api_port=8501&#34;</span>, <span style="color:#e6db74">&#34;--model_name=my_model&#34;</span>, <span style="color:#e6db74">&#34;--model_base_path=/models/my_model&#34;</span>]<span style="color:#960050;background-color:#1e0010">
+</span></span></span></code></pre></div><h3 id="模型版本管理">模型版本管理</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#75715e"># 模型版本管理</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> tensorflow <span style="color:#66d9ef">as</span> tf
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">ModelVersionManager</span>:
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">__init__</span>(self, model_base_path):
+</span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>model_base_path <span style="color:#f92672">=</span> model_base_path
+</span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>versions <span style="color:#f92672">=</span> {}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">save_model_version</span>(self, model, version, metadata<span style="color:#f92672">=</span><span style="color:#66d9ef">None</span>):
+</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#34;&#34;&#34;保存模型版本&#34;&#34;&#34;</span>
+</span></span><span style="display:flex;"><span>        version_path <span style="color:#f92672">=</span> <span style="color:#e6db74">f</span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">{</span>self<span style="color:#f92672">.</span>model_base_path<span style="color:#e6db74">}</span><span style="color:#e6db74">/</span><span style="color:#e6db74">{</span>version<span style="color:#e6db74">}</span><span style="color:#e6db74">&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e"># 保存模型</span>
+</span></span><span style="display:flex;"><span>        model<span style="color:#f92672">.</span>save(version_path)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e"># 保存元数据</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> metadata:
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">with</span> open(<span style="color:#e6db74">f</span><span style="color:#e6db74">&#34;</span><span style="color:#e6db74">{</span>version_path<span style="color:#e6db74">}</span><span style="color:#e6db74">/metadata.json&#34;</span>, <span style="color:#e6db74">&#39;w&#39;</span>) <span style="color:#66d9ef">as</span> f:
+</span></span><span style="display:flex;"><span>                json<span style="color:#f92672">.</span>dump(metadata, f)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>versions[version] <span style="color:#f92672">=</span> {
+</span></span><span style="display:flex;"><span>            <span style="color:#e6db74">&#39;path&#39;</span>: version_path,
+</span></span><span style="display:flex;"><span>            <span style="color:#e6db74">&#39;metadata&#39;</span>: metadata,
+</span></span><span style="display:flex;"><span>            <span style="color:#e6db74">&#39;timestamp&#39;</span>: time<span style="color:#f92672">.</span>time()
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">load_model_version</span>(self, version):
+</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#34;&#34;&#34;加载模型版本&#34;&#34;&#34;</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> version <span style="color:#f92672">not</span> <span style="color:#f92672">in</span> self<span style="color:#f92672">.</span>versions:
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">raise</span> <span style="color:#a6e22e">ValueError</span>(<span style="color:#e6db74">f</span><span style="color:#e6db74">&#34;版本 </span><span style="color:#e6db74">{</span>version<span style="color:#e6db74">}</span><span style="color:#e6db74"> 不存在&#34;</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        version_path <span style="color:#f92672">=</span> self<span style="color:#f92672">.</span>versions[version][<span style="color:#e6db74">&#39;path&#39;</span>]
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> tf<span style="color:#f92672">.</span>keras<span style="color:#f92672">.</span>models<span style="color:#f92672">.</span>load_model(version_path)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">list_versions</span>(self):
+</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#34;&#34;&#34;列出版本&#34;&#34;&#34;</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> list(self<span style="color:#f92672">.</span>versions<span style="color:#f92672">.</span>keys())
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">rollback</span>(self, version):
+</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#34;&#34;&#34;回滚到指定版本&#34;&#34;&#34;</span>
+</span></span><span style="display:flex;"><span>        model <span style="color:#f92672">=</span> self<span style="color:#f92672">.</span>load_model_version(version)
+</span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>save_model_version(model, <span style="color:#e6db74">&#39;current&#39;</span>, {<span style="color:#e6db74">&#39;rollback_from&#39;</span>: version})
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> model
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 使用版本管理器</span>
+</span></span><span style="display:flex;"><span>version_manager <span style="color:#f92672">=</span> ModelVersionManager(<span style="color:#e6db74">&#39;./models&#39;</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 保存不同版本</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">for</span> i, model <span style="color:#f92672">in</span> enumerate([model_v1, model_v2, model_v3]):
+</span></span><span style="display:flex;"><span>    version_manager<span style="color:#f92672">.</span>save_model_version(
+</span></span><span style="display:flex;"><span>        model,
+</span></span><span style="display:flex;"><span>        version<span style="color:#f92672">=</span><span style="color:#e6db74">f</span><span style="color:#e6db74">&#34;v</span><span style="color:#e6db74">{</span>i<span style="color:#f92672">+</span><span style="color:#ae81ff">1</span><span style="color:#e6db74">}</span><span style="color:#e6db74">&#34;</span>,
+</span></span><span style="display:flex;"><span>        metadata<span style="color:#f92672">=</span>{<span style="color:#e6db74">&#39;description&#39;</span>: <span style="color:#e6db74">f</span><span style="color:#e6db74">&#39;模型版本</span><span style="color:#e6db74">{</span>i<span style="color:#f92672">+</span><span style="color:#ae81ff">1</span><span style="color:#e6db74">}</span><span style="color:#e6db74">&#39;</span>, <span style="color:#e6db74">&#39;accuracy&#39;</span>: <span style="color:#ae81ff">0.95</span> <span style="color:#f92672">+</span> i<span style="color:#f92672">*</span><span style="color:#ae81ff">0.01</span>}
+</span></span><span style="display:flex;"><span>    )
+</span></span></code></pre></div><hr>
+<p><em>最近更新: {{ .Lastmod.Format &ldquo;2006-01-02&rdquo; }}</em></p>
+</div>
+    
+<nav class="pager" aria-label="文章导航">
+  
+  
+  <a href="/wiki/deep_learning/tensorflow/advanced_1/" class="is-next" data-press>
+    <span class="dir">下一篇 →</span>TensorFlow高级特性
+  </a>
+  
+</nav>
+
+
+    
+<div class="comments">
+  <h2 class="comments-title">评论</h2>
+  <div id="utterances"></div>
+  <script>
+    (function () {
+      if (window.location.protocol === 'file:') return;
+      var s = document.createElement('script');
+      s.src = 'https://utteranc.es/client.js';
+      s.async = true;
+      s.setAttribute('repo', "makkichan947/makkichan947.github.io");
+      s.setAttribute('issue-term', "pathname");
+      s.setAttribute('theme', "github-dark");
+      s.setAttribute('crossorigin', 'anonymous');
+      document.getElementById('utterances').appendChild(s);
+    })();
+  </script>
+</div>
+
+
+  </article>
+  
+</div>
+
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+      <div class="footer-links">
+        
+        <a href="https://github.com/makkichan947" target="_blank" rel="noopener" title="Github" data-press>Github</a>
+        
+        <a href="mailto:yakumakki947@hotmail.com" target="_blank" rel="noopener" title="Email" data-press>Email</a>
+        
+        <a href="https://x.com/Makki_Yaku947" target="_blank" rel="noopener" title="Twitter" data-press>Twitter</a>
+        
+        <a href="https://www.twitch.tv/u/makkichan947" target="_blank" rel="noopener" title="Twitch" data-press>Twitch</a>
+        
+      </div>
+      <p>&copy; 2026 Yaku Makki</p>
+      <p>Powered by <a href="https://gohugo.io" target="_blank" rel="noopener">Hugo</a> · Makki Theme</p>
+      
+      <div class="stats">
+        <span>访客 <span id="busuanzi_value_site_uv"></span></span>
+        <span>访问 <span id="busuanzi_value_site_pv"></span></span>
+        <span>本页 <span id="busuanzi_value_page_pv"></span></span>
+      </div>
+      
+    </div>
+  </footer>
+
+  <button class="back-to-top" id="back-to-top" type="button" aria-label="回到顶部" data-press>
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 19V5"/><path d="M5 12l7-7 7 7"/></svg>
+  </button>
+
+  
+  <script src="/js/main.min.2e977141114ec7890ffee2c35e08034683543cfe8ef98dd4af5effb3b37a3345.js" integrity="sha256-LpdxQRFOx4kP/uLDXggDRoNUPP6O&#43;Y3Ur17/s7N6M0U=" defer></script>
+  
+  
+  <script src="/js/search.min.b2d6ba6610ce24454bc1436dc521dcfd878b2583ad9f65f77aadedaaa1e1a54c.js" integrity="sha256-sta6ZhDOJEVLwUNtxSHc/YeLJYOtn2X3eq3tqqHhpUw=" defer></script>
+  
+
+  
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+  
+
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/katex.min.js" crossorigin="anonymous"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/contrib/auto-render.min.js" crossorigin="anonymous"></script>
+</body>
+</html>

@@ -1,0 +1,327 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>第 1 章 引言 · Yaku Makki</title>
+  <meta name="description" content="M4KK1 简介、核心特性与系统架构">
+  <meta name="theme-color" content="#0a0a0f">
+  <script>document.documentElement.classList.add('js');</script>
+
+  <link rel="icon" href="/avatar/avatar.jpg" type="image/jpeg">
+
+  
+  <link rel="stylesheet" href="/css/main.min.b64e4527cc255b367461135391e39e321a5d86fc97defca99c7afda308ada007.css" integrity="sha256-tk5FJ8wlWzZ0YRNTkeOeMhpdhvyX3vypnHr9owitoAc=">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/katex.min.css" crossorigin="anonymous">
+</head>
+<body>
+  <a class="skip-link" href="#main">跳到内容</a>
+
+  <div class="scene" aria-hidden="true">
+    <div class="scene-sky"></div>
+    <div class="scene-stars"></div>
+    <div class="scene-sun-halo"></div>
+    <div class="scene-sun"></div>
+    <div class="scene-mountains scene-mountains-far"></div>
+    <div class="scene-mountains scene-mountains-near"></div>
+    <div class="scene-horizon"></div>
+    <div class="scene-floor"></div>
+    <div class="scene-scanlines"></div>
+  </div>
+
+  <nav class="navbar" aria-label="主导航">
+    <div class="nav-inner">
+      <a class="logo" href="/" data-press>
+        <img class="logo-avatar" src="/avatar/avatar.jpg" alt="" width="34" height="34">
+        <span class="logo-text">Yaku Makki</span>
+      </a>
+      <div class="nav-menu-wrap">
+        <span class="nav-tick" aria-hidden="true"></span>
+        <ul class="nav-menu">
+          
+          <li>
+            <a href="/" data-press>首页</a>
+          </li>
+          
+          <li>
+            <a href="/post/" data-press>博客</a>
+          </li>
+          
+          <li>
+            <a href="/wiki/" data-press>维基</a>
+          </li>
+          
+          <li>
+            <a href="/tags/" data-press>标签</a>
+          </li>
+          
+          <li>
+            <a href="/about/" data-press>关于</a>
+          </li>
+          
+          
+          <li>
+            <button id="search-toggle" class="search-toggle" type="button" title="搜索 (Ctrl+K 或 /)" aria-haspopup="dialog" aria-expanded="false" data-press>搜索</button>
+          </li>
+          
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  
+  <div class="sheet-scrim" id="sheet-scrim"></div>
+  <section class="sheet" id="search-sheet" role="dialog" aria-modal="true" aria-label="搜索" aria-hidden="true">
+    <div class="sheet-panel" id="sheet-panel">
+      <div class="sheet-handle" id="sheet-handle" role="presentation" aria-hidden="true"></div>
+      <div class="sheet-body">
+        <div class="search-field">
+          <input id="search-input" type="search" placeholder="搜索文章和 Wiki…"
+                 autocomplete="off" spellcheck="false" aria-controls="search-results">
+          <span class="search-key" aria-hidden="true">/</span>
+        </div>
+        <div id="search-results" class="search-results" role="listbox" aria-label="搜索结果"></div>
+      </div>
+    </div>
+  </section>
+  
+
+  <main class="main" id="main">
+    
+<header class="page-head">
+  <nav class="crumb" aria-label="面包屑">
+    <a href="/" data-press>首页</a>
+    <span class="sep">/</span>
+    <a href="/wiki/" data-press>维基</a>
+    
+    
+    <span class="sep">/</span>
+    <a href="/wiki/m4kk1/handbook/" data-press>系统手册</a>
+    
+    
+  </nav>
+  <h1>第 1 章 引言</h1>
+  <p>M4KK1 简介、核心特性与系统架构</p>
+</header>
+
+<div class="wiki-layout">
+  <article class="article">
+    <div class="article-content"><h2 id="11-关于-m4kk1">1.1 关于 M4KK1</h2>
+<p>M4KK1 是一个从零开发的 i386 操作系统，采用 <strong>4P1 独立标准</strong>，不兼容 POSIX。项目使用 freestanding C 和 NASM 汇编编写，遵循宏内核设计。</p>
+<h3 id="设计哲学">设计哲学</h3>
+<ul>
+<li><strong>清晰优于兼容</strong>: 不背负 POSIX 历史包袱，接口设计追求可读性和可预测性</li>
+<li><strong>简洁优于臃肿</strong>: 接口数量少，行为确定，易于理解和实现</li>
+<li><strong>原生优于模拟</strong>: 所有工具和库基于原生 M4KK1 ABI，无兼容层</li>
+</ul>
+<h2 id="12-核心特性">1.2 核心特性</h2>
+<table>
+	<thead>
+			<tr>
+					<th>特性</th>
+					<th>说明</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>内核</td>
+					<td>Y4KU 宏内核，i386 保护模式，GRUB multiboot 引导</td>
+			</tr>
+			<tr>
+					<td>内存</td>
+					<td>平坦 32 位物理内存，无 MMU/分页（设计特性，非缺陷）</td>
+			</tr>
+			<tr>
+					<td>系统调用</td>
+					<td><code>int 0x80</code>（兼容）+ <code>int 0x4D</code>（原生，<code>0x4D00XXXX</code> 格式）</td>
+			</tr>
+			<tr>
+					<td>文件系统</td>
+					<td>YAFS — 基于 COW B+Tree 的 RAM 磁盘（16 MB）</td>
+			</tr>
+			<tr>
+					<td>用户空间</td>
+					<td>M4SH 单进程 Shell，40+ 内置命令，静态链接</td>
+			</tr>
+			<tr>
+					<td>控制台</td>
+					<td>串口 COM1，38400 8N1</td>
+			</tr>
+			<tr>
+					<td>错误处理</td>
+					<td>不兼容 <code>errno</code>，函数直接返回负值表示错误</td>
+			</tr>
+	</tbody>
+</table>
+<h2 id="13-命名约定">1.3 命名约定</h2>
+<table>
+	<thead>
+			<tr>
+					<th>前缀</th>
+					<th>范围</th>
+					<th>示例</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td><code>mkrn_</code></td>
+					<td>内核全局函数/变量</td>
+					<td><code>mkrn_timer_init()</code></td>
+			</tr>
+			<tr>
+					<td><code>musr_</code></td>
+					<td>用户空间全局函数/变量</td>
+					<td><code>musr_cmd_echo()</code></td>
+			</tr>
+			<tr>
+					<td><code>m4k_</code></td>
+					<td>系统调用 ABI 层</td>
+					<td><code>m4k_spawn()</code></td>
+			</tr>
+			<tr>
+					<td>无前缀</td>
+					<td>文件内静态</td>
+					<td><code>tokenize_quoted()</code></td>
+			</tr>
+	</tbody>
+</table>
+<h2 id="14-系统架构">1.4 系统架构</h2>
+<pre tabindex="0"><code>┌────────────────────────────────────┐
+│         用户空间 (Ring 0)          │
+│  ┌──────────────────────────────┐  │
+│  │  M4SH Shell (PID 1)         │  │
+│  │  40+ 内置命令 / 正则引擎     │  │
+│  └──────────┬───────────────────┘  │
+├─────────────┼──────────────────────┤
+│         系统调用层                  │
+│  int 0x80 / int 0x4D              │
+├─────────────┼──────────────────────┤
+│         内核空间                    │
+│  进程管理 | 文件系统 | 内存 | 驱动 │
+│  架构层: GDT / IDT / PIT / RTC    │
+└────────────────────────────────────┘
+</code></pre><h2 id="15-启动流程">1.5 启动流程</h2>
+<pre tabindex="0"><code>GRUB → entry.asm → kmain()
+  ├── 内存初始化 → GDT → IDT → PIT (1000 Hz)
+  ├── 进程管理 → 系统调用 → VFS → YAFS
+  ├── 写入 ELF (m4sh / login) → 创建配置文件
+  └── exec init → login → m4sh
+</code></pre><h2 id="16-项目状态">1.6 项目状态</h2>
+<p>当前为 <strong>v1.0.0-alpha1</strong>，处于早期实验阶段。已完成内核基础、YAFS 文件系统、M4SH Shell 和 40+ 内置命令。</p>
+<h3 id="已知限制">已知限制</h3>
+<ul>
+<li>i386 32-bit 仅，无 SMP/APIC</li>
+<li>单进程用户空间，全部 Ring 0</li>
+<li>无 MMU 隔离、无网络栈、无图形界面</li>
+<li>YAFS 无日志/崩溃恢复</li>
+<li>无 POSIX 兼容层</li>
+</ul>
+</div>
+    
+<nav class="pager" aria-label="文章导航">
+  
+  <a href="/wiki/m4kk1/handbook/02-installation/" data-press>
+    <span class="dir">← 上一篇</span>第 2 章 安装与运行
+  </a>
+  
+  
+</nav>
+
+
+    
+<div class="comments">
+  <h2 class="comments-title">评论</h2>
+  <div id="utterances"></div>
+  <script>
+    (function () {
+      if (window.location.protocol === 'file:') return;
+      var s = document.createElement('script');
+      s.src = 'https://utteranc.es/client.js';
+      s.async = true;
+      s.setAttribute('repo', "makkichan947/makkichan947.github.io");
+      s.setAttribute('issue-term', "pathname");
+      s.setAttribute('theme', "github-dark");
+      s.setAttribute('crossorigin', 'anonymous');
+      document.getElementById('utterances').appendChild(s);
+    })();
+  </script>
+</div>
+
+
+  </article>
+  
+  <aside class="toc" aria-label="目录">
+    <p class="toc-title">目录</p>
+    <nav id="TableOfContents">
+  <ul>
+    <li><a href="#11-关于-m4kk1">1.1 关于 M4KK1</a>
+      <ul>
+        <li><a href="#设计哲学">设计哲学</a></li>
+      </ul>
+    </li>
+    <li><a href="#12-核心特性">1.2 核心特性</a></li>
+    <li><a href="#13-命名约定">1.3 命名约定</a></li>
+    <li><a href="#14-系统架构">1.4 系统架构</a></li>
+    <li><a href="#15-启动流程">1.5 启动流程</a></li>
+    <li><a href="#16-项目状态">1.6 项目状态</a>
+      <ul>
+        <li><a href="#已知限制">已知限制</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+  </aside>
+  
+</div>
+
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+      <div class="footer-links">
+        
+        <a href="https://github.com/makkichan947" target="_blank" rel="noopener" title="Github" data-press>Github</a>
+        
+        <a href="mailto:yakumakki947@hotmail.com" target="_blank" rel="noopener" title="Email" data-press>Email</a>
+        
+        <a href="https://x.com/Makki_Yaku947" target="_blank" rel="noopener" title="Twitter" data-press>Twitter</a>
+        
+        <a href="https://www.twitch.tv/u/makkichan947" target="_blank" rel="noopener" title="Twitch" data-press>Twitch</a>
+        
+      </div>
+      <p>&copy; 2026 Yaku Makki</p>
+      <p>Powered by <a href="https://gohugo.io" target="_blank" rel="noopener">Hugo</a> · Makki Theme</p>
+      
+      <div class="stats">
+        <span>访客 <span id="busuanzi_value_site_uv"></span></span>
+        <span>访问 <span id="busuanzi_value_site_pv"></span></span>
+        <span>本页 <span id="busuanzi_value_page_pv"></span></span>
+      </div>
+      
+    </div>
+  </footer>
+
+  <button class="back-to-top" id="back-to-top" type="button" aria-label="回到顶部" data-press>
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 19V5"/><path d="M5 12l7-7 7 7"/></svg>
+  </button>
+
+  
+  <script src="/js/main.min.2e977141114ec7890ffee2c35e08034683543cfe8ef98dd4af5effb3b37a3345.js" integrity="sha256-LpdxQRFOx4kP/uLDXggDRoNUPP6O&#43;Y3Ur17/s7N6M0U=" defer></script>
+  
+  
+  <script src="/js/search.min.b2d6ba6610ce24454bc1436dc521dcfd878b2583ad9f65f77aadedaaa1e1a54c.js" integrity="sha256-sta6ZhDOJEVLwUNtxSHc/YeLJYOtn2X3eq3tqqHhpUw=" defer></script>
+  
+
+  
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+  
+
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/katex.min.js" crossorigin="anonymous"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/contrib/auto-render.min.js" crossorigin="anonymous"></script>
+</body>
+</html>

@@ -1,0 +1,267 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>为什么我开始使用BlackArch作为我的网安发行版 · Yaku Makki</title>
+  <meta name="description" content="个人小巢">
+  <meta name="theme-color" content="#0a0a0f">
+  <script>document.documentElement.classList.add('js');</script>
+
+  <link rel="icon" href="/avatar/avatar.jpg" type="image/jpeg">
+
+  
+  <link rel="stylesheet" href="/css/main.min.b64e4527cc255b367461135391e39e321a5d86fc97defca99c7afda308ada007.css" integrity="sha256-tk5FJ8wlWzZ0YRNTkeOeMhpdhvyX3vypnHr9owitoAc=">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/katex.min.css" crossorigin="anonymous">
+</head>
+<body>
+  <a class="skip-link" href="#main">跳到内容</a>
+
+  <div class="scene" aria-hidden="true">
+    <div class="scene-sky"></div>
+    <div class="scene-stars"></div>
+    <div class="scene-sun-halo"></div>
+    <div class="scene-sun"></div>
+    <div class="scene-mountains scene-mountains-far"></div>
+    <div class="scene-mountains scene-mountains-near"></div>
+    <div class="scene-horizon"></div>
+    <div class="scene-floor"></div>
+    <div class="scene-scanlines"></div>
+  </div>
+
+  <nav class="navbar" aria-label="主导航">
+    <div class="nav-inner">
+      <a class="logo" href="/" data-press>
+        <img class="logo-avatar" src="/avatar/avatar.jpg" alt="" width="34" height="34">
+        <span class="logo-text">Yaku Makki</span>
+      </a>
+      <div class="nav-menu-wrap">
+        <span class="nav-tick" aria-hidden="true"></span>
+        <ul class="nav-menu">
+          
+          <li>
+            <a href="/" data-press>首页</a>
+          </li>
+          
+          <li>
+            <a href="/post/" data-press>博客</a>
+          </li>
+          
+          <li>
+            <a href="/wiki/" data-press>维基</a>
+          </li>
+          
+          <li>
+            <a href="/tags/" data-press>标签</a>
+          </li>
+          
+          <li>
+            <a href="/about/" data-press>关于</a>
+          </li>
+          
+          
+          <li>
+            <button id="search-toggle" class="search-toggle" type="button" title="搜索 (Ctrl+K 或 /)" aria-haspopup="dialog" aria-expanded="false" data-press>搜索</button>
+          </li>
+          
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  
+  <div class="sheet-scrim" id="sheet-scrim"></div>
+  <section class="sheet" id="search-sheet" role="dialog" aria-modal="true" aria-label="搜索" aria-hidden="true">
+    <div class="sheet-panel" id="sheet-panel">
+      <div class="sheet-handle" id="sheet-handle" role="presentation" aria-hidden="true"></div>
+      <div class="sheet-body">
+        <div class="search-field">
+          <input id="search-input" type="search" placeholder="搜索文章和 Wiki…"
+                 autocomplete="off" spellcheck="false" aria-controls="search-results">
+          <span class="search-key" aria-hidden="true">/</span>
+        </div>
+        <div id="search-results" class="search-results" role="listbox" aria-label="搜索结果"></div>
+      </div>
+    </div>
+  </section>
+  
+
+  <main class="main" id="main">
+    
+<article class="article">
+  <header class="article-head" data-reveal>
+    <h1>为什么我开始使用BlackArch作为我的网安发行版</h1>
+    <div class="meta">
+      <time datetime="2026-04-18T23:06:15&#43;08:00">2026-04-18</time>
+      <span>1 分钟阅读</span>
+      <span>86 字</span>
+      
+    </div>
+  </header>
+  <div class="article-content" data-reveal data-reveal-delay="60"><h2 id="从kali到blackarch">从Kali到BlackArch</h2>
+<p>如果你在三年前告诉我，我会放弃Kali Linux转投BlackArch，我大概会觉得你疯了。毕竟Kali是行业标准，是OSCP认证的官方指定发行版，是每个网安新手的必修课。但三年后的今天，我不仅完成了这个迁移，而且发自内心地觉得——<strong>早该这么做了</strong>。</p>
+<p>这篇文章不是要劝所有人都换到BlackArch。恰恰相反，BlackArch并不适合大多数人。但如果你和我一样，已经是Arch Linux的深度用户，对系统有强烈的定制需求，又恰好从事安全相关工作，那这篇文章或许能引起你的共鸣。</p>
+<p>先说说我的背景。Arch Linux是我的主力系统，我享受rolling release带来的最新软件，也享受从零搭建自己桌面环境的掌控感。我的日常离不开<code>pacman -S</code>，我的Hyprland配置经过了无数次的调整和ricing——窗口边框的阴影、终端的配色方案、状态栏的每一个模块，都是反复打磨的结果。</p>
+<p>换句话说，<strong>我已经离不开Arch的生态了</strong>。</p>
+<h2 id="kali很好但它不属于我">Kali很好，但它不属于我</h2>
+<p>Kali基于Debian Testing分支，使用APT包管理器。对于一个习惯了<code>pacman</code>和AUR的人来说，每次切到Kali都像穿了一双不合脚的鞋——不是不能走路，但总觉得哪里不对。</p>
+<p>更让我困扰的是Kali的更新策略。Kali采用“半滚动发布”模式，每年推出4个主要版本。这意味着如果你想用上某个工具的最新版本，可能需要等上好几个月。对于安全研究来说，<strong>工具的新旧往往直接决定了你能不能在最新的漏洞上抢到先机</strong>。</p>
+<p>还有一点：Kali预装了大约600个工具。听起来很多对吧？但对于一个习惯了“想要什么就自己装什么”的Arch用户来说，这种“给你什么你就用什么”的思路，总让我觉得少了点什么。</p>
+<h2 id="第一次接触">第一次接触</h2>
+<p>第一次听说BlackArch，是在某个技术社区的讨论里。有人提到BlackArch实际上有<strong>超过2800个安全工具</strong>，是Kali的4倍以上。这个数字让我很好奇，但真正打动我的不是数量，而是它的安装方式。</p>
+<p>BlackArch本质上不是一个新的操作系统——<strong>它是Arch Linux的一个“覆盖层”</strong> 。你不需要重装系统，只需要在现有的Arch安装上添加BlackArch仓库，然后按需安装工具。一条命令就能搞定：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>curl -s https://blackarch.org/strap.sh | sudo bash
+</span></span></code></pre></div><p>这意味着什么？意味着<strong>我可以保留我精心打磨了三年的Arch系统、我的Hyprland配置、我的Quickshell、我所有的ricing成果</strong>，然后在这个基础上，获得一个拥有近3000个安全工具的巨大武器库。</p>
+<p>这对我来说简直是降维打击式的吸引力。</p>
+<h2 id="全是工具">全是工具</h2>
+<p>Kali的做法是把几百个工具预装好，开箱即用。这对新手来说很友好——你不用思考需要什么，系统都帮你装好了。但代价是：你有一大堆可能永远用不到的工具占着磁盘空间。</p>
+<p>BlackArch的做法完全不同。它的工具仓库有超过2800个工具，按类别组织，但<strong>你可以只安装你需要的那些</strong>。想装一个就装一个，想装一组就装一组。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># 安装单个工具</span>
+</span></span><span style="display:flex;"><span>sudo pacman -S &lt;工具名&gt;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 安装整个分类</span>
+</span></span><span style="display:flex;"><span>sudo pacman -S blackarch-&lt;分类名&gt;
+</span></span></code></pre></div><p>这种“工具超市”的模式，让我可以在需要的时候随时“采购”，而不是被迫接受一个固定的工具集。对于喜欢掌控一切的Arch用户来说，这种自由度简直是天生的契合。</p>
+<h2 id="性能与响应速度">性能与响应速度</h2>
+<p>一个意外的惊喜是性能。有用户在相同硬件上对比过Kali和BlackArch，发现BlackArch的安装和运行明显更快、响应更灵敏。我自己也有类似的感受——也许是Arch本身更轻量的缘故，也许是少了那些预装服务的拖累，总之在同样的笔记本上，BlackArch跑起来确实更“跟手”。</p>
+<h2 id="ricing友好">Ricing友好</h2>
+<p>这一点可能对大多数网安从业者来说无关紧要，但对我很重要。</p>
+<p>Kali有自己固定的主题和桌面配置，虽然可以改，但总有种“在别人的系统上装修”的感觉。而BlackArch跑在Arch之上——<strong>我的Hyprland配置可以直接复用，我的Quickshell快捷键不用重新适应，我的终端配色方案、我的字体设置、我的所有dotfiles，全部原封不动地工作</strong>。</p>
+<p>作为一个花了大量时间打磨桌面环境的人，这种“无缝迁移”的体验是无价的。</p>
+<h2 id="不是没有代价">不是没有代价</h2>
+<p>当然，BlackArch不是完美的。它的学习曲线比Kali陡峭得多。如果你不熟悉Arch Linux的安装和配置，BlackArch可能会让你非常头疼。滚动更新也意味着偶尔会遇到包冲突或兼容性问题。</p>
+<p>但对我来说，这些“代价”恰好是我作为一个三年Arch用户已经熟练掌握的技能。<strong>我不是在学习一个新的发行版，我只是在为我熟悉的系统增加一个新的仓库。</strong></p>
+<h2 id="总结为什么我选择了blackarch">总结：为什么我选择了BlackArch</h2>
+<p>回过头来看，我的选择其实很自然：</p>
+<table>
+	<thead>
+			<tr>
+					<th>维度</th>
+					<th>Kali Linux</th>
+					<th>BlackArch</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>底层</td>
+					<td>Debian + APT</td>
+					<td>Arch + pacman</td>
+			</tr>
+			<tr>
+					<td>工具数量</td>
+					<td>~600个</td>
+					<td>2800+个</td>
+			</tr>
+			<tr>
+					<td>安装方式</td>
+					<td>完整发行版</td>
+					<td><strong>可在现有Arch上叠加</strong></td>
+			</tr>
+			<tr>
+					<td>更新策略</td>
+					<td>半滚动，每年4版</td>
+					<td>滚动更新</td>
+			</tr>
+			<tr>
+					<td>定制性</td>
+					<td>有限</td>
+					<td><strong>极高</strong></td>
+			</tr>
+			<tr>
+					<td>对Arch用户友好度</td>
+					<td>需要切换包管理器</td>
+					<td><strong>原生体验</strong></td>
+			</tr>
+	</tbody>
+</table>
+<p><strong>Kali是给所有人的网安发行版，BlackArch是给Arch用户的网安发行版。</strong></p>
+<p>如果你已经在Arch的生态里扎了根，如果你享受用<code>pacman -S</code>而不是<code>apt install</code>，如果你不愿意为了安全工具放弃自己打磨了三年的桌面环境，你适合blackarch。</p>
+</div>
+  
+<nav class="pager" aria-label="文章导航">
+  
+  <a href="/post/dailylifesucks/" data-press>
+    <span class="dir">← 上一篇</span>神人日常
+  </a>
+  
+  
+  <a href="/post/colab/" class="is-next" data-press>
+    <span class="dir">下一篇 →</span>Colab Unsloth SFT 快速训练！
+  </a>
+  
+</nav>
+
+
+  
+<div class="comments">
+  <h2 class="comments-title">评论</h2>
+  <div id="utterances"></div>
+  <script>
+    (function () {
+      if (window.location.protocol === 'file:') return;
+      var s = document.createElement('script');
+      s.src = 'https://utteranc.es/client.js';
+      s.async = true;
+      s.setAttribute('repo', "makkichan947/makkichan947.github.io");
+      s.setAttribute('issue-term', "pathname");
+      s.setAttribute('theme', "github-dark");
+      s.setAttribute('crossorigin', 'anonymous');
+      document.getElementById('utterances').appendChild(s);
+    })();
+  </script>
+</div>
+
+
+</article>
+
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+      <div class="footer-links">
+        
+        <a href="https://github.com/makkichan947" target="_blank" rel="noopener" title="Github" data-press>Github</a>
+        
+        <a href="mailto:yakumakki947@hotmail.com" target="_blank" rel="noopener" title="Email" data-press>Email</a>
+        
+        <a href="https://x.com/Makki_Yaku947" target="_blank" rel="noopener" title="Twitter" data-press>Twitter</a>
+        
+        <a href="https://www.twitch.tv/u/makkichan947" target="_blank" rel="noopener" title="Twitch" data-press>Twitch</a>
+        
+      </div>
+      <p>&copy; 2026 Yaku Makki</p>
+      <p>Powered by <a href="https://gohugo.io" target="_blank" rel="noopener">Hugo</a> · Makki Theme</p>
+      
+      <div class="stats">
+        <span>访客 <span id="busuanzi_value_site_uv"></span></span>
+        <span>访问 <span id="busuanzi_value_site_pv"></span></span>
+        <span>本页 <span id="busuanzi_value_page_pv"></span></span>
+      </div>
+      
+    </div>
+  </footer>
+
+  <button class="back-to-top" id="back-to-top" type="button" aria-label="回到顶部" data-press>
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 19V5"/><path d="M5 12l7-7 7 7"/></svg>
+  </button>
+
+  
+  <script src="/js/main.min.2e977141114ec7890ffee2c35e08034683543cfe8ef98dd4af5effb3b37a3345.js" integrity="sha256-LpdxQRFOx4kP/uLDXggDRoNUPP6O&#43;Y3Ur17/s7N6M0U=" defer></script>
+  
+  
+  <script src="/js/search.min.b2d6ba6610ce24454bc1436dc521dcfd878b2583ad9f65f77aadedaaa1e1a54c.js" integrity="sha256-sta6ZhDOJEVLwUNtxSHc/YeLJYOtn2X3eq3tqqHhpUw=" defer></script>
+  
+
+  
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+  
+
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/katex.min.js" crossorigin="anonymous"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/contrib/auto-render.min.js" crossorigin="anonymous"></script>
+</body>
+</html>

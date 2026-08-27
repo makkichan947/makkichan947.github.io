@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>用户命令 (man1) · Yaku Makki</title>
+  <meta name="description" content="Shell 与常用命令">
+  <meta name="theme-color" content="#0a0a0f">
+  <script>document.documentElement.classList.add('js');</script>
+
+  <link rel="icon" href="/avatar/avatar.jpg" type="image/jpeg">
+
+  
+  <link rel="stylesheet" href="/css/main.min.b64e4527cc255b367461135391e39e321a5d86fc97defca99c7afda308ada007.css" integrity="sha256-tk5FJ8wlWzZ0YRNTkeOeMhpdhvyX3vypnHr9owitoAc=">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/katex.min.css" crossorigin="anonymous">
+</head>
+<body>
+  <a class="skip-link" href="#main">跳到内容</a>
+
+  <div class="scene" aria-hidden="true">
+    <div class="scene-sky"></div>
+    <div class="scene-stars"></div>
+    <div class="scene-sun-halo"></div>
+    <div class="scene-sun"></div>
+    <div class="scene-mountains scene-mountains-far"></div>
+    <div class="scene-mountains scene-mountains-near"></div>
+    <div class="scene-horizon"></div>
+    <div class="scene-floor"></div>
+    <div class="scene-scanlines"></div>
+  </div>
+
+  <nav class="navbar" aria-label="主导航">
+    <div class="nav-inner">
+      <a class="logo" href="/" data-press>
+        <img class="logo-avatar" src="/avatar/avatar.jpg" alt="" width="34" height="34">
+        <span class="logo-text">Yaku Makki</span>
+      </a>
+      <div class="nav-menu-wrap">
+        <span class="nav-tick" aria-hidden="true"></span>
+        <ul class="nav-menu">
+          
+          <li>
+            <a href="/" data-press>首页</a>
+          </li>
+          
+          <li>
+            <a href="/post/" data-press>博客</a>
+          </li>
+          
+          <li>
+            <a href="/wiki/" data-press>维基</a>
+          </li>
+          
+          <li>
+            <a href="/tags/" data-press>标签</a>
+          </li>
+          
+          <li>
+            <a href="/about/" data-press>关于</a>
+          </li>
+          
+          
+          <li>
+            <button id="search-toggle" class="search-toggle" type="button" title="搜索 (Ctrl+K 或 /)" aria-haspopup="dialog" aria-expanded="false" data-press>搜索</button>
+          </li>
+          
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  
+  <div class="sheet-scrim" id="sheet-scrim"></div>
+  <section class="sheet" id="search-sheet" role="dialog" aria-modal="true" aria-label="搜索" aria-hidden="true">
+    <div class="sheet-panel" id="sheet-panel">
+      <div class="sheet-handle" id="sheet-handle" role="presentation" aria-hidden="true"></div>
+      <div class="sheet-body">
+        <div class="search-field">
+          <input id="search-input" type="search" placeholder="搜索文章和 Wiki…"
+                 autocomplete="off" spellcheck="false" aria-controls="search-results">
+          <span class="search-key" aria-hidden="true">/</span>
+        </div>
+        <div id="search-results" class="search-results" role="listbox" aria-label="搜索结果"></div>
+      </div>
+    </div>
+  </section>
+  
+
+  <main class="main" id="main">
+    
+<header class="page-head">
+  <h1>用户命令 (man1)</h1>
+  <p>Shell 与常用命令</p>
+</header>
+
+
+
+
+<div class="card-grid">
+  
+  <article class="card" data-press data-reveal data-reveal-delay="045">
+    <h3><a href="/wiki/m4kk1/man/man1/cat/">cat</a></h3>
+    <p><h2 id="名称">名称</h2>
+<p>cat — 显示文件内容</p>
+<h2 id="概要">概要</h2>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>cat &lt;文件&gt;
+</span></span></code></pre></div><h2 id="描述">描述</h2>
+<p>读取指定文件的内容并输出到标准输出。</p>
+<h2 id="示例">示例</h2>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>cat /export/cfg/passwd.db
+</span></span></code></pre></div><p>显示用户数据库</p>
+<h2 id="参见">参见</h2>
+<p><a href="ls/">ls(1)</a>、<a href="grep/">grep(1)</a>、 …</p></p>
+    <div class="meta">
+      <time datetime="2026-08-08">2026-08-08</time>
+      
+    </div>
+  </article>
+  
+  <article class="card" data-press data-reveal data-reveal-delay="145">
+    <h3><a href="/wiki/m4kk1/man/man1/date/">date</a></h3>
+    <p><h2 id="名称">名称</h2>
+<p>date — 显示或设置系统日期和时间</p>
+<h2 id="概要">概要</h2>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>date [选项]
+</span></span></code></pre></div><h2 id="描述">描述</h2>
+<p>显示当前系统日期和时间，或设置系统时间。</p>
+<h2 id="选项">选项</h2>
+<ul>
+<li><code>-f, --format FMT</code> — strftime 格式输出</li>
+<li><code>-u, --utc</code> — 以 …</li></ul></p>
+    <div class="meta">
+      <time datetime="2026-08-08">2026-08-08</time>
+      
+    </div>
+  </article>
+  
+  <article class="card" data-press data-reveal data-reveal-delay="245">
+    <h3><a href="/wiki/m4kk1/man/man1/echo/">echo</a></h3>
+    <p><h2 id="名称">名称</h2>
+<p>echo — 输出文本</p>
+<h2 id="概要">概要</h2>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>echo [-e] [-E] [-n] 参数...
+</span></span></code></pre></div><h2 id="描述">描述</h2>
+<p>将参数输出到标准输出。默认在末尾添加换行。</p>
+<h2 id="选项">选项</h2>
+<ul>
+<li><code>-e</code> — 启用转义序列解释</li>
+<li><code>-E</code> — 禁用转义序列解释（默认）</li>
+<li><code>-n</code> — …</li></ul></p>
+    <div class="meta">
+      <time datetime="2026-08-08">2026-08-08</time>
+      
+    </div>
+  </article>
+  
+  <article class="card" data-press data-reveal data-reveal-delay="345">
+    <h3><a href="/wiki/m4kk1/man/man1/grep/">grep</a></h3>
+    <p><h2 id="名称">名称</h2>
+<p>grep — 使用正则表达式搜索文本</p>
+<h2 id="概要">概要</h2>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>grep 模式 [文件]
+</span></span></code></pre></div><h2 id="描述">描述</h2>
+<p>在文件或标准输入中搜索匹配给定正则表达式的行并输出。如果未指定文件，从标准输入读取。</p>
+<h2 id="正则表达式语法">正则表达式语法</h2>
+<ul>
+<li><code>.</code> — 任意单字符（除换行）</li>
+<li><code>* …</code></li></ul></p>
+    <div class="meta">
+      <time datetime="2026-08-08">2026-08-08</time>
+      
+    </div>
+  </article>
+  
+  <article class="card" data-press data-reveal data-reveal-delay="445">
+    <h3><a href="/wiki/m4kk1/man/man1/id/">id</a></h3>
+    <p><h2 id="名称">名称</h2>
+<p>id — 显示用户身份信息</p>
+<h2 id="概要">概要</h2>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>id
+</span></span></code></pre></div><h2 id="描述">描述</h2>
+<p>显示当前用户的 UID、GID、有效 UID/EUID、有效 GID/EGID 以及附加组列表。</p>
+<h2 id="参见">参见</h2>
+<p><a href="who/">who(1)</a>、<a href="../man8/passwd/">passwd(8)</a>、<a href="../man8/usermod/">usermod(8)</a></p></p>
+    <div class="meta">
+      <time datetime="2026-08-08">2026-08-08</time>
+      
+    </div>
+  </article>
+  
+  <article class="card" data-press data-reveal data-reveal-delay="545">
+    <h3><a href="/wiki/m4kk1/man/man1/ls/">ls</a></h3>
+    <p><h2 id="名称">名称</h2>
+<p>ls — 列出目录内容</p>
+<h2 id="概要">概要</h2>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>ls [路径]
+</span></span></code></pre></div><h2 id="描述">描述</h2>
+<p>列出指定目录的内容。如果不指定路径，列出当前目录。</p>
+<h2 id="示例">示例</h2>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>ls
+</span></span></code></pre></div><p>列出当前目录</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>ls /bin
+</span></span></code></pre></div><p>列出 /bin 目录</p>
+<h2 id="参见">参见</h2>
+<p><a href="cat/">cat(1)</a>、<a href="../man1/cd/">cd(1)</a>、<a href="../man1/pwd/">pwd(1)</a></p></p>
+    <div class="meta">
+      <time datetime="2026-08-08">2026-08-08</time>
+      
+    </div>
+  </article>
+  
+  <article class="card" data-press data-reveal data-reveal-delay="045">
+    <h3><a href="/wiki/m4kk1/man/man1/m4sh/">m4sh</a></h3>
+    <p><h2 id="名称">名称</h2>
+<p>m4sh — M4KK1 Shell，交互式命令行解释器</p>
+<h2 id="概要">概要</h2>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>m4sh
+</span></span></code></pre></div><h2 id="描述">描述</h2>
+<p>M4SH 是 M4KK1 系统的 init 进程（PID 1），提供交互式命令行环境。支持命令执行、管道、重定向、环境变量、命令历史 …</p></p>
+    <div class="meta">
+      <time datetime="2026-08-08">2026-08-08</time>
+      
+    </div>
+  </article>
+  
+  <article class="card" data-press data-reveal data-reveal-delay="145">
+    <h3><a href="/wiki/m4kk1/man/man1/ps/">ps</a></h3>
+    <p><h2 id="名称">名称</h2>
+<p>ps — 显示进程状态</p>
+<h2 id="概要">概要</h2>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>ps
+</span></span></code></pre></div><h2 id="描述">描述</h2>
+<p>显示当前系统中所有进程的信息，包括 PID、PPID、状态、名称。当前为单进程系统，仅显示 init 进程。</p>
+<h2 id="参见">参见</h2>
+<p><a href="who/">who(1)</a>、<a href="../man1/kill/">kill(1)</a></p></p>
+    <div class="meta">
+      <time datetime="2026-08-08">2026-08-08</time>
+      
+    </div>
+  </article>
+  
+  <article class="card" data-press data-reveal data-reveal-delay="245">
+    <h3><a href="/wiki/m4kk1/man/man1/wc/">wc</a></h3>
+    <p><h2 id="名称">名称</h2>
+<p>wc — 统计行、词和字符数</p>
+<h2 id="概要">概要</h2>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>wc [文件]
+</span></span></code></pre></div><h2 id="描述">描述</h2>
+<p>统计指定文件或标准输入的行数、词数和字符数。</p>
+<h2 id="参见">参见</h2>
+<p><a href="grep/">grep(1)</a>、<a href="cat/">cat(1)</a></p></p>
+    <div class="meta">
+      <time datetime="2026-08-08">2026-08-08</time>
+      
+    </div>
+  </article>
+  
+  <article class="card" data-press data-reveal data-reveal-delay="345">
+    <h3><a href="/wiki/m4kk1/man/man1/who/">who</a></h3>
+    <p><h2 id="名称">名称</h2>
+<p>who — 显示当前登录的用户</p>
+<h2 id="概要">概要</h2>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>who
+</span></span></code></pre></div><h2 id="描述">描述</h2>
+<p>显示当前所有活跃登录会话。数据来源: <code>/sys/sessions/</code>。</p>
+<h2 id="输出格式">输出格式</h2>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-text" data-lang="text"><span style="display:flex;"><span>USER     TTY     LOGIN_TIME          FROM …</span></span></code></pre></div></p>
+    <div class="meta">
+      <time datetime="2026-08-08">2026-08-08</time>
+      
+    </div>
+  </article>
+  
+</div>
+
+
+
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+      <div class="footer-links">
+        
+        <a href="https://github.com/makkichan947" target="_blank" rel="noopener" title="Github" data-press>Github</a>
+        
+        <a href="mailto:yakumakki947@hotmail.com" target="_blank" rel="noopener" title="Email" data-press>Email</a>
+        
+        <a href="https://x.com/Makki_Yaku947" target="_blank" rel="noopener" title="Twitter" data-press>Twitter</a>
+        
+        <a href="https://www.twitch.tv/u/makkichan947" target="_blank" rel="noopener" title="Twitch" data-press>Twitch</a>
+        
+      </div>
+      <p>&copy; 2026 Yaku Makki</p>
+      <p>Powered by <a href="https://gohugo.io" target="_blank" rel="noopener">Hugo</a> · Makki Theme</p>
+      
+      <div class="stats">
+        <span>访客 <span id="busuanzi_value_site_uv"></span></span>
+        <span>访问 <span id="busuanzi_value_site_pv"></span></span>
+        <span>本页 <span id="busuanzi_value_page_pv"></span></span>
+      </div>
+      
+    </div>
+  </footer>
+
+  <button class="back-to-top" id="back-to-top" type="button" aria-label="回到顶部" data-press>
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 19V5"/><path d="M5 12l7-7 7 7"/></svg>
+  </button>
+
+  
+  <script src="/js/main.min.2e977141114ec7890ffee2c35e08034683543cfe8ef98dd4af5effb3b37a3345.js" integrity="sha256-LpdxQRFOx4kP/uLDXggDRoNUPP6O&#43;Y3Ur17/s7N6M0U=" defer></script>
+  
+  
+  <script src="/js/search.min.b2d6ba6610ce24454bc1436dc521dcfd878b2583ad9f65f77aadedaaa1e1a54c.js" integrity="sha256-sta6ZhDOJEVLwUNtxSHc/YeLJYOtn2X3eq3tqqHhpUw=" defer></script>
+  
+
+  
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+  
+
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/katex.min.js" crossorigin="anonymous"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/contrib/auto-render.min.js" crossorigin="anonymous"></script>
+</body>
+</html>

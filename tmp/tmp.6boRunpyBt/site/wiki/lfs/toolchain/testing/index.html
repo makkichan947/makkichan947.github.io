@@ -1,0 +1,817 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>临时工具链测试 · Yaku Makki</title>
+  <meta name="description" content="验证临时工具链的完整性和功能">
+  <meta name="theme-color" content="#0a0a0f">
+  <script>document.documentElement.classList.add('js');</script>
+
+  <link rel="icon" href="/avatar/avatar.jpg" type="image/jpeg">
+
+  
+  <link rel="stylesheet" href="/css/main.min.b64e4527cc255b367461135391e39e321a5d86fc97defca99c7afda308ada007.css" integrity="sha256-tk5FJ8wlWzZ0YRNTkeOeMhpdhvyX3vypnHr9owitoAc=">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/katex.min.css" crossorigin="anonymous">
+</head>
+<body>
+  <a class="skip-link" href="#main">跳到内容</a>
+
+  <div class="scene" aria-hidden="true">
+    <div class="scene-sky"></div>
+    <div class="scene-stars"></div>
+    <div class="scene-sun-halo"></div>
+    <div class="scene-sun"></div>
+    <div class="scene-mountains scene-mountains-far"></div>
+    <div class="scene-mountains scene-mountains-near"></div>
+    <div class="scene-horizon"></div>
+    <div class="scene-floor"></div>
+    <div class="scene-scanlines"></div>
+  </div>
+
+  <nav class="navbar" aria-label="主导航">
+    <div class="nav-inner">
+      <a class="logo" href="/" data-press>
+        <img class="logo-avatar" src="/avatar/avatar.jpg" alt="" width="34" height="34">
+        <span class="logo-text">Yaku Makki</span>
+      </a>
+      <div class="nav-menu-wrap">
+        <span class="nav-tick" aria-hidden="true"></span>
+        <ul class="nav-menu">
+          
+          <li>
+            <a href="/" data-press>首页</a>
+          </li>
+          
+          <li>
+            <a href="/post/" data-press>博客</a>
+          </li>
+          
+          <li>
+            <a href="/wiki/" data-press>维基</a>
+          </li>
+          
+          <li>
+            <a href="/tags/" data-press>标签</a>
+          </li>
+          
+          <li>
+            <a href="/about/" data-press>关于</a>
+          </li>
+          
+          
+          <li>
+            <button id="search-toggle" class="search-toggle" type="button" title="搜索 (Ctrl+K 或 /)" aria-haspopup="dialog" aria-expanded="false" data-press>搜索</button>
+          </li>
+          
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  
+  <div class="sheet-scrim" id="sheet-scrim"></div>
+  <section class="sheet" id="search-sheet" role="dialog" aria-modal="true" aria-label="搜索" aria-hidden="true">
+    <div class="sheet-panel" id="sheet-panel">
+      <div class="sheet-handle" id="sheet-handle" role="presentation" aria-hidden="true"></div>
+      <div class="sheet-body">
+        <div class="search-field">
+          <input id="search-input" type="search" placeholder="搜索文章和 Wiki…"
+                 autocomplete="off" spellcheck="false" aria-controls="search-results">
+          <span class="search-key" aria-hidden="true">/</span>
+        </div>
+        <div id="search-results" class="search-results" role="listbox" aria-label="搜索结果"></div>
+      </div>
+    </div>
+  </section>
+  
+
+  <main class="main" id="main">
+    
+<header class="page-head">
+  <nav class="crumb" aria-label="面包屑">
+    <a href="/" data-press>首页</a>
+    <span class="sep">/</span>
+    <a href="/wiki/" data-press>维基</a>
+    
+    
+    <span class="sep">/</span>
+    <a href="/wiki/lfs/toolchain/" data-press>第二部分：临时工具链</a>
+    
+    
+  </nav>
+  <h1>临时工具链测试</h1>
+  <p>验证临时工具链的完整性和功能</p>
+</header>
+
+<div class="wiki-layout">
+  <article class="article">
+    <div class="article-content"><h1 id="临时工具链测试">临时工具链测试</h1>
+<p>构建完成后，必须对临时工具链进行全面测试，确保其能够正确编译和运行程序。本章将介绍各种测试方法和验证步骤。</p>
+<h2 id="-测试目标">🎯 测试目标</h2>
+<h3 id="工具链验证内容">工具链验证内容</h3>
+<p>临时工具链测试需要验证：</p>
+<ol>
+<li><strong>编译器功能</strong>：GCC能够正确编译C/C++程序</li>
+<li><strong>链接器功能</strong>：能够正确链接目标文件和库</li>
+<li><strong>库功能</strong>：C库和运行时支持正常工作</li>
+<li><strong>交叉编译</strong>：能够生成目标平台的可执行代码</li>
+<li><strong>调试支持</strong>：调试信息和符号表正确</li>
+</ol>
+<h2 id="-基本功能测试">🧪 基本功能测试</h2>
+<h3 id="编译器测试">编译器测试</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># 切换到lfs用户</span>
+</span></span><span style="display:flex;"><span>su - lfs
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 创建测试目录</span>
+</span></span><span style="display:flex;"><span>mkdir -pv $LFS/toolchain_tests
+</span></span><span style="display:flex;"><span>cd $LFS/toolchain_tests
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 基本C程序测试</span>
+</span></span><span style="display:flex;"><span>cat &gt; hello.c &lt;&lt; <span style="color:#e6db74">&#34;EOF&#34;</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#include &lt;stdio.h&gt;</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#include &lt;stdlib.h&gt;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>int main<span style="color:#f92672">(</span>int argc, char *argv<span style="color:#f92672">[])</span> <span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>    printf<span style="color:#f92672">(</span><span style="color:#e6db74">&#34;Hello, LFS Toolchain!\n&#34;</span><span style="color:#f92672">)</span>;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>argc &gt; 1<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>        printf<span style="color:#f92672">(</span><span style="color:#e6db74">&#34;Arguments: &#34;</span><span style="color:#f92672">)</span>;
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">for</span> <span style="color:#f92672">(</span>int i <span style="color:#f92672">=</span> 1; i &lt; argc; i++<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>            printf<span style="color:#f92672">(</span><span style="color:#e6db74">&#34;%s &#34;</span>, argv<span style="color:#f92672">[</span>i<span style="color:#f92672">])</span>;
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span>        printf<span style="color:#f92672">(</span><span style="color:#e6db74">&#34;\n&#34;</span><span style="color:#f92672">)</span>;
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> EXIT_SUCCESS;
+</span></span><span style="display:flex;"><span><span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span>EOF
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 编译测试</span>
+</span></span><span style="display:flex;"><span>$LFS_TGT-gcc hello.c -o hello
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 检查编译结果</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">if</span> <span style="color:#f92672">[</span> -x hello <span style="color:#f92672">]</span>; <span style="color:#66d9ef">then</span>
+</span></span><span style="display:flex;"><span>    echo <span style="color:#e6db74">&#34;✓ 基本编译测试通过&#34;</span>
+</span></span><span style="display:flex;"><span>    $LFS_TGT-readelf -l hello | grep <span style="color:#e6db74">&#34;interpreter&#34;</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">else</span>
+</span></span><span style="display:flex;"><span>    echo <span style="color:#e6db74">&#34;✗ 基本编译测试失败&#34;</span>
+</span></span><span style="display:flex;"><span>    exit <span style="color:#ae81ff">1</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">fi</span>
+</span></span></code></pre></div><h3 id="库功能测试">库功能测试</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># 测试标准库函数</span>
+</span></span><span style="display:flex;"><span>cat &gt; lib_test.c &lt;&lt; <span style="color:#e6db74">&#34;EOF&#34;</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#include &lt;stdio.h&gt;</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#include &lt;stdlib.h&gt;</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#include &lt;string.h&gt;</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#include &lt;math.h&gt;</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#include &lt;time.h&gt;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>int main<span style="color:#f92672">()</span> <span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>    printf<span style="color:#f92672">(</span><span style="color:#e6db74">&#34;=== 标准库功能测试 ===\n&#34;</span><span style="color:#f92672">)</span>;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    // 字符串函数
+</span></span><span style="display:flex;"><span>    char str1<span style="color:#f92672">[</span>50<span style="color:#f92672">]</span> <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;Hello&#34;</span>;
+</span></span><span style="display:flex;"><span>    char str2<span style="color:#f92672">[</span>50<span style="color:#f92672">]</span> <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;World&#34;</span>;
+</span></span><span style="display:flex;"><span>    strcat<span style="color:#f92672">(</span>str1, <span style="color:#e6db74">&#34; &#34;</span><span style="color:#f92672">)</span>;
+</span></span><span style="display:flex;"><span>    strcat<span style="color:#f92672">(</span>str1, str2<span style="color:#f92672">)</span>;
+</span></span><span style="display:flex;"><span>    printf<span style="color:#f92672">(</span><span style="color:#e6db74">&#34;字符串连接: %s\n&#34;</span>, str1<span style="color:#f92672">)</span>;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    // 数学函数
+</span></span><span style="display:flex;"><span>    double x <span style="color:#f92672">=</span> 3.14159;
+</span></span><span style="display:flex;"><span>    printf<span style="color:#f92672">(</span><span style="color:#e6db74">&#34;平方根: %.6f\n&#34;</span>, sqrt<span style="color:#f92672">(</span>x<span style="color:#f92672">))</span>;
+</span></span><span style="display:flex;"><span>    printf<span style="color:#f92672">(</span><span style="color:#e6db74">&#34;正弦值: %.6f\n&#34;</span>, sin<span style="color:#f92672">(</span>x<span style="color:#f92672">))</span>;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    // 内存管理
+</span></span><span style="display:flex;"><span>    int *array <span style="color:#f92672">=</span> malloc<span style="color:#f92672">(</span><span style="color:#ae81ff">10</span> * sizeof<span style="color:#f92672">(</span>int<span style="color:#f92672">))</span>;
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>array<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">for</span> <span style="color:#f92672">(</span>int i <span style="color:#f92672">=</span> 0; i &lt; 10; i++<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>            array<span style="color:#f92672">[</span>i<span style="color:#f92672">]</span> <span style="color:#f92672">=</span> i * i;
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span>        printf<span style="color:#f92672">(</span><span style="color:#e6db74">&#34;数组内容: &#34;</span><span style="color:#f92672">)</span>;
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">for</span> <span style="color:#f92672">(</span>int i <span style="color:#f92672">=</span> 0; i &lt; 10; i++<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>            printf<span style="color:#f92672">(</span><span style="color:#e6db74">&#34;%d &#34;</span>, array<span style="color:#f92672">[</span>i<span style="color:#f92672">])</span>;
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span>        printf<span style="color:#f92672">(</span><span style="color:#e6db74">&#34;\n&#34;</span><span style="color:#f92672">)</span>;
+</span></span><span style="display:flex;"><span>        free<span style="color:#f92672">(</span>array<span style="color:#f92672">)</span>;
+</span></span><span style="display:flex;"><span>        printf<span style="color:#f92672">(</span><span style="color:#e6db74">&#34;✓ 内存管理测试通过\n&#34;</span><span style="color:#f92672">)</span>;
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">}</span> <span style="color:#66d9ef">else</span> <span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>        printf<span style="color:#f92672">(</span><span style="color:#e6db74">&#34;✗ 内存分配失败\n&#34;</span><span style="color:#f92672">)</span>;
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    // 时间函数
+</span></span><span style="display:flex;"><span>    time_t now <span style="color:#f92672">=</span> time<span style="color:#f92672">(</span>NULL<span style="color:#f92672">)</span>;
+</span></span><span style="display:flex;"><span>    printf<span style="color:#f92672">(</span><span style="color:#e6db74">&#34;当前时间戳: %ld\n&#34;</span>, now<span style="color:#f92672">)</span>;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    printf<span style="color:#f92672">(</span><span style="color:#e6db74">&#34;=== 所有测试完成 ===\n&#34;</span><span style="color:#f92672">)</span>;
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> 0;
+</span></span><span style="display:flex;"><span><span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span>EOF
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 编译并测试</span>
+</span></span><span style="display:flex;"><span>$LFS_TGT-gcc lib_test.c -lm -o lib_test
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">if</span> <span style="color:#f92672">[</span> -x lib_test <span style="color:#f92672">]</span>; <span style="color:#66d9ef">then</span>
+</span></span><span style="display:flex;"><span>    echo <span style="color:#e6db74">&#34;✓ 库功能测试编译成功&#34;</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">else</span>
+</span></span><span style="display:flex;"><span>    echo <span style="color:#e6db74">&#34;✗ 库功能测试编译失败&#34;</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">fi</span>
+</span></span></code></pre></div><h3 id="c功能测试">C++功能测试</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># C++标准库测试</span>
+</span></span><span style="display:flex;"><span>cat &gt; cpp_test.cpp &lt;&lt; <span style="color:#e6db74">&#34;EOF&#34;</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#include &lt;iostream&gt;</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#include &lt;string&gt;</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#include &lt;vector&gt;</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#include &lt;algorithm&gt;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>class TestClass <span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>private:
+</span></span><span style="display:flex;"><span>    std::string name;
+</span></span><span style="display:flex;"><span>    int value;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>public:
+</span></span><span style="display:flex;"><span>    TestClass<span style="color:#f92672">(</span>std::string n, int v<span style="color:#f92672">)</span> : name<span style="color:#f92672">(</span>n<span style="color:#f92672">)</span>, value<span style="color:#f92672">(</span>v<span style="color:#f92672">)</span> <span style="color:#f92672">{}</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    void display<span style="color:#f92672">()</span> const <span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>        std::cout &lt;&lt; <span style="color:#e6db74">&#34;对象: &#34;</span> <span style="color:#e6db74">&lt;&lt; name &lt;&lt; &#34;, 值: &#34; &lt;&lt; value &lt;&lt; std::en</span>dl;
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    int getValue<span style="color:#f92672">()</span> const <span style="color:#f92672">{</span> <span style="color:#66d9ef">return</span> value; <span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">}</span>;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>int main<span style="color:#f92672">()</span> <span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>    std::cout &lt;&lt; <span style="color:#e6db74">&#34;=== C++功能测试 ===&#34;</span> <span style="color:#e6db74">&lt;&lt; std::endl;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    // 基本输出
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    std</span>::cout &lt;&lt; <span style="color:#e6db74">&#34;Hello, C++!&#34;</span> <span style="color:#e6db74">&lt;&lt; std::endl;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    // STL容器
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    std</span>::vector&lt;TestClass&gt; objects;
+</span></span><span style="display:flex;"><span>    objects.emplace_back<span style="color:#f92672">(</span><span style="color:#e6db74">&#34;对象1&#34;</span>, 10<span style="color:#f92672">)</span>;
+</span></span><span style="display:flex;"><span>    objects.emplace_back<span style="color:#f92672">(</span><span style="color:#e6db74">&#34;对象2&#34;</span>, 20<span style="color:#f92672">)</span>;
+</span></span><span style="display:flex;"><span>    objects.emplace_back<span style="color:#f92672">(</span><span style="color:#e6db74">&#34;对象3&#34;</span>, 15<span style="color:#f92672">)</span>;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    // 排序
+</span></span><span style="display:flex;"><span>    std::sort<span style="color:#f92672">(</span>objects.begin<span style="color:#f92672">()</span>, objects.end<span style="color:#f92672">()</span>,
+</span></span><span style="display:flex;"><span>              <span style="color:#f92672">[](</span>const TestClass&amp; a, const TestClass&amp; b<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>                  <span style="color:#66d9ef">return</span> a.getValue<span style="color:#f92672">()</span> &lt; b.getValue<span style="color:#f92672">()</span>;
+</span></span><span style="display:flex;"><span>              <span style="color:#f92672">})</span>;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    // 显示结果
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">for</span> <span style="color:#f92672">(</span>const auto&amp; obj : objects<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>        obj.display<span style="color:#f92672">()</span>;
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    std::cout &lt;&lt; <span style="color:#e6db74">&#34;=== C++测试完成 ===&#34;</span> <span style="color:#e6db74">&lt;&lt; std::endl;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    return 0;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">}
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">EOF
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74"># 编译C++程序
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">$LFS_TGT-g++ cpp_test</span>.cpp -o cpp_test
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">if</span> <span style="color:#f92672">[</span> -x cpp_test <span style="color:#f92672">]</span>; <span style="color:#66d9ef">then</span>
+</span></span><span style="display:flex;"><span>    echo <span style="color:#e6db74">&#34;✓ C++功能测试编译成功&#34;</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">else</span>
+</span></span><span style="display:flex;"><span>    echo <span style="color:#e6db74">&#34;✗ C++功能测试编译失败&#34;</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">fi</span>
+</span></span></code></pre></div><h2 id="-高级功能测试">🔧 高级功能测试</h2>
+<h3 id="链接器测试">链接器测试</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># 测试静态链接</span>
+</span></span><span style="display:flex;"><span>cat &gt; static_lib.c &lt;&lt; <span style="color:#e6db74">&#34;EOF&#34;</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#include &lt;stdio.h&gt;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>void print_message<span style="color:#f92672">(</span>const char *msg<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>    printf<span style="color:#f92672">(</span><span style="color:#e6db74">&#34;静态库消息: %s\n&#34;</span>, msg<span style="color:#f92672">)</span>;
+</span></span><span style="display:flex;"><span><span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span>EOF
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 编译为目标文件</span>
+</span></span><span style="display:flex;"><span>$LFS_TGT-gcc -c static_lib.c -o static_lib.o
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 创建静态库</span>
+</span></span><span style="display:flex;"><span>$LFS_TGT-ar rcs libstatic.a static_lib.o
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 创建使用静态库的程序</span>
+</span></span><span style="display:flex;"><span>cat &gt; use_static.c &lt;&lt; <span style="color:#e6db74">&#34;EOF&#34;</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#include &lt;stdio.h&gt;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>void print_message<span style="color:#f92672">(</span>const char *msg<span style="color:#f92672">)</span>;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>int main<span style="color:#f92672">()</span> <span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>    printf<span style="color:#f92672">(</span><span style="color:#e6db74">&#34;=== 静态链接测试 ===\n&#34;</span><span style="color:#f92672">)</span>;
+</span></span><span style="display:flex;"><span>    print_message<span style="color:#f92672">(</span><span style="color:#e6db74">&#34;Hello from static library!&#34;</span><span style="color:#f92672">)</span>;
+</span></span><span style="display:flex;"><span>    printf<span style="color:#f92672">(</span><span style="color:#e6db74">&#34;=== 测试完成 ===\n&#34;</span><span style="color:#f92672">)</span>;
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> 0;
+</span></span><span style="display:flex;"><span><span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span>EOF
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 静态链接</span>
+</span></span><span style="display:flex;"><span>$LFS_TGT-gcc use_static.c -L. -lstatic -o use_static
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">if</span> <span style="color:#f92672">[</span> -x use_static <span style="color:#f92672">]</span>; <span style="color:#66d9ef">then</span>
+</span></span><span style="display:flex;"><span>    echo <span style="color:#e6db74">&#34;✓ 静态链接测试成功&#34;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># 检查是否包含库代码</span>
+</span></span><span style="display:flex;"><span>    $LFS_TGT-nm use_static | grep <span style="color:#e6db74">&#34;print_message&#34;</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">else</span>
+</span></span><span style="display:flex;"><span>    echo <span style="color:#e6db74">&#34;✗ 静态链接测试失败&#34;</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">fi</span>
+</span></span></code></pre></div><h3 id="动态链接测试">动态链接测试</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># 测试动态链接</span>
+</span></span><span style="display:flex;"><span>cat &gt; dynamic_lib.c &lt;&lt; <span style="color:#e6db74">&#34;EOF&#34;</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#include &lt;stdio.h&gt;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>void dynamic_function<span style="color:#f92672">(</span>const char *msg<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>    printf<span style="color:#f92672">(</span><span style="color:#e6db74">&#34;动态库消息: %s\n&#34;</span>, msg<span style="color:#f92672">)</span>;
+</span></span><span style="display:flex;"><span><span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span>EOF
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 编译为位置无关代码</span>
+</span></span><span style="display:flex;"><span>$LFS_TGT-gcc -fPIC -c dynamic_lib.c -o dynamic_lib.o
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 创建共享库</span>
+</span></span><span style="display:flex;"><span>$LFS_TGT-gcc -shared -o libdynamic.so dynamic_lib.o
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 创建使用动态库的程序</span>
+</span></span><span style="display:flex;"><span>cat &gt; use_dynamic.c &lt;&lt; <span style="color:#e6db74">&#34;EOF&#34;</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#include &lt;stdio.h&gt;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>void dynamic_function<span style="color:#f92672">(</span>const char *msg<span style="color:#f92672">)</span>;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>int main<span style="color:#f92672">()</span> <span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>    printf<span style="color:#f92672">(</span><span style="color:#e6db74">&#34;=== 动态链接测试 ===\n&#34;</span><span style="color:#f92672">)</span>;
+</span></span><span style="display:flex;"><span>    dynamic_function<span style="color:#f92672">(</span><span style="color:#e6db74">&#34;Hello from shared library!&#34;</span><span style="color:#f92672">)</span>;
+</span></span><span style="display:flex;"><span>    printf<span style="color:#f92672">(</span><span style="color:#e6db74">&#34;=== 测试完成 ===\n&#34;</span><span style="color:#f92672">)</span>;
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> 0;
+</span></span><span style="display:flex;"><span><span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span>EOF
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 动态链接编译</span>
+</span></span><span style="display:flex;"><span>$LFS_TGT-gcc use_dynamic.c -L. -ldynamic -o use_dynamic
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">if</span> <span style="color:#f92672">[</span> -x use_dynamic <span style="color:#f92672">]</span>; <span style="color:#66d9ef">then</span>
+</span></span><span style="display:flex;"><span>    echo <span style="color:#e6db74">&#34;✓ 动态链接测试成功&#34;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># 检查动态依赖</span>
+</span></span><span style="display:flex;"><span>    $LFS_TGT-readelf -d use_dynamic | grep <span style="color:#e6db74">&#34;Shared library&#34;</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">else</span>
+</span></span><span style="display:flex;"><span>    echo <span style="color:#e6db74">&#34;✗ 动态链接测试失败&#34;</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">fi</span>
+</span></span></code></pre></div><h3 id="交叉编译验证">交叉编译验证</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># 测试交叉编译功能</span>
+</span></span><span style="display:flex;"><span>cat &gt; cross_test.c &lt;&lt; <span style="color:#e6db74">&#34;EOF&#34;</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#include &lt;stdio.h&gt;</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#include &lt;stdint.h&gt;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>int main<span style="color:#f92672">()</span> <span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>    printf<span style="color:#f92672">(</span><span style="color:#e6db74">&#34;=== 交叉编译验证 ===\n&#34;</span><span style="color:#f92672">)</span>;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    // 检查数据类型大小
+</span></span><span style="display:flex;"><span>    printf<span style="color:#f92672">(</span><span style="color:#e6db74">&#34;char: %zu bytes\n&#34;</span>, sizeof<span style="color:#f92672">(</span>char<span style="color:#f92672">))</span>;
+</span></span><span style="display:flex;"><span>    printf<span style="color:#f92672">(</span><span style="color:#e6db74">&#34;short: %zu bytes\n&#34;</span>, sizeof<span style="color:#f92672">(</span>short<span style="color:#f92672">))</span>;
+</span></span><span style="display:flex;"><span>    printf<span style="color:#f92672">(</span><span style="color:#e6db74">&#34;int: %zu bytes\n&#34;</span>, sizeof<span style="color:#f92672">(</span>int<span style="color:#f92672">))</span>;
+</span></span><span style="display:flex;"><span>    printf<span style="color:#f92672">(</span><span style="color:#e6db74">&#34;long: %zu bytes\n&#34;</span>, sizeof<span style="color:#f92672">(</span>long<span style="color:#f92672">))</span>;
+</span></span><span style="display:flex;"><span>    printf<span style="color:#f92672">(</span><span style="color:#e6db74">&#34;long long: %zu bytes\n&#34;</span>, sizeof<span style="color:#f92672">(</span>long long<span style="color:#f92672">))</span>;
+</span></span><span style="display:flex;"><span>    printf<span style="color:#f92672">(</span><span style="color:#e6db74">&#34;pointer: %zu bytes\n&#34;</span>, sizeof<span style="color:#f92672">(</span>void*<span style="color:#f92672">))</span>;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    // 检查字节序
+</span></span><span style="display:flex;"><span>    uint32_t test <span style="color:#f92672">=</span> 0x12345678;
+</span></span><span style="display:flex;"><span>    unsigned char *bytes <span style="color:#f92672">=</span> <span style="color:#f92672">(</span>unsigned char*<span style="color:#f92672">)</span>&amp;test;
+</span></span><span style="display:flex;"><span>    printf<span style="color:#f92672">(</span><span style="color:#e6db74">&#34;字节序: %s\n&#34;</span>, <span style="color:#f92672">(</span>bytes<span style="color:#f92672">[</span>0<span style="color:#f92672">]</span> <span style="color:#f92672">==</span> 0x78<span style="color:#f92672">)</span> ? <span style="color:#e6db74">&#34;小端&#34;</span> : <span style="color:#e6db74">&#34;大端&#34;</span><span style="color:#f92672">)</span>;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    // 检查编译器定义
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#ifdef __GNUC__</span>
+</span></span><span style="display:flex;"><span>    printf<span style="color:#f92672">(</span><span style="color:#e6db74">&#34;编译器: GCC %d.%d.%d\n&#34;</span>, __GNUC__, __GNUC_MINOR__, __GNUC_PATCHLEVEL__<span style="color:#f92672">)</span>;
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#endif</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#ifdef __x86_64__</span>
+</span></span><span style="display:flex;"><span>    printf<span style="color:#f92672">(</span><span style="color:#e6db74">&#34;目标架构: x86_64\n&#34;</span><span style="color:#f92672">)</span>;
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#endif</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    printf<span style="color:#f92672">(</span><span style="color:#e6db74">&#34;=== 验证完成 ===\n&#34;</span><span style="color:#f92672">)</span>;
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> 0;
+</span></span><span style="display:flex;"><span><span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span>EOF
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 交叉编译</span>
+</span></span><span style="display:flex;"><span>$LFS_TGT-gcc cross_test.c -o cross_test
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">if</span> <span style="color:#f92672">[</span> -x cross_test <span style="color:#f92672">]</span>; <span style="color:#66d9ef">then</span>
+</span></span><span style="display:flex;"><span>    echo <span style="color:#e6db74">&#34;✓ 交叉编译验证成功&#34;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># 分析目标文件</span>
+</span></span><span style="display:flex;"><span>    $LFS_TGT-readelf -h cross_test | grep <span style="color:#e6db74">&#34;Machine\|Class\|OS/ABI&#34;</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">else</span>
+</span></span><span style="display:flex;"><span>    echo <span style="color:#e6db74">&#34;✗ 交叉编译验证失败&#34;</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">fi</span>
+</span></span></code></pre></div><h2 id="-性能和稳定性测试">📊 性能和稳定性测试</h2>
+<h3 id="编译性能测试">编译性能测试</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># 测试编译速度</span>
+</span></span><span style="display:flex;"><span>cat &gt; perf_test.c &lt;&lt; <span style="color:#e6db74">&#34;EOF&#34;</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#include &lt;stdio.h&gt;</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#include &lt;stdlib.h&gt;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#define SIZE 10000</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>int main<span style="color:#f92672">()</span> <span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>    int **matrix <span style="color:#f92672">=</span> malloc<span style="color:#f92672">(</span>SIZE * sizeof<span style="color:#f92672">(</span>int*<span style="color:#f92672">))</span>;
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">for</span> <span style="color:#f92672">(</span>int i <span style="color:#f92672">=</span> 0; i &lt; SIZE; i++<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>        matrix<span style="color:#f92672">[</span>i<span style="color:#f92672">]</span> <span style="color:#f92672">=</span> malloc<span style="color:#f92672">(</span>SIZE * sizeof<span style="color:#f92672">(</span>int<span style="color:#f92672">))</span>;
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">for</span> <span style="color:#f92672">(</span>int j <span style="color:#f92672">=</span> 0; j &lt; SIZE; j++<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>            matrix<span style="color:#f92672">[</span>i<span style="color:#f92672">][</span>j<span style="color:#f92672">]</span> <span style="color:#f92672">=</span> i + j;
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    long long sum <span style="color:#f92672">=</span> 0;
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">for</span> <span style="color:#f92672">(</span>int i <span style="color:#f92672">=</span> 0; i &lt; SIZE; i++<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">for</span> <span style="color:#f92672">(</span>int j <span style="color:#f92672">=</span> 0; j &lt; SIZE; j++<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>            sum <span style="color:#f92672">+=</span> matrix<span style="color:#f92672">[</span>i<span style="color:#f92672">][</span>j<span style="color:#f92672">]</span>;
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span>        free<span style="color:#f92672">(</span>matrix<span style="color:#f92672">[</span>i<span style="color:#f92672">])</span>;
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span>    free<span style="color:#f92672">(</span>matrix<span style="color:#f92672">)</span>;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    printf<span style="color:#f92672">(</span><span style="color:#e6db74">&#34;矩阵求和结果: %lld\n&#34;</span>, sum<span style="color:#f92672">)</span>;
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> 0;
+</span></span><span style="display:flex;"><span><span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span>EOF
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 测试不同优化级别</span>
+</span></span><span style="display:flex;"><span>echo <span style="color:#e6db74">&#34;=== 编译性能测试 ===&#34;</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">for</span> opt in O0 O1 O2 O3; <span style="color:#66d9ef">do</span>
+</span></span><span style="display:flex;"><span>    echo <span style="color:#e6db74">&#34;测试优化级别: -</span>$opt<span style="color:#e6db74">&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># 记录编译时间</span>
+</span></span><span style="display:flex;"><span>    start_time<span style="color:#f92672">=</span><span style="color:#66d9ef">$(</span>date +%s.%3N<span style="color:#66d9ef">)</span>
+</span></span><span style="display:flex;"><span>    $LFS_TGT-gcc -$opt perf_test.c -o perf_test_$opt
+</span></span><span style="display:flex;"><span>    end_time<span style="color:#f92672">=</span><span style="color:#66d9ef">$(</span>date +%s.%3N<span style="color:#66d9ef">)</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    compile_time<span style="color:#f92672">=</span><span style="color:#66d9ef">$(</span>echo <span style="color:#e6db74">&#34;</span>$end_time<span style="color:#e6db74"> - </span>$start_time<span style="color:#e6db74">&#34;</span> | bc<span style="color:#66d9ef">)</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> <span style="color:#f92672">[</span> -x perf_test_$opt <span style="color:#f92672">]</span>; <span style="color:#66d9ef">then</span>
+</span></span><span style="display:flex;"><span>        file_size<span style="color:#f92672">=</span><span style="color:#66d9ef">$(</span>ls -lh perf_test_$opt | awk <span style="color:#e6db74">&#39;{print $5}&#39;</span><span style="color:#66d9ef">)</span>
+</span></span><span style="display:flex;"><span>        echo <span style="color:#e6db74">&#34;✓ 编译成功 - 时间: </span><span style="color:#e6db74">${</span>compile_time<span style="color:#e6db74">}</span><span style="color:#e6db74">s, 大小: </span>$file_size<span style="color:#e6db74">&#34;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">else</span>
+</span></span><span style="display:flex;"><span>        echo <span style="color:#e6db74">&#34;✗ 编译失败&#34;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">fi</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">done</span>
+</span></span></code></pre></div><h3 id="稳定性测试">稳定性测试</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># 多进程编译测试</span>
+</span></span><span style="display:flex;"><span>cat &gt; stress_test.c &lt;&lt; <span style="color:#e6db74">&#34;EOF&#34;</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#include &lt;stdio.h&gt;</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#include &lt;stdlib.h&gt;</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#include &lt;unistd.h&gt;</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#include &lt;sys/wait.h&gt;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#define NUM_PROCESSES 10</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>int main<span style="color:#f92672">()</span> <span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>    printf<span style="color:#f92672">(</span><span style="color:#e6db74">&#34;=== 稳定性测试 ===\n&#34;</span><span style="color:#f92672">)</span>;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">for</span> <span style="color:#f92672">(</span>int i <span style="color:#f92672">=</span> 0; i &lt; NUM_PROCESSES; i++<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>        pid_t pid <span style="color:#f92672">=</span> fork<span style="color:#f92672">()</span>;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>pid <span style="color:#f92672">==</span> 0<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>            // 子进程：执行简单计算
+</span></span><span style="display:flex;"><span>            long sum <span style="color:#f92672">=</span> 0;
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">for</span> <span style="color:#f92672">(</span>long j <span style="color:#f92672">=</span> 0; j &lt; 100000; j++<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>                sum <span style="color:#f92672">+=</span> j;
+</span></span><span style="display:flex;"><span>            <span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span>            printf<span style="color:#f92672">(</span><span style="color:#e6db74">&#34;进程 %d 计算结果: %ld\n&#34;</span>, i + 1, sum<span style="color:#f92672">)</span>;
+</span></span><span style="display:flex;"><span>            exit<span style="color:#f92672">(</span>0<span style="color:#f92672">)</span>;
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">}</span> <span style="color:#66d9ef">else</span> <span style="color:#66d9ef">if</span> <span style="color:#f92672">(</span>pid &lt; 0<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>            printf<span style="color:#f92672">(</span><span style="color:#e6db74">&#34;创建进程失败\n&#34;</span><span style="color:#f92672">)</span>;
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">return</span> 1;
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    // 等待所有子进程
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">for</span> <span style="color:#f92672">(</span>int i <span style="color:#f92672">=</span> 0; i &lt; NUM_PROCESSES; i++<span style="color:#f92672">)</span> <span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>        wait<span style="color:#f92672">(</span>NULL<span style="color:#f92672">)</span>;
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    printf<span style="color:#f92672">(</span><span style="color:#e6db74">&#34;=== 稳定性测试完成 ===\n&#34;</span><span style="color:#f92672">)</span>;
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> 0;
+</span></span><span style="display:flex;"><span><span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span>EOF
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 编译并测试</span>
+</span></span><span style="display:flex;"><span>$LFS_TGT-gcc stress_test.c -o stress_test
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">if</span> <span style="color:#f92672">[</span> -x stress_test <span style="color:#f92672">]</span>; <span style="color:#66d9ef">then</span>
+</span></span><span style="display:flex;"><span>    echo <span style="color:#e6db74">&#34;✓ 稳定性测试编译成功&#34;</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">else</span>
+</span></span><span style="display:flex;"><span>    echo <span style="color:#e6db74">&#34;✗ 稳定性测试编译失败&#34;</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">fi</span>
+</span></span></code></pre></div><h2 id="-调试和诊断">🔍 调试和诊断</h2>
+<h3 id="编译过程分析">编译过程分析</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># 详细编译过程跟踪</span>
+</span></span><span style="display:flex;"><span>cat &gt; debug_compile.c &lt;&lt; <span style="color:#e6db74">&#34;EOF&#34;</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#include &lt;stdio.h&gt;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#define DEBUG_LEVEL 2</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>int main<span style="color:#f92672">()</span> <span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#if DEBUG_LEVEL &gt;= 1</span>
+</span></span><span style="display:flex;"><span>    printf<span style="color:#f92672">(</span><span style="color:#e6db74">&#34;调试级别 1: 基本信息\n&#34;</span><span style="color:#f92672">)</span>;
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#endif</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#if DEBUG_LEVEL &gt;= 2</span>
+</span></span><span style="display:flex;"><span>    printf<span style="color:#f92672">(</span><span style="color:#e6db74">&#34;调试级别 2: 详细信息\n&#34;</span><span style="color:#f92672">)</span>;
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#endif</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    printf<span style="color:#f92672">(</span><span style="color:#e6db74">&#34;程序正常运行\n&#34;</span><span style="color:#f92672">)</span>;
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> 0;
+</span></span><span style="display:flex;"><span><span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span>EOF
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 显示预处理结果</span>
+</span></span><span style="display:flex;"><span>echo <span style="color:#e6db74">&#34;=== 预处理结果 ===&#34;</span>
+</span></span><span style="display:flex;"><span>$LFS_TGT-gcc -E debug_compile.c | tail -20
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 显示汇编代码</span>
+</span></span><span style="display:flex;"><span>echo -e <span style="color:#e6db74">&#34;\n=== 汇编代码 ===&#34;</span>
+</span></span><span style="display:flex;"><span>$LFS_TGT-gcc -S debug_compile.c
+</span></span><span style="display:flex;"><span>cat debug_compile.s
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 显示编译详细信息</span>
+</span></span><span style="display:flex;"><span>echo -e <span style="color:#e6db74">&#34;\n=== 编译详细信息 ===&#34;</span>
+</span></span><span style="display:flex;"><span>$LFS_TGT-gcc -v debug_compile.c -o debug_compile
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 分析目标文件</span>
+</span></span><span style="display:flex;"><span>echo -e <span style="color:#e6db74">&#34;\n=== 目标文件分析 ===&#34;</span>
+</span></span><span style="display:flex;"><span>$LFS_TGT-objdump -h debug_compile
+</span></span><span style="display:flex;"><span>$LFS_TGT-objdump -d debug_compile | head -30
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 清理</span>
+</span></span><span style="display:flex;"><span>rm -f debug_compile.c debug_compile.s debug_compile
+</span></span></code></pre></div><h3 id="错误诊断">错误诊断</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># 创建可能出错的程序来测试错误处理</span>
+</span></span><span style="display:flex;"><span>cat &gt; error_test.c &lt;&lt; <span style="color:#e6db74">&#34;EOF&#34;</span>
+</span></span><span style="display:flex;"><span>// 这个程序包含一些潜在的编译问题
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#include &lt;stdio.h&gt;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>int main<span style="color:#f92672">()</span> <span style="color:#f92672">{</span>
+</span></span><span style="display:flex;"><span>    // 未使用的变量
+</span></span><span style="display:flex;"><span>    int unused_var <span style="color:#f92672">=</span> 42;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    // 类型不匹配
+</span></span><span style="display:flex;"><span>    char *str <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;Hello&#34;</span>;
+</span></span><span style="display:flex;"><span>    // str<span style="color:#f92672">[</span>0<span style="color:#f92672">]</span> <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;h&#39;</span>;  // 这会导致段错误
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    printf<span style="color:#f92672">(</span><span style="color:#e6db74">&#34;错误测试程序\n&#34;</span><span style="color:#f92672">)</span>;
+</span></span><span style="display:flex;"><span>    printf<span style="color:#f92672">(</span><span style="color:#e6db74">&#34;字符串: %s\n&#34;</span>, str<span style="color:#f92672">)</span>;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> 0;
+</span></span><span style="display:flex;"><span><span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span>EOF
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 测试警告检测</span>
+</span></span><span style="display:flex;"><span>echo <span style="color:#e6db74">&#34;=== 警告检测测试 ===&#34;</span>
+</span></span><span style="display:flex;"><span>$LFS_TGT-gcc -Wall -Wextra error_test.c -o error_test
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 测试严格模式</span>
+</span></span><span style="display:flex;"><span>echo -e <span style="color:#e6db74">&#34;\n=== 严格模式测试 ===&#34;</span>
+</span></span><span style="display:flex;"><span>$LFS_TGT-gcc -Werror -Wall error_test.c -o error_test_strict 2&gt;&amp;<span style="color:#ae81ff">1</span> <span style="color:#f92672">||</span> echo <span style="color:#e6db74">&#34;预期的编译失败&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 清理</span>
+</span></span><span style="display:flex;"><span>rm -f error_test.c error_test error_test_strict
+</span></span></code></pre></div><h2 id="-完整测试套件">📋 完整测试套件</h2>
+<h3 id="自动化测试脚本">自动化测试脚本</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># 创建完整的测试套件</span>
+</span></span><span style="display:flex;"><span>cat &gt; $LFS/toolchain_tests/run_all_tests.sh <span style="color:#e6db74">&lt;&lt; &#39;EOF&#39;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">#!/bin/bash
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74"># LFS工具链完整测试套件
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">LFS=${LFS:-/mnt/lfs}
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">LFS_TGT=${LFS_TGT:-x86_64-lfs-linux-gnu}
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74"># 颜色定义
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">RED=&#39;\033[0;31m&#39;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">GREEN=&#39;\033[0;32m&#39;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">YELLOW=&#39;\033[1;33m&#39;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">NC=&#39;\033[0m&#39;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74"># 测试计数器
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">total_tests=0
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">passed_tests=0
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">failed_tests=0
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74"># 测试函数
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">run_test() {
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    local test_name=$1
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    local test_cmd=$2
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    echo -n &#34;运行测试: $test_name... &#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    total_tests=$((total_tests + 1))
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    if eval &#34;$test_cmd&#34; &gt;/dev/null 2&gt;&amp;1; then
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        echo -e &#34;${GREEN}通过${NC}&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        passed_tests=$((passed_tests + 1))
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    else
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        echo -e &#34;${RED}失败${NC}&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        failed_tests=$((failed_tests + 1))
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    fi
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">}
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74"># 切换到测试目录
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">cd $LFS/toolchain_tests
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">echo &#34;=== LFS工具链测试套件 ===&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">echo &#34;目标平台: $LFS_TGT&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">echo &#34;测试时间: $(date)&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">echo &#34;&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74"># 基本编译测试
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">run_test &#34;基本C编译&#34; &#34;$LFS_TGT-gcc hello.c -o hello_test&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">run_test &#34;C++编译&#34; &#34;$LFS_TGT-g++ cpp_test.cpp -o cpp_test_exec&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">run_test &#34;库链接&#34; &#34;$LFS_TGT-gcc lib_test.c -lm -o lib_test_exec&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74"># 链接器测试
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">run_test &#34;静态链接&#34; &#34;$LFS_TGT-gcc use_static.c -L. -lstatic -o static_exec&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">run_test &#34;动态链接&#34; &#34;$LFS_TGT-gcc use_dynamic.c -L. -ldynamic -o dynamic_exec&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74"># 交叉编译测试
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">run_test &#34;交叉编译验证&#34; &#34;$LFS_TGT-gcc cross_test.c -o cross_exec&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74"># 优化测试
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">run_test &#34;O0优化&#34; &#34;$LFS_TGT-gcc -O0 perf_test.c -o perf_O0&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">run_test &#34;O2优化&#34; &#34;$LFS_TGT-gcc -O2 perf_test.c -o perf_O2&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">run_test &#34;O3优化&#34; &#34;$LFS_TGT-gcc -O3 perf_test.c -o perf_O3&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74"># 稳定性测试
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">run_test &#34;多进程测试&#34; &#34;$LFS_TGT-gcc stress_test.c -o stress_exec&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">echo &#34;&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">echo &#34;=== 测试结果汇总 ===&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">echo &#34;总测试数: $total_tests&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">echo -e &#34;通过: ${GREEN}$passed_tests${NC}&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">echo -e &#34;失败: ${RED}$failed_tests${NC}&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">if [ $failed_tests -eq 0 ]; then
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    echo -e &#34;${GREEN}所有测试通过！工具链工作正常。${NC}&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    exit 0
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">else
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    echo -e &#34;${RED}有 $failed_tests 个测试失败，请检查工具链配置。${NC}&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    exit 1
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">fi
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">EOF</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>chmod +x $LFS/toolchain_tests/run_all_tests.sh
+</span></span></code></pre></div><h3 id="测试结果分析">测试结果分析</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># 运行完整测试套件</span>
+</span></span><span style="display:flex;"><span>$LFS/toolchain_tests/run_all_tests.sh
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 生成测试报告</span>
+</span></span><span style="display:flex;"><span>cat &gt; $LFS/toolchain_tests/generate_report.sh <span style="color:#e6db74">&lt;&lt; &#39;EOF&#39;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">#!/bin/bash
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74"># 生成测试报告
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">LFS=${LFS:-/mnt/lfs}
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">echo &#34;# LFS工具链测试报告&#34; &gt; $LFS/toolchain_test_report.md
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">echo &#34;&#34; &gt;&gt; $LFS/toolchain_test_report.md
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">echo &#34;生成时间: $(date)&#34; &gt;&gt; $LFS/toolchain_test_report.md
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">echo &#34;&#34; &gt;&gt; $LFS/toolchain_test_report.md
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">echo &#34;## 系统信息&#34; &gt;&gt; $LFS/toolchain_test_report.md
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">echo &#34;- LFS目录: $LFS&#34; &gt;&gt; $LFS/toolchain_test_report.md
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">echo &#34;- 目标平台: $LFS_TGT&#34; &gt;&gt; $LFS/toolchain_test_report.md
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">echo &#34;- GCC版本: $($LFS_TGT-gcc --version | head -1)&#34; &gt;&gt; $LFS/toolchain_test_report.md
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">echo &#34;- Binutils版本: $($LFS_TGT-ld --version | head -1)&#34; &gt;&gt; $LFS/toolchain_test_report.md
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">echo &#34;&#34; &gt;&gt; $LFS/toolchain_test_report.md
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">echo &#34;## 测试文件&#34; &gt;&gt; $LFS/toolchain_test_report.md
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">echo &#34;\`\`\`bash&#34; &gt;&gt; $LFS/toolchain_test_report.md
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">ls -la $LFS/toolchain_tests/ &gt;&gt; $LFS/toolchain_test_report.md
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">echo &#34;\`\`\`&#34; &gt;&gt; $LFS/toolchain_test_report.md
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">echo &#34;&#34; &gt;&gt; $LFS/toolchain_test_report.md
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">echo &#34;## 磁盘使用情况&#34; &gt;&gt; $LFS/toolchain_test_report.md
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">echo &#34;\`\`\`bash&#34; &gt;&gt; $LFS/toolchain_test_report.md
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">df -h $LFS &gt;&gt; $LFS/toolchain_test_report.md
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">echo &#34;\`\`\`&#34; &gt;&gt; $LFS/toolchain_test_report.md
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">echo &#34;报告已保存到: $LFS/toolchain_test_report.md&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">EOF</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>chmod +x $LFS/toolchain_tests/generate_report.sh
+</span></span><span style="display:flex;"><span>$LFS/toolchain_tests/generate_report.sh
+</span></span></code></pre></div><h2 id="-故障排除指南">🚨 故障排除指南</h2>
+<h3 id="常见测试失败原因">常见测试失败原因</h3>
+<ol>
+<li>
+<p><strong>编译失败</strong></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># 检查环境变量</span>
+</span></span><span style="display:flex;"><span>echo $PATH
+</span></span><span style="display:flex;"><span>echo $LFS_TGT
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 验证工具存在</span>
+</span></span><span style="display:flex;"><span>which $LFS_TGT-gcc
+</span></span><span style="display:flex;"><span>ls -la $LFS/tools/bin/$LFS_TGT-gcc
+</span></span></code></pre></div></li>
+<li>
+<p><strong>链接失败</strong></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># 检查库文件</span>
+</span></span><span style="display:flex;"><span>find $LFS -name <span style="color:#e6db74">&#34;libc.so*&#34;</span> -type f
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 检查链接器</span>
+</span></span><span style="display:flex;"><span>$LFS_TGT-ld --version
+</span></span></code></pre></div></li>
+<li>
+<p><strong>运行时失败</strong></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># 检查动态链接器</span>
+</span></span><span style="display:flex;"><span>ls -la $LFS/lib/ld-linux*
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 验证库依赖</span>
+</span></span><span style="display:flex;"><span>$LFS_TGT-readelf -d <span style="color:#f92672">[</span>可执行文件<span style="color:#f92672">]</span>
+</span></span></code></pre></div></li>
+</ol>
+<h3 id="调试技巧">调试技巧</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># 启用详细输出</span>
+</span></span><span style="display:flex;"><span>$LFS_TGT-gcc -v hello.c -o hello
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 显示预处理结果</span>
+</span></span><span style="display:flex;"><span>$LFS_TGT-gcc -E hello.c | head -50
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 显示编译警告</span>
+</span></span><span style="display:flex;"><span>$LFS_TGT-gcc -Wall -Wextra hello.c -o hello
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 分析目标文件</span>
+</span></span><span style="display:flex;"><span>$LFS_TGT-objdump -x hello
+</span></span><span style="display:flex;"><span>$LFS_TGT-readelf -a hello
+</span></span></code></pre></div><h2 id="-相关资源">📚 相关资源</h2>
+<ul>
+<li><a href="http://www.linuxfromscratch.org/lfs/view/stable/chapter05/chapter05.html">LFS官方文档 - 工具链测试</a></li>
+<li><a href="https://gcc.gnu.org/onlinedocs/gccint/Testsuites.html">GCC测试套件</a></li>
+<li><a href="https://sourceware.org/binutils/binutils.pdf">Binutils测试</a></li>
+</ul>
+<hr>
+<p><em>最近更新: {{ .Lastmod.Format &ldquo;2006-01-02&rdquo; }}</em></p>
+</div>
+    
+<nav class="pager" aria-label="文章导航">
+  
+  
+  <a href="/wiki/lfs/toolchain/gcc/" class="is-next" data-press>
+    <span class="dir">下一篇 →</span>GCC编译器
+  </a>
+  
+</nav>
+
+
+    
+
+  </article>
+  
+</div>
+
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+      <div class="footer-links">
+        
+        <a href="https://github.com/makkichan947" target="_blank" rel="noopener" title="Github" data-press>Github</a>
+        
+        <a href="mailto:yakumakki947@hotmail.com" target="_blank" rel="noopener" title="Email" data-press>Email</a>
+        
+        <a href="https://x.com/Makki_Yaku947" target="_blank" rel="noopener" title="Twitter" data-press>Twitter</a>
+        
+        <a href="https://www.twitch.tv/u/makkichan947" target="_blank" rel="noopener" title="Twitch" data-press>Twitch</a>
+        
+      </div>
+      <p>&copy; 2026 Yaku Makki</p>
+      <p>Powered by <a href="https://gohugo.io" target="_blank" rel="noopener">Hugo</a> · Makki Theme</p>
+      
+      <div class="stats">
+        <span>访客 <span id="busuanzi_value_site_uv"></span></span>
+        <span>访问 <span id="busuanzi_value_site_pv"></span></span>
+        <span>本页 <span id="busuanzi_value_page_pv"></span></span>
+      </div>
+      
+    </div>
+  </footer>
+
+  <button class="back-to-top" id="back-to-top" type="button" aria-label="回到顶部" data-press>
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 19V5"/><path d="M5 12l7-7 7 7"/></svg>
+  </button>
+
+  
+  <script src="/js/main.min.2e977141114ec7890ffee2c35e08034683543cfe8ef98dd4af5effb3b37a3345.js" integrity="sha256-LpdxQRFOx4kP/uLDXggDRoNUPP6O&#43;Y3Ur17/s7N6M0U=" defer></script>
+  
+  
+  <script src="/js/search.min.b2d6ba6610ce24454bc1436dc521dcfd878b2583ad9f65f77aadedaaa1e1a54c.js" integrity="sha256-sta6ZhDOJEVLwUNtxSHc/YeLJYOtn2X3eq3tqqHhpUw=" defer></script>
+  
+
+  
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+  
+
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/katex.min.js" crossorigin="anonymous"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/contrib/auto-render.min.js" crossorigin="anonymous"></script>
+</body>
+</html>

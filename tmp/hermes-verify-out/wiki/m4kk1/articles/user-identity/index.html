@@ -1,0 +1,309 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>用户身份模型 · Yaku Makki</title>
+  <meta name="description" content="数据/配置分离的用户与组管理">
+  <meta name="theme-color" content="#0a0a0f">
+  <script>document.documentElement.classList.add('js');</script>
+
+  <link rel="icon" href="/avatar/avatar.jpg" type="image/jpeg">
+
+  
+  <link rel="stylesheet" href="/css/main.min.b64e4527cc255b367461135391e39e321a5d86fc97defca99c7afda308ada007.css" integrity="sha256-tk5FJ8wlWzZ0YRNTkeOeMhpdhvyX3vypnHr9owitoAc=">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/katex.min.css" crossorigin="anonymous">
+</head>
+<body>
+  <a class="skip-link" href="#main">跳到内容</a>
+
+  <div class="scene" aria-hidden="true">
+    <div class="scene-sky"></div>
+    <div class="scene-stars"></div>
+    <div class="scene-sun-halo"></div>
+    <div class="scene-sun"></div>
+    <div class="scene-mountains scene-mountains-far"></div>
+    <div class="scene-mountains scene-mountains-near"></div>
+    <div class="scene-horizon"></div>
+    <div class="scene-floor"></div>
+    <div class="scene-scanlines"></div>
+  </div>
+
+  <nav class="navbar" aria-label="主导航">
+    <div class="nav-inner">
+      <a class="logo" href="/" data-press>
+        <img class="logo-avatar" src="/avatar/avatar.jpg" alt="" width="34" height="34">
+        <span class="logo-text">Yaku Makki</span>
+      </a>
+      <div class="nav-menu-wrap">
+        <span class="nav-tick" aria-hidden="true"></span>
+        <ul class="nav-menu">
+          
+          <li>
+            <a href="/" data-press>首页</a>
+          </li>
+          
+          <li>
+            <a href="/post/" data-press>博客</a>
+          </li>
+          
+          <li>
+            <a href="/wiki/" data-press>维基</a>
+          </li>
+          
+          <li>
+            <a href="/tags/" data-press>标签</a>
+          </li>
+          
+          <li>
+            <a href="/about/" data-press>关于</a>
+          </li>
+          
+          
+          <li>
+            <button id="search-toggle" class="search-toggle" type="button" title="搜索 (Ctrl+K 或 /)" aria-haspopup="dialog" aria-expanded="false" data-press>搜索</button>
+          </li>
+          
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  
+  <div class="sheet-scrim" id="sheet-scrim"></div>
+  <section class="sheet" id="search-sheet" role="dialog" aria-modal="true" aria-label="搜索" aria-hidden="true">
+    <div class="sheet-panel" id="sheet-panel">
+      <div class="sheet-handle" id="sheet-handle" role="presentation" aria-hidden="true"></div>
+      <div class="sheet-body">
+        <div class="search-field">
+          <input id="search-input" type="search" placeholder="搜索文章和 Wiki…"
+                 autocomplete="off" spellcheck="false" aria-controls="search-results">
+          <span class="search-key" aria-hidden="true">/</span>
+        </div>
+        <div id="search-results" class="search-results" role="listbox" aria-label="搜索结果"></div>
+      </div>
+    </div>
+  </section>
+  
+
+  <main class="main" id="main">
+    
+<header class="page-head">
+  <nav class="crumb" aria-label="面包屑">
+    <a href="/" data-press>首页</a>
+    <span class="sep">/</span>
+    <a href="/wiki/" data-press>维基</a>
+    
+    
+    <span class="sep">/</span>
+    <a href="/wiki/m4kk1/articles/" data-press>专题文章</a>
+    
+    
+  </nav>
+  <h1>用户身份模型</h1>
+  <p>数据/配置分离的用户与组管理</p>
+</header>
+
+<div class="wiki-layout">
+  <article class="article">
+    <div class="article-content"><h2 id="设计哲学">设计哲学</h2>
+<p>M4KK1 采用 &ldquo;数据/配置分离&rdquo; 架构，区别于 Linux <code>/etc/passwd</code> + <code>/home</code> 模型:</p>
+<ol>
+<li><strong>数据 (重)</strong>: 用户私有文件存储在 <code>/export</code></li>
+<li><strong>配置 (轻)</strong>: 系统配置存储在 <code>/export/cfg/</code></li>
+<li><strong>服务隔离</strong>: 系统服务运行在无特权的系统账户下</li>
+</ol>
+<h2 id="目录结构">目录结构</h2>
+<pre tabindex="0"><code>/export/
+├── cfg/              # 配置文件
+│   ├── passwd.db     # 用户数据库
+│   ├── groups.db     # 组数据库
+│   └── timezone      # 时区
+├── home/             # 用户家目录（物理存储）
+│   └── {username}/
+├── root/             # root 家目录
+├── PATH/             # 各用户的 PATH 配置
+│   ├── root          # root 的 PATH
+│   ├── testuser      # testuser 的 PATH
+│   └── default       # 默认 PATH
+└── srv/              # 服务账户目录
+    ├── daemon/
+    ├── nobody/
+    └── ...
+</code></pre><h2 id="用户数据库">用户数据库</h2>
+<p>文件: <code>/export/cfg/passwd.db</code></p>
+<p>格式: <code>username:uid:gid:home:shell:gecos:password_hash</code></p>
+<h3 id="默认用户">默认用户</h3>
+<table>
+	<thead>
+			<tr>
+					<th>用户</th>
+					<th>UID</th>
+					<th>用途</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>root</td>
+					<td>0</td>
+					<td>超级用户</td>
+			</tr>
+			<tr>
+					<td>daemon</td>
+					<td>1</td>
+					<td>系统服务</td>
+			</tr>
+			<tr>
+					<td>testuser</td>
+					<td>1001</td>
+					<td>测试用户</td>
+			</tr>
+			<tr>
+					<td>nobody</td>
+					<td>65534</td>
+					<td>无特权用户</td>
+			</tr>
+	</tbody>
+</table>
+<h2 id="组数据库">组数据库</h2>
+<p>文件: <code>/export/cfg/groups.db</code></p>
+<p>格式: <code>groupname:gid:member1,member2,...</code></p>
+<h3 id="prime-组">prime 组</h3>
+<p><code>prime</code> 组（GID 1001）是 M4KK1 权限系统的核心。组成员可执行管理操作:</p>
+<ul>
+<li>修改 <code>/export/cfg/*</code>（包括用户账户、服务配置）</li>
+<li>执行 <code>mount</code> / <code>umount</code></li>
+<li>执行 <code>usermod</code>、<code>groupmod</code>、<code>passwd</code></li>
+<li>执行 <code>kill</code>、<code>nice</code></li>
+</ul>
+<h3 id="quell-命令">quell 命令</h3>
+<p>替代 <code>sudo</code>，基于组成员身份而非复杂配置文件:</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># 以 prime 组成员身份执行特权命令</span>
+</span></span><span style="display:flex;"><span>quell usermod -a --group prime alice
+</span></span><span style="display:flex;"><span>quell mount /dev/yafs0 /mnt
+</span></span></code></pre></div><h2 id="密码哈希">密码哈希</h2>
+<p>使用 SHA-256 + 随机 salt:</p>
+<pre tabindex="0"><code>$SHA$&lt;base64_salt&gt;$&lt;base64_hash&gt;
+</code></pre><h2 id="家目录自动挂载">家目录自动挂载</h2>
+<p>登录时自动将 <code>/export/home/{username}</code> bind mount 到 <code>/home/{username}</code>，登出时自动卸载。</p>
+<h2 id="path-管理">PATH 管理</h2>
+<p>PATH 通过 <code>/export/PATH/&lt;用户名&gt;</code> 集中管理，无需 Shell 脚本配置:</p>
+<pre tabindex="0"><code>/export/PATH/
+├── root          # /bin:/sbin:/usr/bin:/usr/sbin
+├── testuser      # /home/testuser/bin:/usr/local/bin:/bin
+└── default       # 默认 PATH
+</code></pre></div>
+    
+<nav class="pager" aria-label="文章导航">
+  
+  <a href="/wiki/m4kk1/articles/yafs-internals/" data-press>
+    <span class="dir">← 上一篇</span>YAFS 文件系统内部原理
+  </a>
+  
+  
+  <a href="/wiki/m4kk1/articles/shell-m4sh/" class="is-next" data-press>
+    <span class="dir">下一篇 →</span>M4SH Shell 设计与实现
+  </a>
+  
+</nav>
+
+
+    
+<div class="comments">
+  <h2 class="comments-title">评论</h2>
+  <div id="utterances"></div>
+  <script>
+    (function () {
+      if (window.location.protocol === 'file:') return;
+      var s = document.createElement('script');
+      s.src = 'https://utteranc.es/client.js';
+      s.async = true;
+      s.setAttribute('repo', "makkichan947/makkichan947.github.io");
+      s.setAttribute('issue-term', "pathname");
+      s.setAttribute('theme', "github-dark");
+      s.setAttribute('crossorigin', 'anonymous');
+      document.getElementById('utterances').appendChild(s);
+    })();
+  </script>
+</div>
+
+
+  </article>
+  
+  <aside class="toc" aria-label="目录">
+    <p class="toc-title">目录</p>
+    <nav id="TableOfContents">
+  <ul>
+    <li><a href="#设计哲学">设计哲学</a></li>
+    <li><a href="#目录结构">目录结构</a></li>
+    <li><a href="#用户数据库">用户数据库</a>
+      <ul>
+        <li><a href="#默认用户">默认用户</a></li>
+      </ul>
+    </li>
+    <li><a href="#组数据库">组数据库</a>
+      <ul>
+        <li><a href="#prime-组">prime 组</a></li>
+        <li><a href="#quell-命令">quell 命令</a></li>
+      </ul>
+    </li>
+    <li><a href="#密码哈希">密码哈希</a></li>
+    <li><a href="#家目录自动挂载">家目录自动挂载</a></li>
+    <li><a href="#path-管理">PATH 管理</a></li>
+  </ul>
+</nav>
+  </aside>
+  
+</div>
+
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+      <div class="footer-links">
+        
+        <a href="https://github.com/makkichan947" target="_blank" rel="noopener" title="Github" data-press>Github</a>
+        
+        <a href="mailto:yakumakki947@hotmail.com" target="_blank" rel="noopener" title="Email" data-press>Email</a>
+        
+        <a href="https://x.com/Makki_Yaku947" target="_blank" rel="noopener" title="Twitter" data-press>Twitter</a>
+        
+        <a href="https://www.twitch.tv/u/makkichan947" target="_blank" rel="noopener" title="Twitch" data-press>Twitch</a>
+        
+      </div>
+      <p>&copy; 2026 Yaku Makki</p>
+      <p>Powered by <a href="https://gohugo.io" target="_blank" rel="noopener">Hugo</a> · Makki Theme</p>
+      
+      <div class="stats">
+        <span>访客 <span id="busuanzi_value_site_uv"></span></span>
+        <span>访问 <span id="busuanzi_value_site_pv"></span></span>
+        <span>本页 <span id="busuanzi_value_page_pv"></span></span>
+      </div>
+      
+    </div>
+  </footer>
+
+  <button class="back-to-top" id="back-to-top" type="button" aria-label="回到顶部" data-press>
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 19V5"/><path d="M5 12l7-7 7 7"/></svg>
+  </button>
+
+  
+  <script src="/js/main.min.2e977141114ec7890ffee2c35e08034683543cfe8ef98dd4af5effb3b37a3345.js" integrity="sha256-LpdxQRFOx4kP/uLDXggDRoNUPP6O&#43;Y3Ur17/s7N6M0U=" defer></script>
+  
+  
+  <script src="/js/search.min.b2d6ba6610ce24454bc1436dc521dcfd878b2583ad9f65f77aadedaaa1e1a54c.js" integrity="sha256-sta6ZhDOJEVLwUNtxSHc/YeLJYOtn2X3eq3tqqHhpUw=" defer></script>
+  
+
+  
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+  
+
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/katex.min.js" crossorigin="anonymous"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/contrib/auto-render.min.js" crossorigin="anonymous"></script>
+</body>
+</html>

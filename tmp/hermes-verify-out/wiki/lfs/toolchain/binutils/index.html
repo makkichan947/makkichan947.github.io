@@ -1,0 +1,587 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Binutils工具链 · Yaku Makki</title>
+  <meta name="description" content="构建完整的Binutils二进制工具链">
+  <meta name="theme-color" content="#0a0a0f">
+  <script>document.documentElement.classList.add('js');</script>
+
+  <link rel="icon" href="/avatar/avatar.jpg" type="image/jpeg">
+
+  
+  <link rel="stylesheet" href="/css/main.min.b64e4527cc255b367461135391e39e321a5d86fc97defca99c7afda308ada007.css" integrity="sha256-tk5FJ8wlWzZ0YRNTkeOeMhpdhvyX3vypnHr9owitoAc=">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/katex.min.css" crossorigin="anonymous">
+</head>
+<body>
+  <a class="skip-link" href="#main">跳到内容</a>
+
+  <div class="scene" aria-hidden="true">
+    <div class="scene-sky"></div>
+    <div class="scene-stars"></div>
+    <div class="scene-sun-halo"></div>
+    <div class="scene-sun"></div>
+    <div class="scene-mountains scene-mountains-far"></div>
+    <div class="scene-mountains scene-mountains-near"></div>
+    <div class="scene-horizon"></div>
+    <div class="scene-floor"></div>
+    <div class="scene-scanlines"></div>
+  </div>
+
+  <nav class="navbar" aria-label="主导航">
+    <div class="nav-inner">
+      <a class="logo" href="/" data-press>
+        <img class="logo-avatar" src="/avatar/avatar.jpg" alt="" width="34" height="34">
+        <span class="logo-text">Yaku Makki</span>
+      </a>
+      <div class="nav-menu-wrap">
+        <span class="nav-tick" aria-hidden="true"></span>
+        <ul class="nav-menu">
+          
+          <li>
+            <a href="/" data-press>首页</a>
+          </li>
+          
+          <li>
+            <a href="/post/" data-press>博客</a>
+          </li>
+          
+          <li>
+            <a href="/wiki/" data-press>维基</a>
+          </li>
+          
+          <li>
+            <a href="/tags/" data-press>标签</a>
+          </li>
+          
+          <li>
+            <a href="/about/" data-press>关于</a>
+          </li>
+          
+          
+          <li>
+            <button id="search-toggle" class="search-toggle" type="button" title="搜索 (Ctrl+K 或 /)" aria-haspopup="dialog" aria-expanded="false" data-press>搜索</button>
+          </li>
+          
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  
+  <div class="sheet-scrim" id="sheet-scrim"></div>
+  <section class="sheet" id="search-sheet" role="dialog" aria-modal="true" aria-label="搜索" aria-hidden="true">
+    <div class="sheet-panel" id="sheet-panel">
+      <div class="sheet-handle" id="sheet-handle" role="presentation" aria-hidden="true"></div>
+      <div class="sheet-body">
+        <div class="search-field">
+          <input id="search-input" type="search" placeholder="搜索文章和 Wiki…"
+                 autocomplete="off" spellcheck="false" aria-controls="search-results">
+          <span class="search-key" aria-hidden="true">/</span>
+        </div>
+        <div id="search-results" class="search-results" role="listbox" aria-label="搜索结果"></div>
+      </div>
+    </div>
+  </section>
+  
+
+  <main class="main" id="main">
+    
+<header class="page-head">
+  <nav class="crumb" aria-label="面包屑">
+    <a href="/" data-press>首页</a>
+    <span class="sep">/</span>
+    <a href="/wiki/" data-press>维基</a>
+    
+    
+    <span class="sep">/</span>
+    <a href="/wiki/lfs/toolchain/" data-press>第二部分：临时工具链</a>
+    
+    
+  </nav>
+  <h1>Binutils工具链</h1>
+  <p>构建完整的Binutils二进制工具链</p>
+</header>
+
+<div class="wiki-layout">
+  <article class="article">
+    <div class="article-content"><h1 id="binutils工具链">Binutils工具链</h1>
+<p>Binutils（Binary Utilities）是一套二进制工具集合，是LFS工具链的核心组件。本章将详细介绍如何构建完整的Binutils工具链。</p>
+<h2 id="-binutils概述">🎯 Binutils概述</h2>
+<h3 id="工具组成">工具组成</h3>
+<p>Binutils包含以下主要工具：</p>
+<ul>
+<li><strong>as</strong>：汇编器，将汇编代码转换为机器码</li>
+<li><strong>ld</strong>：链接器，将目标文件链接为可执行文件</li>
+<li><strong>ar</strong>：归档器，创建和管理静态库</li>
+<li><strong>nm</strong>：符号表查看器，显示目标文件的符号信息</li>
+<li><strong>objcopy</strong>：对象文件复制器，转换文件格式</li>
+<li><strong>objdump</strong>：对象文件分析器，显示文件详细信息</li>
+<li><strong>readelf</strong>：ELF文件读取器，分析ELF格式文件</li>
+<li><strong>strip</strong>：符号表剥离器，减小可执行文件大小</li>
+<li><strong>ranlib</strong>：归档索引器，为静态库创建索引</li>
+</ul>
+<h3 id="在lfs中的作用">在LFS中的作用</h3>
+<p>Binutils在LFS构建中的作用：</p>
+<ol>
+<li><strong>交叉编译</strong>：提供目标平台的汇编和链接工具</li>
+<li><strong>库管理</strong>：创建和管理静态/动态库</li>
+<li><strong>调试支持</strong>：提供符号信息和调试工具</li>
+<li><strong>文件处理</strong>：转换和优化二进制文件</li>
+</ol>
+<h2 id="-构建binutils">🛠️ 构建Binutils</h2>
+<h3 id="准备工作">准备工作</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># 切换到lfs用户</span>
+</span></span><span style="display:flex;"><span>su - lfs
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 创建构建目录</span>
+</span></span><span style="display:flex;"><span>mkdir -pv $LFS/sources/binutils_build
+</span></span><span style="display:flex;"><span>cd $LFS/sources/binutils_build
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 解压Binutils源码</span>
+</span></span><span style="display:flex;"><span>tar -xf $LFS/sources/binutils-2.40.tar.xz
+</span></span><span style="display:flex;"><span>cd binutils-2.40
+</span></span></code></pre></div><h3 id="应用补丁">应用补丁</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># 应用上游补丁（如果有）</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># wget https://www.linuxfromscratch.org/patches/lfs/11.3/binutils-2.40-upstream_fixes-1.patch</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># patch -Np1 -i ../binutils-2.40-upstream_fixes-1.patch</span>
+</span></span></code></pre></div><h3 id="配置binutils">配置Binutils</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># 创建独立的构建目录</span>
+</span></span><span style="display:flex;"><span>mkdir -v build
+</span></span><span style="display:flex;"><span>cd build
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 配置Binutils</span>
+</span></span><span style="display:flex;"><span>../configure <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span>    --prefix<span style="color:#f92672">=</span>/usr <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span>    --build<span style="color:#f92672">=</span><span style="color:#66d9ef">$(</span>../config.guess<span style="color:#66d9ef">)</span> <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span>    --host<span style="color:#f92672">=</span>$LFS_TGT <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span>    --disable-nls <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span>    --enable-shared <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span>    --enable-gprofng<span style="color:#f92672">=</span>no <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span>    --disable-werror <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span>    --enable-64-bit-bfd
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 配置选项解释：</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># --prefix=/usr              : 安装到/usr目录</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># --build=...                : 构建平台（自动检测）</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># --host=$LFS_TGT            : 目标平台</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># --disable-nls              : 禁用本地化</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># --enable-shared            : 启用共享库</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># --enable-gprofng=no        : 禁用gprofng</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># --disable-werror           : 不将警告视为错误</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># --enable-64-bit-bfd        : 启用64位BFD支持</span>
+</span></span></code></pre></div><h3 id="编译binutils">编译Binutils</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># 编译Binutils</span>
+</span></span><span style="display:flex;"><span>make $LFS_MAKEFLAGS
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 编译过程可能需要一些时间</span>
+</span></span><span style="display:flex;"><span>echo <span style="color:#e6db74">&#34;Binutils编译开始时间: </span><span style="color:#66d9ef">$(</span>date<span style="color:#66d9ef">)</span><span style="color:#e6db74">&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 监控编译进度</span>
+</span></span><span style="display:flex;"><span>make $LFS_MAKEFLAGS 2&gt;&amp;<span style="color:#ae81ff">1</span> | tee build.log &amp;
+</span></span><span style="display:flex;"><span>BUILD_PID<span style="color:#f92672">=</span>$!
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 显示进度</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">while</span> kill -0 $BUILD_PID 2&gt;/dev/null; <span style="color:#66d9ef">do</span>
+</span></span><span style="display:flex;"><span>    echo -n <span style="color:#e6db74">&#34;.&#34;</span>
+</span></span><span style="display:flex;"><span>    sleep <span style="color:#ae81ff">10</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">done</span>
+</span></span><span style="display:flex;"><span>echo <span style="color:#e6db74">&#34;&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 检查编译结果</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">if</span> <span style="color:#f92672">[</span> -f ld/ld-new <span style="color:#f92672">]</span> <span style="color:#f92672">&amp;&amp;</span> <span style="color:#f92672">[</span> -f gas/as-new <span style="color:#f92672">]</span>; <span style="color:#66d9ef">then</span>
+</span></span><span style="display:flex;"><span>    echo <span style="color:#e6db74">&#34;Binutils编译成功&#34;</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">else</span>
+</span></span><span style="display:flex;"><span>    echo <span style="color:#e6db74">&#34;Binutils编译失败&#34;</span>
+</span></span><span style="display:flex;"><span>    exit <span style="color:#ae81ff">1</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">fi</span>
+</span></span></code></pre></div><h3 id="安装binutils">安装Binutils</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># 安装Binutils</span>
+</span></span><span style="display:flex;"><span>make install
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 验证安装</span>
+</span></span><span style="display:flex;"><span>echo <span style="color:#e6db74">&#34;验证Binutils工具:&#34;</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">for</span> tool in as ld ar nm objcopy objdump readelf strip ranlib; <span style="color:#66d9ef">do</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> <span style="color:#f92672">[</span> -x <span style="color:#e6db74">&#34;/usr/bin/</span>$LFS_TGT<span style="color:#e6db74">-</span>$tool<span style="color:#e6db74">&#34;</span> <span style="color:#f92672">]</span>; <span style="color:#66d9ef">then</span>
+</span></span><span style="display:flex;"><span>        echo <span style="color:#e6db74">&#34;✓ </span>$tool<span style="color:#e6db74">&#34;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">else</span>
+</span></span><span style="display:flex;"><span>        echo <span style="color:#e6db74">&#34;✗ </span>$tool<span style="color:#e6db74">&#34;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">fi</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">done</span>
+</span></span></code></pre></div><h2 id="-工具链完整性测试">🔧 工具链完整性测试</h2>
+<h3 id="基本功能测试">基本功能测试</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># 测试汇编器</span>
+</span></span><span style="display:flex;"><span>echo <span style="color:#e6db74">&#34;测试汇编器...&#34;</span>
+</span></span><span style="display:flex;"><span>cat &gt; test.s <span style="color:#e6db74">&lt;&lt; &#39;EOF&#39;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">.section .data
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">msg: .ascii &#34;Hello, Binutils!\n&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">len = . - msg
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">.section .text
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">.global _start
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">_start:
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    mov $1, %rax          # syscall number for write
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    mov $1, %rdi          # file descriptor 1 (stdout)
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    mov $msg, %rsi        # pointer to message
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    mov $len, %rdx        # message length
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    syscall
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    mov $60, %rax         # syscall number for exit
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    xor %rdi, %rdi        # exit code 0
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    syscall
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">EOF</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 汇编文件</span>
+</span></span><span style="display:flex;"><span>$LFS_TGT-as test.s -o test.o
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 检查目标文件</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">if</span> <span style="color:#f92672">[</span> -f test.o <span style="color:#f92672">]</span>; <span style="color:#66d9ef">then</span>
+</span></span><span style="display:flex;"><span>    echo <span style="color:#e6db74">&#34;汇编成功&#34;</span>
+</span></span><span style="display:flex;"><span>    $LFS_TGT-objdump -d test.o | head -20
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">else</span>
+</span></span><span style="display:flex;"><span>    echo <span style="color:#e6db74">&#34;汇编失败&#34;</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">fi</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 清理</span>
+</span></span><span style="display:flex;"><span>rm -f test.s test.o
+</span></span></code></pre></div><h3 id="链接器测试">链接器测试</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># 测试链接器</span>
+</span></span><span style="display:flex;"><span>echo <span style="color:#e6db74">&#34;测试链接器...&#34;</span>
+</span></span><span style="display:flex;"><span>cat &gt; simple.c <span style="color:#e6db74">&lt;&lt; &#39;EOF&#39;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">#include &lt;stdio.h&gt;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">int main() {
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    printf(&#34;Binutils linker test successful!\n&#34;);
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    return 0;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">}
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">EOF</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 编译并链接</span>
+</span></span><span style="display:flex;"><span>$LFS_TGT-gcc -c simple.c -o simple.o
+</span></span><span style="display:flex;"><span>$LFS_TGT-ld -o simple <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span>    -dynamic-linker /lib/ld-linux-x86-64.so.2 <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span>    /usr/lib/crt1.o /usr/lib/crti.o /usr/lib/crtn.o <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span>    simple.o <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span>    -lc -lm
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 检查可执行文件</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">if</span> <span style="color:#f92672">[</span> -x simple <span style="color:#f92672">]</span>; <span style="color:#66d9ef">then</span>
+</span></span><span style="display:flex;"><span>    echo <span style="color:#e6db74">&#34;链接成功&#34;</span>
+</span></span><span style="display:flex;"><span>    $LFS_TGT-readelf -l simple | grep <span style="color:#e6db74">&#34;program interpreter&#34;</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">else</span>
+</span></span><span style="display:flex;"><span>    echo <span style="color:#e6db74">&#34;链接失败&#34;</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">fi</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 清理</span>
+</span></span><span style="display:flex;"><span>rm -f simple.c simple.o simple
+</span></span></code></pre></div><h3 id="库管理测试">库管理测试</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># 测试静态库创建</span>
+</span></span><span style="display:flex;"><span>echo <span style="color:#e6db74">&#34;测试静态库...&#34;</span>
+</span></span><span style="display:flex;"><span>cat &gt; libtest.c <span style="color:#e6db74">&lt;&lt; &#39;EOF&#39;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">#include &lt;stdio.h&gt;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">void hello_world() {
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    printf(&#34;Hello from static library!\n&#34;);
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">}
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">EOF</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 编译为目标文件</span>
+</span></span><span style="display:flex;"><span>$LFS_TGT-gcc -c libtest.c -o libtest.o
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 创建静态库</span>
+</span></span><span style="display:flex;"><span>$LFS_TGT-ar rcs libtest.a libtest.o
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 检查库内容</span>
+</span></span><span style="display:flex;"><span>$LFS_TGT-nm libtest.a
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 清理</span>
+</span></span><span style="display:flex;"><span>rm -f libtest.c libtest.o libtest.a
+</span></span></code></pre></div><h2 id="-高级配置选项">📊 高级配置选项</h2>
+<h3 id="优化配置">优化配置</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># 重新配置Binutils（优化版本）</span>
+</span></span><span style="display:flex;"><span>cd $LFS/sources/binutils_build/binutils-2.40/build
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 清理之前的构建</span>
+</span></span><span style="display:flex;"><span>make clean
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 重新配置（添加优化选项）</span>
+</span></span><span style="display:flex;"><span>../configure <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span>    --prefix<span style="color:#f92672">=</span>/usr <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span>    --build<span style="color:#f92672">=</span><span style="color:#66d9ef">$(</span>../config.guess<span style="color:#66d9ef">)</span> <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span>    --host<span style="color:#f92672">=</span>$LFS_TGT <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span>    --disable-nls <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span>    --enable-shared <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span>    --enable-gprofng<span style="color:#f92672">=</span>no <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span>    --disable-werror <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span>    --enable-64-bit-bfd <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span>    --enable-gold<span style="color:#f92672">=</span>yes <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span>    --enable-plugins <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span>    --enable-threads <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span>    CFLAGS<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;-O2 -march=native&#34;</span> <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span>    CXXFLAGS<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;-O2 -march=native&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 重新编译</span>
+</span></span><span style="display:flex;"><span>make $LFS_MAKEFLAGS
+</span></span><span style="display:flex;"><span>make install
+</span></span></code></pre></div><h3 id="多目标支持">多目标支持</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># 配置支持多种架构</span>
+</span></span><span style="display:flex;"><span>../configure <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span>    --prefix<span style="color:#f92672">=</span>/usr <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span>    --build<span style="color:#f92672">=</span><span style="color:#66d9ef">$(</span>../config.guess<span style="color:#66d9ef">)</span> <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span>    --host<span style="color:#f92672">=</span>$LFS_TGT <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span>    --disable-nls <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span>    --enable-shared <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span>    --enable-64-bit-bfd <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span>    --enable-targets<span style="color:#f92672">=</span>x86_64-pep,i386-efi-pe,x86_64-efi-pe <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span>    --enable-multilib
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 这个配置支持：</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># - x86_64-pep: Windows PE+格式</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># - i386-efi-pe: 32位EFI</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># - x86_64-efi-pe: 64位EFI</span>
+</span></span></code></pre></div><h2 id="-调试和分析">🔍 调试和分析</h2>
+<h3 id="符号表分析">符号表分析</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># 创建测试程序</span>
+</span></span><span style="display:flex;"><span>cat &gt; debug_test.c <span style="color:#e6db74">&lt;&lt; &#39;EOF&#39;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">#include &lt;stdio.h&gt;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">int global_var = 42;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">static int static_var = 24;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">void test_function() {
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    printf(&#34;Debug test function\n&#34;);
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">}
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">int main() {
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    test_function();
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    printf(&#34;Global: %d, Static: %d\n&#34;, global_var, static_var);
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    return 0;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">}
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">EOF</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 编译（保留调试信息）</span>
+</span></span><span style="display:flex;"><span>$LFS_TGT-gcc -g -c debug_test.c -o debug_test.o
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 分析符号表</span>
+</span></span><span style="display:flex;"><span>echo <span style="color:#e6db74">&#34;=== 符号表分析 ===&#34;</span>
+</span></span><span style="display:flex;"><span>$LFS_TGT-nm debug_test.o
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>echo -e <span style="color:#e6db74">&#34;\n=== 详细符号信息 ===&#34;</span>
+</span></span><span style="display:flex;"><span>$LFS_TGT-nm -l debug_test.o
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 反汇编</span>
+</span></span><span style="display:flex;"><span>echo -e <span style="color:#e6db74">&#34;\n=== 反汇编 ===&#34;</span>
+</span></span><span style="display:flex;"><span>$LFS_TGT-objdump -d debug_test.o | head -30
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 清理</span>
+</span></span><span style="display:flex;"><span>rm -f debug_test.c debug_test.o
+</span></span></code></pre></div><h3 id="文件格式分析">文件格式分析</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># 创建测试可执行文件</span>
+</span></span><span style="display:flex;"><span>cat &gt; format_test.c <span style="color:#e6db74">&lt;&lt; &#39;EOF&#39;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">int main() { return 42; }
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">EOF</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>$LFS_TGT-gcc format_test.c -o format_test
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 分析ELF文件结构</span>
+</span></span><span style="display:flex;"><span>echo <span style="color:#e6db74">&#34;=== ELF文件头 ===&#34;</span>
+</span></span><span style="display:flex;"><span>$LFS_TGT-readelf -h format_test
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>echo -e <span style="color:#e6db74">&#34;\n=== 程序头 ===&#34;</span>
+</span></span><span style="display:flex;"><span>$LFS_TGT-readelf -l format_test
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>echo -e <span style="color:#e6db74">&#34;\n=== 节头 ===&#34;</span>
+</span></span><span style="display:flex;"><span>$LFS_TGT-readelf -S format_test
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>echo -e <span style="color:#e6db74">&#34;\n=== 符号表 ===&#34;</span>
+</span></span><span style="display:flex;"><span>$LFS_TGT-readelf -s format_test
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 清理</span>
+</span></span><span style="display:flex;"><span>rm -f format_test.c format_test
+</span></span></code></pre></div><h2 id="-故障排除">🚨 故障排除</h2>
+<h3 id="编译失败">编译失败</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># 检查常见问题：</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 1. 依赖库</span>
+</span></span><span style="display:flex;"><span>ldd /usr/bin/$LFS_TGT-ld
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 2. 环境变量</span>
+</span></span><span style="display:flex;"><span>echo $PATH
+</span></span><span style="display:flex;"><span>echo $LFS_TGT
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 3. 源码完整性</span>
+</span></span><span style="display:flex;"><span>md5sum $LFS/sources/binutils-2.40.tar.xz
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 4. 重新配置</span>
+</span></span><span style="display:flex;"><span>cd build
+</span></span><span style="display:flex;"><span>make clean
+</span></span><span style="display:flex;"><span>../configure <span style="color:#f92672">[</span>配置选项<span style="color:#f92672">]</span>
+</span></span></code></pre></div><h3 id="工具不可用">工具不可用</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># 如果工具无法执行：</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 1. 检查文件权限</span>
+</span></span><span style="display:flex;"><span>ls -la /usr/bin/$LFS_TGT-*
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 2. 检查动态链接器</span>
+</span></span><span style="display:flex;"><span>$LFS_TGT-readelf -l /usr/bin/$LFS_TGT-ld | grep <span style="color:#e6db74">&#34;interpreter&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 3. 检查库依赖</span>
+</span></span><span style="display:flex;"><span>$LFS_TGT-ldd /usr/bin/$LFS_TGT-ld 2&gt;/dev/null <span style="color:#f92672">||</span> echo <span style="color:#e6db74">&#34;ldd不可用&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 4. 手动检查依赖</span>
+</span></span><span style="display:flex;"><span>$LFS_TGT-readelf -d /usr/bin/$LFS_TGT-ld
+</span></span></code></pre></div><h3 id="测试失败">测试失败</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># 如果测试失败：</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 1. 检查错误信息</span>
+</span></span><span style="display:flex;"><span>cat $LFS/logs/build.log | grep -i error
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 2. 验证工具链完整性</span>
+</span></span><span style="display:flex;"><span>$LFS/verify_toolchain.sh
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 3. 检查系统资源</span>
+</span></span><span style="display:flex;"><span>free -h
+</span></span><span style="display:flex;"><span>df -h $LFS
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 4. 简化测试</span>
+</span></span><span style="display:flex;"><span>$LFS_TGT-gcc --version
+</span></span><span style="display:flex;"><span>$LFS_TGT-ld --version
+</span></span></code></pre></div><h2 id="-性能监控">📈 性能监控</h2>
+<h3 id="编译时间分析">编译时间分析</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># 记录编译时间</span>
+</span></span><span style="display:flex;"><span>start_time<span style="color:#f92672">=</span><span style="color:#66d9ef">$(</span>date +%s<span style="color:#66d9ef">)</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>cd $LFS/sources/binutils_build/binutils-2.40/build
+</span></span><span style="display:flex;"><span>make $LFS_MAKEFLAGS
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>end_time<span style="color:#f92672">=</span><span style="color:#66d9ef">$(</span>date +%s<span style="color:#66d9ef">)</span>
+</span></span><span style="display:flex;"><span>compile_time<span style="color:#f92672">=</span><span style="color:#66d9ef">$((</span>end_time <span style="color:#f92672">-</span> start_time<span style="color:#66d9ef">))</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>echo <span style="color:#e6db74">&#34;Binutils编译时间: </span>$compile_time<span style="color:#e6db74"> 秒&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 分析编译日志</span>
+</span></span><span style="display:flex;"><span>echo <span style="color:#e6db74">&#34;编译警告数量:&#34;</span> <span style="color:#66d9ef">$(</span>grep -c <span style="color:#e6db74">&#34;warning:&#34;</span> build.log<span style="color:#66d9ef">)</span>
+</span></span><span style="display:flex;"><span>echo <span style="color:#e6db74">&#34;编译错误数量:&#34;</span> <span style="color:#66d9ef">$(</span>grep -c <span style="color:#e6db74">&#34;error:&#34;</span> build.log<span style="color:#66d9ef">)</span>
+</span></span></code></pre></div><h3 id="资源使用监控">资源使用监控</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># 监控编译资源使用</span>
+</span></span><span style="display:flex;"><span>cat &gt; $LFS/monitor_binutils.sh <span style="color:#e6db74">&lt;&lt; &#39;EOF&#39;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">#!/bin/bash
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74"># Binutils编译监控脚本
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">PID_FILE=&#34;$LFS/binutils_compile.pid&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74"># 查找make进程
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">MAKE_PID=$(pgrep -f &#34;make.*binutils&#34;)
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">if [ -n &#34;$MAKE_PID&#34; ]; then
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    echo $MAKE_PID &gt; $PID_FILE
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    echo &#34;监控Binutils编译进程 (PID: $MAKE_PID)&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    echo &#34;时间 | CPU% | 内存(MB) | 磁盘使用&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    while kill -0 $MAKE_PID 2&gt;/dev/null; do
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        # 获取进程信息
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        cpu_mem=$(ps -p $MAKE_PID -o pcpu,pmem --no-headers)
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        cpu=$(echo $cpu_mem | awk &#39;{print $1}&#39;)
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        mem_percent=$(echo $cpu_mem | awk &#39;{print $2}&#39;)
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        # 计算实际内存使用
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        total_mem=$(free -m | grep &#39;^Mem:&#39; | awk &#39;{print $2}&#39;)
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        mem_mb=$(echo &#34;scale=1; $total_mem * $mem_percent / 100&#34; | bc)
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        # 磁盘使用
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        disk_usage=$(df $LFS | tail -1 | awk &#39;{print $5}&#39;)
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        echo &#34;$(date &#39;+%H:%M:%S&#39;) | ${cpu}% | ${mem_mb}MB | ${disk_usage}&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        sleep 5
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    done
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    echo &#34;编译完成&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    rm -f $PID_FILE
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">else
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    echo &#34;未找到Binutils编译进程&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">fi
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">EOF</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>chmod +x $LFS/monitor_binutils.sh
+</span></span><span style="display:flex;"><span>$LFS/monitor_binutils.sh &amp;
+</span></span></code></pre></div><h2 id="-相关资源">📚 相关资源</h2>
+<ul>
+<li><a href="http://www.linuxfromscratch.org/lfs/view/stable/chapter06/binutils.html">LFS官方文档 - Binutils</a></li>
+<li><a href="https://sourceware.org/binutils/docs/">Binutils官方文档</a></li>
+<li><a href="https://refspecs.linuxfoundation.org/elf/elf.pdf">ELF格式规范</a></li>
+</ul>
+<hr>
+<p><em>最近更新: {{ .Lastmod.Format &ldquo;2006-01-02&rdquo; }}</em></p>
+</div>
+    
+<nav class="pager" aria-label="文章导航">
+  
+  <a href="/wiki/lfs/toolchain/gcc/" data-press>
+    <span class="dir">← 上一篇</span>GCC编译器
+  </a>
+  
+  
+  <a href="/wiki/lfs/toolchain/temporary-c-library/" class="is-next" data-press>
+    <span class="dir">下一篇 →</span>临时C库
+  </a>
+  
+</nav>
+
+
+    
+
+  </article>
+  
+</div>
+
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+      <div class="footer-links">
+        
+        <a href="https://github.com/makkichan947" target="_blank" rel="noopener" title="Github" data-press>Github</a>
+        
+        <a href="mailto:yakumakki947@hotmail.com" target="_blank" rel="noopener" title="Email" data-press>Email</a>
+        
+        <a href="https://x.com/Makki_Yaku947" target="_blank" rel="noopener" title="Twitter" data-press>Twitter</a>
+        
+        <a href="https://www.twitch.tv/u/makkichan947" target="_blank" rel="noopener" title="Twitch" data-press>Twitch</a>
+        
+      </div>
+      <p>&copy; 2026 Yaku Makki</p>
+      <p>Powered by <a href="https://gohugo.io" target="_blank" rel="noopener">Hugo</a> · Makki Theme</p>
+      
+      <div class="stats">
+        <span>访客 <span id="busuanzi_value_site_uv"></span></span>
+        <span>访问 <span id="busuanzi_value_site_pv"></span></span>
+        <span>本页 <span id="busuanzi_value_page_pv"></span></span>
+      </div>
+      
+    </div>
+  </footer>
+
+  <button class="back-to-top" id="back-to-top" type="button" aria-label="回到顶部" data-press>
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 19V5"/><path d="M5 12l7-7 7 7"/></svg>
+  </button>
+
+  
+  <script src="/js/main.min.2e977141114ec7890ffee2c35e08034683543cfe8ef98dd4af5effb3b37a3345.js" integrity="sha256-LpdxQRFOx4kP/uLDXggDRoNUPP6O&#43;Y3Ur17/s7N6M0U=" defer></script>
+  
+  
+  <script src="/js/search.min.b2d6ba6610ce24454bc1436dc521dcfd878b2583ad9f65f77aadedaaa1e1a54c.js" integrity="sha256-sta6ZhDOJEVLwUNtxSHc/YeLJYOtn2X3eq3tqqHhpUw=" defer></script>
+  
+
+  
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+  
+
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/katex.min.js" crossorigin="anonymous"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/contrib/auto-render.min.js" crossorigin="anonymous"></script>
+</body>
+</html>

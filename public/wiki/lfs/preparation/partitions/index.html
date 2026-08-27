@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="zh">
-<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1417&amp;path=livereload" data-no-instant defer></script>
+<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <title>分区和文件系统 · Yaku Makki</title>
@@ -117,45 +117,45 @@
 <h3 id="分区方案">分区方案</h3>
 <p>LFS推荐使用以下分区方案：</p>
 <table>
-	<thead>
-			<tr>
-					<th>分区</th>
-					<th>挂载点</th>
-					<th>文件系统</th>
-					<th>大小</th>
-					<th>用途</th>
-			</tr>
-	</thead>
-	<tbody>
-			<tr>
-					<td><code>/dev/sda1</code></td>
-					<td><code>/boot</code></td>
-					<td>ext2/ext4</td>
-					<td>100MB</td>
-					<td>引导分区</td>
-			</tr>
-			<tr>
-					<td><code>/dev/sda2</code></td>
-					<td><code>/</code></td>
-					<td>ext4</td>
-					<td>10GB+</td>
-					<td>根分区</td>
-			</tr>
-			<tr>
-					<td><code>/dev/sda3</code></td>
-					<td><code>/home</code></td>
-					<td>ext4</td>
-					<td>5GB+</td>
-					<td>用户主目录</td>
-			</tr>
-			<tr>
-					<td><code>/dev/sda4</code></td>
-					<td>swap</td>
-					<td>swap</td>
-					<td>RAM*2</td>
-					<td>交换分区</td>
-			</tr>
-	</tbody>
+  <thead>
+      <tr>
+          <th>分区</th>
+          <th>挂载点</th>
+          <th>文件系统</th>
+          <th>大小</th>
+          <th>用途</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><code>/dev/sda1</code></td>
+          <td><code>/boot</code></td>
+          <td>ext2/ext4</td>
+          <td>100MB</td>
+          <td>引导分区</td>
+      </tr>
+      <tr>
+          <td><code>/dev/sda2</code></td>
+          <td><code>/</code></td>
+          <td>ext4</td>
+          <td>10GB+</td>
+          <td>根分区</td>
+      </tr>
+      <tr>
+          <td><code>/dev/sda3</code></td>
+          <td><code>/home</code></td>
+          <td>ext4</td>
+          <td>5GB+</td>
+          <td>用户主目录</td>
+      </tr>
+      <tr>
+          <td><code>/dev/sda4</code></td>
+          <td>swap</td>
+          <td>swap</td>
+          <td>RAM*2</td>
+          <td>交换分区</td>
+      </tr>
+  </tbody>
 </table>
 <h3 id="分区大小建议">分区大小建议</h3>
 <ul>

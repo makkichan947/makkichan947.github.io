@@ -1,0 +1,767 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>TensorFlow基础教程 · Yaku Makki</title>
+  <meta name="description" content="个人小巢">
+  <meta name="theme-color" content="#0a0a0f">
+  <script>document.documentElement.classList.add('js');</script>
+
+  <link rel="icon" href="/avatar/avatar.jpg" type="image/jpeg">
+
+  
+  <link rel="stylesheet" href="/css/main.min.b64e4527cc255b367461135391e39e321a5d86fc97defca99c7afda308ada007.css" integrity="sha256-tk5FJ8wlWzZ0YRNTkeOeMhpdhvyX3vypnHr9owitoAc=">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/katex.min.css" crossorigin="anonymous">
+</head>
+<body>
+  <a class="skip-link" href="#main">跳到内容</a>
+
+  <div class="scene" aria-hidden="true">
+    <div class="scene-sky"></div>
+    <div class="scene-stars"></div>
+    <div class="scene-sun-halo"></div>
+    <div class="scene-sun"></div>
+    <div class="scene-mountains scene-mountains-far"></div>
+    <div class="scene-mountains scene-mountains-near"></div>
+    <div class="scene-horizon"></div>
+    <div class="scene-floor"></div>
+    <div class="scene-scanlines"></div>
+  </div>
+
+  <nav class="navbar" aria-label="主导航">
+    <div class="nav-inner">
+      <a class="logo" href="/" data-press>
+        <img class="logo-avatar" src="/avatar/avatar.jpg" alt="" width="34" height="34">
+        <span class="logo-text">Yaku Makki</span>
+      </a>
+      <div class="nav-menu-wrap">
+        <span class="nav-tick" aria-hidden="true"></span>
+        <ul class="nav-menu">
+          
+          <li>
+            <a href="/" data-press>首页</a>
+          </li>
+          
+          <li>
+            <a href="/post/" data-press>博客</a>
+          </li>
+          
+          <li>
+            <a href="/wiki/" data-press>维基</a>
+          </li>
+          
+          <li>
+            <a href="/tags/" data-press>标签</a>
+          </li>
+          
+          <li>
+            <a href="/about/" data-press>关于</a>
+          </li>
+          
+          
+          <li>
+            <button id="search-toggle" class="search-toggle" type="button" title="搜索 (Ctrl+K 或 /)" aria-haspopup="dialog" aria-expanded="false" data-press>搜索</button>
+          </li>
+          
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  
+  <div class="sheet-scrim" id="sheet-scrim"></div>
+  <section class="sheet" id="search-sheet" role="dialog" aria-modal="true" aria-label="搜索" aria-hidden="true">
+    <div class="sheet-panel" id="sheet-panel">
+      <div class="sheet-handle" id="sheet-handle" role="presentation" aria-hidden="true"></div>
+      <div class="sheet-body">
+        <div class="search-field">
+          <input id="search-input" type="search" placeholder="搜索文章和 Wiki…"
+                 autocomplete="off" spellcheck="false" aria-controls="search-results">
+          <span class="search-key" aria-hidden="true">/</span>
+        </div>
+        <div id="search-results" class="search-results" role="listbox" aria-label="搜索结果"></div>
+      </div>
+    </div>
+  </section>
+  
+
+  <main class="main" id="main">
+    
+<header class="page-head">
+  <nav class="crumb" aria-label="面包屑">
+    <a href="/" data-press>首页</a>
+    <span class="sep">/</span>
+    <a href="/wiki/" data-press>维基</a>
+    
+    
+    <span class="sep">/</span>
+    <a href="/wiki/deep_learning/tensorflow/" data-press>TensorFlow框架</a>
+    
+    
+  </nav>
+  <h1>TensorFlow基础教程</h1>
+  
+</header>
+
+<div class="wiki-layout">
+  <article class="article">
+    <div class="article-content"><h1 id="tensorflow基础教程">TensorFlow基础教程</h1>
+<p>本教程将从零开始介绍TensorFlow的基础知识，包括环境搭建、基本概念、简单模型构建和训练。通过本教程，你将能够使用TensorFlow构建和训练基本的机器学习模型。</p>
+<h2 id="-环境搭建">🛠️ 环境搭建</h2>
+<h3 id="安装tensorflow">安装TensorFlow</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># CPU版本</span>
+</span></span><span style="display:flex;"><span>pip install tensorflow
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># GPU版本（需要CUDA支持）</span>
+</span></span><span style="display:flex;"><span>pip install tensorflow<span style="color:#f92672">[</span>and-cuda<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 验证安装</span>
+</span></span><span style="display:flex;"><span>python -c <span style="color:#e6db74">&#34;import tensorflow as tf; print(tf.config.list_physical_devices(&#39;GPU&#39; if tf.test.is_gpu_available() else &#39;CPU&#39;))&#34;</span>
+</span></span></code></pre></div><h3 id="推荐开发环境">推荐开发环境</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># 创建虚拟环境</span>
+</span></span><span style="display:flex;"><span>conda create -n tf_env python<span style="color:#f92672">=</span>3.9
+</span></span><span style="display:flex;"><span>conda activate tf_env
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 安装TensorFlow和相关依赖</span>
+</span></span><span style="display:flex;"><span>pip install tensorflow numpy matplotlib jupyter pandas scikit-learn
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 启动Jupyter Notebook</span>
+</span></span><span style="display:flex;"><span>jupyter notebook
+</span></span></code></pre></div><h2 id="-基础概念">🎯 基础概念</h2>
+<h3 id="hello-tensorflow">Hello TensorFlow</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#f92672">import</span> tensorflow <span style="color:#66d9ef">as</span> tf
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 打印TensorFlow版本</span>
+</span></span><span style="display:flex;"><span>print(<span style="color:#e6db74">f</span><span style="color:#e6db74">&#34;TensorFlow版本: </span><span style="color:#e6db74">{</span>tf<span style="color:#f92672">.</span>__version__<span style="color:#e6db74">}</span><span style="color:#e6db74">&#34;</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 创建常量张量</span>
+</span></span><span style="display:flex;"><span>hello <span style="color:#f92672">=</span> tf<span style="color:#f92672">.</span>constant(<span style="color:#e6db74">&#34;Hello, TensorFlow!&#34;</span>)
+</span></span><span style="display:flex;"><span>print(<span style="color:#e6db74">f</span><span style="color:#e6db74">&#34;常量: </span><span style="color:#e6db74">{</span>hello<span style="color:#f92672">.</span>numpy()<span style="color:#e6db74">}</span><span style="color:#e6db74">&#34;</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 基本运算</span>
+</span></span><span style="display:flex;"><span>a <span style="color:#f92672">=</span> tf<span style="color:#f92672">.</span>constant(<span style="color:#ae81ff">5</span>)
+</span></span><span style="display:flex;"><span>b <span style="color:#f92672">=</span> tf<span style="color:#f92672">.</span>constant(<span style="color:#ae81ff">3</span>)
+</span></span><span style="display:flex;"><span>print(<span style="color:#e6db74">f</span><span style="color:#e6db74">&#34;5 + 3 = </span><span style="color:#e6db74">{</span>tf<span style="color:#f92672">.</span>add(a, b)<span style="color:#f92672">.</span>numpy()<span style="color:#e6db74">}</span><span style="color:#e6db74">&#34;</span>)
+</span></span><span style="display:flex;"><span>print(<span style="color:#e6db74">f</span><span style="color:#e6db74">&#34;5 * 3 = </span><span style="color:#e6db74">{</span>tf<span style="color:#f92672">.</span>multiply(a, b)<span style="color:#f92672">.</span>numpy()<span style="color:#e6db74">}</span><span style="color:#e6db74">&#34;</span>)
+</span></span></code></pre></div><h3 id="张量操作">张量操作</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#f92672">import</span> tensorflow <span style="color:#66d9ef">as</span> tf
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> numpy <span style="color:#66d9ef">as</span> np
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 创建不同类型的张量</span>
+</span></span><span style="display:flex;"><span>scalar <span style="color:#f92672">=</span> tf<span style="color:#f92672">.</span>constant(<span style="color:#ae81ff">42</span>)  <span style="color:#75715e"># 标量</span>
+</span></span><span style="display:flex;"><span>vector <span style="color:#f92672">=</span> tf<span style="color:#f92672">.</span>constant([<span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">2</span>, <span style="color:#ae81ff">3</span>, <span style="color:#ae81ff">4</span>, <span style="color:#ae81ff">5</span>])  <span style="color:#75715e"># 向量</span>
+</span></span><span style="display:flex;"><span>matrix <span style="color:#f92672">=</span> tf<span style="color:#f92672">.</span>constant([[<span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">2</span>], [<span style="color:#ae81ff">3</span>, <span style="color:#ae81ff">4</span>], [<span style="color:#ae81ff">5</span>, <span style="color:#ae81ff">6</span>]])  <span style="color:#75715e"># 矩阵</span>
+</span></span><span style="display:flex;"><span>tensor_3d <span style="color:#f92672">=</span> tf<span style="color:#f92672">.</span>constant(np<span style="color:#f92672">.</span>random<span style="color:#f92672">.</span>rand(<span style="color:#ae81ff">2</span>, <span style="color:#ae81ff">3</span>, <span style="color:#ae81ff">4</span>))  <span style="color:#75715e"># 三维张量</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>print(<span style="color:#e6db74">f</span><span style="color:#e6db74">&#34;标量形状: </span><span style="color:#e6db74">{</span>scalar<span style="color:#f92672">.</span>shape<span style="color:#e6db74">}</span><span style="color:#e6db74">&#34;</span>)
+</span></span><span style="display:flex;"><span>print(<span style="color:#e6db74">f</span><span style="color:#e6db74">&#34;向量形状: </span><span style="color:#e6db74">{</span>vector<span style="color:#f92672">.</span>shape<span style="color:#e6db74">}</span><span style="color:#e6db74">&#34;</span>)
+</span></span><span style="display:flex;"><span>print(<span style="color:#e6db74">f</span><span style="color:#e6db74">&#34;矩阵形状: </span><span style="color:#e6db74">{</span>matrix<span style="color:#f92672">.</span>shape<span style="color:#e6db74">}</span><span style="color:#e6db74">&#34;</span>)
+</span></span><span style="display:flex;"><span>print(<span style="color:#e6db74">f</span><span style="color:#e6db74">&#34;三维张量形状: </span><span style="color:#e6db74">{</span>tensor_3d<span style="color:#f92672">.</span>shape<span style="color:#e6db74">}</span><span style="color:#e6db74">&#34;</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 张量运算</span>
+</span></span><span style="display:flex;"><span>x <span style="color:#f92672">=</span> tf<span style="color:#f92672">.</span>constant([<span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">2</span>, <span style="color:#ae81ff">3</span>, <span style="color:#ae81ff">4</span>, <span style="color:#ae81ff">5</span>])
+</span></span><span style="display:flex;"><span>y <span style="color:#f92672">=</span> tf<span style="color:#f92672">.</span>constant([<span style="color:#ae81ff">6</span>, <span style="color:#ae81ff">7</span>, <span style="color:#ae81ff">8</span>, <span style="color:#ae81ff">9</span>, <span style="color:#ae81ff">10</span>])
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 元素级运算</span>
+</span></span><span style="display:flex;"><span>print(<span style="color:#e6db74">f</span><span style="color:#e6db74">&#34;x + y = </span><span style="color:#e6db74">{</span>tf<span style="color:#f92672">.</span>add(x, y)<span style="color:#f92672">.</span>numpy()<span style="color:#e6db74">}</span><span style="color:#e6db74">&#34;</span>)
+</span></span><span style="display:flex;"><span>print(<span style="color:#e6db74">f</span><span style="color:#e6db74">&#34;x * y = </span><span style="color:#e6db74">{</span>tf<span style="color:#f92672">.</span>multiply(x, y)<span style="color:#f92672">.</span>numpy()<span style="color:#e6db74">}</span><span style="color:#e6db74">&#34;</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 广播机制</span>
+</span></span><span style="display:flex;"><span>matrix <span style="color:#f92672">=</span> tf<span style="color:#f92672">.</span>constant([[<span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">2</span>], [<span style="color:#ae81ff">3</span>, <span style="color:#ae81ff">4</span>]])
+</span></span><span style="display:flex;"><span>vector <span style="color:#f92672">=</span> tf<span style="color:#f92672">.</span>constant([<span style="color:#ae81ff">5</span>, <span style="color:#ae81ff">6</span>])
+</span></span><span style="display:flex;"><span>print(<span style="color:#e6db74">f</span><span style="color:#e6db74">&#34;矩阵 + 向量广播结果:</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">{</span>tf<span style="color:#f92672">.</span>add(matrix, vector)<span style="color:#f92672">.</span>numpy()<span style="color:#e6db74">}</span><span style="color:#e6db74">&#34;</span>)
+</span></span></code></pre></div><h2 id="-第一个神经网络">🏗️ 第一个神经网络</h2>
+<h3 id="线性回归模型">线性回归模型</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#f92672">import</span> tensorflow <span style="color:#66d9ef">as</span> tf
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> numpy <span style="color:#66d9ef">as</span> np
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> matplotlib.pyplot <span style="color:#66d9ef">as</span> plt
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 生成模拟数据</span>
+</span></span><span style="display:flex;"><span>np<span style="color:#f92672">.</span>random<span style="color:#f92672">.</span>seed(<span style="color:#ae81ff">42</span>)
+</span></span><span style="display:flex;"><span>X <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>random<span style="color:#f92672">.</span>rand(<span style="color:#ae81ff">100</span>, <span style="color:#ae81ff">1</span>) <span style="color:#f92672">*</span> <span style="color:#ae81ff">10</span>
+</span></span><span style="display:flex;"><span>y <span style="color:#f92672">=</span> <span style="color:#ae81ff">2</span> <span style="color:#f92672">*</span> X <span style="color:#f92672">+</span> <span style="color:#ae81ff">1</span> <span style="color:#f92672">+</span> np<span style="color:#f92672">.</span>random<span style="color:#f92672">.</span>randn(<span style="color:#ae81ff">100</span>, <span style="color:#ae81ff">1</span>) <span style="color:#f92672">*</span> <span style="color:#ae81ff">0.5</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 构建模型</span>
+</span></span><span style="display:flex;"><span>model <span style="color:#f92672">=</span> tf<span style="color:#f92672">.</span>keras<span style="color:#f92672">.</span>Sequential([
+</span></span><span style="display:flex;"><span>    tf<span style="color:#f92672">.</span>keras<span style="color:#f92672">.</span>layers<span style="color:#f92672">.</span>Dense(<span style="color:#ae81ff">1</span>, input_shape<span style="color:#f92672">=</span>(<span style="color:#ae81ff">1</span>,))
+</span></span><span style="display:flex;"><span>])
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 编译模型</span>
+</span></span><span style="display:flex;"><span>model<span style="color:#f92672">.</span>compile(
+</span></span><span style="display:flex;"><span>    optimizer<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;sgd&#39;</span>,  <span style="color:#75715e"># 随机梯度下降</span>
+</span></span><span style="display:flex;"><span>    loss<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;mse&#39;</span>,       <span style="color:#75715e"># 均方误差</span>
+</span></span><span style="display:flex;"><span>    metrics<span style="color:#f92672">=</span>[<span style="color:#e6db74">&#39;mae&#39;</span>]   <span style="color:#75715e"># 平均绝对误差</span>
+</span></span><span style="display:flex;"><span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 模型摘要</span>
+</span></span><span style="display:flex;"><span>model<span style="color:#f92672">.</span>summary()
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 训练模型</span>
+</span></span><span style="display:flex;"><span>history <span style="color:#f92672">=</span> model<span style="color:#f92672">.</span>fit(X, y, epochs<span style="color:#f92672">=</span><span style="color:#ae81ff">100</span>, verbose<span style="color:#f92672">=</span><span style="color:#ae81ff">0</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 预测</span>
+</span></span><span style="display:flex;"><span>y_pred <span style="color:#f92672">=</span> model<span style="color:#f92672">.</span>predict(X)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 可视化结果</span>
+</span></span><span style="display:flex;"><span>plt<span style="color:#f92672">.</span>figure(figsize<span style="color:#f92672">=</span>(<span style="color:#ae81ff">12</span>, <span style="color:#ae81ff">4</span>))
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>plt<span style="color:#f92672">.</span>subplot(<span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">2</span>, <span style="color:#ae81ff">1</span>)
+</span></span><span style="display:flex;"><span>plt<span style="color:#f92672">.</span>scatter(X, y, alpha<span style="color:#f92672">=</span><span style="color:#ae81ff">0.5</span>, label<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;真实数据&#39;</span>)
+</span></span><span style="display:flex;"><span>plt<span style="color:#f92672">.</span>plot(X, y_pred, color<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;red&#39;</span>, label<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;预测结果&#39;</span>)
+</span></span><span style="display:flex;"><span>plt<span style="color:#f92672">.</span>xlabel(<span style="color:#e6db74">&#39;X&#39;</span>)
+</span></span><span style="display:flex;"><span>plt<span style="color:#f92672">.</span>ylabel(<span style="color:#e6db74">&#39;y&#39;</span>)
+</span></span><span style="display:flex;"><span>plt<span style="color:#f92672">.</span>title(<span style="color:#e6db74">&#39;线性回归结果&#39;</span>)
+</span></span><span style="display:flex;"><span>plt<span style="color:#f92672">.</span>legend()
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>plt<span style="color:#f92672">.</span>subplot(<span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">2</span>, <span style="color:#ae81ff">2</span>)
+</span></span><span style="display:flex;"><span>plt<span style="color:#f92672">.</span>plot(history<span style="color:#f92672">.</span>history[<span style="color:#e6db74">&#39;loss&#39;</span>])
+</span></span><span style="display:flex;"><span>plt<span style="color:#f92672">.</span>xlabel(<span style="color:#e6db74">&#39;Epoch&#39;</span>)
+</span></span><span style="display:flex;"><span>plt<span style="color:#f92672">.</span>ylabel(<span style="color:#e6db74">&#39;Loss&#39;</span>)
+</span></span><span style="display:flex;"><span>plt<span style="color:#f92672">.</span>title(<span style="color:#e6db74">&#39;训练损失曲线&#39;</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>plt<span style="color:#f92672">.</span>tight_layout()
+</span></span><span style="display:flex;"><span>plt<span style="color:#f92672">.</span>show()
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>print(<span style="color:#e6db74">f</span><span style="color:#e6db74">&#34;模型权重: </span><span style="color:#e6db74">{</span>model<span style="color:#f92672">.</span>weights[<span style="color:#ae81ff">0</span>]<span style="color:#f92672">.</span>numpy()<span style="color:#f92672">.</span>flatten()<span style="color:#e6db74">}</span><span style="color:#e6db74">&#34;</span>)
+</span></span><span style="display:flex;"><span>print(<span style="color:#e6db74">f</span><span style="color:#e6db74">&#34;模型偏置: </span><span style="color:#e6db74">{</span>model<span style="color:#f92672">.</span>weights[<span style="color:#ae81ff">1</span>]<span style="color:#f92672">.</span>numpy()<span style="color:#e6db74">}</span><span style="color:#e6db74">&#34;</span>)
+</span></span></code></pre></div><h3 id="分类模型---mnist手写数字识别">分类模型 - MNIST手写数字识别</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#f92672">import</span> tensorflow <span style="color:#66d9ef">as</span> tf
+</span></span><span style="display:flex;"><span><span style="color:#f92672">from</span> tensorflow.keras.datasets <span style="color:#f92672">import</span> mnist
+</span></span><span style="display:flex;"><span><span style="color:#f92672">from</span> tensorflow.keras.utils <span style="color:#f92672">import</span> to_categorical
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 加载MNIST数据集</span>
+</span></span><span style="display:flex;"><span>(x_train, y_train), (x_test, y_test) <span style="color:#f92672">=</span> mnist<span style="color:#f92672">.</span>load_data()
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 数据预处理</span>
+</span></span><span style="display:flex;"><span>x_train <span style="color:#f92672">=</span> x_train<span style="color:#f92672">.</span>reshape(<span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">784</span>) <span style="color:#f92672">/</span> <span style="color:#ae81ff">255.0</span>  <span style="color:#75715e"># 展平并归一化</span>
+</span></span><span style="display:flex;"><span>x_test <span style="color:#f92672">=</span> x_test<span style="color:#f92672">.</span>reshape(<span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">784</span>) <span style="color:#f92672">/</span> <span style="color:#ae81ff">255.0</span>
+</span></span><span style="display:flex;"><span>y_train <span style="color:#f92672">=</span> to_categorical(y_train, <span style="color:#ae81ff">10</span>)  <span style="color:#75715e"># one-hot编码</span>
+</span></span><span style="display:flex;"><span>y_test <span style="color:#f92672">=</span> to_categorical(y_test, <span style="color:#ae81ff">10</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 构建模型</span>
+</span></span><span style="display:flex;"><span>model <span style="color:#f92672">=</span> tf<span style="color:#f92672">.</span>keras<span style="color:#f92672">.</span>Sequential([
+</span></span><span style="display:flex;"><span>    tf<span style="color:#f92672">.</span>keras<span style="color:#f92672">.</span>layers<span style="color:#f92672">.</span>Dense(<span style="color:#ae81ff">128</span>, activation<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;relu&#39;</span>, input_shape<span style="color:#f92672">=</span>(<span style="color:#ae81ff">784</span>,)),
+</span></span><span style="display:flex;"><span>    tf<span style="color:#f92672">.</span>keras<span style="color:#f92672">.</span>layers<span style="color:#f92672">.</span>Dropout(<span style="color:#ae81ff">0.2</span>),  <span style="color:#75715e"># Dropout防止过拟合</span>
+</span></span><span style="display:flex;"><span>    tf<span style="color:#f92672">.</span>keras<span style="color:#f92672">.</span>layers<span style="color:#f92672">.</span>Dense(<span style="color:#ae81ff">64</span>, activation<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;relu&#39;</span>),
+</span></span><span style="display:flex;"><span>    tf<span style="color:#f92672">.</span>keras<span style="color:#f92672">.</span>layers<span style="color:#f92672">.</span>Dense(<span style="color:#ae81ff">10</span>, activation<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;softmax&#39;</span>)  <span style="color:#75715e"># 输出层</span>
+</span></span><span style="display:flex;"><span>])
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 编译模型</span>
+</span></span><span style="display:flex;"><span>model<span style="color:#f92672">.</span>compile(
+</span></span><span style="display:flex;"><span>    optimizer<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;adam&#39;</span>,  <span style="color:#75715e"># Adam优化器</span>
+</span></span><span style="display:flex;"><span>    loss<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;categorical_crossentropy&#39;</span>,  <span style="color:#75715e"># 交叉熵损失</span>
+</span></span><span style="display:flex;"><span>    metrics<span style="color:#f92672">=</span>[<span style="color:#e6db74">&#39;accuracy&#39;</span>]  <span style="color:#75715e"># 准确率</span>
+</span></span><span style="display:flex;"><span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 训练模型</span>
+</span></span><span style="display:flex;"><span>history <span style="color:#f92672">=</span> model<span style="color:#f92672">.</span>fit(
+</span></span><span style="display:flex;"><span>    x_train, y_train,
+</span></span><span style="display:flex;"><span>    batch_size<span style="color:#f92672">=</span><span style="color:#ae81ff">128</span>,
+</span></span><span style="display:flex;"><span>    epochs<span style="color:#f92672">=</span><span style="color:#ae81ff">10</span>,
+</span></span><span style="display:flex;"><span>    validation_split<span style="color:#f92672">=</span><span style="color:#ae81ff">0.1</span>,  <span style="color:#75715e"># 验证集</span>
+</span></span><span style="display:flex;"><span>    verbose<span style="color:#f92672">=</span><span style="color:#ae81ff">1</span>
+</span></span><span style="display:flex;"><span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 评估模型</span>
+</span></span><span style="display:flex;"><span>test_loss, test_acc <span style="color:#f92672">=</span> model<span style="color:#f92672">.</span>evaluate(x_test, y_test, verbose<span style="color:#f92672">=</span><span style="color:#ae81ff">0</span>)
+</span></span><span style="display:flex;"><span>print(<span style="color:#e6db74">f</span><span style="color:#e6db74">&#34;测试集准确率: </span><span style="color:#e6db74">{</span>test_acc<span style="color:#e6db74">:</span><span style="color:#e6db74">.4f</span><span style="color:#e6db74">}</span><span style="color:#e6db74">&#34;</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 预测</span>
+</span></span><span style="display:flex;"><span>predictions <span style="color:#f92672">=</span> model<span style="color:#f92672">.</span>predict(x_test[:<span style="color:#ae81ff">5</span>])
+</span></span><span style="display:flex;"><span>predicted_labels <span style="color:#f92672">=</span> tf<span style="color:#f92672">.</span>argmax(predictions, axis<span style="color:#f92672">=</span><span style="color:#ae81ff">1</span>)<span style="color:#f92672">.</span>numpy()
+</span></span><span style="display:flex;"><span>true_labels <span style="color:#f92672">=</span> tf<span style="color:#f92672">.</span>argmax(y_test[:<span style="color:#ae81ff">5</span>], axis<span style="color:#f92672">=</span><span style="color:#ae81ff">1</span>)<span style="color:#f92672">.</span>numpy()
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>print(<span style="color:#e6db74">&#34;预测结果:&#34;</span>, predicted_labels)
+</span></span><span style="display:flex;"><span>print(<span style="color:#e6db74">&#34;真实标签:&#34;</span>, true_labels)
+</span></span></code></pre></div><h2 id="-数据处理">📊 数据处理</h2>
+<h3 id="使用tfdata-api">使用tf.data API</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#f92672">import</span> tensorflow <span style="color:#66d9ef">as</span> tf
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> numpy <span style="color:#66d9ef">as</span> np
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 创建数据集</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">create_dataset</span>():
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># 生成随机数据</span>
+</span></span><span style="display:flex;"><span>    X <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>random<span style="color:#f92672">.</span>rand(<span style="color:#ae81ff">1000</span>, <span style="color:#ae81ff">10</span>)
+</span></span><span style="display:flex;"><span>    y <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>random<span style="color:#f92672">.</span>randint(<span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">2</span>, <span style="color:#ae81ff">1000</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># 创建tf.data.Dataset</span>
+</span></span><span style="display:flex;"><span>    dataset <span style="color:#f92672">=</span> tf<span style="color:#f92672">.</span>data<span style="color:#f92672">.</span>Dataset<span style="color:#f92672">.</span>from_tensor_slices((X, y))
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># 数据预处理</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">preprocess</span>(x, y):
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e"># 归一化</span>
+</span></span><span style="display:flex;"><span>        x <span style="color:#f92672">=</span> (x <span style="color:#f92672">-</span> tf<span style="color:#f92672">.</span>reduce_mean(x)) <span style="color:#f92672">/</span> tf<span style="color:#f92672">.</span>math<span style="color:#f92672">.</span>reduce_std(x)
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> x, y
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># 应用预处理</span>
+</span></span><span style="display:flex;"><span>    dataset <span style="color:#f92672">=</span> dataset<span style="color:#f92672">.</span>map(preprocess)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># 打乱和批处理</span>
+</span></span><span style="display:flex;"><span>    dataset <span style="color:#f92672">=</span> dataset<span style="color:#f92672">.</span>shuffle(buffer_size<span style="color:#f92672">=</span><span style="color:#ae81ff">100</span>)
+</span></span><span style="display:flex;"><span>    dataset <span style="color:#f92672">=</span> dataset<span style="color:#f92672">.</span>batch(<span style="color:#ae81ff">32</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># 重复和预取</span>
+</span></span><span style="display:flex;"><span>    dataset <span style="color:#f92672">=</span> dataset<span style="color:#f92672">.</span>repeat()
+</span></span><span style="display:flex;"><span>    dataset <span style="color:#f92672">=</span> dataset<span style="color:#f92672">.</span>prefetch(tf<span style="color:#f92672">.</span>data<span style="color:#f92672">.</span>AUTOTUNE)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> dataset
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 使用数据集训练</span>
+</span></span><span style="display:flex;"><span>dataset <span style="color:#f92672">=</span> create_dataset()
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>model <span style="color:#f92672">=</span> tf<span style="color:#f92672">.</span>keras<span style="color:#f92672">.</span>Sequential([
+</span></span><span style="display:flex;"><span>    tf<span style="color:#f92672">.</span>keras<span style="color:#f92672">.</span>layers<span style="color:#f92672">.</span>Dense(<span style="color:#ae81ff">64</span>, activation<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;relu&#39;</span>, input_shape<span style="color:#f92672">=</span>(<span style="color:#ae81ff">10</span>,)),
+</span></span><span style="display:flex;"><span>    tf<span style="color:#f92672">.</span>keras<span style="color:#f92672">.</span>layers<span style="color:#f92672">.</span>Dense(<span style="color:#ae81ff">32</span>, activation<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;relu&#39;</span>),
+</span></span><span style="display:flex;"><span>    tf<span style="color:#f92672">.</span>keras<span style="color:#f92672">.</span>layers<span style="color:#f92672">.</span>Dense(<span style="color:#ae81ff">1</span>, activation<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;sigmoid&#39;</span>)
+</span></span><span style="display:flex;"><span>])
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>model<span style="color:#f92672">.</span>compile(optimizer<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;adam&#39;</span>, loss<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;binary_crossentropy&#39;</span>, metrics<span style="color:#f92672">=</span>[<span style="color:#e6db74">&#39;accuracy&#39;</span>])
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 训练</span>
+</span></span><span style="display:flex;"><span>model<span style="color:#f92672">.</span>fit(dataset, epochs<span style="color:#f92672">=</span><span style="color:#ae81ff">5</span>, steps_per_epoch<span style="color:#f92672">=</span><span style="color:#ae81ff">10</span>)
+</span></span></code></pre></div><h3 id="图像数据增强">图像数据增强</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#f92672">from</span> tensorflow.keras.preprocessing.image <span style="color:#f92672">import</span> ImageDataGenerator
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 创建图像数据生成器</span>
+</span></span><span style="display:flex;"><span>datagen <span style="color:#f92672">=</span> ImageDataGenerator(
+</span></span><span style="display:flex;"><span>    rotation_range<span style="color:#f92672">=</span><span style="color:#ae81ff">20</span>,      <span style="color:#75715e"># 随机旋转角度</span>
+</span></span><span style="display:flex;"><span>    width_shift_range<span style="color:#f92672">=</span><span style="color:#ae81ff">0.1</span>,  <span style="color:#75715e"># 水平平移</span>
+</span></span><span style="display:flex;"><span>    height_shift_range<span style="color:#f92672">=</span><span style="color:#ae81ff">0.1</span>, <span style="color:#75715e"># 垂直平移</span>
+</span></span><span style="display:flex;"><span>    shear_range<span style="color:#f92672">=</span><span style="color:#ae81ff">0.1</span>,        <span style="color:#75715e"># 剪切变换</span>
+</span></span><span style="display:flex;"><span>    zoom_range<span style="color:#f92672">=</span><span style="color:#ae81ff">0.1</span>,         <span style="color:#75715e"># 缩放</span>
+</span></span><span style="display:flex;"><span>    horizontal_flip<span style="color:#f92672">=</span><span style="color:#66d9ef">True</span>,   <span style="color:#75715e"># 水平翻转</span>
+</span></span><span style="display:flex;"><span>    fill_mode<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;nearest&#39;</span>     <span style="color:#75715e"># 填充模式</span>
+</span></span><span style="display:flex;"><span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 应用数据增强</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># datagen.fit(x_train)  # 如果需要的话</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># enhanced_data = datagen.flow(x_train, y_train, batch_size=32)</span>
+</span></span></code></pre></div><h2 id="-自定义模型和层">🎨 自定义模型和层</h2>
+<h3 id="自定义层">自定义层</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#f92672">import</span> tensorflow <span style="color:#66d9ef">as</span> tf
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">CustomDense</span>(tf<span style="color:#f92672">.</span>keras<span style="color:#f92672">.</span>layers<span style="color:#f92672">.</span>Layer):
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">__init__</span>(self, units, activation<span style="color:#f92672">=</span><span style="color:#66d9ef">None</span>, <span style="color:#f92672">**</span>kwargs):
+</span></span><span style="display:flex;"><span>        super(CustomDense, self)<span style="color:#f92672">.</span><span style="color:#a6e22e">__init__</span>(<span style="color:#f92672">**</span>kwargs)
+</span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>units <span style="color:#f92672">=</span> units
+</span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>activation <span style="color:#f92672">=</span> tf<span style="color:#f92672">.</span>keras<span style="color:#f92672">.</span>activations<span style="color:#f92672">.</span>get(activation)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">build</span>(self, input_shape):
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e"># 创建权重</span>
+</span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>w <span style="color:#f92672">=</span> self<span style="color:#f92672">.</span>add_weight(
+</span></span><span style="display:flex;"><span>            name<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;kernel&#39;</span>,
+</span></span><span style="display:flex;"><span>            shape<span style="color:#f92672">=</span>(input_shape[<span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>], self<span style="color:#f92672">.</span>units),
+</span></span><span style="display:flex;"><span>            initializer<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;glorot_uniform&#39;</span>,
+</span></span><span style="display:flex;"><span>            trainable<span style="color:#f92672">=</span><span style="color:#66d9ef">True</span>
+</span></span><span style="display:flex;"><span>        )
+</span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>b <span style="color:#f92672">=</span> self<span style="color:#f92672">.</span>add_weight(
+</span></span><span style="display:flex;"><span>            name<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;bias&#39;</span>,
+</span></span><span style="display:flex;"><span>            shape<span style="color:#f92672">=</span>(self<span style="color:#f92672">.</span>units,),
+</span></span><span style="display:flex;"><span>            initializer<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;zeros&#39;</span>,
+</span></span><span style="display:flex;"><span>            trainable<span style="color:#f92672">=</span><span style="color:#66d9ef">True</span>
+</span></span><span style="display:flex;"><span>        )
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">call</span>(self, inputs):
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e"># 前向传播</span>
+</span></span><span style="display:flex;"><span>        output <span style="color:#f92672">=</span> tf<span style="color:#f92672">.</span>matmul(inputs, self<span style="color:#f92672">.</span>w) <span style="color:#f92672">+</span> self<span style="color:#f92672">.</span>b
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> self<span style="color:#f92672">.</span>activation <span style="color:#f92672">is</span> <span style="color:#f92672">not</span> <span style="color:#66d9ef">None</span>:
+</span></span><span style="display:flex;"><span>            output <span style="color:#f92672">=</span> self<span style="color:#f92672">.</span>activation(output)
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> output
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">get_config</span>(self):
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e"># 序列化配置</span>
+</span></span><span style="display:flex;"><span>        config <span style="color:#f92672">=</span> super(CustomDense, self)<span style="color:#f92672">.</span>get_config()
+</span></span><span style="display:flex;"><span>        config<span style="color:#f92672">.</span>update({
+</span></span><span style="display:flex;"><span>            <span style="color:#e6db74">&#39;units&#39;</span>: self<span style="color:#f92672">.</span>units,
+</span></span><span style="display:flex;"><span>            <span style="color:#e6db74">&#39;activation&#39;</span>: tf<span style="color:#f92672">.</span>keras<span style="color:#f92672">.</span>activations<span style="color:#f92672">.</span>serialize(self<span style="color:#f92672">.</span>activation)
+</span></span><span style="display:flex;"><span>        })
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> config
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 使用自定义层</span>
+</span></span><span style="display:flex;"><span>model <span style="color:#f92672">=</span> tf<span style="color:#f92672">.</span>keras<span style="color:#f92672">.</span>Sequential([
+</span></span><span style="display:flex;"><span>    CustomDense(<span style="color:#ae81ff">128</span>, activation<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;relu&#39;</span>, input_shape<span style="color:#f92672">=</span>(<span style="color:#ae81ff">784</span>,)),
+</span></span><span style="display:flex;"><span>    CustomDense(<span style="color:#ae81ff">64</span>, activation<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;relu&#39;</span>),
+</span></span><span style="display:flex;"><span>    CustomDense(<span style="color:#ae81ff">10</span>, activation<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;softmax&#39;</span>)
+</span></span><span style="display:flex;"><span>])
+</span></span></code></pre></div><h3 id="自定义模型">自定义模型</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">CustomModel</span>(tf<span style="color:#f92672">.</span>keras<span style="color:#f92672">.</span>Model):
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">__init__</span>(self, num_classes):
+</span></span><span style="display:flex;"><span>        super(CustomModel, self)<span style="color:#f92672">.</span><span style="color:#a6e22e">__init__</span>()
+</span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>dense1 <span style="color:#f92672">=</span> tf<span style="color:#f92672">.</span>keras<span style="color:#f92672">.</span>layers<span style="color:#f92672">.</span>Dense(<span style="color:#ae81ff">128</span>, activation<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;relu&#39;</span>)
+</span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>dense2 <span style="color:#f92672">=</span> tf<span style="color:#f92672">.</span>keras<span style="color:#f92672">.</span>layers<span style="color:#f92672">.</span>Dense(<span style="color:#ae81ff">64</span>, activation<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;relu&#39;</span>)
+</span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>dense3 <span style="color:#f92672">=</span> tf<span style="color:#f92672">.</span>keras<span style="color:#f92672">.</span>layers<span style="color:#f92672">.</span>Dense(num_classes, activation<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;softmax&#39;</span>)
+</span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>dropout <span style="color:#f92672">=</span> tf<span style="color:#f92672">.</span>keras<span style="color:#f92672">.</span>layers<span style="color:#f92672">.</span>Dropout(<span style="color:#ae81ff">0.2</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">call</span>(self, inputs, training<span style="color:#f92672">=</span><span style="color:#66d9ef">False</span>):
+</span></span><span style="display:flex;"><span>        x <span style="color:#f92672">=</span> self<span style="color:#f92672">.</span>dense1(inputs)
+</span></span><span style="display:flex;"><span>        x <span style="color:#f92672">=</span> self<span style="color:#f92672">.</span>dropout(x, training<span style="color:#f92672">=</span>training)
+</span></span><span style="display:flex;"><span>        x <span style="color:#f92672">=</span> self<span style="color:#f92672">.</span>dense2(x)
+</span></span><span style="display:flex;"><span>        x <span style="color:#f92672">=</span> self<span style="color:#f92672">.</span>dropout(x, training<span style="color:#f92672">=</span>training)
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> self<span style="color:#f92672">.</span>dense3(x)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 使用自定义模型</span>
+</span></span><span style="display:flex;"><span>model <span style="color:#f92672">=</span> CustomModel(num_classes<span style="color:#f92672">=</span><span style="color:#ae81ff">10</span>)
+</span></span><span style="display:flex;"><span>model<span style="color:#f92672">.</span>compile(optimizer<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;adam&#39;</span>, loss<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;sparse_categorical_crossentropy&#39;</span>, metrics<span style="color:#f92672">=</span>[<span style="color:#e6db74">&#39;accuracy&#39;</span>])
+</span></span></code></pre></div><h2 id="-模型保存和加载">🔧 模型保存和加载</h2>
+<h3 id="保存和加载模型">保存和加载模型</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#f92672">import</span> tensorflow <span style="color:#66d9ef">as</span> tf
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 构建和训练模型</span>
+</span></span><span style="display:flex;"><span>model <span style="color:#f92672">=</span> tf<span style="color:#f92672">.</span>keras<span style="color:#f92672">.</span>Sequential([
+</span></span><span style="display:flex;"><span>    tf<span style="color:#f92672">.</span>keras<span style="color:#f92672">.</span>layers<span style="color:#f92672">.</span>Dense(<span style="color:#ae81ff">64</span>, activation<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;relu&#39;</span>, input_shape<span style="color:#f92672">=</span>(<span style="color:#ae81ff">10</span>,)),
+</span></span><span style="display:flex;"><span>    tf<span style="color:#f92672">.</span>keras<span style="color:#f92672">.</span>layers<span style="color:#f92672">.</span>Dense(<span style="color:#ae81ff">1</span>, activation<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;sigmoid&#39;</span>)
+</span></span><span style="display:flex;"><span>])
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>model<span style="color:#f92672">.</span>compile(optimizer<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;adam&#39;</span>, loss<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;binary_crossentropy&#39;</span>, metrics<span style="color:#f92672">=</span>[<span style="color:#e6db74">&#39;accuracy&#39;</span>])
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 训练模型（这里使用随机数据作为示例）</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> numpy <span style="color:#66d9ef">as</span> np
+</span></span><span style="display:flex;"><span>X_train <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>random<span style="color:#f92672">.</span>rand(<span style="color:#ae81ff">100</span>, <span style="color:#ae81ff">10</span>)
+</span></span><span style="display:flex;"><span>y_train <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>random<span style="color:#f92672">.</span>randint(<span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">2</span>, <span style="color:#ae81ff">100</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>model<span style="color:#f92672">.</span>fit(X_train, y_train, epochs<span style="color:#f92672">=</span><span style="color:#ae81ff">5</span>, verbose<span style="color:#f92672">=</span><span style="color:#ae81ff">0</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 保存完整模型</span>
+</span></span><span style="display:flex;"><span>model<span style="color:#f92672">.</span>save(<span style="color:#e6db74">&#39;my_model.h5&#39;</span>)  <span style="color:#75715e"># HDF5格式</span>
+</span></span><span style="display:flex;"><span>model<span style="color:#f92672">.</span>save(<span style="color:#e6db74">&#39;my_model&#39;</span>)     <span style="color:#75715e"># TensorFlow SavedModel格式</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 加载模型</span>
+</span></span><span style="display:flex;"><span>loaded_model_h5 <span style="color:#f92672">=</span> tf<span style="color:#f92672">.</span>keras<span style="color:#f92672">.</span>models<span style="color:#f92672">.</span>load_model(<span style="color:#e6db74">&#39;my_model.h5&#39;</span>)
+</span></span><span style="display:flex;"><span>loaded_model <span style="color:#f92672">=</span> tf<span style="color:#f92672">.</span>keras<span style="color:#f92672">.</span>models<span style="color:#f92672">.</span>load_model(<span style="color:#e6db74">&#39;my_model&#39;</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 比较预测结果</span>
+</span></span><span style="display:flex;"><span>test_data <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>random<span style="color:#f92672">.</span>rand(<span style="color:#ae81ff">5</span>, <span style="color:#ae81ff">10</span>)
+</span></span><span style="display:flex;"><span>original_pred <span style="color:#f92672">=</span> model<span style="color:#f92672">.</span>predict(test_data)
+</span></span><span style="display:flex;"><span>loaded_pred <span style="color:#f92672">=</span> loaded_model<span style="color:#f92672">.</span>predict(test_data)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>print(<span style="color:#e6db74">f</span><span style="color:#e6db74">&#34;预测结果一致: </span><span style="color:#e6db74">{</span>np<span style="color:#f92672">.</span>allclose(original_pred, loaded_pred)<span style="color:#e6db74">}</span><span style="color:#e6db74">&#34;</span>)
+</span></span></code></pre></div><h3 id="保存和加载权重">保存和加载权重</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#75715e"># 保存模型权重</span>
+</span></span><span style="display:flex;"><span>model<span style="color:#f92672">.</span>save_weights(<span style="color:#e6db74">&#39;model_weights.h5&#39;</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 创建相同架构的新模型</span>
+</span></span><span style="display:flex;"><span>new_model <span style="color:#f92672">=</span> tf<span style="color:#f92672">.</span>keras<span style="color:#f92672">.</span>Sequential([
+</span></span><span style="display:flex;"><span>    tf<span style="color:#f92672">.</span>keras<span style="color:#f92672">.</span>layers<span style="color:#f92672">.</span>Dense(<span style="color:#ae81ff">64</span>, activation<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;relu&#39;</span>, input_shape<span style="color:#f92672">=</span>(<span style="color:#ae81ff">10</span>,)),
+</span></span><span style="display:flex;"><span>    tf<span style="color:#f92672">.</span>keras<span style="color:#f92672">.</span>layers<span style="color:#f92672">.</span>Dense(<span style="color:#ae81ff">1</span>, activation<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;sigmoid&#39;</span>)
+</span></span><span style="display:flex;"><span>])
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 加载权重</span>
+</span></span><span style="display:flex;"><span>new_model<span style="color:#f92672">.</span>load_weights(<span style="color:#e6db74">&#39;model_weights.h5&#39;</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 验证权重是否相同</span>
+</span></span><span style="display:flex;"><span>original_weights <span style="color:#f92672">=</span> model<span style="color:#f92672">.</span>get_weights()
+</span></span><span style="display:flex;"><span>loaded_weights <span style="color:#f92672">=</span> new_model<span style="color:#f92672">.</span>get_weights()
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">for</span> i, (orig, loaded) <span style="color:#f92672">in</span> enumerate(zip(original_weights, loaded_weights)):
+</span></span><span style="display:flex;"><span>    print(<span style="color:#e6db74">f</span><span style="color:#e6db74">&#34;权重</span><span style="color:#e6db74">{</span>i<span style="color:#e6db74">}</span><span style="color:#e6db74">一致: </span><span style="color:#e6db74">{</span>np<span style="color:#f92672">.</span>allclose(orig, loaded)<span style="color:#e6db74">}</span><span style="color:#e6db74">&#34;</span>)
+</span></span></code></pre></div><h2 id="-模型评估和可视化">📈 模型评估和可视化</h2>
+<h3 id="评估指标">评估指标</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#f92672">from</span> sklearn.metrics <span style="color:#f92672">import</span> classification_report, confusion_matrix
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> seaborn <span style="color:#66d9ef">as</span> sns
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 预测测试集</span>
+</span></span><span style="display:flex;"><span>y_pred <span style="color:#f92672">=</span> model<span style="color:#f92672">.</span>predict(x_test)
+</span></span><span style="display:flex;"><span>y_pred_classes <span style="color:#f92672">=</span> tf<span style="color:#f92672">.</span>argmax(y_pred, axis<span style="color:#f92672">=</span><span style="color:#ae81ff">1</span>)<span style="color:#f92672">.</span>numpy()
+</span></span><span style="display:flex;"><span>y_true <span style="color:#f92672">=</span> tf<span style="color:#f92672">.</span>argmax(y_test, axis<span style="color:#f92672">=</span><span style="color:#ae81ff">1</span>)<span style="color:#f92672">.</span>numpy()
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 分类报告</span>
+</span></span><span style="display:flex;"><span>print(<span style="color:#e6db74">&#34;分类报告:&#34;</span>)
+</span></span><span style="display:flex;"><span>print(classification_report(y_true, y_pred_classes))
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 混淆矩阵</span>
+</span></span><span style="display:flex;"><span>cm <span style="color:#f92672">=</span> confusion_matrix(y_true, y_pred_classes)
+</span></span><span style="display:flex;"><span>plt<span style="color:#f92672">.</span>figure(figsize<span style="color:#f92672">=</span>(<span style="color:#ae81ff">10</span>, <span style="color:#ae81ff">8</span>))
+</span></span><span style="display:flex;"><span>sns<span style="color:#f92672">.</span>heatmap(cm, annot<span style="color:#f92672">=</span><span style="color:#66d9ef">True</span>, fmt<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;d&#39;</span>, cmap<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;Blues&#39;</span>)
+</span></span><span style="display:flex;"><span>plt<span style="color:#f92672">.</span>xlabel(<span style="color:#e6db74">&#39;预测标签&#39;</span>)
+</span></span><span style="display:flex;"><span>plt<span style="color:#f92672">.</span>ylabel(<span style="color:#e6db74">&#39;真实标签&#39;</span>)
+</span></span><span style="display:flex;"><span>plt<span style="color:#f92672">.</span>title(<span style="color:#e6db74">&#39;混淆矩阵&#39;</span>)
+</span></span><span style="display:flex;"><span>plt<span style="color:#f92672">.</span>show()
+</span></span></code></pre></div><h3 id="训练历史可视化">训练历史可视化</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#f92672">import</span> matplotlib.pyplot <span style="color:#66d9ef">as</span> plt
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 训练历史</span>
+</span></span><span style="display:flex;"><span>history <span style="color:#f92672">=</span> model<span style="color:#f92672">.</span>fit(x_train, y_train, validation_data<span style="color:#f92672">=</span>(x_val, y_val), epochs<span style="color:#f92672">=</span><span style="color:#ae81ff">20</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 绘制训练曲线</span>
+</span></span><span style="display:flex;"><span>plt<span style="color:#f92672">.</span>figure(figsize<span style="color:#f92672">=</span>(<span style="color:#ae81ff">12</span>, <span style="color:#ae81ff">4</span>))
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 损失曲线</span>
+</span></span><span style="display:flex;"><span>plt<span style="color:#f92672">.</span>subplot(<span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">2</span>, <span style="color:#ae81ff">1</span>)
+</span></span><span style="display:flex;"><span>plt<span style="color:#f92672">.</span>plot(history<span style="color:#f92672">.</span>history[<span style="color:#e6db74">&#39;loss&#39;</span>], label<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;训练损失&#39;</span>)
+</span></span><span style="display:flex;"><span>plt<span style="color:#f92672">.</span>plot(history<span style="color:#f92672">.</span>history[<span style="color:#e6db74">&#39;val_loss&#39;</span>], label<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;验证损失&#39;</span>)
+</span></span><span style="display:flex;"><span>plt<span style="color:#f92672">.</span>xlabel(<span style="color:#e6db74">&#39;Epoch&#39;</span>)
+</span></span><span style="display:flex;"><span>plt<span style="color:#f92672">.</span>ylabel(<span style="color:#e6db74">&#39;Loss&#39;</span>)
+</span></span><span style="display:flex;"><span>plt<span style="color:#f92672">.</span>title(<span style="color:#e6db74">&#39;训练和验证损失&#39;</span>)
+</span></span><span style="display:flex;"><span>plt<span style="color:#f92672">.</span>legend()
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 准确率曲线</span>
+</span></span><span style="display:flex;"><span>plt<span style="color:#f92672">.</span>subplot(<span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">2</span>, <span style="color:#ae81ff">2</span>)
+</span></span><span style="display:flex;"><span>plt<span style="color:#f92672">.</span>plot(history<span style="color:#f92672">.</span>history[<span style="color:#e6db74">&#39;accuracy&#39;</span>], label<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;训练准确率&#39;</span>)
+</span></span><span style="display:flex;"><span>plt<span style="color:#f92672">.</span>plot(history<span style="color:#f92672">.</span>history[<span style="color:#e6db74">&#39;val_accuracy&#39;</span>], label<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;验证准确率&#39;</span>)
+</span></span><span style="display:flex;"><span>plt<span style="color:#f92672">.</span>xlabel(<span style="color:#e6db74">&#39;Epoch&#39;</span>)
+</span></span><span style="display:flex;"><span>plt<span style="color:#f92672">.</span>ylabel(<span style="color:#e6db74">&#39;Accuracy&#39;</span>)
+</span></span><span style="display:flex;"><span>plt<span style="color:#f92672">.</span>title(<span style="color:#e6db74">&#39;训练和验证准确率&#39;</span>)
+</span></span><span style="display:flex;"><span>plt<span style="color:#f92672">.</span>legend()
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>plt<span style="color:#f92672">.</span>tight_layout()
+</span></span><span style="display:flex;"><span>plt<span style="color:#f92672">.</span>show()
+</span></span></code></pre></div><h2 id="-实际项目房价预测">🚀 实际项目：房价预测</h2>
+<h3 id="完整项目代码">完整项目代码</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#f92672">import</span> tensorflow <span style="color:#66d9ef">as</span> tf
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> numpy <span style="color:#66d9ef">as</span> np
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> pandas <span style="color:#66d9ef">as</span> pd
+</span></span><span style="display:flex;"><span><span style="color:#f92672">from</span> sklearn.model_selection <span style="color:#f92672">import</span> train_test_split
+</span></span><span style="display:flex;"><span><span style="color:#f92672">from</span> sklearn.preprocessing <span style="color:#f92672">import</span> StandardScaler
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 生成模拟房价数据</span>
+</span></span><span style="display:flex;"><span>np<span style="color:#f92672">.</span>random<span style="color:#f92672">.</span>seed(<span style="color:#ae81ff">42</span>)
+</span></span><span style="display:flex;"><span>n_samples <span style="color:#f92672">=</span> <span style="color:#ae81ff">1000</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 特征：面积、房间数、年龄、距离市中心距离</span>
+</span></span><span style="display:flex;"><span>areas <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>random<span style="color:#f92672">.</span>normal(<span style="color:#ae81ff">100</span>, <span style="color:#ae81ff">20</span>, n_samples)  <span style="color:#75715e"># 平方米</span>
+</span></span><span style="display:flex;"><span>rooms <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>random<span style="color:#f92672">.</span>randint(<span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">6</span>, n_samples)     <span style="color:#75715e"># 房间数</span>
+</span></span><span style="display:flex;"><span>ages <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>random<span style="color:#f92672">.</span>randint(<span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">50</span>, n_samples)     <span style="color:#75715e"># 房屋年龄</span>
+</span></span><span style="display:flex;"><span>distances <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>random<span style="color:#f92672">.</span>normal(<span style="color:#ae81ff">10</span>, <span style="color:#ae81ff">3</span>, n_samples) <span style="color:#75715e"># 距离市中心（公里）</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 目标：房价（万元）</span>
+</span></span><span style="display:flex;"><span>prices <span style="color:#f92672">=</span> <span style="color:#ae81ff">50</span> <span style="color:#f92672">+</span> <span style="color:#ae81ff">0.8</span> <span style="color:#f92672">*</span> areas <span style="color:#f92672">+</span> <span style="color:#ae81ff">10</span> <span style="color:#f92672">*</span> rooms <span style="color:#f92672">-</span> <span style="color:#ae81ff">0.5</span> <span style="color:#f92672">*</span> ages <span style="color:#f92672">-</span> <span style="color:#ae81ff">2</span> <span style="color:#f92672">*</span> distances <span style="color:#f92672">+</span> np<span style="color:#f92672">.</span>random<span style="color:#f92672">.</span>normal(<span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">10</span>, n_samples)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 创建DataFrame</span>
+</span></span><span style="display:flex;"><span>data <span style="color:#f92672">=</span> pd<span style="color:#f92672">.</span>DataFrame({
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#39;area&#39;</span>: areas,
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#39;rooms&#39;</span>: rooms,
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#39;age&#39;</span>: ages,
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#39;distance&#39;</span>: distances,
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#39;price&#39;</span>: prices
+</span></span><span style="display:flex;"><span>})
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 数据预处理</span>
+</span></span><span style="display:flex;"><span>features <span style="color:#f92672">=</span> [<span style="color:#e6db74">&#39;area&#39;</span>, <span style="color:#e6db74">&#39;rooms&#39;</span>, <span style="color:#e6db74">&#39;age&#39;</span>, <span style="color:#e6db74">&#39;distance&#39;</span>]
+</span></span><span style="display:flex;"><span>X <span style="color:#f92672">=</span> data[features]<span style="color:#f92672">.</span>values
+</span></span><span style="display:flex;"><span>y <span style="color:#f92672">=</span> data[<span style="color:#e6db74">&#39;price&#39;</span>]<span style="color:#f92672">.</span>values
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 标准化特征</span>
+</span></span><span style="display:flex;"><span>scaler <span style="color:#f92672">=</span> StandardScaler()
+</span></span><span style="display:flex;"><span>X_scaled <span style="color:#f92672">=</span> scaler<span style="color:#f92672">.</span>fit_transform(X)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 分割数据集</span>
+</span></span><span style="display:flex;"><span>X_train, X_test, y_train, y_test <span style="color:#f92672">=</span> train_test_split(X_scaled, y, test_size<span style="color:#f92672">=</span><span style="color:#ae81ff">0.2</span>, random_state<span style="color:#f92672">=</span><span style="color:#ae81ff">42</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 构建模型</span>
+</span></span><span style="display:flex;"><span>model <span style="color:#f92672">=</span> tf<span style="color:#f92672">.</span>keras<span style="color:#f92672">.</span>Sequential([
+</span></span><span style="display:flex;"><span>    tf<span style="color:#f92672">.</span>keras<span style="color:#f92672">.</span>layers<span style="color:#f92672">.</span>Dense(<span style="color:#ae81ff">64</span>, activation<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;relu&#39;</span>, input_shape<span style="color:#f92672">=</span>(<span style="color:#ae81ff">4</span>,)),
+</span></span><span style="display:flex;"><span>    tf<span style="color:#f92672">.</span>keras<span style="color:#f92672">.</span>layers<span style="color:#f92672">.</span>Dense(<span style="color:#ae81ff">32</span>, activation<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;relu&#39;</span>),
+</span></span><span style="display:flex;"><span>    tf<span style="color:#f92672">.</span>keras<span style="color:#f92672">.</span>layers<span style="color:#f92672">.</span>Dense(<span style="color:#ae81ff">16</span>, activation<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;relu&#39;</span>),
+</span></span><span style="display:flex;"><span>    tf<span style="color:#f92672">.</span>keras<span style="color:#f92672">.</span>layers<span style="color:#f92672">.</span>Dense(<span style="color:#ae81ff">1</span>)  <span style="color:#75715e"># 回归问题，输出层无激活函数</span>
+</span></span><span style="display:flex;"><span>])
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 编译模型</span>
+</span></span><span style="display:flex;"><span>model<span style="color:#f92672">.</span>compile(
+</span></span><span style="display:flex;"><span>    optimizer<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;adam&#39;</span>,
+</span></span><span style="display:flex;"><span>    loss<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;mse&#39;</span>,
+</span></span><span style="display:flex;"><span>    metrics<span style="color:#f92672">=</span>[<span style="color:#e6db74">&#39;mae&#39;</span>, <span style="color:#e6db74">&#39;mse&#39;</span>]
+</span></span><span style="display:flex;"><span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 训练模型</span>
+</span></span><span style="display:flex;"><span>history <span style="color:#f92672">=</span> model<span style="color:#f92672">.</span>fit(
+</span></span><span style="display:flex;"><span>    X_train, y_train,
+</span></span><span style="display:flex;"><span>    batch_size<span style="color:#f92672">=</span><span style="color:#ae81ff">32</span>,
+</span></span><span style="display:flex;"><span>    epochs<span style="color:#f92672">=</span><span style="color:#ae81ff">100</span>,
+</span></span><span style="display:flex;"><span>    validation_split<span style="color:#f92672">=</span><span style="color:#ae81ff">0.2</span>,
+</span></span><span style="display:flex;"><span>    callbacks<span style="color:#f92672">=</span>[
+</span></span><span style="display:flex;"><span>        tf<span style="color:#f92672">.</span>keras<span style="color:#f92672">.</span>callbacks<span style="color:#f92672">.</span>EarlyStopping(patience<span style="color:#f92672">=</span><span style="color:#ae81ff">10</span>, restore_best_weights<span style="color:#f92672">=</span><span style="color:#66d9ef">True</span>),
+</span></span><span style="display:flex;"><span>        tf<span style="color:#f92672">.</span>keras<span style="color:#f92672">.</span>callbacks<span style="color:#f92672">.</span>ReduceLROnPlateau(factor<span style="color:#f92672">=</span><span style="color:#ae81ff">0.5</span>, patience<span style="color:#f92672">=</span><span style="color:#ae81ff">5</span>)
+</span></span><span style="display:flex;"><span>    ],
+</span></span><span style="display:flex;"><span>    verbose<span style="color:#f92672">=</span><span style="color:#ae81ff">1</span>
+</span></span><span style="display:flex;"><span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 评估模型</span>
+</span></span><span style="display:flex;"><span>test_loss, test_mae, test_mse <span style="color:#f92672">=</span> model<span style="color:#f92672">.</span>evaluate(X_test, y_test, verbose<span style="color:#f92672">=</span><span style="color:#ae81ff">0</span>)
+</span></span><span style="display:flex;"><span>print(<span style="color:#e6db74">f</span><span style="color:#e6db74">&#34;测试集MAE: </span><span style="color:#e6db74">{</span>test_mae<span style="color:#e6db74">:</span><span style="color:#e6db74">.2f</span><span style="color:#e6db74">}</span><span style="color:#e6db74">万元&#34;</span>)
+</span></span><span style="display:flex;"><span>print(<span style="color:#e6db74">f</span><span style="color:#e6db74">&#34;测试集MSE: </span><span style="color:#e6db74">{</span>test_mse<span style="color:#e6db74">:</span><span style="color:#e6db74">.2f</span><span style="color:#e6db74">}</span><span style="color:#e6db74">万元²&#34;</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 预测</span>
+</span></span><span style="display:flex;"><span>predictions <span style="color:#f92672">=</span> model<span style="color:#f92672">.</span>predict(X_test[:<span style="color:#ae81ff">5</span>])
+</span></span><span style="display:flex;"><span>print(<span style="color:#e6db74">&#34;</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">预测结果:&#34;</span>)
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">for</span> i <span style="color:#f92672">in</span> range(<span style="color:#ae81ff">5</span>):
+</span></span><span style="display:flex;"><span>    print(<span style="color:#e6db74">f</span><span style="color:#e6db74">&#34;真实价格: </span><span style="color:#e6db74">{</span>y_test[i]<span style="color:#e6db74">:</span><span style="color:#e6db74">.2f</span><span style="color:#e6db74">}</span><span style="color:#e6db74">万元, 预测价格: </span><span style="color:#e6db74">{</span>predictions[i][<span style="color:#ae81ff">0</span>]<span style="color:#e6db74">:</span><span style="color:#e6db74">.2f</span><span style="color:#e6db74">}</span><span style="color:#e6db74">万元&#34;</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 保存模型</span>
+</span></span><span style="display:flex;"><span>model<span style="color:#f92672">.</span>save(<span style="color:#e6db74">&#39;house_price_model.h5&#39;</span>)
+</span></span><span style="display:flex;"><span>print(<span style="color:#e6db74">&#34;</span><span style="color:#ae81ff">\n</span><span style="color:#e6db74">模型已保存为 &#39;house_price_model.h5&#39;&#34;</span>)
+</span></span></code></pre></div><h2 id="-最佳实践">🎯 最佳实践</h2>
+<h3 id="代码组织">代码组织</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#75715e"># 推荐的项目结构</span>
+</span></span><span style="display:flex;"><span>house_price_prediction<span style="color:#f92672">/</span>
+</span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">├──</span> data<span style="color:#f92672">/</span>
+</span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">│</span>   <span style="color:#960050;background-color:#1e0010">├──</span> raw<span style="color:#f92672">/</span>
+</span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">│</span>   <span style="color:#960050;background-color:#1e0010">└──</span> processed<span style="color:#f92672">/</span>
+</span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">├──</span> models<span style="color:#f92672">/</span>
+</span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">│</span>   <span style="color:#960050;background-color:#1e0010">└──</span> saved_models<span style="color:#f92672">/</span>
+</span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">├──</span> notebooks<span style="color:#f92672">/</span>
+</span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">│</span>   <span style="color:#960050;background-color:#1e0010">└──</span> exploration<span style="color:#f92672">.</span>ipynb
+</span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">├──</span> src<span style="color:#f92672">/</span>
+</span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">│</span>   <span style="color:#960050;background-color:#1e0010">├──</span> <span style="color:#a6e22e">__init__</span><span style="color:#f92672">.</span>py
+</span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">│</span>   <span style="color:#960050;background-color:#1e0010">├──</span> data_preprocessing<span style="color:#f92672">.</span>py
+</span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">│</span>   <span style="color:#960050;background-color:#1e0010">├──</span> model<span style="color:#f92672">.</span>py
+</span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">│</span>   <span style="color:#960050;background-color:#1e0010">└──</span> train<span style="color:#f92672">.</span>py
+</span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">├──</span> config<span style="color:#f92672">/</span>
+</span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">│</span>   <span style="color:#960050;background-color:#1e0010">└──</span> config<span style="color:#f92672">.</span>yaml
+</span></span><span style="display:flex;"><span><span style="color:#960050;background-color:#1e0010">└──</span> requirements<span style="color:#f92672">.</span>txt
+</span></span></code></pre></div><h3 id="调试技巧">调试技巧</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#75715e"># 启用TensorFlow调试</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> os
+</span></span><span style="display:flex;"><span>os<span style="color:#f92672">.</span>environ[<span style="color:#e6db74">&#39;TF_CPP_MIN_LOG_LEVEL&#39;</span>] <span style="color:#f92672">=</span> <span style="color:#e6db74">&#39;2&#39;</span>  <span style="color:#75715e"># 减少警告信息</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 检查模型结构</span>
+</span></span><span style="display:flex;"><span>model<span style="color:#f92672">.</span>summary()
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 检查张量形状</span>
+</span></span><span style="display:flex;"><span>print(<span style="color:#e6db74">f</span><span style="color:#e6db74">&#34;输入形状: </span><span style="color:#e6db74">{</span>x_train<span style="color:#f92672">.</span>shape<span style="color:#e6db74">}</span><span style="color:#e6db74">&#34;</span>)
+</span></span><span style="display:flex;"><span>print(<span style="color:#e6db74">f</span><span style="color:#e6db74">&#34;输出形状: </span><span style="color:#e6db74">{</span>model<span style="color:#f92672">.</span>predict(x_train[:<span style="color:#ae81ff">1</span>])<span style="color:#f92672">.</span>shape<span style="color:#e6db74">}</span><span style="color:#e6db74">&#34;</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 使用tf.debugging</span>
+</span></span><span style="display:flex;"><span>x <span style="color:#f92672">=</span> tf<span style="color:#f92672">.</span>constant([<span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">2</span>, <span style="color:#ae81ff">3</span>])
+</span></span><span style="display:flex;"><span>tf<span style="color:#f92672">.</span>debugging<span style="color:#f92672">.</span>assert_shapes([
+</span></span><span style="display:flex;"><span>    (x, (<span style="color:#e6db74">&#39;N&#39;</span>,)),  <span style="color:#75715e"># 断言x的形状</span>
+</span></span><span style="display:flex;"><span>])
+</span></span></code></pre></div><h2 id="-学习资源">📚 学习资源</h2>
+<h3 id="官方教程">官方教程</h3>
+<ul>
+<li><a href="https://www.tensorflow.org/tutorials">TensorFlow官方教程</a></li>
+<li><a href="https://keras.io/getting_started/">Keras文档</a></li>
+<li><a href="https://www.tensorflow.org/tutorials/quickstart/beginner">TensorFlow 2.0快速入门</a></li>
+</ul>
+<h3 id="吴恩达课程">吴恩达课程</h3>
+<ul>
+<li>深度学习课程中关于TensorFlow的部分</li>
+</ul>
+<h3 id="实践项目">实践项目</h3>
+<ul>
+<li><a href="https://github.com/tensorflow/examples">TensorFlow Examples</a></li>
+<li><a href="https://www.kaggle.com/competitions">Kaggle竞赛</a></li>
+<li><a href="https://colab.research.google.com/">Google Colab</a></li>
+</ul>
+<h2 id="-常见问题">🔧 常见问题</h2>
+<h3 id="gpu内存不足">GPU内存不足</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#75715e"># 限制GPU内存使用</span>
+</span></span><span style="display:flex;"><span>gpus <span style="color:#f92672">=</span> tf<span style="color:#f92672">.</span>config<span style="color:#f92672">.</span>experimental<span style="color:#f92672">.</span>list_physical_devices(<span style="color:#e6db74">&#39;GPU&#39;</span>)
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">if</span> gpus:
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">try</span>:
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">for</span> gpu <span style="color:#f92672">in</span> gpus:
+</span></span><span style="display:flex;"><span>            tf<span style="color:#f92672">.</span>config<span style="color:#f92672">.</span>experimental<span style="color:#f92672">.</span>set_memory_growth(gpu, <span style="color:#66d9ef">True</span>)
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">except</span> <span style="color:#a6e22e">RuntimeError</span> <span style="color:#66d9ef">as</span> e:
+</span></span><span style="display:flex;"><span>        print(e)
+</span></span></code></pre></div><h3 id="模型不收敛">模型不收敛</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#75715e"># 调整学习率</span>
+</span></span><span style="display:flex;"><span>optimizer <span style="color:#f92672">=</span> tf<span style="color:#f92672">.</span>keras<span style="color:#f92672">.</span>optimizers<span style="color:#f92672">.</span>Adam(learning_rate<span style="color:#f92672">=</span><span style="color:#ae81ff">0.001</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 使用学习率调度</span>
+</span></span><span style="display:flex;"><span>lr_schedule <span style="color:#f92672">=</span> tf<span style="color:#f92672">.</span>keras<span style="color:#f92672">.</span>optimizers<span style="color:#f92672">.</span>schedules<span style="color:#f92672">.</span>ExponentialDecay(
+</span></span><span style="display:flex;"><span>    initial_learning_rate<span style="color:#f92672">=</span><span style="color:#ae81ff">0.001</span>,
+</span></span><span style="display:flex;"><span>    decay_steps<span style="color:#f92672">=</span><span style="color:#ae81ff">1000</span>,
+</span></span><span style="display:flex;"><span>    decay_rate<span style="color:#f92672">=</span><span style="color:#ae81ff">0.9</span>
+</span></span><span style="display:flex;"><span>)
+</span></span><span style="display:flex;"><span>optimizer <span style="color:#f92672">=</span> tf<span style="color:#f92672">.</span>keras<span style="color:#f92672">.</span>optimizers<span style="color:#f92672">.</span>Adam(learning_rate<span style="color:#f92672">=</span>lr_schedule)
+</span></span></code></pre></div><h3 id="数据预处理">数据预处理</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#75715e"># 正确的数据预处理流程</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">preprocess_data</span>(X, y):
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># 1. 处理缺失值</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># 2. 特征缩放</span>
+</span></span><span style="display:flex;"><span>    scaler <span style="color:#f92672">=</span> StandardScaler()
+</span></span><span style="display:flex;"><span>    X_scaled <span style="color:#f92672">=</span> scaler<span style="color:#f92672">.</span>fit_transform(X)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># 3. 分割数据集</span>
+</span></span><span style="display:flex;"><span>    X_train, X_test, y_train, y_test <span style="color:#f92672">=</span> train_test_split(X_scaled, y, test_size<span style="color:#f92672">=</span><span style="color:#ae81ff">0.2</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> X_train, X_test, y_train, y_test, scaler
+</span></span></code></pre></div><hr>
+<p><em>最近更新: {{ .Lastmod.Format &ldquo;2006-01-02&rdquo; }}</em></p>
+</div>
+    
+<nav class="pager" aria-label="文章导航">
+  
+  <a href="/wiki/deep_learning/tensorflow/advanced_1/" data-press>
+    <span class="dir">← 上一篇</span>TensorFlow高级特性
+  </a>
+  
+  
+</nav>
+
+
+    
+<div class="comments">
+  <h2 class="comments-title">评论</h2>
+  <div id="utterances"></div>
+  <script>
+    (function () {
+      if (window.location.protocol === 'file:') return;
+      var s = document.createElement('script');
+      s.src = 'https://utteranc.es/client.js';
+      s.async = true;
+      s.setAttribute('repo', "makkichan947/makkichan947.github.io");
+      s.setAttribute('issue-term', "pathname");
+      s.setAttribute('theme', "github-dark");
+      s.setAttribute('crossorigin', 'anonymous');
+      document.getElementById('utterances').appendChild(s);
+    })();
+  </script>
+</div>
+
+
+  </article>
+  
+</div>
+
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+      <div class="footer-links">
+        
+        <a href="https://github.com/makkichan947" target="_blank" rel="noopener" title="Github" data-press>Github</a>
+        
+        <a href="mailto:yakumakki947@hotmail.com" target="_blank" rel="noopener" title="Email" data-press>Email</a>
+        
+        <a href="https://x.com/Makki_Yaku947" target="_blank" rel="noopener" title="Twitter" data-press>Twitter</a>
+        
+        <a href="https://www.twitch.tv/u/makkichan947" target="_blank" rel="noopener" title="Twitch" data-press>Twitch</a>
+        
+      </div>
+      <p>&copy; 2026 Yaku Makki</p>
+      <p>Powered by <a href="https://gohugo.io" target="_blank" rel="noopener">Hugo</a> · Makki Theme</p>
+      
+      <div class="stats">
+        <span>访客 <span id="busuanzi_value_site_uv"></span></span>
+        <span>访问 <span id="busuanzi_value_site_pv"></span></span>
+        <span>本页 <span id="busuanzi_value_page_pv"></span></span>
+      </div>
+      
+    </div>
+  </footer>
+
+  <button class="back-to-top" id="back-to-top" type="button" aria-label="回到顶部" data-press>
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 19V5"/><path d="M5 12l7-7 7 7"/></svg>
+  </button>
+
+  
+  <script src="/js/main.min.2e977141114ec7890ffee2c35e08034683543cfe8ef98dd4af5effb3b37a3345.js" integrity="sha256-LpdxQRFOx4kP/uLDXggDRoNUPP6O&#43;Y3Ur17/s7N6M0U=" defer></script>
+  
+  
+  <script src="/js/search.min.b2d6ba6610ce24454bc1436dc521dcfd878b2583ad9f65f77aadedaaa1e1a54c.js" integrity="sha256-sta6ZhDOJEVLwUNtxSHc/YeLJYOtn2X3eq3tqqHhpUw=" defer></script>
+  
+
+  
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+  
+
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/katex.min.js" crossorigin="anonymous"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/contrib/auto-render.min.js" crossorigin="anonymous"></script>
+</body>
+</html>

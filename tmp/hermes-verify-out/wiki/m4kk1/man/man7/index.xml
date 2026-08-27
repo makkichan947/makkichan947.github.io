@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+	<channel>
+		<title>标准 (man7) on Yaku Makki</title>
+		<link>https://makkichan947.github.io/wiki/m4kk1/man/man7/</link>
+		<description>Recent content in 标准 (man7) on Yaku Makki</description>
+		<generator>Hugo</generator>
+		<language>zh</language>
+		
+		
+		
+		
+			<lastBuildDate>Sat, 08 Aug 2026 14:03:10 +0800</lastBuildDate>
+		
+			<atom:link href="https://makkichan947.github.io/wiki/m4kk1/man/man7/index.xml" rel="self" type="application/rss+xml" />
+			<item>
+				<title>hier</title>
+				<link>https://makkichan947.github.io/wiki/m4kk1/man/man7/hier/</link>
+				<pubDate>Sat, 08 Aug 2026 14:03:10 +0800</pubDate>
+				<guid>https://makkichan947.github.io/wiki/m4kk1/man/man7/hier/</guid>
+				<description>&lt;h2 id=&#34;名称&#34;&gt;名称&lt;/h2&gt;&#xA;&lt;p&gt;hier — M4KK1 文件系统层次结构&lt;/p&gt;&#xA;&lt;h2 id=&#34;描述&#34;&gt;描述&lt;/h2&gt;&#xA;&lt;p&gt;M4KK1 标准文件系统层次:&lt;/p&gt;&#xA;&lt;ul&gt;&#xA;&lt;li&gt;&lt;code&gt;/&lt;/code&gt; — 根文件系统&lt;/li&gt;&#xA;&lt;li&gt;&lt;code&gt;/bin/&lt;/code&gt; — 可执行文件 (login, m4sh)&lt;/li&gt;&#xA;&lt;li&gt;&lt;code&gt;/dev/&lt;/code&gt; — 设备文件 (console, null, zero)&lt;/li&gt;&#xA;&lt;li&gt;&lt;code&gt;/export/cfg/&lt;/code&gt; — 配置文件 (passwd.db, groups.db)&lt;/li&gt;&#xA;&lt;li&gt;&lt;code&gt;/export/home/&lt;/code&gt; — 用户家目录&lt;/li&gt;&#xA;&lt;li&gt;&lt;code&gt;/sys/proc/&lt;/code&gt; — 进程信息伪文件系统&lt;/li&gt;&#xA;&lt;li&gt;&lt;code&gt;/sys/sessions/&lt;/code&gt; — 登录会话&lt;/li&gt;&#xA;&lt;li&gt;&lt;code&gt;/tmp/&lt;/code&gt; — 临时文件&lt;/li&gt;&#xA;&lt;/ul&gt;&#xA;&lt;h2 id=&#34;参见&#34;&gt;参见&lt;/h2&gt;&#xA;&lt;p&gt;&lt;a href=&#34;m4k_std/&#34;&gt;m4k_std(7)&lt;/a&gt;&lt;/p&gt;</description>
+			</item>
+			<item>
+				<title>m4k_std</title>
+				<link>https://makkichan947.github.io/wiki/m4kk1/man/man7/m4k_std/</link>
+				<pubDate>Sat, 08 Aug 2026 14:03:10 +0800</pubDate>
+				<guid>https://makkichan947.github.io/wiki/m4kk1/man/man7/m4k_std/</guid>
+				<description>&lt;h2 id=&#34;名称&#34;&gt;名称&lt;/h2&gt;&#xA;&lt;p&gt;m4k_std — M4KK1 4P1 独立标准概述&lt;/p&gt;&#xA;&lt;h2 id=&#34;描述&#34;&gt;描述&lt;/h2&gt;&#xA;&lt;p&gt;M4KK1 遵循 4P1 独立标准。核心约定:&lt;/p&gt;&#xA;&lt;ul&gt;&#xA;&lt;li&gt;&lt;strong&gt;系统调用 ABI&lt;/strong&gt; — int 0x4D，参数通过寄存器传递，返回值在 &lt;code&gt;%eax&lt;/code&gt;（负值表示错误）&lt;/li&gt;&#xA;&lt;li&gt;&lt;strong&gt;命名约定&lt;/strong&gt; — &lt;code&gt;mkrn_&lt;/code&gt;（内核）、&lt;code&gt;musr_&lt;/code&gt;（用户空间）、&lt;code&gt;m4k_&lt;/code&gt;（系统调用 ABI）&lt;/li&gt;&#xA;&lt;li&gt;&lt;strong&gt;错误处理&lt;/strong&gt; — 无 errno，函数直接返回负值&lt;/li&gt;&#xA;&lt;li&gt;&lt;strong&gt;内存模型&lt;/strong&gt; — 平坦 32 位物理内存，无 MMU/分页&lt;/li&gt;&#xA;&lt;li&gt;&lt;strong&gt;文件描述符&lt;/strong&gt; — 全局表，最多 256 个&lt;/li&gt;&#xA;&lt;/ul&gt;&#xA;&lt;h2 id=&#34;参见&#34;&gt;参见&lt;/h2&gt;&#xA;&lt;p&gt;&lt;a href=&#34;hier/&#34;&gt;hier(7)&lt;/a&gt;&lt;/p&gt;</description>
+			</item>
+	</channel>
+</rss>

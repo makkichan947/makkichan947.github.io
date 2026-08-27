@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Posts · Yaku Makki</title>
+  <meta name="description" content="个人小巢">
+  <meta name="theme-color" content="#0a0a0f">
+  <script>document.documentElement.classList.add('js');</script>
+
+  <link rel="icon" href="/avatar/avatar.jpg" type="image/jpeg">
+
+  
+  <link rel="stylesheet" href="/css/main.min.b64e4527cc255b367461135391e39e321a5d86fc97defca99c7afda308ada007.css" integrity="sha256-tk5FJ8wlWzZ0YRNTkeOeMhpdhvyX3vypnHr9owitoAc=">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/katex.min.css" crossorigin="anonymous">
+</head>
+<body>
+  <a class="skip-link" href="#main">跳到内容</a>
+
+  <div class="scene" aria-hidden="true">
+    <div class="scene-sky"></div>
+    <div class="scene-stars"></div>
+    <div class="scene-sun-halo"></div>
+    <div class="scene-sun"></div>
+    <div class="scene-mountains scene-mountains-far"></div>
+    <div class="scene-mountains scene-mountains-near"></div>
+    <div class="scene-horizon"></div>
+    <div class="scene-floor"></div>
+    <div class="scene-scanlines"></div>
+  </div>
+
+  <nav class="navbar" aria-label="主导航">
+    <div class="nav-inner">
+      <a class="logo" href="/" data-press>
+        <img class="logo-avatar" src="/avatar/avatar.jpg" alt="" width="34" height="34">
+        <span class="logo-text">Yaku Makki</span>
+      </a>
+      <div class="nav-menu-wrap">
+        <span class="nav-tick" aria-hidden="true"></span>
+        <ul class="nav-menu">
+          
+          <li>
+            <a href="/" data-press>首页</a>
+          </li>
+          
+          <li>
+            <a href="/post/" data-press>博客</a>
+          </li>
+          
+          <li>
+            <a href="/wiki/" data-press>维基</a>
+          </li>
+          
+          <li>
+            <a href="/tags/" data-press>标签</a>
+          </li>
+          
+          <li>
+            <a href="/about/" data-press>关于</a>
+          </li>
+          
+          
+          <li>
+            <button id="search-toggle" class="search-toggle" type="button" title="搜索 (Ctrl+K 或 /)" aria-haspopup="dialog" aria-expanded="false" data-press>搜索</button>
+          </li>
+          
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  
+  <div class="sheet-scrim" id="sheet-scrim"></div>
+  <section class="sheet" id="search-sheet" role="dialog" aria-modal="true" aria-label="搜索" aria-hidden="true">
+    <div class="sheet-panel" id="sheet-panel">
+      <div class="sheet-handle" id="sheet-handle" role="presentation" aria-hidden="true"></div>
+      <div class="sheet-body">
+        <div class="search-field">
+          <input id="search-input" type="search" placeholder="搜索文章和 Wiki…"
+                 autocomplete="off" spellcheck="false" aria-controls="search-results">
+          <span class="search-key" aria-hidden="true">/</span>
+        </div>
+        <div id="search-results" class="search-results" role="listbox" aria-label="搜索结果"></div>
+      </div>
+    </div>
+  </section>
+  
+
+  <main class="main" id="main">
+    
+<header class="page-head">
+  <h1>Posts</h1>
+  
+</header>
+
+
+
+
+<div class="card-grid">
+  
+  <article class="card" data-press data-reveal data-reveal-delay="045">
+    <h3><a href="/post/depression/">人之将死</a></h3>
+    <p><h1 id="人之将死其言也善">人之将死，其言也善</h1>
+<p>我大概是知道我活的时间不多了，如果有人看到了这篇博客，也算是我曾经来过这个世界，做出了点什么吧。</p>
+<p>我是一个生活在对比中的人，从小我就被与别人对比，到了转学到深圳就开始自己和别人去比对。再后来我不去比对 …</p></p>
+    <div class="meta">
+      <time datetime="2026-08-14">2026-08-14</time>
+      
+    </div>
+  </article>
+  
+  <article class="card" data-press data-reveal data-reveal-delay="145">
+    <h3><a href="/post/neko/">豪猫</a></h3>
+    <p><h1 id="猫娘计划">猫娘计划</h1>
+<h2 id="我如何认识这个项目">我如何认识这个项目</h2>
+<p>就是在中考前一周的时间，我从同样混迹技术圈的同学了解到了这个仓库。</p>
+<p>我第一次打开 N.E.K.O. 的时候，心里想的是：“又是一个需要我手动喂 Prompt 的 AI 玩具。”</p>
+<p>但我错了 …</p></p>
+    <div class="meta">
+      <time datetime="2026-08-06">2026-08-06</time>
+      
+    </div>
+  </article>
+  
+  <article class="card" data-press data-reveal data-reveal-delay="245">
+    <h3><a href="/post/colab/">Colab Unsloth SFT 快速训练！</a></h3>
+    <p><h1 id="序言">序言</h1>
+<p>大部分人的GPU都没有训练AI的显存要求，而谷歌Colab完全可以解决这一点，谷歌Colab可以让你免费使用谷歌的服务器4个小时左右来进行训练；并且这是一个Jupyter Notebook环境。</p>
+<p>这是它的地址： …</p></p>
+    <div class="meta">
+      <time datetime="2026-05-19">2026-05-19</time>
+      <span class="tag">AI</span><span class="tag">计算机科学</span>
+    </div>
+  </article>
+  
+  <article class="card" data-press data-reveal data-reveal-delay="345">
+    <h3><a href="/post/whyblackarch/">为什么我开始使用BlackArch作为我的网安发行版</a></h3>
+    <p><h2 id="从kali到blackarch">从Kali到BlackArch</h2>
+<p>如果你在三年前告诉我，我会放弃Kali Linux转投BlackArch，我大概会觉得你疯了。毕竟Kali是行业标准，是OSCP认证的官方指定发行版，是每个网安新手的必修课。但三年后的今天 …</p></p>
+    <div class="meta">
+      <time datetime="2026-04-18">2026-04-18</time>
+      
+    </div>
+  </article>
+  
+  <article class="card" data-press data-reveal data-reveal-delay="445">
+    <h3><a href="/post/dailylifesucks/">神人日常</a></h3>
+    <p><p>有些时候真的会感觉自己很无助</p>
+<p>你知道吗，其实地上的钱不能捡，面额越大越不能捡</p>
+<h2 id="因为我要捡">因为我要捡</h2>
+<p>你知道吗？其实人身体内70%是水，也就是说10个人中7个人是水</p>
+<p>难怪为什么那么多人是傻逼，原来已经没有人类了</p>
+<hr>
+<p>你知道吗？如果让全 …</p></p>
+    <div class="meta">
+      <time datetime="2025-12-06">2025-12-06</time>
+      
+    </div>
+  </article>
+  
+  <article class="card" data-press data-reveal data-reveal-delay="545">
+    <h3><a href="/post/useollama/">使用Ollama本地部署大语言模型</a></h3>
+    <p><h1 id="使用ollama本地部署大语言模型">使用Ollama本地部署大语言模型</h1>
+<h2 id="从云端到本地为什么我选择ollama">从云端到本地：为什么我选择Ollama</h2>
+<p>过去一年，我几乎每天都在跟各种大语言模型打交道。ChatGPT、Claude、Gemini……它们确实强大，但有几个问题始终让我不太舒服：<strong>数据隐 …</strong></p></p>
+    <div class="meta">
+      <time datetime="2025-10-10">2025-10-10</time>
+      <span class="tag">AI</span><span class="tag">工具</span><span class="tag">教程</span>
+    </div>
+  </article>
+  
+  <article class="card" data-press data-reveal data-reveal-delay="045">
+    <h3><a href="/post/test/">测试</a></h3>
+    <p><h1 id="一号标题">一号标题</h1>
+<h2 id="二号标题">二号标题</h2>
+<h3 id="三号标题">三号标题</h3>
+<h4 id="四号标题">四号标题</h4>
+<h4 id="代码块测试"><strong>代码块测试：</strong></h4>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-Rust" data-lang="Rust"><span style="display:flex;"><span>    <span style="color:#75715e">// 获取日志统计信息
+</span></span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">pub</span> <span style="color:#66d9ef">fn</span> <span style="color:#a6e22e">get_logging_stats</span>(<span style="color:#f92672">&amp;</span>self) -&gt; <span style="color:#66d9ef">&amp;</span><span style="color:#a6e22e">LoggingStats</span> { …</span></span></span></span></code></pre></div></p>
+    <div class="meta">
+      <time datetime="2025-09-30">2025-09-30</time>
+      <span class="tag">杂项</span>
+    </div>
+  </article>
+  
+  <article class="card" data-press data-reveal data-reveal-delay="145">
+    <h3><a href="/post/starthistory/">起源</a></h3>
+    <p><h1 id="起源">起源</h1>
+<p>本博客其实于8月左右早已建立并且即将推到GitHub
+但是由于我不小心把源代码整没了 不得不重整一个新的</p>
+<h1 id="这个博客的技术栈">这个博客的技术栈</h1>
+<p>本来使用Hugo写的，但是最近换了两台ThinkPad,  在迁移数据的时候给源码整没了 …</p></p>
+    <div class="meta">
+      <time datetime="2025-09-29">2025-09-29</time>
+      <span class="tag">杂项</span>
+    </div>
+  </article>
+  
+</div>
+
+
+
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+      <div class="footer-links">
+        
+        <a href="https://github.com/makkichan947" target="_blank" rel="noopener" title="Github" data-press>Github</a>
+        
+        <a href="mailto:yakumakki947@hotmail.com" target="_blank" rel="noopener" title="Email" data-press>Email</a>
+        
+        <a href="https://x.com/Makki_Yaku947" target="_blank" rel="noopener" title="Twitter" data-press>Twitter</a>
+        
+        <a href="https://www.twitch.tv/u/makkichan947" target="_blank" rel="noopener" title="Twitch" data-press>Twitch</a>
+        
+      </div>
+      <p>&copy; 2026 Yaku Makki</p>
+      <p>Powered by <a href="https://gohugo.io" target="_blank" rel="noopener">Hugo</a> · Makki Theme</p>
+      
+      <div class="stats">
+        <span>访客 <span id="busuanzi_value_site_uv"></span></span>
+        <span>访问 <span id="busuanzi_value_site_pv"></span></span>
+        <span>本页 <span id="busuanzi_value_page_pv"></span></span>
+      </div>
+      
+    </div>
+  </footer>
+
+  <button class="back-to-top" id="back-to-top" type="button" aria-label="回到顶部" data-press>
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 19V5"/><path d="M5 12l7-7 7 7"/></svg>
+  </button>
+
+  
+  <script src="/js/main.min.2e977141114ec7890ffee2c35e08034683543cfe8ef98dd4af5effb3b37a3345.js" integrity="sha256-LpdxQRFOx4kP/uLDXggDRoNUPP6O&#43;Y3Ur17/s7N6M0U=" defer></script>
+  
+  
+  <script src="/js/search.min.b2d6ba6610ce24454bc1436dc521dcfd878b2583ad9f65f77aadedaaa1e1a54c.js" integrity="sha256-sta6ZhDOJEVLwUNtxSHc/YeLJYOtn2X3eq3tqqHhpUw=" defer></script>
+  
+
+  
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+  
+
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/katex.min.js" crossorigin="anonymous"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/contrib/auto-render.min.js" crossorigin="anonymous"></script>
+</body>
+</html>

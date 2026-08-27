@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+	<channel>
+		<title>设备 (man4) on Yaku Makki</title>
+		<link>https://makkichan947.github.io/wiki/m4kk1/man/man4/</link>
+		<description>Recent content in 设备 (man4) on Yaku Makki</description>
+		<generator>Hugo</generator>
+		<language>zh</language>
+		
+		
+		
+		
+			<lastBuildDate>Sat, 08 Aug 2026 14:03:09 +0800</lastBuildDate>
+		
+			<atom:link href="https://makkichan947.github.io/wiki/m4kk1/man/man4/index.xml" rel="self" type="application/rss+xml" />
+			<item>
+				<title>console</title>
+				<link>https://makkichan947.github.io/wiki/m4kk1/man/man4/console/</link>
+				<pubDate>Sat, 08 Aug 2026 14:03:08 +0800</pubDate>
+				<guid>https://makkichan947.github.io/wiki/m4kk1/man/man4/console/</guid>
+				<description>&lt;h2 id=&#34;名称&#34;&gt;名称&lt;/h2&gt;&#xA;&lt;p&gt;console — 控制台设备&lt;/p&gt;&#xA;&lt;h2 id=&#34;描述&#34;&gt;描述&lt;/h2&gt;&#xA;&lt;p&gt;&lt;code&gt;/dev/console&lt;/code&gt; 是 M4KK1 的系统控制台设备，后端为串口 COM1。配置: 38400 8N1，无流控。&lt;/p&gt;&#xA;&lt;h2 id=&#34;参见&#34;&gt;参见&lt;/h2&gt;&#xA;&lt;p&gt;&lt;a href=&#34;null/&#34;&gt;null(4)&lt;/a&gt;、&lt;a href=&#34;zero/&#34;&gt;zero(4)&lt;/a&gt;&lt;/p&gt;</description>
+			</item>
+			<item>
+				<title>null</title>
+				<link>https://makkichan947.github.io/wiki/m4kk1/man/man4/null/</link>
+				<pubDate>Sat, 08 Aug 2026 14:03:09 +0800</pubDate>
+				<guid>https://makkichan947.github.io/wiki/m4kk1/man/man4/null/</guid>
+				<description>&lt;h2 id=&#34;名称&#34;&gt;名称&lt;/h2&gt;&#xA;&lt;p&gt;null — 空设备&lt;/p&gt;&#xA;&lt;h2 id=&#34;描述&#34;&gt;描述&lt;/h2&gt;&#xA;&lt;p&gt;&lt;code&gt;/dev/null&lt;/code&gt; 是一个特殊的设备文件。所有写入 &lt;code&gt;/dev/null&lt;/code&gt; 的数据被丢弃。读取 &lt;code&gt;/dev/null&lt;/code&gt; 返回 EOF（0 字节）。&lt;/p&gt;&#xA;&lt;h2 id=&#34;参见&#34;&gt;参见&lt;/h2&gt;&#xA;&lt;p&gt;&lt;a href=&#34;zero/&#34;&gt;zero(4)&lt;/a&gt;、&lt;a href=&#34;console/&#34;&gt;console(4)&lt;/a&gt;&lt;/p&gt;</description>
+			</item>
+			<item>
+				<title>zero</title>
+				<link>https://makkichan947.github.io/wiki/m4kk1/man/man4/zero/</link>
+				<pubDate>Sat, 08 Aug 2026 14:03:09 +0800</pubDate>
+				<guid>https://makkichan947.github.io/wiki/m4kk1/man/man4/zero/</guid>
+				<description>&lt;h2 id=&#34;名称&#34;&gt;名称&lt;/h2&gt;&#xA;&lt;p&gt;zero — 零设备&lt;/p&gt;&#xA;&lt;h2 id=&#34;描述&#34;&gt;描述&lt;/h2&gt;&#xA;&lt;p&gt;&lt;code&gt;/dev/zero&lt;/code&gt; 是一个特殊的设备文件。读取 &lt;code&gt;/dev/zero&lt;/code&gt; 返回无限数量的 &lt;code&gt;\0&lt;/code&gt; 字节。写入 &lt;code&gt;/dev/zero&lt;/code&gt; 的数据被丢弃。&lt;/p&gt;&#xA;&lt;h2 id=&#34;参见&#34;&gt;参见&lt;/h2&gt;&#xA;&lt;p&gt;&lt;a href=&#34;null/&#34;&gt;null(4)&lt;/a&gt;、&lt;a href=&#34;console/&#34;&gt;console(4)&lt;/a&gt;&lt;/p&gt;</description>
+			</item>
+	</channel>
+</rss>

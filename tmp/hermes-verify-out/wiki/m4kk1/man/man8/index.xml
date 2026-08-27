@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+	<channel>
+		<title>系统管理 (man8) on Yaku Makki</title>
+		<link>https://makkichan947.github.io/wiki/m4kk1/man/man8/</link>
+		<description>Recent content in 系统管理 (man8) on Yaku Makki</description>
+		<generator>Hugo</generator>
+		<language>zh</language>
+		
+		
+		
+		
+			<lastBuildDate>Sat, 08 Aug 2026 14:03:12 +0800</lastBuildDate>
+		
+			<atom:link href="https://makkichan947.github.io/wiki/m4kk1/man/man8/index.xml" rel="self" type="application/rss+xml" />
+			<item>
+				<title>cu</title>
+				<link>https://makkichan947.github.io/wiki/m4kk1/man/man8/cu/</link>
+				<pubDate>Sat, 08 Aug 2026 14:03:10 +0800</pubDate>
+				<guid>https://makkichan947.github.io/wiki/m4kk1/man/man8/cu/</guid>
+				<description>&lt;h2 id=&#34;名称&#34;&gt;名称&lt;/h2&gt;&#xA;&lt;p&gt;cu — 强制注销用户&lt;/p&gt;&#xA;&lt;h2 id=&#34;概要&#34;&gt;概要&lt;/h2&gt;&#xA;&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;&#34;&gt;&lt;code class=&#34;language-text&#34; data-lang=&#34;text&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;cu 用户名&#xA;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;描述&#34;&gt;描述&lt;/h2&gt;&#xA;&lt;p&gt;强制注销指定用户: 锁定账户、终止该用户的所有进程、卸载家目录并记录日志。需要 prime 组成员权限。&lt;/p&gt;&#xA;&lt;h2 id=&#34;参见&#34;&gt;参见&lt;/h2&gt;&#xA;&lt;p&gt;&lt;a href=&#34;usermod/&#34;&gt;usermod(8)&lt;/a&gt;、&lt;a href=&#34;../man1/who/&#34;&gt;who(1)&lt;/a&gt;、&lt;a href=&#34;quell/&#34;&gt;quell(8)&lt;/a&gt;&lt;/p&gt;</description>
+			</item>
+			<item>
+				<title>groupmod</title>
+				<link>https://makkichan947.github.io/wiki/m4kk1/man/man8/groupmod/</link>
+				<pubDate>Sat, 08 Aug 2026 14:03:11 +0800</pubDate>
+				<guid>https://makkichan947.github.io/wiki/m4kk1/man/man8/groupmod/</guid>
+				<description>&lt;h2 id=&#34;名称&#34;&gt;名称&lt;/h2&gt;&#xA;&lt;p&gt;groupmod — 修改组&lt;/p&gt;&#xA;&lt;h2 id=&#34;概要&#34;&gt;概要&lt;/h2&gt;&#xA;&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;&#34;&gt;&lt;code class=&#34;language-text&#34; data-lang=&#34;text&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;groupmod [选项] 组名&#xA;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;描述&#34;&gt;描述&lt;/h2&gt;&#xA;&lt;p&gt;修改 &lt;code&gt;/export/cfg/groups.db&lt;/code&gt; 中的组信息。需要 prime 组成员权限。&lt;/p&gt;&#xA;&lt;h2 id=&#34;选项&#34;&gt;选项&lt;/h2&gt;&#xA;&lt;ul&gt;&#xA;&lt;li&gt;&lt;code&gt;-a, --add 用户&lt;/code&gt; — 添加用户到组&lt;/li&gt;&#xA;&lt;li&gt;&lt;code&gt;-d, --del 用户&lt;/code&gt; — 从组中移除用户&lt;/li&gt;&#xA;&lt;li&gt;&lt;code&gt;-n, --new 新名&lt;/code&gt; — 重命名组&lt;/li&gt;&#xA;&lt;/ul&gt;&#xA;&lt;h2 id=&#34;参见&#34;&gt;参见&lt;/h2&gt;&#xA;&lt;p&gt;&lt;a href=&#34;usermod/&#34;&gt;usermod(8)&lt;/a&gt;、&lt;a href=&#34;passwd/&#34;&gt;passwd(8)&lt;/a&gt;、&lt;a href=&#34;quell/&#34;&gt;quell(8)&lt;/a&gt;&lt;/p&gt;</description>
+			</item>
+			<item>
+				<title>passwd</title>
+				<link>https://makkichan947.github.io/wiki/m4kk1/man/man8/passwd/</link>
+				<pubDate>Sat, 08 Aug 2026 14:03:11 +0800</pubDate>
+				<guid>https://makkichan947.github.io/wiki/m4kk1/man/man8/passwd/</guid>
+				<description>&lt;h2 id=&#34;名称&#34;&gt;名称&lt;/h2&gt;&#xA;&lt;p&gt;passwd — 修改用户密码&lt;/p&gt;&#xA;&lt;h2 id=&#34;概要&#34;&gt;概要&lt;/h2&gt;&#xA;&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;&#34;&gt;&lt;code class=&#34;language-text&#34; data-lang=&#34;text&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;passwd [用户名]&#xA;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;描述&#34;&gt;描述&lt;/h2&gt;&#xA;&lt;p&gt;修改用户密码。无参数时修改当前用户密码。指定用户名时需要 prime 组成员权限。密码使用 SHA-256 + salt 哈希。&lt;/p&gt;&#xA;&lt;h2 id=&#34;参见&#34;&gt;参见&lt;/h2&gt;&#xA;&lt;p&gt;&lt;a href=&#34;usermod/&#34;&gt;usermod(8)&lt;/a&gt;、&lt;a href=&#34;quell/&#34;&gt;quell(8)&lt;/a&gt;、&lt;a href=&#34;../man5/login.conf/&#34;&gt;login.conf(5)&lt;/a&gt;&lt;/p&gt;</description>
+			</item>
+			<item>
+				<title>quell</title>
+				<link>https://makkichan947.github.io/wiki/m4kk1/man/man8/quell/</link>
+				<pubDate>Sat, 08 Aug 2026 14:03:11 +0800</pubDate>
+				<guid>https://makkichan947.github.io/wiki/m4kk1/man/man8/quell/</guid>
+				<description>&lt;h2 id=&#34;名称&#34;&gt;名称&lt;/h2&gt;&#xA;&lt;p&gt;quell — 以 prime 组权限执行命令&lt;/p&gt;&#xA;&lt;h2 id=&#34;概要&#34;&gt;概要&lt;/h2&gt;&#xA;&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;&#34;&gt;&lt;code class=&#34;language-text&#34; data-lang=&#34;text&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;quell 命令 [参数...]&#xA;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;描述&#34;&gt;描述&lt;/h2&gt;&#xA;&lt;p&gt;以 root 权限（euid=0）执行指定命令。调用者必须在 prime 组（GID 1001）中。这是 M4KK1 中 sudo 的替代方案。&lt;/p&gt;&#xA;&lt;h2 id=&#34;示例&#34;&gt;示例&lt;/h2&gt;&#xA;&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;&#34;&gt;&lt;code class=&#34;language-text&#34; data-lang=&#34;text&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;quell mount /dev/yafs0 /mnt&#xA;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;挂载文件系统&lt;/p&gt;&#xA;&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;&#34;&gt;&lt;code class=&#34;language-text&#34; data-lang=&#34;text&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;quell usermod -a --group prime alice&#xA;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;p&gt;添加 alice 到 prime 组&lt;/p&gt;&#xA;&lt;h2 id=&#34;参见&#34;&gt;参见&lt;/h2&gt;&#xA;&lt;p&gt;&lt;a href=&#34;usermod/&#34;&gt;usermod(8)&lt;/a&gt;、&lt;a href=&#34;groupmod/&#34;&gt;groupmod(8)&lt;/a&gt;、&lt;a href=&#34;passwd/&#34;&gt;passwd(8)&lt;/a&gt;&lt;/p&gt;</description>
+			</item>
+			<item>
+				<title>usermod</title>
+				<link>https://makkichan947.github.io/wiki/m4kk1/man/man8/usermod/</link>
+				<pubDate>Sat, 08 Aug 2026 14:03:12 +0800</pubDate>
+				<guid>https://makkichan947.github.io/wiki/m4kk1/man/man8/usermod/</guid>
+				<description>&lt;h2 id=&#34;名称&#34;&gt;名称&lt;/h2&gt;&#xA;&lt;p&gt;usermod — 修改用户账户&lt;/p&gt;&#xA;&lt;h2 id=&#34;概要&#34;&gt;概要&lt;/h2&gt;&#xA;&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;&#34;&gt;&lt;code class=&#34;language-text&#34; data-lang=&#34;text&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;usermod [选项] 用户名&#xA;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;描述&#34;&gt;描述&lt;/h2&gt;&#xA;&lt;p&gt;修改 &lt;code&gt;/export/cfg/passwd.db&lt;/code&gt; 中的用户账户信息。需要 prime 组成员权限。&lt;/p&gt;&#xA;&lt;h2 id=&#34;选项&#34;&gt;选项&lt;/h2&gt;&#xA;&lt;ul&gt;&#xA;&lt;li&gt;&lt;code&gt;-a, --add 组&lt;/code&gt; — 添加用户到附加组&lt;/li&gt;&#xA;&lt;li&gt;&lt;code&gt;-d, --del 组&lt;/code&gt; — 从组中移除用户&lt;/li&gt;&#xA;&lt;li&gt;&lt;code&gt;-s, --shell 路径&lt;/code&gt; — 更改登录 Shell&lt;/li&gt;&#xA;&lt;li&gt;&lt;code&gt;-g, --group 组&lt;/code&gt; — 设置主组&lt;/li&gt;&#xA;&lt;li&gt;&lt;code&gt;-L, --lock&lt;/code&gt; — 锁定账户&lt;/li&gt;&#xA;&lt;li&gt;&lt;code&gt;-U, --unlock&lt;/code&gt; — 解锁账户&lt;/li&gt;&#xA;&lt;/ul&gt;&#xA;&lt;h2 id=&#34;参见&#34;&gt;参见&lt;/h2&gt;&#xA;&lt;p&gt;&lt;a href=&#34;groupmod/&#34;&gt;groupmod(8)&lt;/a&gt;、&lt;a href=&#34;passwd/&#34;&gt;passwd(8)&lt;/a&gt;、&lt;a href=&#34;quell/&#34;&gt;quell(8)&lt;/a&gt;&lt;/p&gt;</description>
+			</item>
+	</channel>
+</rss>

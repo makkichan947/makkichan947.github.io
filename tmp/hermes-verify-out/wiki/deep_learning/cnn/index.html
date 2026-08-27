@@ -1,0 +1,535 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>卷积神经网络 · Yaku Makki</title>
+  <meta name="description" content="个人小巢">
+  <meta name="theme-color" content="#0a0a0f">
+  <script>document.documentElement.classList.add('js');</script>
+
+  <link rel="icon" href="/avatar/avatar.jpg" type="image/jpeg">
+
+  
+  <link rel="stylesheet" href="/css/main.min.b64e4527cc255b367461135391e39e321a5d86fc97defca99c7afda308ada007.css" integrity="sha256-tk5FJ8wlWzZ0YRNTkeOeMhpdhvyX3vypnHr9owitoAc=">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/katex.min.css" crossorigin="anonymous">
+</head>
+<body>
+  <a class="skip-link" href="#main">跳到内容</a>
+
+  <div class="scene" aria-hidden="true">
+    <div class="scene-sky"></div>
+    <div class="scene-stars"></div>
+    <div class="scene-sun-halo"></div>
+    <div class="scene-sun"></div>
+    <div class="scene-mountains scene-mountains-far"></div>
+    <div class="scene-mountains scene-mountains-near"></div>
+    <div class="scene-horizon"></div>
+    <div class="scene-floor"></div>
+    <div class="scene-scanlines"></div>
+  </div>
+
+  <nav class="navbar" aria-label="主导航">
+    <div class="nav-inner">
+      <a class="logo" href="/" data-press>
+        <img class="logo-avatar" src="/avatar/avatar.jpg" alt="" width="34" height="34">
+        <span class="logo-text">Yaku Makki</span>
+      </a>
+      <div class="nav-menu-wrap">
+        <span class="nav-tick" aria-hidden="true"></span>
+        <ul class="nav-menu">
+          
+          <li>
+            <a href="/" data-press>首页</a>
+          </li>
+          
+          <li>
+            <a href="/post/" data-press>博客</a>
+          </li>
+          
+          <li>
+            <a href="/wiki/" data-press>维基</a>
+          </li>
+          
+          <li>
+            <a href="/tags/" data-press>标签</a>
+          </li>
+          
+          <li>
+            <a href="/about/" data-press>关于</a>
+          </li>
+          
+          
+          <li>
+            <button id="search-toggle" class="search-toggle" type="button" title="搜索 (Ctrl+K 或 /)" aria-haspopup="dialog" aria-expanded="false" data-press>搜索</button>
+          </li>
+          
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  
+  <div class="sheet-scrim" id="sheet-scrim"></div>
+  <section class="sheet" id="search-sheet" role="dialog" aria-modal="true" aria-label="搜索" aria-hidden="true">
+    <div class="sheet-panel" id="sheet-panel">
+      <div class="sheet-handle" id="sheet-handle" role="presentation" aria-hidden="true"></div>
+      <div class="sheet-body">
+        <div class="search-field">
+          <input id="search-input" type="search" placeholder="搜索文章和 Wiki…"
+                 autocomplete="off" spellcheck="false" aria-controls="search-results">
+          <span class="search-key" aria-hidden="true">/</span>
+        </div>
+        <div id="search-results" class="search-results" role="listbox" aria-label="搜索结果"></div>
+      </div>
+    </div>
+  </section>
+  
+
+  <main class="main" id="main">
+    
+<header class="page-head">
+  <nav class="crumb" aria-label="面包屑">
+    <a href="/" data-press>首页</a>
+    <span class="sep">/</span>
+    <a href="/wiki/" data-press>维基</a>
+    
+    
+    <span class="sep">/</span>
+    <a href="/wiki/deep_learning/" data-press>深度学习</a>
+    
+    
+  </nav>
+  <h1>卷积神经网络</h1>
+  
+</header>
+
+<div class="wiki-layout">
+  <article class="article">
+    <div class="article-content"><h1 id="卷积神经网络">卷积神经网络</h1>
+<p>卷积神经网络（Convolutional Neural Networks, CNN）是深度学习中专门用于处理图像数据的神经网络架构，在计算机视觉领域取得了巨大成功。</p>
+<h2 id="-图像处理基础">🖼️ 图像处理基础</h2>
+<h3 id="图像表示">图像表示</h3>
+<p>图像可以表示为三维张量：</p>
+<ul>
+<li><strong>高度</strong> (Height)</li>
+<li><strong>宽度</strong> (Width)</li>
+<li><strong>通道数</strong> (Channels): RGB图像为3，灰度图像为1</li>
+</ul>
+<h3 id="卷积操作">卷积操作</h3>
+<p>卷积是CNN的核心操作，通过在图像上滑动滤波器来提取特征：</p>
+<p><strong>数学定义</strong>：
+$$(I * K)<em>{x,y} = \sum</em>{i}\sum_{j} I_{x+i, y+j} K_{i,j}$$</p>
+<h2 id="-卷积层">🔍 卷积层</h2>
+<h3 id="卷积核">卷积核</h3>
+<p>卷积核（Kernel/Filter）是用于特征提取的小矩阵：</p>
+<p><strong>边缘检测</strong>：</p>
+<pre tabindex="0"><code>[-1, -1, -1]
+[-1,  8, -1]
+[-1, -1, -1]
+</code></pre><p><strong>模糊滤波</strong>：</p>
+<pre tabindex="0"><code>[1, 1, 1]
+[1, 1, 1]
+[1, 1, 1]
+</code></pre><p>（除以9进行归一化）</p>
+<h3 id="卷积参数">卷积参数</h3>
+<p><strong>步长 (Stride)</strong>：卷积核滑动的步长
+<strong>填充 (Padding)</strong>：图像边缘填充
+<strong>输出尺寸</strong>：$\frac{W - F + 2P}{S} + 1$</p>
+<h2 id="-池化层">🏊 池化层</h2>
+<h3 id="最大池化-max-pooling">最大池化 (Max Pooling)</h3>
+<p>保留区域内的最大值：</p>
+<pre tabindex="0"><code>输入：
+[[1, 3],
+ [2, 4]]
+
+最大池化：
+[[4]]
+</code></pre><h3 id="平均池化-average-pooling">平均池化 (Average Pooling)</h3>
+<p>计算区域内平均值：</p>
+<pre tabindex="0"><code>输入：
+[[1, 3],
+ [2, 4]]
+
+平均池化：
+[[2.5]]
+</code></pre><h2 id="-经典cnn架构">🏗️ 经典CNN架构</h2>
+<h3 id="lenet-5-1998">LeNet-5 (1998)</h3>
+<p>** Yann LeCun的开创性工作 **</p>
+<p><strong>架构</strong>：</p>
+<pre tabindex="0"><code>输入(32×32) → Conv(6@28×28) → Pool(6@14×14) → Conv(16@10×10) → Pool(16@5×5) → FC(120) → FC(84) → FC(10)
+</code></pre><h3 id="alexnet-2012">AlexNet (2012)</h3>
+<p><strong>ImageNet 2012冠军</strong></p>
+<p><strong>创新点</strong>：</p>
+<ul>
+<li>使用ReLU激活函数</li>
+<li>引入Dropout防止过拟合</li>
+<li>使用GPU加速训练</li>
+<li>数据增强技术</li>
+</ul>
+<p><strong>架构</strong>：</p>
+<pre tabindex="0"><code>输入(227×227×3) → Conv+ReLU+Pool → Conv+ReLU+Pool → Conv+ReLU → Conv+ReLU → Conv+ReLU+Pool → FC+Dropout → FC+Dropout → FC(1000)
+</code></pre><h3 id="vggnet-2014">VGGNet (2014)</h3>
+<p><strong>简洁而有效的架构</strong></p>
+<p><strong>特点</strong>：</p>
+<ul>
+<li>使用3×3小卷积核</li>
+<li>堆叠多个卷积层</li>
+<li>验证了网络深度的重要性</li>
+</ul>
+<p><strong>VGG16架构</strong>：</p>
+<pre tabindex="0"><code>输入(224×224×3) → 2×Conv3×3 → Pool → 2×Conv3×3 → Pool → 3×Conv3×3 → Pool → 3×Conv3×3 → Pool → 3×Conv3×3 → Pool → FC(4096) → FC(4096) → FC(1000)
+</code></pre><h3 id="resnet-2015">ResNet (2015)</h3>
+<p><strong>残差网络，解决梯度消失问题</strong></p>
+<p><strong>残差块</strong>：
+$$y = F(x) + x$$</p>
+<p><strong>创新点</strong>：</p>
+<ul>
+<li>引入残差连接</li>
+<li>允许训练更深的网络</li>
+<li>ResNet-152: 152层</li>
+</ul>
+<h2 id="-目标检测">🎯 目标检测</h2>
+<h3 id="r-cnn系列">R-CNN系列</h3>
+<p><strong>R-CNN (2014)</strong>：</p>
+<ol>
+<li>使用选择性搜索生成候选框</li>
+<li>对每个候选框提取CNN特征</li>
+<li>使用SVM进行分类</li>
+</ol>
+<p><strong>Fast R-CNN (2015)</strong>：</p>
+<ul>
+<li>共享卷积特征</li>
+<li>引入RoI池化层</li>
+<li>多任务损失函数</li>
+</ul>
+<p><strong>Faster R-CNN (2015)</strong>：</p>
+<ul>
+<li>引入RPN（Region Proposal Network）</li>
+<li>端到端训练</li>
+<li>实时目标检测</li>
+</ul>
+<h3 id="yolo系列">YOLO系列</h3>
+<p><strong>YOLO (You Only Look Once)</strong>：</p>
+<ul>
+<li>单阶段检测器</li>
+<li>直接预测边界框和类别</li>
+<li>速度快，适合实时应用</li>
+</ul>
+<p><strong>YOLOv3</strong>：</p>
+<ul>
+<li>多尺度预测</li>
+<li>更好的小目标检测</li>
+<li>平衡速度和精度</li>
+</ul>
+<h2 id="-反向传播">🔄 反向传播</h2>
+<h3 id="卷积层梯度">卷积层梯度</h3>
+<p><strong>权重梯度</strong>：
+$$\frac{\partial L}{\partial K} = \frac{\partial L}{\partial Y} * X^T$$</p>
+<p><strong>输入梯度</strong>：
+$$\frac{\partial L}{\partial X} = \frac{\partial L}{\partial Y} * K^T$$</p>
+<h3 id="池化层梯度">池化层梯度</h3>
+<p><strong>最大池化</strong>：</p>
+<ul>
+<li>最大值位置的梯度为1</li>
+<li>其他位置的梯度为0</li>
+</ul>
+<p><strong>平均池化</strong>：</p>
+<ul>
+<li>所有位置的梯度相等</li>
+</ul>
+<h2 id="-编程实现">🚀 编程实现</h2>
+<h3 id="pytorch实现">PyTorch实现</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#f92672">import</span> torch
+</span></span><span style="display:flex;"><span><span style="color:#f92672">import</span> torch.nn <span style="color:#66d9ef">as</span> nn
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">CNN</span>(nn<span style="color:#f92672">.</span>Module):
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">__init__</span>(self):
+</span></span><span style="display:flex;"><span>        super(CNN, self)<span style="color:#f92672">.</span><span style="color:#a6e22e">__init__</span>()
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e"># 卷积层</span>
+</span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>conv1 <span style="color:#f92672">=</span> nn<span style="color:#f92672">.</span>Conv2d(<span style="color:#ae81ff">3</span>, <span style="color:#ae81ff">32</span>, kernel_size<span style="color:#f92672">=</span><span style="color:#ae81ff">3</span>, padding<span style="color:#f92672">=</span><span style="color:#ae81ff">1</span>)
+</span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>conv2 <span style="color:#f92672">=</span> nn<span style="color:#f92672">.</span>Conv2d(<span style="color:#ae81ff">32</span>, <span style="color:#ae81ff">64</span>, kernel_size<span style="color:#f92672">=</span><span style="color:#ae81ff">3</span>, padding<span style="color:#f92672">=</span><span style="color:#ae81ff">1</span>)
+</span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>conv3 <span style="color:#f92672">=</span> nn<span style="color:#f92672">.</span>Conv2d(<span style="color:#ae81ff">64</span>, <span style="color:#ae81ff">128</span>, kernel_size<span style="color:#f92672">=</span><span style="color:#ae81ff">3</span>, padding<span style="color:#f92672">=</span><span style="color:#ae81ff">1</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e"># 池化层</span>
+</span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>pool <span style="color:#f92672">=</span> nn<span style="color:#f92672">.</span>MaxPool2d(<span style="color:#ae81ff">2</span>, <span style="color:#ae81ff">2</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e"># 全连接层</span>
+</span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>fc1 <span style="color:#f92672">=</span> nn<span style="color:#f92672">.</span>Linear(<span style="color:#ae81ff">128</span> <span style="color:#f92672">*</span> <span style="color:#ae81ff">4</span> <span style="color:#f92672">*</span> <span style="color:#ae81ff">4</span>, <span style="color:#ae81ff">512</span>)
+</span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>fc2 <span style="color:#f92672">=</span> nn<span style="color:#f92672">.</span>Linear(<span style="color:#ae81ff">512</span>, <span style="color:#ae81ff">10</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e"># 激活函数</span>
+</span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>relu <span style="color:#f92672">=</span> nn<span style="color:#f92672">.</span>ReLU()
+</span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>dropout <span style="color:#f92672">=</span> nn<span style="color:#f92672">.</span>Dropout(<span style="color:#ae81ff">0.5</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">forward</span>(self, x):
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e"># 卷积 + 激活 + 池化</span>
+</span></span><span style="display:flex;"><span>        x <span style="color:#f92672">=</span> self<span style="color:#f92672">.</span>pool(self<span style="color:#f92672">.</span>relu(self<span style="color:#f92672">.</span>conv1(x)))
+</span></span><span style="display:flex;"><span>        x <span style="color:#f92672">=</span> self<span style="color:#f92672">.</span>pool(self<span style="color:#f92672">.</span>relu(self<span style="color:#f92672">.</span>conv2(x)))
+</span></span><span style="display:flex;"><span>        x <span style="color:#f92672">=</span> self<span style="color:#f92672">.</span>pool(self<span style="color:#f92672">.</span>relu(self<span style="color:#f92672">.</span>conv3(x)))
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e"># 展平</span>
+</span></span><span style="display:flex;"><span>        x <span style="color:#f92672">=</span> x<span style="color:#f92672">.</span>view(<span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>, <span style="color:#ae81ff">128</span> <span style="color:#f92672">*</span> <span style="color:#ae81ff">4</span> <span style="color:#f92672">*</span> <span style="color:#ae81ff">4</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e"># 全连接层</span>
+</span></span><span style="display:flex;"><span>        x <span style="color:#f92672">=</span> self<span style="color:#f92672">.</span>relu(self<span style="color:#f92672">.</span>fc1(x))
+</span></span><span style="display:flex;"><span>        x <span style="color:#f92672">=</span> self<span style="color:#f92672">.</span>dropout(x)
+</span></span><span style="display:flex;"><span>        x <span style="color:#f92672">=</span> self<span style="color:#f92672">.</span>fc2(x)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> x
+</span></span></code></pre></div><h3 id="手动实现卷积">手动实现卷积</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">conv2d</span>(input_tensor, kernel, stride<span style="color:#f92672">=</span><span style="color:#ae81ff">1</span>, padding<span style="color:#f92672">=</span><span style="color:#ae81ff">0</span>):
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#34;&#34;&#34;手动实现2D卷积&#34;&#34;&#34;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># 输入尺寸</span>
+</span></span><span style="display:flex;"><span>    batch_size, in_channels, in_height, in_width <span style="color:#f92672">=</span> input_tensor<span style="color:#f92672">.</span>shape
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># 卷积核尺寸</span>
+</span></span><span style="display:flex;"><span>    out_channels, in_channels, kernel_height, kernel_width <span style="color:#f92672">=</span> kernel<span style="color:#f92672">.</span>shape
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># 输出尺寸计算</span>
+</span></span><span style="display:flex;"><span>    out_height <span style="color:#f92672">=</span> (in_height <span style="color:#f92672">+</span> <span style="color:#ae81ff">2</span> <span style="color:#f92672">*</span> padding <span style="color:#f92672">-</span> kernel_height) <span style="color:#f92672">//</span> stride <span style="color:#f92672">+</span> <span style="color:#ae81ff">1</span>
+</span></span><span style="display:flex;"><span>    out_width <span style="color:#f92672">=</span> (in_width <span style="color:#f92672">+</span> <span style="color:#ae81ff">2</span> <span style="color:#f92672">*</span> padding <span style="color:#f92672">-</span> kernel_width) <span style="color:#f92672">//</span> stride <span style="color:#f92672">+</span> <span style="color:#ae81ff">1</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># 输出张量</span>
+</span></span><span style="display:flex;"><span>    output <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>zeros((batch_size, out_channels, out_height, out_width))
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># 填充输入</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> padding <span style="color:#f92672">&gt;</span> <span style="color:#ae81ff">0</span>:
+</span></span><span style="display:flex;"><span>        padded_input <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>pad(input_tensor,
+</span></span><span style="display:flex;"><span>                            ((<span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">0</span>), (<span style="color:#ae81ff">0</span>, <span style="color:#ae81ff">0</span>), (padding, padding), (padding, padding)),
+</span></span><span style="display:flex;"><span>                            mode<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;constant&#39;</span>)
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">else</span>:
+</span></span><span style="display:flex;"><span>        padded_input <span style="color:#f92672">=</span> input_tensor
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># 卷积操作</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">for</span> b <span style="color:#f92672">in</span> range(batch_size):
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">for</span> oc <span style="color:#f92672">in</span> range(out_channels):
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">for</span> oh <span style="color:#f92672">in</span> range(out_height):
+</span></span><span style="display:flex;"><span>                <span style="color:#66d9ef">for</span> ow <span style="color:#f92672">in</span> range(out_width):
+</span></span><span style="display:flex;"><span>                    <span style="color:#75715e"># 提取输入块</span>
+</span></span><span style="display:flex;"><span>                    input_block <span style="color:#f92672">=</span> padded_input[
+</span></span><span style="display:flex;"><span>                        b,
+</span></span><span style="display:flex;"><span>                        :,
+</span></span><span style="display:flex;"><span>                        oh<span style="color:#f92672">*</span>stride : oh<span style="color:#f92672">*</span>stride <span style="color:#f92672">+</span> kernel_height,
+</span></span><span style="display:flex;"><span>                        ow<span style="color:#f92672">*</span>stride : ow<span style="color:#f92672">*</span>stride <span style="color:#f92672">+</span> kernel_width
+</span></span><span style="display:flex;"><span>                    ]
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>                    <span style="color:#75715e"># 计算卷积</span>
+</span></span><span style="display:flex;"><span>                    output[b, oc, oh, ow] <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>sum(input_block <span style="color:#f92672">*</span> kernel[oc])
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> output
+</span></span></code></pre></div><h2 id="-性能优化">📊 性能优化</h2>
+<h3 id="gpu加速">GPU加速</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#75715e"># 检查GPU可用性</span>
+</span></span><span style="display:flex;"><span>device <span style="color:#f92672">=</span> torch<span style="color:#f92672">.</span>device(<span style="color:#e6db74">&#34;cuda&#34;</span> <span style="color:#66d9ef">if</span> torch<span style="color:#f92672">.</span>cuda<span style="color:#f92672">.</span>is_available() <span style="color:#66d9ef">else</span> <span style="color:#e6db74">&#34;cpu&#34;</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 模型移动到GPU</span>
+</span></span><span style="display:flex;"><span>model <span style="color:#f92672">=</span> CNN()<span style="color:#f92672">.</span>to(device)
+</span></span><span style="display:flex;"><span>inputs <span style="color:#f92672">=</span> inputs<span style="color:#f92672">.</span>to(device)
+</span></span></code></pre></div><h3 id="批量归一化">批量归一化</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#75715e"># 在卷积层后添加BN层</span>
+</span></span><span style="display:flex;"><span>self<span style="color:#f92672">.</span>bn1 <span style="color:#f92672">=</span> nn<span style="color:#f92672">.</span>BatchNorm2d(<span style="color:#ae81ff">32</span>)
+</span></span><span style="display:flex;"><span>self<span style="color:#f92672">.</span>bn2 <span style="color:#f92672">=</span> nn<span style="color:#f92672">.</span>BatchNorm2d(<span style="color:#ae81ff">64</span>)
+</span></span><span style="display:flex;"><span>self<span style="color:#f92672">.</span>bn3 <span style="color:#f92672">=</span> nn<span style="color:#f92672">.</span>BatchNorm2d(<span style="color:#ae81ff">128</span>)
+</span></span></code></pre></div><h3 id="残差连接">残差连接</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">ResidualBlock</span>(nn<span style="color:#f92672">.</span>Module):
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">__init__</span>(self, in_channels, out_channels):
+</span></span><span style="display:flex;"><span>        super(ResidualBlock, self)<span style="color:#f92672">.</span><span style="color:#a6e22e">__init__</span>()
+</span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>conv1 <span style="color:#f92672">=</span> nn<span style="color:#f92672">.</span>Conv2d(in_channels, out_channels, kernel_size<span style="color:#f92672">=</span><span style="color:#ae81ff">3</span>, padding<span style="color:#f92672">=</span><span style="color:#ae81ff">1</span>)
+</span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>bn1 <span style="color:#f92672">=</span> nn<span style="color:#f92672">.</span>BatchNorm2d(out_channels)
+</span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>conv2 <span style="color:#f92672">=</span> nn<span style="color:#f92672">.</span>Conv2d(out_channels, out_channels, kernel_size<span style="color:#f92672">=</span><span style="color:#ae81ff">3</span>, padding<span style="color:#f92672">=</span><span style="color:#ae81ff">1</span>)
+</span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>bn2 <span style="color:#f92672">=</span> nn<span style="color:#f92672">.</span>BatchNorm2d(out_channels)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e"># 残差连接</span>
+</span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>shortcut <span style="color:#f92672">=</span> nn<span style="color:#f92672">.</span>Sequential()
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> in_channels <span style="color:#f92672">!=</span> out_channels:
+</span></span><span style="display:flex;"><span>            self<span style="color:#f92672">.</span>shortcut <span style="color:#f92672">=</span> nn<span style="color:#f92672">.</span>Conv2d(in_channels, out_channels, kernel_size<span style="color:#f92672">=</span><span style="color:#ae81ff">1</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">forward</span>(self, x):
+</span></span><span style="display:flex;"><span>        residual <span style="color:#f92672">=</span> x
+</span></span><span style="display:flex;"><span>        x <span style="color:#f92672">=</span> self<span style="color:#f92672">.</span>bn1(self<span style="color:#f92672">.</span>conv1(x))
+</span></span><span style="display:flex;"><span>        x <span style="color:#f92672">=</span> self<span style="color:#f92672">.</span>bn2(self<span style="color:#f92672">.</span>conv2(x))
+</span></span><span style="display:flex;"><span>        x <span style="color:#f92672">+=</span> self<span style="color:#f92672">.</span>shortcut(residual)
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> x
+</span></span></code></pre></div><h2 id="-计算机视觉应用">🎨 计算机视觉应用</h2>
+<h3 id="图像分类">图像分类</h3>
+<ul>
+<li><strong>ImageNet</strong>：1000类图像分类</li>
+<li><strong>CIFAR-10/100</strong>：10/100类小图像分类</li>
+<li><strong>MNIST</strong>：手写数字识别</li>
+</ul>
+<h3 id="目标检测">目标检测</h3>
+<ul>
+<li><strong>边界框回归</strong>：预测目标位置</li>
+<li><strong>分类</strong>：判断目标类别</li>
+<li><strong>置信度</strong>：预测检测的准确性</li>
+</ul>
+<h3 id="语义分割">语义分割</h3>
+<ul>
+<li><strong>FCN</strong>：全卷积网络</li>
+<li><strong>U-Net</strong>：医学图像分割</li>
+<li><strong>DeepLab</strong>：多尺度特征融合</li>
+</ul>
+<h3 id="图像生成">图像生成</h3>
+<ul>
+<li><strong>GAN</strong>：生成对抗网络</li>
+<li><strong>VAE</strong>：变分自编码器</li>
+<li><strong>Style Transfer</strong>：风格迁移</li>
+</ul>
+<h2 id="-评估指标">📈 评估指标</h2>
+<h3 id="分类任务">分类任务</h3>
+<ul>
+<li><strong>Top-1准确率</strong>：预测类别与真实类别完全匹配</li>
+<li><strong>Top-5准确率</strong>：预测的5个类别中包含真实类别</li>
+</ul>
+<h3 id="目标检测-1">目标检测</h3>
+<ul>
+<li><strong>mAP (mean Average Precision)</strong>：平均精度均值</li>
+<li><strong>IoU (Intersection over Union)</strong>：预测框与真实框的重叠度</li>
+</ul>
+<h3 id="语义分割-1">语义分割</h3>
+<ul>
+<li><strong>Pixel Accuracy</strong>：像素级准确率</li>
+<li><strong>IoU (Intersection over Union)</strong>：类别级IoU</li>
+<li><strong>mIoU</strong>：平均IoU</li>
+</ul>
+<h2 id="-实用技巧">🔧 实用技巧</h2>
+<h3 id="数据增强">数据增强</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>transform <span style="color:#f92672">=</span> transforms<span style="color:#f92672">.</span>Compose([
+</span></span><span style="display:flex;"><span>    transforms<span style="color:#f92672">.</span>RandomCrop(<span style="color:#ae81ff">32</span>, padding<span style="color:#f92672">=</span><span style="color:#ae81ff">4</span>),
+</span></span><span style="display:flex;"><span>    transforms<span style="color:#f92672">.</span>RandomHorizontalFlip(),
+</span></span><span style="display:flex;"><span>    transforms<span style="color:#f92672">.</span>ToTensor(),
+</span></span><span style="display:flex;"><span>    transforms<span style="color:#f92672">.</span>Normalize((<span style="color:#ae81ff">0.5</span>, <span style="color:#ae81ff">0.5</span>, <span style="color:#ae81ff">0.5</span>), (<span style="color:#ae81ff">0.5</span>, <span style="color:#ae81ff">0.5</span>, <span style="color:#ae81ff">0.5</span>))
+</span></span><span style="display:flex;"><span>])
+</span></span></code></pre></div><h3 id="迁移学习">迁移学习</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#75715e"># 加载预训练模型</span>
+</span></span><span style="display:flex;"><span>model <span style="color:#f92672">=</span> torchvision<span style="color:#f92672">.</span>models<span style="color:#f92672">.</span>resnet50(pretrained<span style="color:#f92672">=</span><span style="color:#66d9ef">True</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 冻结特征提取层</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">for</span> param <span style="color:#f92672">in</span> model<span style="color:#f92672">.</span>parameters():
+</span></span><span style="display:flex;"><span>    param<span style="color:#f92672">.</span>requires_grad <span style="color:#f92672">=</span> <span style="color:#66d9ef">False</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 替换分类器</span>
+</span></span><span style="display:flex;"><span>model<span style="color:#f92672">.</span>fc <span style="color:#f92672">=</span> nn<span style="color:#f92672">.</span>Linear(<span style="color:#ae81ff">2048</span>, num_classes)
+</span></span></code></pre></div><h3 id="模型可视化">模型可视化</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#75715e"># 可视化卷积核</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">visualize_kernels</span>(model):
+</span></span><span style="display:flex;"><span>    kernels <span style="color:#f92672">=</span> model<span style="color:#f92672">.</span>conv1<span style="color:#f92672">.</span>weight<span style="color:#f92672">.</span>data<span style="color:#f92672">.</span>cpu()<span style="color:#f92672">.</span>numpy()
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># 绘制卷积核图像</span>
+</span></span><span style="display:flex;"><span>    plt<span style="color:#f92672">.</span>figure(figsize<span style="color:#f92672">=</span>(<span style="color:#ae81ff">10</span>, <span style="color:#ae81ff">10</span>))
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">for</span> i <span style="color:#f92672">in</span> range(<span style="color:#ae81ff">32</span>):
+</span></span><span style="display:flex;"><span>        plt<span style="color:#f92672">.</span>subplot(<span style="color:#ae81ff">6</span>, <span style="color:#ae81ff">6</span>, i<span style="color:#f92672">+</span><span style="color:#ae81ff">1</span>)
+</span></span><span style="display:flex;"><span>        plt<span style="color:#f92672">.</span>imshow(kernels[i, <span style="color:#ae81ff">0</span>], cmap<span style="color:#f92672">=</span><span style="color:#e6db74">&#39;gray&#39;</span>)
+</span></span><span style="display:flex;"><span>        plt<span style="color:#f92672">.</span>axis(<span style="color:#e6db74">&#39;off&#39;</span>)
+</span></span><span style="display:flex;"><span>    plt<span style="color:#f92672">.</span>show()
+</span></span></code></pre></div><h2 id="-学习资源">📚 学习资源</h2>
+<h3 id="吴恩达课程">吴恩达课程</h3>
+<ul>
+<li><a href="https://www.coursera.org/learn/convolutional-neural-networks">第四周：卷积神经网络</a></li>
+</ul>
+<h3 id="经典论文">经典论文</h3>
+<ul>
+<li><a href="https://papers.nips.cc/paper/4824-imagenet-classification-with-deep-convolutional-neural-networks.pdf">ImageNet Classification with Deep Convolutional Neural Networks</a> - AlexNet</li>
+<li><a href="https://arxiv.org/abs/1409.1556">Very Deep Convolutional Networks for Large-Scale Image Recognition</a> - VGG</li>
+<li><a href="https://arxiv.org/abs/1512.03385">Deep Residual Learning for Image Recognition</a> - ResNet</li>
+</ul>
+<h3 id="在线资源">在线资源</h3>
+<ul>
+<li><a href="https://cs231n.github.io/">CS231n: Convolutional Neural Networks</a></li>
+<li><a href="https://poloclub.github.io/cnn-explainer/">CNN Explainer</a></li>
+<li><a href="https://pytorch.org/tutorials/intermediate/torchvision_tutorial.html">PyTorch Vision Tutorials</a></li>
+</ul>
+<hr>
+<p><em>最近更新: {{ .Lastmod.Format &ldquo;2006-01-02&rdquo; }}</em></p>
+</div>
+    
+<nav class="pager" aria-label="文章导航">
+  
+  <a href="/wiki/deep_learning/rnn/" data-press>
+    <span class="dir">← 上一篇</span>循环神经网络
+  </a>
+  
+  
+  <a href="/wiki/deep_learning/neural_networks/" class="is-next" data-press>
+    <span class="dir">下一篇 →</span>神经网络基础
+  </a>
+  
+</nav>
+
+
+    
+<div class="comments">
+  <h2 class="comments-title">评论</h2>
+  <div id="utterances"></div>
+  <script>
+    (function () {
+      if (window.location.protocol === 'file:') return;
+      var s = document.createElement('script');
+      s.src = 'https://utteranc.es/client.js';
+      s.async = true;
+      s.setAttribute('repo', "makkichan947/makkichan947.github.io");
+      s.setAttribute('issue-term', "pathname");
+      s.setAttribute('theme', "github-dark");
+      s.setAttribute('crossorigin', 'anonymous');
+      document.getElementById('utterances').appendChild(s);
+    })();
+  </script>
+</div>
+
+
+  </article>
+  
+</div>
+
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+      <div class="footer-links">
+        
+        <a href="https://github.com/makkichan947" target="_blank" rel="noopener" title="Github" data-press>Github</a>
+        
+        <a href="mailto:yakumakki947@hotmail.com" target="_blank" rel="noopener" title="Email" data-press>Email</a>
+        
+        <a href="https://x.com/Makki_Yaku947" target="_blank" rel="noopener" title="Twitter" data-press>Twitter</a>
+        
+        <a href="https://www.twitch.tv/u/makkichan947" target="_blank" rel="noopener" title="Twitch" data-press>Twitch</a>
+        
+      </div>
+      <p>&copy; 2026 Yaku Makki</p>
+      <p>Powered by <a href="https://gohugo.io" target="_blank" rel="noopener">Hugo</a> · Makki Theme</p>
+      
+      <div class="stats">
+        <span>访客 <span id="busuanzi_value_site_uv"></span></span>
+        <span>访问 <span id="busuanzi_value_site_pv"></span></span>
+        <span>本页 <span id="busuanzi_value_page_pv"></span></span>
+      </div>
+      
+    </div>
+  </footer>
+
+  <button class="back-to-top" id="back-to-top" type="button" aria-label="回到顶部" data-press>
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 19V5"/><path d="M5 12l7-7 7 7"/></svg>
+  </button>
+
+  
+  <script src="/js/main.min.2e977141114ec7890ffee2c35e08034683543cfe8ef98dd4af5effb3b37a3345.js" integrity="sha256-LpdxQRFOx4kP/uLDXggDRoNUPP6O&#43;Y3Ur17/s7N6M0U=" defer></script>
+  
+  
+  <script src="/js/search.min.b2d6ba6610ce24454bc1436dc521dcfd878b2583ad9f65f77aadedaaa1e1a54c.js" integrity="sha256-sta6ZhDOJEVLwUNtxSHc/YeLJYOtn2X3eq3tqqHhpUw=" defer></script>
+  
+
+  
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+  
+
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/katex.min.js" crossorigin="anonymous"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/contrib/auto-render.min.js" crossorigin="anonymous"></script>
+</body>
+</html>

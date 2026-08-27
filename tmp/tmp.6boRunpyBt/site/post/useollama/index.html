@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>使用Ollama本地部署大语言模型 · Yaku Makki</title>
+  <meta name="description" content="个人小巢">
+  <meta name="theme-color" content="#0a0a0f">
+  <script>document.documentElement.classList.add('js');</script>
+
+  <link rel="icon" href="/avatar/avatar.jpg" type="image/jpeg">
+
+  
+  <link rel="stylesheet" href="/css/main.min.b64e4527cc255b367461135391e39e321a5d86fc97defca99c7afda308ada007.css" integrity="sha256-tk5FJ8wlWzZ0YRNTkeOeMhpdhvyX3vypnHr9owitoAc=">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/katex.min.css" crossorigin="anonymous">
+</head>
+<body>
+  <a class="skip-link" href="#main">跳到内容</a>
+
+  <div class="scene" aria-hidden="true">
+    <div class="scene-sky"></div>
+    <div class="scene-stars"></div>
+    <div class="scene-sun-halo"></div>
+    <div class="scene-sun"></div>
+    <div class="scene-mountains scene-mountains-far"></div>
+    <div class="scene-mountains scene-mountains-near"></div>
+    <div class="scene-horizon"></div>
+    <div class="scene-floor"></div>
+    <div class="scene-scanlines"></div>
+  </div>
+
+  <nav class="navbar" aria-label="主导航">
+    <div class="nav-inner">
+      <a class="logo" href="/" data-press>
+        <img class="logo-avatar" src="/avatar/avatar.jpg" alt="" width="34" height="34">
+        <span class="logo-text">Yaku Makki</span>
+      </a>
+      <div class="nav-menu-wrap">
+        <span class="nav-tick" aria-hidden="true"></span>
+        <ul class="nav-menu">
+          
+          <li>
+            <a href="/" data-press>首页</a>
+          </li>
+          
+          <li>
+            <a href="/post/" data-press>博客</a>
+          </li>
+          
+          <li>
+            <a href="/wiki/" data-press>维基</a>
+          </li>
+          
+          <li>
+            <a href="/tags/" data-press>标签</a>
+          </li>
+          
+          <li>
+            <a href="/about/" data-press>关于</a>
+          </li>
+          
+          
+          <li>
+            <button id="search-toggle" class="search-toggle" type="button" title="搜索 (Ctrl+K 或 /)" aria-haspopup="dialog" aria-expanded="false" data-press>搜索</button>
+          </li>
+          
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  
+  <div class="sheet-scrim" id="sheet-scrim"></div>
+  <section class="sheet" id="search-sheet" role="dialog" aria-modal="true" aria-label="搜索" aria-hidden="true">
+    <div class="sheet-panel" id="sheet-panel">
+      <div class="sheet-handle" id="sheet-handle" role="presentation" aria-hidden="true"></div>
+      <div class="sheet-body">
+        <div class="search-field">
+          <input id="search-input" type="search" placeholder="搜索文章和 Wiki…"
+                 autocomplete="off" spellcheck="false" aria-controls="search-results">
+          <span class="search-key" aria-hidden="true">/</span>
+        </div>
+        <div id="search-results" class="search-results" role="listbox" aria-label="搜索结果"></div>
+      </div>
+    </div>
+  </section>
+  
+
+  <main class="main" id="main">
+    
+<article class="article">
+  <header class="article-head" data-reveal>
+    <h1>使用Ollama本地部署大语言模型</h1>
+    <div class="meta">
+      <time datetime="2025-10-10T11:42:47&#43;08:00">2025-10-10</time>
+      <span>2 分钟阅读</span>
+      <span>269 字</span>
+      <a class="tag" href="/tags/ai/" data-press>AI</a><a class="tag" href="/tags/%E5%B7%A5%E5%85%B7/" data-press>工具</a><a class="tag" href="/tags/%E6%95%99%E7%A8%8B/" data-press>教程</a>
+    </div>
+  </header>
+  <div class="article-content" data-reveal data-reveal-delay="60"><h1 id="使用ollama本地部署大语言模型">使用Ollama本地部署大语言模型</h1>
+<h2 id="从云端到本地为什么我选择ollama">从云端到本地：为什么我选择Ollama</h2>
+<p>过去一年，我几乎每天都在跟各种大语言模型打交道。ChatGPT、Claude、Gemini……它们确实强大，但有几个问题始终让我不太舒服：<strong>数据隐私</strong>、<strong>网络依赖</strong>，以及<strong>每月的订阅费用</strong>。尤其是当我需要处理一些敏感代码或内部文档时，把内容上传到云端总让我心里打鼓。</p>
+<p>于是我开始探索本地部署方案。试过<code>llama.cpp</code>，也试过<code>text-generation-webui</code>，它们都很强大，但配置起来多少有些繁琐——编译、依赖、环境变量，折腾一圈下来，我发现自己把时间花在了“让模型跑起来”而不是“用模型解决问题”上。</p>
+<p>直到遇见了Ollama。<strong>它把复杂的模型管理变得简单</strong>。作为一个Arch Linux的忠实用户，这种“一条命令搞定”的体验让我瞬间有了归属感。</p>
+<h2 id="什么是ollama">什么是Ollama？</h2>
+<p>Ollama是一个开源的、轻量级的大语言模型运行时。它封装了模型下载、推理、API服务等环节，让你可以在本地快速运行诸如Llama 2、Mistral、Code Llama等主流开源模型。</p>
+<p>它的核心优势在于：</p>
+<ul>
+<li><strong>隐私安全</strong>：所有数据留在本地，无需担心外泄</li>
+<li><strong>离线可用</strong>：断网环境下依然正常工作</li>
+<li><strong>零成本</strong>：无需API密钥，没有使用限额</li>
+<li><strong>开箱即用</strong>：内置REST API，方便集成到各种应用中</li>
+<li><strong>模型复用</strong>：支持从Hugging Face导入自定义模型</li>
+</ul>
+<h2 id="安装ollama我的arch-way">安装Ollama：我的Arch Way</h2>
+<p>我的主力发行版是Arch Linux，所以安装Ollama自然首选<code>pacman</code>：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># Arch Linux 官方社区仓库已收录</span>
+</span></span><span style="display:flex;"><span>sudo pacman -S ollama
+</span></span></code></pre></div><p>安装完成后，启动服务并设置开机自启：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># 启动ollama服务</span>
+</span></span><span style="display:flex;"><span>systemctl --user start ollama
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 开机自动启动</span>
+</span></span><span style="display:flex;"><span>systemctl --user enable ollama
+</span></span></code></pre></div><p>如果你是Debian/Ubuntu用户，也可以使用官方脚本一键安装：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># 官方推荐方式（会添加apt仓库）</span>
+</span></span><span style="display:flex;"><span>curl -fsSL https://ollama.com/install.sh | sh
+</span></span></code></pre></div><p>或者使用Docker（适合隔离环境或快速试用）：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># 拉取并运行容器</span>
+</span></span><span style="display:flex;"><span>docker run -d -v ollama:/root/.ollama -p 11434:11434 --name ollama ollama/ollama
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 进入容器执行命令</span>
+</span></span><span style="display:flex;"><span>docker exec -it ollama ollama
+</span></span></code></pre></div><p>无论哪种方式，Ollama默认会在<code>http://localhost:11434</code>开启API服务，随时等待你的调用。</p>
+<h2 id="模型选择找到最适合你的那一款">模型选择：找到最适合你的那一款</h2>
+<p>Ollama官方模型库（<a href="https://ollama.com/library">https://ollama.com/library</a>）提供了几十种模型。我根据自己的硬件和实际需求，筛选出以下几款常用模型：</p>
+<h3 id="通用对话llama-2-与-mistral">通用对话：Llama 2 与 Mistral</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># Llama 2 7B（平衡性能与资源）</span>
+</span></span><span style="display:flex;"><span>ollama pull llama2:7b
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Mistral 7B（更小更快，表现接近Llama 2 13B）</span>
+</span></span><span style="display:flex;"><span>ollama pull mistral
+</span></span></code></pre></div><h3 id="轻量级选手phi-2-与-tinyllama">轻量级选手：Phi-2 与 TinyLlama</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># 微软Phi-2（2.7B参数，适合低配设备）</span>
+</span></span><span style="display:flex;"><span>ollama pull phi
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># TinyLlama 1.1B（极致轻量，树莓派都能跑）</span>
+</span></span><span style="display:flex;"><span>ollama pull tinyllama
+</span></span></code></pre></div><p><strong>关于量化版本</strong>：如果显存紧张，可以拉取量化后的模型，例如<code>llama2:7b-q4_0</code>，体积更小，速度更快，质量损失在可接受范围内。</p>
+<h2 id="基本使用命令行与api">基本使用：命令行与API</h2>
+<h3 id="交互式对话">交互式对话</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># 直接进入聊天模式</span>
+</span></span><span style="display:flex;"><span>ollama run mistral
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>&gt;&gt;&gt; 解释一下什么是“注意力机制”
+</span></span></code></pre></div><h3 id="单次生成">单次生成</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># 非交互式生成，适合脚本调用</span>
+</span></span><span style="display:flex;"><span>ollama run codellama:7b <span style="color:#e6db74">&#34;写一个Python函数，判断一个字符串是否为回文&#34;</span>
+</span></span></code></pre></div><h3 id="rest-api调用">REST API调用</h3>
+<p>Ollama内置了兼容OpenAI格式的API，可以用<code>curl</code>或任何HTTP客户端调用：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># 生成文本（流式响应）</span>
+</span></span><span style="display:flex;"><span>curl http://localhost:11434/api/generate -d <span style="color:#e6db74">&#39;{
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">  &#34;model&#34;: &#34;mistral&#34;,
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">  &#34;prompt&#34;: &#34;用三句话介绍自己&#34;,
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">  &#34;stream&#34;: false
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">}&#39;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 聊天补全（类似ChatGPT接口）</span>
+</span></span><span style="display:flex;"><span>curl http://localhost:11434/api/chat -d <span style="color:#e6db74">&#39;{
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">  &#34;model&#34;: &#34;llama2&#34;,
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">  &#34;messages&#34;: [
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    {&#34;role&#34;: &#34;user&#34;, &#34;content&#34;: &#34;你好&#34;}
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">  ]
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">}&#39;</span>
+</span></span></code></pre></div><h2 id="定制你的专属模型modelfile">定制你的专属模型：Modelfile</h2>
+<p>Ollama最让我心动的地方在于<strong>自定义模型</strong>。通过编写<code>Modelfile</code>，你可以调整推理参数、设定系统提示词，甚至基于某个基础模型“嫁接”新的能力。</p>
+<p>举个例子，我想创建一个专用于写Shell脚本的助手：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># 创建一个Modelfile</span>
+</span></span><span style="display:flex;"><span>cat &gt; ShellHelper <span style="color:#e6db74">&lt;&lt;EOF
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">FROM codellama:7b
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">PARAMETER temperature 0.3
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">PARAMETER top_p 0.9
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">SYSTEM 你是一个Shell脚本专家，只输出可运行的bash代码，不要添加额外解释。
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">EOF</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 构建自定义模型</span>
+</span></span><span style="display:flex;"><span>ollama create shell-helper -f ShellHelper
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 运行</span>
+</span></span><span style="display:flex;"><span>ollama run shell-helper <span style="color:#e6db74">&#34;写一个循环重命名当前目录下所有.jpg文件的脚本&#34;</span>
+</span></span></code></pre></div><p>这样一来，每次调用都能得到稳定、精简的代码输出，省去了反复调整提示词的麻烦。</p>
+<h2 id="性能优化让模型跑得更快">性能优化：让模型跑得更快</h2>
+<h3 id="显存管理">显存管理</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># 查看当前加载的模型</span>
+</span></span><span style="display:flex;"><span>ollama ps
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 卸载不再使用的模型，释放显存</span>
+</span></span><span style="display:flex;"><span>ollama stop model-name
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 删除本地模型文件（释放磁盘空间）</span>
+</span></span><span style="display:flex;"><span>ollama rm model-name
+</span></span></code></pre></div><h3 id="gpu加速">GPU加速</h3>
+<p>Ollama会自动检测CUDA或ROCm环境。如果有多张GPU，可以通过环境变量指定设备：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># 指定使用第一张卡</span>
+</span></span><span style="display:flex;"><span>CUDA_VISIBLE_DEVICES<span style="color:#f92672">=</span><span style="color:#ae81ff">0</span> ollama run llama2
+</span></span></code></pre></div><h3 id="并发请求">并发请求</h3>
+<p>Ollama默认支持并发处理，你可以通过调整<code>OLLAMA_NUM_PARALLEL</code>来增加并发数（视显存而定）：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>OLLAMA_NUM_PARALLEL<span style="color:#f92672">=</span><span style="color:#ae81ff">4</span> ollama serve
+</span></span></code></pre></div><h2 id="实际应用我是如何融入工作流的">实际应用：我是如何融入工作流的</h2>
+<h3 id="1-neovim-代码辅助">1. Neovim 代码辅助</h3>
+<p>我在Neovim中配置了一个快捷键，选中代码后调用Ollama API进行解释或优化。搭配<code>codellama</code>模型，就像一个本地化的GitHub Copilot。</p>
+<h3 id="2-命令行快速问答">2. 命令行快速问答</h3>
+<p>写了一个<code>ask</code>脚本，封装<code>curl</code>请求，随时随地提问：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e">#!/bin/bash
+</span></span></span><span style="display:flex;"><span>ollama run mistral <span style="color:#e6db74">&#34;</span>$@<span style="color:#e6db74">&#34;</span>
+</span></span></code></pre></div><p>现在遇到不熟悉的命令参数，直接<code>ask &quot;tar命令的-xzf参数是什么意思&quot;</code>，秒得答案。</p>
+<h3 id="3-本地知识库检索rag">3. 本地知识库检索（RAG）</h3>
+<p>配合向量数据库（如Chroma），将个人文档嵌入后，用Ollama做检索增强生成，实现私有化智能问答系统——数据永远不出本地。</p>
+<h2 id="与其他方案的对比">与其他方案的对比</h2>
+<table>
+	<thead>
+			<tr>
+					<th>方案</th>
+					<th>优点</th>
+					<th>缺点</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td><strong>Ollama</strong></td>
+					<td>安装简单、模型丰富、API标准</td>
+					<td>定制性不如llama.cpp灵活</td>
+			</tr>
+			<tr>
+					<td><strong>llama.cpp</strong></td>
+					<td>极致轻量、支持CPU推理</td>
+					<td>需要编译，缺乏统一管理</td>
+			</tr>
+			<tr>
+					<td><strong>text-generation-webui</strong></td>
+					<td>图形界面、功能全面</td>
+					<td>依赖多，启动慢</td>
+			</tr>
+			<tr>
+					<td><strong>vLLM</strong></td>
+					<td>高吞吐，适合服务部署</td>
+					<td>配置复杂，侧重生产环境</td>
+			</tr>
+	</tbody>
+</table>
+<p>对我这种既要效率又要掌控感的用户来说，Ollama恰好站在了“易用”和“可控”的平衡点上。</p>
+<h2 id="一些踩坑经验">一些踩坑经验</h2>
+<ul>
+<li><strong>模型下载缓慢</strong>：可以设置代理，或者手动从Hugging Face下载后放到<code>~/.ollama/models</code>目录。</li>
+<li><strong>显存不足</strong>：优先选择量化版本，或使用<code>--num-gpu</code>限制GPU层数。</li>
+<li><strong>中文支持</strong>：有些模型中文能力较弱，推荐使用<code>qwen</code>或<code>Yi</code>系列（Ollama已支持）。</li>
+<li><strong>长时间运行</strong>：建议定期重启服务，避免内存泄漏。</li>
+</ul>
+<h2 id="总结">总结</h2>
+<p>Ollama让我彻底告别了“云端模型依赖症”。现在，我的主力机器上常驻着Mistral和Code Llama，它们随叫随到，回答稳定，隐私无忧。虽然偶尔会有“模型幻觉”，但比起每次都要上传文件的顾虑，这点小瑕疵完全可以接受。</p>
+<h2 id="相关资源">相关资源</h2>
+<ul>
+<li><a href="https://ollama.ai">Ollama官网</a></li>
+<li><a href="https://github.com/jmorganca/ollama">GitHub仓库</a></li>
+<li><a href="https://ollama.ai/library">模型库</a></li>
+</ul>
+</div>
+  
+<nav class="pager" aria-label="文章导航">
+  
+  <a href="/post/test/" data-press>
+    <span class="dir">← 上一篇</span>测试
+  </a>
+  
+  
+  <a href="/post/dailylifesucks/" class="is-next" data-press>
+    <span class="dir">下一篇 →</span>神人日常
+  </a>
+  
+</nav>
+
+
+  
+<div class="comments">
+  <h2 class="comments-title">评论</h2>
+  <div id="utterances"></div>
+  <script>
+    (function () {
+      if (window.location.protocol === 'file:') return;
+      var s = document.createElement('script');
+      s.src = 'https://utteranc.es/client.js';
+      s.async = true;
+      s.setAttribute('repo', "makkichan947/makkichan947.github.io");
+      s.setAttribute('issue-term', "pathname");
+      s.setAttribute('theme', "github-dark");
+      s.setAttribute('crossorigin', 'anonymous');
+      document.getElementById('utterances').appendChild(s);
+    })();
+  </script>
+</div>
+
+
+</article>
+
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+      <div class="footer-links">
+        
+        <a href="https://github.com/makkichan947" target="_blank" rel="noopener" title="Github" data-press>Github</a>
+        
+        <a href="mailto:yakumakki947@hotmail.com" target="_blank" rel="noopener" title="Email" data-press>Email</a>
+        
+        <a href="https://x.com/Makki_Yaku947" target="_blank" rel="noopener" title="Twitter" data-press>Twitter</a>
+        
+        <a href="https://www.twitch.tv/u/makkichan947" target="_blank" rel="noopener" title="Twitch" data-press>Twitch</a>
+        
+      </div>
+      <p>&copy; 2026 Yaku Makki</p>
+      <p>Powered by <a href="https://gohugo.io" target="_blank" rel="noopener">Hugo</a> · Makki Theme</p>
+      
+      <div class="stats">
+        <span>访客 <span id="busuanzi_value_site_uv"></span></span>
+        <span>访问 <span id="busuanzi_value_site_pv"></span></span>
+        <span>本页 <span id="busuanzi_value_page_pv"></span></span>
+      </div>
+      
+    </div>
+  </footer>
+
+  <button class="back-to-top" id="back-to-top" type="button" aria-label="回到顶部" data-press>
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 19V5"/><path d="M5 12l7-7 7 7"/></svg>
+  </button>
+
+  
+  <script src="/js/main.min.2e977141114ec7890ffee2c35e08034683543cfe8ef98dd4af5effb3b37a3345.js" integrity="sha256-LpdxQRFOx4kP/uLDXggDRoNUPP6O&#43;Y3Ur17/s7N6M0U=" defer></script>
+  
+  
+  <script src="/js/search.min.b2d6ba6610ce24454bc1436dc521dcfd878b2583ad9f65f77aadedaaa1e1a54c.js" integrity="sha256-sta6ZhDOJEVLwUNtxSHc/YeLJYOtn2X3eq3tqqHhpUw=" defer></script>
+  
+
+  
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+  
+
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/katex.min.js" crossorigin="anonymous"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/contrib/auto-render.min.js" crossorigin="anonymous"></script>
+</body>
+</html>

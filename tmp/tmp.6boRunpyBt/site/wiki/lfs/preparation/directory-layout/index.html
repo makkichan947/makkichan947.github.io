@@ -1,0 +1,672 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>目录结构规划 · Yaku Makki</title>
+  <meta name="description" content="LFS系统的目录结构设计和规划">
+  <meta name="theme-color" content="#0a0a0f">
+  <script>document.documentElement.classList.add('js');</script>
+
+  <link rel="icon" href="/avatar/avatar.jpg" type="image/jpeg">
+
+  
+  <link rel="stylesheet" href="/css/main.min.b64e4527cc255b367461135391e39e321a5d86fc97defca99c7afda308ada007.css" integrity="sha256-tk5FJ8wlWzZ0YRNTkeOeMhpdhvyX3vypnHr9owitoAc=">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/katex.min.css" crossorigin="anonymous">
+</head>
+<body>
+  <a class="skip-link" href="#main">跳到内容</a>
+
+  <div class="scene" aria-hidden="true">
+    <div class="scene-sky"></div>
+    <div class="scene-stars"></div>
+    <div class="scene-sun-halo"></div>
+    <div class="scene-sun"></div>
+    <div class="scene-mountains scene-mountains-far"></div>
+    <div class="scene-mountains scene-mountains-near"></div>
+    <div class="scene-horizon"></div>
+    <div class="scene-floor"></div>
+    <div class="scene-scanlines"></div>
+  </div>
+
+  <nav class="navbar" aria-label="主导航">
+    <div class="nav-inner">
+      <a class="logo" href="/" data-press>
+        <img class="logo-avatar" src="/avatar/avatar.jpg" alt="" width="34" height="34">
+        <span class="logo-text">Yaku Makki</span>
+      </a>
+      <div class="nav-menu-wrap">
+        <span class="nav-tick" aria-hidden="true"></span>
+        <ul class="nav-menu">
+          
+          <li>
+            <a href="/" data-press>首页</a>
+          </li>
+          
+          <li>
+            <a href="/post/" data-press>博客</a>
+          </li>
+          
+          <li>
+            <a href="/wiki/" data-press>维基</a>
+          </li>
+          
+          <li>
+            <a href="/tags/" data-press>标签</a>
+          </li>
+          
+          <li>
+            <a href="/about/" data-press>关于</a>
+          </li>
+          
+          
+          <li>
+            <button id="search-toggle" class="search-toggle" type="button" title="搜索 (Ctrl+K 或 /)" aria-haspopup="dialog" aria-expanded="false" data-press>搜索</button>
+          </li>
+          
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  
+  <div class="sheet-scrim" id="sheet-scrim"></div>
+  <section class="sheet" id="search-sheet" role="dialog" aria-modal="true" aria-label="搜索" aria-hidden="true">
+    <div class="sheet-panel" id="sheet-panel">
+      <div class="sheet-handle" id="sheet-handle" role="presentation" aria-hidden="true"></div>
+      <div class="sheet-body">
+        <div class="search-field">
+          <input id="search-input" type="search" placeholder="搜索文章和 Wiki…"
+                 autocomplete="off" spellcheck="false" aria-controls="search-results">
+          <span class="search-key" aria-hidden="true">/</span>
+        </div>
+        <div id="search-results" class="search-results" role="listbox" aria-label="搜索结果"></div>
+      </div>
+    </div>
+  </section>
+  
+
+  <main class="main" id="main">
+    
+<header class="page-head">
+  <nav class="crumb" aria-label="面包屑">
+    <a href="/" data-press>首页</a>
+    <span class="sep">/</span>
+    <a href="/wiki/" data-press>维基</a>
+    
+    
+    <span class="sep">/</span>
+    <a href="/wiki/lfs/preparation/" data-press>第一部分：准备工作</a>
+    
+    
+  </nav>
+  <h1>目录结构规划</h1>
+  <p>LFS系统的目录结构设计和规划</p>
+</header>
+
+<div class="wiki-layout">
+  <article class="article">
+    <div class="article-content"><h1 id="目录结构规划">目录结构规划</h1>
+<p>LFS系统的目录结构遵循Linux文件系统层次标准（FHS）。正确的目录结构规划对于系统的稳定运行和维护至关重要。本章将详细介绍LFS目录结构的创建和配置。</p>
+<h2 id="-linux文件系统层次标准-fhs">📁 Linux文件系统层次标准 (FHS)</h2>
+<h3 id="fhs概述">FHS概述</h3>
+<p>FHS定义了Linux系统中文件和目录的标准组织方式：</p>
+<ul>
+<li><strong>/</strong>：根目录，所有其他目录的起点</li>
+<li><strong>/bin</strong>：基本命令二进制文件</li>
+<li><strong>/boot</strong>：引导加载程序文件</li>
+<li><strong>/dev</strong>：设备文件</li>
+<li><strong>/etc</strong>：系统配置文件</li>
+<li><strong>/home</strong>：用户主目录</li>
+<li><strong>/lib</strong>：基本共享库</li>
+<li><strong>/media</strong>：可移动媒体挂载点</li>
+<li><strong>/mnt</strong>：临时挂载点</li>
+<li><strong>/opt</strong>：附加应用程序软件包</li>
+<li><strong>/proc</strong>：虚拟文件系统（进程信息）</li>
+<li><strong>/root</strong>：root用户主目录</li>
+<li><strong>/sbin</strong>：系统二进制文件</li>
+<li><strong>/srv</strong>：系统提供的服务数据</li>
+<li><strong>/sys</strong>：虚拟文件系统（设备信息）</li>
+<li><strong>/tmp</strong>：临时文件</li>
+<li><strong>/usr</strong>：二级层次结构</li>
+<li><strong>/var</strong>：可变数据</li>
+</ul>
+<h2 id="-lfs目录结构创建">🏗️ LFS目录结构创建</h2>
+<h3 id="创建基础目录结构">创建基础目录结构</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># 切换到LFS用户</span>
+</span></span><span style="display:flex;"><span>su - lfs
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 创建基础目录</span>
+</span></span><span style="display:flex;"><span>mkdir -pv $LFS/<span style="color:#f92672">{</span>etc,var,usr/<span style="color:#f92672">{</span>bin,lib,sbin<span style="color:#f92672">}</span>,tools<span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 创建64位系统所需的lib64目录</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">case</span> <span style="color:#66d9ef">$(</span>uname -m<span style="color:#66d9ef">)</span> in
+</span></span><span style="display:flex;"><span>  x86_64<span style="color:#f92672">)</span> mkdir -pv $LFS/lib64 ;;
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">esac</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 创建其他标准目录</span>
+</span></span><span style="display:flex;"><span>mkdir -pv $LFS/<span style="color:#f92672">{</span>bin,boot,dev,home,media,mnt,opt,proc,root,srv,sys,tmp,var/<span style="color:#f92672">{</span>cache,lib,local,lock,log,opt,run,spool<span style="color:#f92672">}}</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 创建usr下的子目录</span>
+</span></span><span style="display:flex;"><span>mkdir -pv $LFS/usr/<span style="color:#f92672">{</span>include,lib,share/<span style="color:#f92672">{</span>color,dict,doc,info,locale,man,misc,terminfo,zoneinfo<span style="color:#f92672">}}</span>
+</span></span><span style="display:flex;"><span>mkdir -pv $LFS/usr/<span style="color:#f92672">{</span>libexec,local/<span style="color:#f92672">{</span>bin,etc,include,lib,sbin,share,var<span style="color:#f92672">}</span>,sbin,src<span style="color:#f92672">}</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 创建var下的子目录</span>
+</span></span><span style="display:flex;"><span>mkdir -pv $LFS/var/<span style="color:#f92672">{</span>lib/<span style="color:#f92672">{</span>color,misc,locate<span style="color:#f92672">}</span>,cache/<span style="color:#f92672">{</span>local,man<span style="color:#f92672">}}</span>
+</span></span></code></pre></div><h3 id="设置目录权限">设置目录权限</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># 设置正确的目录权限</span>
+</span></span><span style="display:flex;"><span>chmod -v <span style="color:#ae81ff">0750</span> $LFS/root
+</span></span><span style="display:flex;"><span>chmod -v <span style="color:#ae81ff">1777</span> $LFS/<span style="color:#f92672">{</span>var,<span style="color:#f92672">}</span>/tmp
+</span></span><span style="display:flex;"><span>chmod -v <span style="color:#ae81ff">0750</span> $LFS/home
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 创建必要的符号链接</span>
+</span></span><span style="display:flex;"><span>ln -sv usr/bin $LFS/bin
+</span></span><span style="display:flex;"><span>ln -sv usr/lib $LFS/lib
+</span></span><span style="display:flex;"><span>ln -sv usr/sbin $LFS/sbin
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 64位系统创建lib64链接</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">case</span> <span style="color:#66d9ef">$(</span>uname -m<span style="color:#66d9ef">)</span> in
+</span></span><span style="display:flex;"><span>  x86_64<span style="color:#f92672">)</span> ln -sv usr/lib64 $LFS/lib64 ;;
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">esac</span>
+</span></span></code></pre></div><h3 id="验证目录结构">验证目录结构</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># 检查目录结构</span>
+</span></span><span style="display:flex;"><span>ls -la $LFS
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 验证符号链接</span>
+</span></span><span style="display:flex;"><span>ls -l $LFS/bin $LFS/lib $LFS/sbin
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 检查目录权限</span>
+</span></span><span style="display:flex;"><span>ls -ld $LFS/<span style="color:#f92672">{</span>root,tmp,home<span style="color:#f92672">}</span>
+</span></span></code></pre></div><h2 id="-详细目录说明">📋 详细目录说明</h2>
+<h3 id="根目录-">根目录 (/)</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># 根目录包含：</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># - bin -&gt; usr/bin (基本命令)</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># - boot/ (引导文件)</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># - dev/ (设备文件)</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># - etc/ (配置文件)</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># - home/ (用户目录)</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># - lib -&gt; usr/lib (基本库)</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># - lib64 -&gt; usr/lib64 (64位库)</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># - media/ (可移动媒体)</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># - mnt/ (临时挂载)</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># - opt/ (可选软件)</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># - proc/ (进程信息)</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># - root/ (root用户目录)</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># - run/ (运行时数据)</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># - sbin -&gt; usr/sbin (系统命令)</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># - srv/ (服务数据)</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># - sys/ (系统信息)</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># - tmp/ (临时文件)</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># - usr/ (用户程序)</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># - var/ (可变数据)</span>
+</span></span></code></pre></div><h3 id="usr-目录结构">/usr 目录结构</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># /usr 包含二级层次结构：</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># - bin/ (用户命令)</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># - include/ (头文件)</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># - lib/ (库文件)</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># - lib64/ (64位库文件)</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># - libexec/ (可执行库)</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># - local/ (本地软件)</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># - sbin/ (系统管理命令)</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># - share/ (架构无关数据)</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#   - dict/ (词典)</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#   - doc/ (文档)</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#   - info/ (info文档)</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#   - locale/ (本地化)</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#   - man/ (手册页)</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#   - misc/ (杂项)</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#   - terminfo/ (终端信息)</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#   - zoneinfo/ (时区信息)</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># - src/ (源码)</span>
+</span></span></code></pre></div><h3 id="var-目录结构">/var 目录结构</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># /var 包含可变数据：</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># - cache/ (缓存文件)</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#   - local/ (本地缓存)</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#   - man/ (手册页缓存)</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># - lib/ (可变状态信息)</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#   - color/ (颜色数据库)</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#   - locate/ (locate数据库)</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">#   - misc/ (杂项)</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># - local/ (本地软件的可变数据)</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># - lock/ (锁文件)</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># - log/ (日志文件)</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># - opt/ (可选软件的可变数据)</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># - run/ (运行时变量数据)</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># - spool/ (应用程序假脱机文件)</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># - tmp/ (临时文件，系统重启时保留)</span>
+</span></span></code></pre></div><h2 id="-特殊文件和设备">🔧 特殊文件和设备</h2>
+<h3 id="创建设备节点">创建设备节点</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># 创建基本的设备节点</span>
+</span></span><span style="display:flex;"><span>sudo mknod -m <span style="color:#ae81ff">600</span> $LFS/dev/console c <span style="color:#ae81ff">5</span> <span style="color:#ae81ff">1</span>
+</span></span><span style="display:flex;"><span>sudo mknod -m <span style="color:#ae81ff">666</span> $LFS/dev/null c <span style="color:#ae81ff">1</span> <span style="color:#ae81ff">3</span>
+</span></span><span style="display:flex;"><span>sudo mknod -m <span style="color:#ae81ff">666</span> $LFS/dev/zero c <span style="color:#ae81ff">1</span> <span style="color:#ae81ff">5</span>
+</span></span><span style="display:flex;"><span>sudo mknod -m <span style="color:#ae81ff">666</span> $LFS/dev/ptmx c <span style="color:#ae81ff">5</span> <span style="color:#ae81ff">2</span>
+</span></span><span style="display:flex;"><span>sudo mknod -m <span style="color:#ae81ff">666</span> $LFS/dev/tty c <span style="color:#ae81ff">5</span> <span style="color:#ae81ff">0</span>
+</span></span><span style="display:flex;"><span>sudo mknod -m <span style="color:#ae81ff">444</span> $LFS/dev/random c <span style="color:#ae81ff">1</span> <span style="color:#ae81ff">8</span>
+</span></span><span style="display:flex;"><span>sudo mknod -m <span style="color:#ae81ff">444</span> $LFS/dev/urandom c <span style="color:#ae81ff">1</span> <span style="color:#ae81ff">9</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 创建/dev/shm目录</span>
+</span></span><span style="display:flex;"><span>mkdir -pv $LFS/dev/shm
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 创建/dev/pts目录</span>
+</span></span><span style="display:flex;"><span>mkdir -pv $LFS/dev/pts
+</span></span></code></pre></div><h3 id="创建必要的符号链接">创建必要的符号链接</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># 创建日志文件的符号链接</span>
+</span></span><span style="display:flex;"><span>ln -sv /run $LFS/var/run
+</span></span><span style="display:flex;"><span>ln -sv /run/lock $LFS/var/lock
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 创建其他必要的链接</span>
+</span></span><span style="display:flex;"><span>ln -sv /proc/self/mounts $LFS/etc/mtab
+</span></span></code></pre></div><h2 id="-配置文件创建">📝 配置文件创建</h2>
+<h3 id="创建passwd文件">创建passwd文件</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># 创建基本的/etc/passwd文件</span>
+</span></span><span style="display:flex;"><span>cat &gt; $LFS/etc/passwd &lt;&lt; <span style="color:#e6db74">&#34;EOF&#34;</span>
+</span></span><span style="display:flex;"><span>root:x:0:0:root:/root:/bin/bash
+</span></span><span style="display:flex;"><span>bin:x:1:1:bin:/dev/null:/bin/false
+</span></span><span style="display:flex;"><span>daemon:x:6:6:daemon:/dev/null:/bin/false
+</span></span><span style="display:flex;"><span>messagebus:x:18:18:D-Bus Message Daemon User:/var/run/dbus:/bin/false
+</span></span><span style="display:flex;"><span>systemd-bus-proxy:x:72:72:systemd Bus Proxy:/:/bin/false
+</span></span><span style="display:flex;"><span>systemd-journal-gateway:x:73:73:systemd Journal Gateway:/:/bin/false
+</span></span><span style="display:flex;"><span>systemd-journal-remote:x:74:74:systemd Journal Remote:/:/bin/false
+</span></span><span style="display:flex;"><span>systemd-journal-upload:x:75:75:systemd Journal Upload:/:/bin/false
+</span></span><span style="display:flex;"><span>systemd-network:x:76:76:systemd Network Management:/:/bin/false
+</span></span><span style="display:flex;"><span>systemd-resolve:x:77:77:systemd Resolver:/:/bin/false
+</span></span><span style="display:flex;"><span>systemd-timesync:x:78:78:systemd Time Synchronization:/:/bin/false
+</span></span><span style="display:flex;"><span>systemd-coredump:x:79:79:systemd Core Dumper:/:/bin/false
+</span></span><span style="display:flex;"><span>uuidd:x:80:80:UUID daemon:/dev/null:/bin/false
+</span></span><span style="display:flex;"><span>nobody:x:99:99:Unprivileged User:/dev/null:/bin/false
+</span></span><span style="display:flex;"><span>EOF
+</span></span></code></pre></div><h3 id="创建group文件">创建group文件</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># 创建基本的/etc/group文件</span>
+</span></span><span style="display:flex;"><span>cat &gt; $LFS/etc/group &lt;&lt; <span style="color:#e6db74">&#34;EOF&#34;</span>
+</span></span><span style="display:flex;"><span>root:x:0:
+</span></span><span style="display:flex;"><span>bin:x:1:daemon
+</span></span><span style="display:flex;"><span>sys:x:2:
+</span></span><span style="display:flex;"><span>kmem:x:3:
+</span></span><span style="display:flex;"><span>tape:x:4:
+</span></span><span style="display:flex;"><span>tty:x:5:
+</span></span><span style="display:flex;"><span>daemon:x:6:
+</span></span><span style="display:flex;"><span>floppy:x:7:
+</span></span><span style="display:flex;"><span>disk:x:8:
+</span></span><span style="display:flex;"><span>lp:x:9:
+</span></span><span style="display:flex;"><span>dialout:x:10:
+</span></span><span style="display:flex;"><span>audio:x:11:
+</span></span><span style="display:flex;"><span>video:x:12:
+</span></span><span style="display:flex;"><span>utmp:x:13:
+</span></span><span style="display:flex;"><span>usb:x:14:
+</span></span><span style="display:flex;"><span>cdrom:x:15:
+</span></span><span style="display:flex;"><span>adm:x:16:
+</span></span><span style="display:flex;"><span>messagebus:x:18:
+</span></span><span style="display:flex;"><span>systemd-journal:x:23:
+</span></span><span style="display:flex;"><span>input:x:24:
+</span></span><span style="display:flex;"><span>mail:x:34:
+</span></span><span style="display:flex;"><span>kvm:x:61:
+</span></span><span style="display:flex;"><span>systemd-bus-proxy:x:72:
+</span></span><span style="display:flex;"><span>systemd-journal-gateway:x:73:
+</span></span><span style="display:flex;"><span>systemd-journal-remote:x:74:
+</span></span><span style="display:flex;"><span>systemd-journal-upload:x:75:
+</span></span><span style="display:flex;"><span>systemd-network:x:76:
+</span></span><span style="display:flex;"><span>systemd-resolve:x:77:
+</span></span><span style="display:flex;"><span>systemd-timesync:x:78:
+</span></span><span style="display:flex;"><span>systemd-coredump:x:79:
+</span></span><span style="display:flex;"><span>uuidd:x:80:
+</span></span><span style="display:flex;"><span>wheel:x:97:
+</span></span><span style="display:flex;"><span>nogroup:x:99:
+</span></span><span style="display:flex;"><span>users:x:999:
+</span></span><span style="display:flex;"><span>EOF
+</span></span></code></pre></div><h3 id="创建基本的配置文件">创建基本的配置文件</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># 创建/etc/hostname</span>
+</span></span><span style="display:flex;"><span>echo <span style="color:#e6db74">&#34;lfs&#34;</span> &gt; $LFS/etc/hostname
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 创建/etc/hosts</span>
+</span></span><span style="display:flex;"><span>cat &gt; $LFS/etc/hosts &lt;&lt; <span style="color:#e6db74">&#34;EOF&#34;</span>
+</span></span><span style="display:flex;"><span>127.0.0.1 localhost lfs
+</span></span><span style="display:flex;"><span>::1       localhost lfs
+</span></span><span style="display:flex;"><span>EOF
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 创建/etc/resolv.conf</span>
+</span></span><span style="display:flex;"><span>cat &gt; $LFS/etc/resolv.conf &lt;&lt; <span style="color:#e6db74">&#34;EOF&#34;</span>
+</span></span><span style="display:flex;"><span>nameserver 8.8.8.8
+</span></span><span style="display:flex;"><span>nameserver 8.8.4.4
+</span></span><span style="display:flex;"><span>EOF
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 创建/etc/inputrc</span>
+</span></span><span style="display:flex;"><span>cat &gt; $LFS/etc/inputrc &lt;&lt; <span style="color:#e6db74">&#34;EOF&#34;</span>
+</span></span><span style="display:flex;"><span>set horizontal-scroll-mode Off
+</span></span><span style="display:flex;"><span>set meta-flag On
+</span></span><span style="display:flex;"><span>set input-meta On
+</span></span><span style="display:flex;"><span>set convert-meta Off
+</span></span><span style="display:flex;"><span>set output-meta On
+</span></span><span style="display:flex;"><span>set bell-style Off
+</span></span><span style="display:flex;"><span><span style="color:#e6db74">&#34;\eOd&#34;</span>: backward-word
+</span></span><span style="display:flex;"><span><span style="color:#e6db74">&#34;\eOc&#34;</span>: forward-word
+</span></span><span style="display:flex;"><span>EOF
+</span></span></code></pre></div><h2 id="-构建工具设置">🛠️ 构建工具设置</h2>
+<h3 id="创建构建日志目录">创建构建日志目录</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># 创建日志目录</span>
+</span></span><span style="display:flex;"><span>mkdir -pv $LFS/logs
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 设置日志文件权限</span>
+</span></span><span style="display:flex;"><span>touch $LFS/logs/build.log
+</span></span><span style="display:flex;"><span>chmod <span style="color:#ae81ff">644</span> $LFS/logs/build.log
+</span></span></code></pre></div><h3 id="创建构建脚本框架">创建构建脚本框架</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># 创建构建工具函数库</span>
+</span></span><span style="display:flex;"><span>cat &gt; $LFS/lib/build_functions.sh <span style="color:#e6db74">&lt;&lt; &#39;EOF&#39;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">#!/bin/bash
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74"># LFS构建工具函数库
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74"># 日志函数
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">log_info() {
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    echo &#34;$(date &#39;+%Y-%m-%d %H:%M:%S&#39;) [INFO] $*&#34; | tee -a $LFS/logs/build.log
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">}
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">log_error() {
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    echo &#34;$(date &#39;+%Y-%m-%d %H:%M:%S&#39;) [ERROR] $*&#34; &gt;&amp;2 | tee -a $LFS/logs/build.log
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">}
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">log_warn() {
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    echo &#34;$(date &#39;+%Y-%m-%d %H:%M:%S&#39;) [WARN] $*&#34; | tee -a $LFS/logs/build.log
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">}
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74"># 包构建函数
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">build_package() {
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    local package_name=$1
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    local package_url=$2
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    local configure_options=${3:-&#34;&#34;}
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    log_info &#34;开始构建 $package_name&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    # 创建构建目录
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    local build_dir=&#34;$LFS/sources/build_$package_name&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    mkdir -pv &#34;$build_dir&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    cd &#34;$build_dir&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    # 下载源码
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    if [ ! -f &#34;$LFS/sources/$package_name.tar.xz&#34; ]; then
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        log_info &#34;下载 $package_name&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        wget -P &#34;$LFS/sources&#34; &#34;$package_url&#34; || {
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            log_error &#34;下载 $package_name 失败&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            return 1
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        }
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    fi
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    # 解压源码
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    log_info &#34;解压 $package_name&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    tar -xf &#34;$LFS/sources/$package_name.tar.xz&#34; || {
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        log_error &#34;解压 $package_name 失败&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        return 1
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    }
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    # 进入源码目录
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    cd &#34;$package_name&#34;*/
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    # 配置
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    log_info &#34;配置 $package_name&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    ./configure --prefix=/usr $configure_options || {
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        log_error &#34;配置 $package_name 失败&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        return 1
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    }
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    # 编译
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    log_info &#34;编译 $package_name&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    make $LFS_MAKEFLAGS || {
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        log_error &#34;编译 $package_name 失败&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        return 1
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    }
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    # 安装
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    log_info &#34;安装 $package_name&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    make install || {
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        log_error &#34;安装 $package_name 失败&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        return 1
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    }
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    # 清理
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    cd &#34;$LFS/sources&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    rm -rf &#34;$build_dir&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    log_info &#34;$package_name 构建完成&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    return 0
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">}
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74"># 错误处理
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">set -e
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">trap &#39;log_error &#34;构建失败于第 $LINENO 行&#34;&#39; ERR
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">EOF</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 设置执行权限</span>
+</span></span><span style="display:flex;"><span>chmod +x $LFS/lib/build_functions.sh
+</span></span></code></pre></div><h2 id="-目录结构验证">📊 目录结构验证</h2>
+<h3 id="完整性检查脚本">完整性检查脚本</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># 创建目录验证脚本</span>
+</span></span><span style="display:flex;"><span>cat &gt; $LFS/verify_structure.sh <span style="color:#e6db74">&lt;&lt; &#39;EOF&#39;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">#!/bin/bash
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74"># LFS目录结构验证脚本
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">set -e
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">LFS=${LFS:-/mnt/lfs}
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">errors=0
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">log() {
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    echo &#34;$(date &#39;+%Y-%m-%d %H:%M:%S&#39;) - $*&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">}
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">check_dir() {
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    local dir=$1
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    if [ ! -d &#34;$LFS$dir&#34; ]; then
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        log &#34;ERROR: 目录不存在: $dir&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        errors=$((errors + 1))
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    else
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        log &#34;OK: 目录存在: $dir&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    fi
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">}
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">check_link() {
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    local link=$1
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    local target=$2
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    if [ ! -L &#34;$LFS$link&#34; ]; then
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        log &#34;ERROR: 符号链接不存在: $link&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        errors=$((errors + 1))
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    elif [ &#34;$(readlink $LFS$link)&#34; != &#34;$target&#34; ]; then
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        log &#34;ERROR: 符号链接目标错误: $link -&gt; $(readlink $LFS$link) (期望: $target)&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        errors=$((errors + 1))
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    else
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        log &#34;OK: 符号链接正确: $link -&gt; $target&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    fi
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">}
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">check_file() {
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    local file=$1
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    if [ ! -f &#34;$LFS$file&#34; ]; then
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        log &#34;ERROR: 文件不存在: $file&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        errors=$((errors + 1))
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    else
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        log &#34;OK: 文件存在: $file&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    fi
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">}
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">log &#34;开始验证LFS目录结构...&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74"># 检查基本目录
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">log &#34;检查基本目录...&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">check_dir &#34;/bin&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">check_dir &#34;/boot&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">check_dir &#34;/dev&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">check_dir &#34;/etc&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">check_dir &#34;/home&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">check_dir &#34;/lib&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">check_dir &#34;/media&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">check_dir &#34;/mnt&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">check_dir &#34;/opt&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">check_dir &#34;/proc&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">check_dir &#34;/root&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">check_dir &#34;/run&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">check_dir &#34;/sbin&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">check_dir &#34;/srv&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">check_dir &#34;/sys&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">check_dir &#34;/tmp&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">check_dir &#34;/usr&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">check_dir &#34;/var&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74"># 检查符号链接
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">log &#34;检查符号链接...&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">check_link &#34;/bin&#34; &#34;usr/bin&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">check_link &#34;/lib&#34; &#34;usr/lib&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">check_link &#34;/sbin&#34; &#34;usr/sbin&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">case $(uname -m) in
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">  x86_64) check_link &#34;/lib64&#34; &#34;usr/lib64&#34; ;;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">esac
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74"># 检查usr子目录
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">log &#34;检查usr子目录...&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">check_dir &#34;/usr/bin&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">check_dir &#34;/usr/include&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">check_dir &#34;/usr/lib&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">check_dir &#34;/usr/sbin&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">check_dir &#34;/usr/share&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">check_dir &#34;/usr/src&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74"># 检查配置文件
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">log &#34;检查配置文件...&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">check_file &#34;/etc/passwd&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">check_file &#34;/etc/group&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">check_file &#34;/etc/hostname&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">check_file &#34;/etc/hosts&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74"># 检查设备节点
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">log &#34;检查设备节点...&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">check_file &#34;/dev/null&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">check_file &#34;/dev/zero&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">check_file &#34;/dev/console&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74"># 检查权限
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">log &#34;检查目录权限...&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">if [ &#34;$(stat -c %a $LFS/root)&#34; != &#34;750&#34; ]; then
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    log &#34;ERROR: /root 权限不正确&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    errors=$((errors + 1))
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">else
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    log &#34;OK: /root 权限正确&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">fi
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">if [ &#34;$(stat -c %a $LFS/tmp)&#34; != &#34;1777&#34; ]; then
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    log &#34;ERROR: /tmp 权限不正确&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    errors=$((errors + 1))
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">else
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    log &#34;OK: /tmp 权限正确&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">fi
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74"># 总结
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">log &#34;验证完成&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">if [ $errors -eq 0 ]; then
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    log &#34;所有检查通过！LFS目录结构正确。&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    exit 0
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">else
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    log &#34;发现 $errors 个错误。请检查上述错误信息。&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    exit 1
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">fi
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">EOF</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 设置执行权限并运行验证</span>
+</span></span><span style="display:flex;"><span>chmod +x $LFS/verify_structure.sh
+</span></span><span style="display:flex;"><span>$LFS/verify_structure.sh
+</span></span></code></pre></div><h2 id="-常见问题">🚨 常见问题</h2>
+<h3 id="权限问题">权限问题</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># 如果遇到权限问题，确保lfs用户有正确的权限</span>
+</span></span><span style="display:flex;"><span>sudo chown -R lfs:lfs $LFS
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 或者重新创建目录</span>
+</span></span><span style="display:flex;"><span>sudo rm -rf $LFS
+</span></span><span style="display:flex;"><span>sudo mkdir -pv $LFS
+</span></span><span style="display:flex;"><span>sudo chown -v lfs:lfs $LFS
+</span></span></code></pre></div><h3 id="符号链接问题">符号链接问题</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># 检查并修复符号链接</span>
+</span></span><span style="display:flex;"><span>ls -l $LFS/bin
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 如果链接不正确，删除并重新创建</span>
+</span></span><span style="display:flex;"><span>rm $LFS/bin
+</span></span><span style="display:flex;"><span>ln -sv usr/bin $LFS/bin
+</span></span></code></pre></div><h3 id="配置文件问题">配置文件问题</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># 如果配置文件丢失，可以重新创建</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 参考上面的配置创建命令</span>
+</span></span></code></pre></div><h2 id="-相关资源">📚 相关资源</h2>
+<ul>
+<li><a href="http://www.linuxfromscratch.org/lfs/view/stable/chapter06/chapter06.html">LFS官方文档 - 目录结构</a></li>
+<li><a href="https://refspecs.linuxfoundation.org/FHS_3.0/fhs/index.html">Linux FHS标准</a></li>
+<li><a href="https://en.wikipedia.org/wiki/Filesystem_Hierarchy_Standard">Filesystem Hierarchy Standard</a></li>
+</ul>
+<hr>
+<p><em>最近更新: {{ .Lastmod.Format &ldquo;2006-01-02&rdquo; }}</em></p>
+</div>
+    
+<nav class="pager" aria-label="文章导航">
+  
+  <a href="/wiki/lfs/preparation/environment/" data-press>
+    <span class="dir">← 上一篇</span>环境变量设置
+  </a>
+  
+  
+  <a href="/wiki/lfs/preparation/packages/" class="is-next" data-press>
+    <span class="dir">下一篇 →</span>软件包下载
+  </a>
+  
+</nav>
+
+
+    
+
+  </article>
+  
+</div>
+
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+      <div class="footer-links">
+        
+        <a href="https://github.com/makkichan947" target="_blank" rel="noopener" title="Github" data-press>Github</a>
+        
+        <a href="mailto:yakumakki947@hotmail.com" target="_blank" rel="noopener" title="Email" data-press>Email</a>
+        
+        <a href="https://x.com/Makki_Yaku947" target="_blank" rel="noopener" title="Twitter" data-press>Twitter</a>
+        
+        <a href="https://www.twitch.tv/u/makkichan947" target="_blank" rel="noopener" title="Twitch" data-press>Twitch</a>
+        
+      </div>
+      <p>&copy; 2026 Yaku Makki</p>
+      <p>Powered by <a href="https://gohugo.io" target="_blank" rel="noopener">Hugo</a> · Makki Theme</p>
+      
+      <div class="stats">
+        <span>访客 <span id="busuanzi_value_site_uv"></span></span>
+        <span>访问 <span id="busuanzi_value_site_pv"></span></span>
+        <span>本页 <span id="busuanzi_value_page_pv"></span></span>
+      </div>
+      
+    </div>
+  </footer>
+
+  <button class="back-to-top" id="back-to-top" type="button" aria-label="回到顶部" data-press>
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 19V5"/><path d="M5 12l7-7 7 7"/></svg>
+  </button>
+
+  
+  <script src="/js/main.min.2e977141114ec7890ffee2c35e08034683543cfe8ef98dd4af5effb3b37a3345.js" integrity="sha256-LpdxQRFOx4kP/uLDXggDRoNUPP6O&#43;Y3Ur17/s7N6M0U=" defer></script>
+  
+  
+  <script src="/js/search.min.b2d6ba6610ce24454bc1436dc521dcfd878b2583ad9f65f77aadedaaa1e1a54c.js" integrity="sha256-sta6ZhDOJEVLwUNtxSHc/YeLJYOtn2X3eq3tqqHhpUw=" defer></script>
+  
+
+  
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+  
+
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/katex.min.js" crossorigin="anonymous"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/contrib/auto-render.min.js" crossorigin="anonymous"></script>
+</body>
+</html>

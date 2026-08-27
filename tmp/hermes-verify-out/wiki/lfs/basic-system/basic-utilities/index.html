@@ -1,0 +1,706 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>基本命令行工具 · Yaku Makki</title>
+  <meta name="description" content="安装LFS基本命令行工具">
+  <meta name="theme-color" content="#0a0a0f">
+  <script>document.documentElement.classList.add('js');</script>
+
+  <link rel="icon" href="/avatar/avatar.jpg" type="image/jpeg">
+
+  
+  <link rel="stylesheet" href="/css/main.min.b64e4527cc255b367461135391e39e321a5d86fc97defca99c7afda308ada007.css" integrity="sha256-tk5FJ8wlWzZ0YRNTkeOeMhpdhvyX3vypnHr9owitoAc=">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/katex.min.css" crossorigin="anonymous">
+</head>
+<body>
+  <a class="skip-link" href="#main">跳到内容</a>
+
+  <div class="scene" aria-hidden="true">
+    <div class="scene-sky"></div>
+    <div class="scene-stars"></div>
+    <div class="scene-sun-halo"></div>
+    <div class="scene-sun"></div>
+    <div class="scene-mountains scene-mountains-far"></div>
+    <div class="scene-mountains scene-mountains-near"></div>
+    <div class="scene-horizon"></div>
+    <div class="scene-floor"></div>
+    <div class="scene-scanlines"></div>
+  </div>
+
+  <nav class="navbar" aria-label="主导航">
+    <div class="nav-inner">
+      <a class="logo" href="/" data-press>
+        <img class="logo-avatar" src="/avatar/avatar.jpg" alt="" width="34" height="34">
+        <span class="logo-text">Yaku Makki</span>
+      </a>
+      <div class="nav-menu-wrap">
+        <span class="nav-tick" aria-hidden="true"></span>
+        <ul class="nav-menu">
+          
+          <li>
+            <a href="/" data-press>首页</a>
+          </li>
+          
+          <li>
+            <a href="/post/" data-press>博客</a>
+          </li>
+          
+          <li>
+            <a href="/wiki/" data-press>维基</a>
+          </li>
+          
+          <li>
+            <a href="/tags/" data-press>标签</a>
+          </li>
+          
+          <li>
+            <a href="/about/" data-press>关于</a>
+          </li>
+          
+          
+          <li>
+            <button id="search-toggle" class="search-toggle" type="button" title="搜索 (Ctrl+K 或 /)" aria-haspopup="dialog" aria-expanded="false" data-press>搜索</button>
+          </li>
+          
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  
+  <div class="sheet-scrim" id="sheet-scrim"></div>
+  <section class="sheet" id="search-sheet" role="dialog" aria-modal="true" aria-label="搜索" aria-hidden="true">
+    <div class="sheet-panel" id="sheet-panel">
+      <div class="sheet-handle" id="sheet-handle" role="presentation" aria-hidden="true"></div>
+      <div class="sheet-body">
+        <div class="search-field">
+          <input id="search-input" type="search" placeholder="搜索文章和 Wiki…"
+                 autocomplete="off" spellcheck="false" aria-controls="search-results">
+          <span class="search-key" aria-hidden="true">/</span>
+        </div>
+        <div id="search-results" class="search-results" role="listbox" aria-label="搜索结果"></div>
+      </div>
+    </div>
+  </section>
+  
+
+  <main class="main" id="main">
+    
+<header class="page-head">
+  <nav class="crumb" aria-label="面包屑">
+    <a href="/" data-press>首页</a>
+    <span class="sep">/</span>
+    <a href="/wiki/" data-press>维基</a>
+    
+    
+    <span class="sep">/</span>
+    <a href="/wiki/lfs/basic-system/" data-press>第三部分：基本系统构建</a>
+    
+    
+  </nav>
+  <h1>基本命令行工具</h1>
+  <p>安装LFS基本命令行工具</p>
+</header>
+
+<div class="wiki-layout">
+  <article class="article">
+    <div class="article-content"><h1 id="基本命令行工具">基本命令行工具</h1>
+<p>基本命令行工具是Linux系统日常使用的核心工具集，包括文本处理、文件操作、系统监控等功能。本章将详细介绍这些工具的编译和安装。</p>
+<h2 id="-工具概述">🎯 工具概述</h2>
+<h3 id="工具分类">工具分类</h3>
+<p>基本命令行工具主要包括：</p>
+<ul>
+<li><strong>文本处理工具</strong>：grep, sed, awk, diffutils</li>
+<li><strong>压缩工具</strong>：gzip, bzip2, xz</li>
+<li><strong>文件工具</strong>：findutils, file</li>
+<li><strong>网络工具</strong>：wget, curl</li>
+<li><strong>其他工具</strong>：less, tar, patch</li>
+</ul>
+<h2 id="-grep工具">🔍 Grep工具</h2>
+<h3 id="编译grep">编译Grep</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># 切换到lfs用户</span>
+</span></span><span style="display:flex;"><span>su - lfs
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 创建构建目录</span>
+</span></span><span style="display:flex;"><span>mkdir -pv $LFS/sources/basic_utils
+</span></span><span style="display:flex;"><span>cd $LFS/sources/basic_utils
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 解压Grep源码</span>
+</span></span><span style="display:flex;"><span>tar -xf $LFS/sources/grep-3.8.tar.xz
+</span></span><span style="display:flex;"><span>cd grep-3.8
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 配置Grep</span>
+</span></span><span style="display:flex;"><span>./configure --prefix<span style="color:#f92672">=</span>/usr
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 编译</span>
+</span></span><span style="display:flex;"><span>make $LFS_MAKEFLAGS
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 安装</span>
+</span></span><span style="display:flex;"><span>make install
+</span></span></code></pre></div><h2 id="-sed工具">📝 Sed工具</h2>
+<h3 id="编译sed">编译Sed</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># 返回源码目录</span>
+</span></span><span style="display:flex;"><span>cd $LFS/sources/basic_utils
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 解压Sed源码</span>
+</span></span><span style="display:flex;"><span>tar -xf $LFS/sources/sed-4.9.tar.xz
+</span></span><span style="display:flex;"><span>cd sed-4.9
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 配置Sed</span>
+</span></span><span style="display:flex;"><span>./configure --prefix<span style="color:#f92672">=</span>/usr
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 编译</span>
+</span></span><span style="display:flex;"><span>make $LFS_MAKEFLAGS
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 安装</span>
+</span></span><span style="display:flex;"><span>make install
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 创建符号链接</span>
+</span></span><span style="display:flex;"><span>ln -s ../bin/sed /usr/sbin/sed
+</span></span></code></pre></div><h2 id="-awk工具">📊 Awk工具</h2>
+<h3 id="编译gawk">编译Gawk</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># 返回源码目录</span>
+</span></span><span style="display:flex;"><span>cd $LFS/sources/basic_utils
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 解压Gawk源码</span>
+</span></span><span style="display:flex;"><span>tar -xf $LFS/sources/gawk-5.2.1.tar.xz
+</span></span><span style="display:flex;"><span>cd gawk-5.2.1
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 配置Gawk</span>
+</span></span><span style="display:flex;"><span>./configure --prefix<span style="color:#f92672">=</span>/usr
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 编译</span>
+</span></span><span style="display:flex;"><span>make $LFS_MAKEFLAGS
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 安装</span>
+</span></span><span style="display:flex;"><span>make install
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 创建符号链接</span>
+</span></span><span style="display:flex;"><span>ln -s gawk /usr/bin/awk
+</span></span></code></pre></div><h2 id="-diffutils工具">🔄 Diffutils工具</h2>
+<h3 id="编译diffutils">编译Diffutils</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># 返回源码目录</span>
+</span></span><span style="display:flex;"><span>cd $LFS/sources/basic_utils
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 解压Diffutils源码</span>
+</span></span><span style="display:flex;"><span>tar -xf $LFS/sources/diffutils-3.9.tar.xz
+</span></span><span style="display:flex;"><span>cd diffutils-3.9
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 配置Diffutils</span>
+</span></span><span style="display:flex;"><span>./configure --prefix<span style="color:#f92672">=</span>/usr
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 编译</span>
+</span></span><span style="display:flex;"><span>make $LFS_MAKEFLAGS
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 安装</span>
+</span></span><span style="display:flex;"><span>make install
+</span></span></code></pre></div><h2 id="-findutils工具">🔍 Findutils工具</h2>
+<h3 id="编译findutils">编译Findutils</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># 返回源码目录</span>
+</span></span><span style="display:flex;"><span>cd $LFS/sources/basic_utils
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 解压Findutils源码</span>
+</span></span><span style="display:flex;"><span>tar -xf $LFS/sources/findutils-4.9.0.tar.xz
+</span></span><span style="display:flex;"><span>cd findutils-4.9.0
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 配置Findutils</span>
+</span></span><span style="display:flex;"><span>./configure --prefix<span style="color:#f92672">=</span>/usr <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span>            --localstatedir<span style="color:#f92672">=</span>/var/lib/locate
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 编译</span>
+</span></span><span style="display:flex;"><span>make $LFS_MAKEFLAGS
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 安装</span>
+</span></span><span style="display:flex;"><span>make install
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 创建符号链接</span>
+</span></span><span style="display:flex;"><span>ln -s ../bin/find /usr/sbin/find
+</span></span></code></pre></div><h2 id="-file工具">📄 File工具</h2>
+<h3 id="编译file">编译File</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># 返回源码目录</span>
+</span></span><span style="display:flex;"><span>cd $LFS/sources/basic_utils
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 解压File源码</span>
+</span></span><span style="display:flex;"><span>tar -xf $LFS/sources/file-5.44.tar.gz
+</span></span><span style="display:flex;"><span>cd file-5.44
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 配置File</span>
+</span></span><span style="display:flex;"><span>./configure --prefix<span style="color:#f92672">=</span>/usr
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 编译</span>
+</span></span><span style="display:flex;"><span>make $LFS_MAKEFLAGS
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 安装</span>
+</span></span><span style="display:flex;"><span>make install
+</span></span></code></pre></div><h2 id="-tar工具">📦 Tar工具</h2>
+<h3 id="编译tar">编译Tar</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># 返回源码目录</span>
+</span></span><span style="display:flex;"><span>cd $LFS/sources/basic_utils
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 解压Tar源码</span>
+</span></span><span style="display:flex;"><span>tar -xf $LFS/sources/tar-1.34.tar.xz
+</span></span><span style="display:flex;"><span>cd tar-1.34
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 配置Tar</span>
+</span></span><span style="display:flex;"><span>./configure --prefix<span style="color:#f92672">=</span>/usr
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 编译</span>
+</span></span><span style="display:flex;"><span>make $LFS_MAKEFLAGS
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 安装</span>
+</span></span><span style="display:flex;"><span>make install
+</span></span></code></pre></div><h2 id="-压缩工具">🗜️ 压缩工具</h2>
+<h3 id="编译gzip">编译Gzip</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># 返回源码目录</span>
+</span></span><span style="display:flex;"><span>cd $LFS/sources/basic_utils
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 解压Gzip源码</span>
+</span></span><span style="display:flex;"><span>tar -xf $LFS/sources/gzip-1.12.tar.xz
+</span></span><span style="display:flex;"><span>cd gzip-1.12
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 配置Gzip</span>
+</span></span><span style="display:flex;"><span>./configure --prefix<span style="color:#f92672">=</span>/usr
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 编译</span>
+</span></span><span style="display:flex;"><span>make $LFS_MAKEFLAGS
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 安装</span>
+</span></span><span style="display:flex;"><span>make install
+</span></span></code></pre></div><h3 id="编译patch">编译Patch</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># 返回源码目录</span>
+</span></span><span style="display:flex;"><span>cd $LFS/sources/basic_utils
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 解压Patch源码</span>
+</span></span><span style="display:flex;"><span>tar -xf $LFS/sources/patch-2.7.6.tar.xz
+</span></span><span style="display:flex;"><span>cd patch-2.7.6
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 配置Patch</span>
+</span></span><span style="display:flex;"><span>./configure --prefix<span style="color:#f92672">=</span>/usr
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 编译</span>
+</span></span><span style="display:flex;"><span>make $LFS_MAKEFLAGS
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 安装</span>
+</span></span><span style="display:flex;"><span>make install
+</span></span></code></pre></div><h2 id="-网络工具">🌐 网络工具</h2>
+<h3 id="编译wget">编译Wget</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># 返回源码目录</span>
+</span></span><span style="display:flex;"><span>cd $LFS/sources/basic_utils
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 解压Wget源码</span>
+</span></span><span style="display:flex;"><span>tar -xf $LFS/sources/wget-1.21.3.tar.gz
+</span></span><span style="display:flex;"><span>cd wget-1.21.3
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 配置Wget</span>
+</span></span><span style="display:flex;"><span>./configure --prefix<span style="color:#f92672">=</span>/usr <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span>            --sysconfdir<span style="color:#f92672">=</span>/etc <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span>            --with-ssl<span style="color:#f92672">=</span>openssl
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 编译</span>
+</span></span><span style="display:flex;"><span>make $LFS_MAKEFLAGS
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 安装</span>
+</span></span><span style="display:flex;"><span>make install
+</span></span></code></pre></div><h3 id="编译curl">编译Curl</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># 返回源码目录</span>
+</span></span><span style="display:flex;"><span>cd $LFS/sources/basic_utils
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 解压Curl源码</span>
+</span></span><span style="display:flex;"><span>tar -xf $LFS/sources/curl-7.87.0.tar.xz
+</span></span><span style="display:flex;"><span>cd curl-7.87.0
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 配置Curl</span>
+</span></span><span style="display:flex;"><span>./configure --prefix<span style="color:#f92672">=</span>/usr <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span>            --disable-static <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span>            --with-openssl <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span>            --enable-threaded-resolver <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span>            --with-ca-path<span style="color:#f92672">=</span>/etc/ssl/certs
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 编译</span>
+</span></span><span style="display:flex;"><span>make $LFS_MAKEFLAGS
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 安装</span>
+</span></span><span style="display:flex;"><span>make install
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 清理</span>
+</span></span><span style="display:flex;"><span>rm -rf /usr/share/man/man3
+</span></span></code></pre></div><h2 id="-less工具">📖 Less工具</h2>
+<h3 id="编译less">编译Less</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># 返回源码目录</span>
+</span></span><span style="display:flex;"><span>cd $LFS/sources/basic_utils
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 解压Less源码</span>
+</span></span><span style="display:flex;"><span>tar -xf $LFS/sources/less-608.tar.gz
+</span></span><span style="display:flex;"><span>cd less-608
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 配置Less</span>
+</span></span><span style="display:flex;"><span>./configure --prefix<span style="color:#f92672">=</span>/usr --sysconfdir<span style="color:#f92672">=</span>/etc
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 编译</span>
+</span></span><span style="display:flex;"><span>make $LFS_MAKEFLAGS
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 安装</span>
+</span></span><span style="display:flex;"><span>make install
+</span></span></code></pre></div><h2 id="-构建脚本">📋 构建脚本</h2>
+<h3 id="自动化构建脚本">自动化构建脚本</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># 创建基本工具构建脚本</span>
+</span></span><span style="display:flex;"><span>cat &gt; $LFS/build_basic_utils.sh <span style="color:#e6db74">&lt;&lt; &#39;EOF&#39;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">#!/bin/bash
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74"># LFS基本工具构建脚本
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">set -e
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74"># 工具列表
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">utils=(
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    &#34;grep-3.8:grep:--prefix=/usr&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    &#34;sed-4.9:sed:--prefix=/usr&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    &#34;gawk-5.2.1:gawk:--prefix=/usr&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    &#34;diffutils-3.9:diffutils:--prefix=/usr&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    &#34;findutils-4.9.0:findutils:--prefix=/usr --localstatedir=/var/lib/locate&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    &#34;file-5.44:file:--prefix=/usr&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    &#34;tar-1.34:tar:--prefix=/usr&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    &#34;gzip-1.12:gzip:--prefix=/usr&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    &#34;patch-2.7.6:patch:--prefix=/usr&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    &#34;wget-1.21.3:wget:--prefix=/usr --sysconfdir=/etc --with-ssl=openssl&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    &#34;curl-7.87.0:curl:--prefix=/usr --disable-static --with-openssl --enable-threaded-resolver --with-ca-path=/etc/ssl/certs&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    &#34;less-608:less:--prefix=/usr --sysconfdir=/etc&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">)
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">total_utils=${#utils[@]}
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">completed=0
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">for util_info in &#34;${utils[@]}&#34;; do
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    IFS=&#39;:&#39; read -r package_name util_name configure_options &lt;&lt;&lt; &#34;$util_info&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    echo &#34;=== 构建 $util_name ($((completed + 1))/$total_utils) ===&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    # 检查源码
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    if [ ! -f &#34;$LFS/sources/$package_name.tar.xz&#34; ] &amp;&amp; [ ! -f &#34;$LFS/sources/$package_name.tar.gz&#34; ]; then
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        echo &#34;错误: $package_name 源码不存在&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        exit 1
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    fi
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    cd $LFS/sources/basic_utils
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    # 解压源码
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    if [ -f &#34;$LFS/sources/$package_name.tar.xz&#34; ]; then
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        tar -xf &#34;$LFS/sources/$package_name.tar.xz&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    else
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        tar -xf &#34;$LFS/sources/$package_name.tar.gz&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    fi
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    cd $package_name
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    # 配置和构建
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    ./configure $configure_options
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    make $LFS_MAKEFLAGS
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    make install
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    # 特殊处理
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    case $util_name in
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        sed)
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            ln -s ../bin/sed /usr/sbin/sed
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            ;;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        gawk)
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            ln -s gawk /usr/bin/awk
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            ;;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        findutils)
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            ln -s ../bin/find /usr/sbin/find
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            ;;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        curl)
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            rm -rf /usr/share/man/man3
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            ;;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    esac
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    # 验证安装
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    echo &#34;验证 $util_name 安装...&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    case $util_name in
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        grep)
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            [ -x /usr/bin/grep ] &amp;&amp; echo &#34;✓ grep 安装成功&#34; || echo &#34;✗ grep 安装失败&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            ;;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        sed)
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            [ -x /usr/bin/sed ] &amp;&amp; echo &#34;✓ sed 安装成功&#34; || echo &#34;✗ sed 安装失败&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            ;;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        gawk)
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            [ -x /usr/bin/gawk ] &amp;&amp; echo &#34;✓ gawk 安装成功&#34; || echo &#34;✗ gawk 安装失败&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            ;;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        diffutils)
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            [ -x /usr/bin/diff ] &amp;&amp; echo &#34;✓ diffutils 安装成功&#34; || echo &#34;✗ diffutils 安装失败&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            ;;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        findutils)
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            [ -x /usr/bin/find ] &amp;&amp; echo &#34;✓ findutils 安装成功&#34; || echo &#34;✗ findutils 安装失败&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            ;;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        file)
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            [ -x /usr/bin/file ] &amp;&amp; echo &#34;✓ file 安装成功&#34; || echo &#34;✗ file 安装失败&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            ;;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        tar)
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            [ -x /usr/bin/tar ] &amp;&amp; echo &#34;✓ tar 安装成功&#34; || echo &#34;✗ tar 安装失败&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            ;;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        gzip)
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            [ -x /usr/bin/gzip ] &amp;&amp; echo &#34;✓ gzip 安装成功&#34; || echo &#34;✗ gzip 安装失败&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            ;;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        patch)
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            [ -x /usr/bin/patch ] &amp;&amp; echo &#34;✓ patch 安装成功&#34; || echo &#34;✗ patch 安装失败&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            ;;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        wget)
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            [ -x /usr/bin/wget ] &amp;&amp; echo &#34;✓ wget 安装成功&#34; || echo &#34;✗ wget 安装失败&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            ;;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        curl)
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            [ -x /usr/bin/curl ] &amp;&amp; echo &#34;✓ curl 安装成功&#34; || echo &#34;✗ curl 安装失败&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            ;;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        less)
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            [ -x /usr/bin/less ] &amp;&amp; echo &#34;✓ less 安装成功&#34; || echo &#34;✗ less 安装失败&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            ;;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    esac
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    completed=$((completed + 1))
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    echo &#34;进度: $completed/$total_utils 完成&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    echo &#34;&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    # 清理构建目录
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    cd $LFS/sources/basic_utils
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    rm -rf $package_name
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">done
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">echo &#34;=== 所有基本工具构建完成 ===&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">EOF</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>chmod +x $LFS/build_basic_utils.sh
+</span></span></code></pre></div><h2 id="-功能验证">🧪 功能验证</h2>
+<h3 id="工具可用性测试">工具可用性测试</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># 创建验证脚本</span>
+</span></span><span style="display:flex;"><span>cat &gt; $LFS/verify_basic_utils.sh <span style="color:#e6db74">&lt;&lt; &#39;EOF&#39;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">#!/bin/bash
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74"># 基本工具验证脚本
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">echo &#34;=== LFS基本工具验证 ===&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74"># 定义要验证的工具
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">tools=(
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    &#34;/usr/bin/grep:grep&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    &#34;/usr/bin/sed:sed&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    &#34;/usr/bin/gawk:gawk&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    &#34;/usr/bin/diff:diffutils&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    &#34;/usr/bin/find:findutils&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    &#34;/usr/bin/file:file&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    &#34;/usr/bin/tar:tar&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    &#34;/usr/bin/gzip:gzip&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    &#34;/usr/bin/patch:patch&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    &#34;/usr/bin/wget:wget&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    &#34;/usr/bin/curl:curl&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    &#34;/usr/bin/less:less&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">)
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">passed=0
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">total=${#tools[@]}
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">for tool_info in &#34;${tools[@]}&#34;; do
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    IFS=&#39;:&#39; read -r tool_path tool_name &lt;&lt;&lt; &#34;$tool_info&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    echo -n &#34;检查 $tool_name ($tool_path)... &#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    if [ -x &#34;$tool_path&#34; ]; then
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        echo &#34;✓ 可用&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        # 基本功能测试
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        case $tool_name in
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            grep)
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">                echo &#34;test&#34; | grep &#34;test&#34; &gt;/dev/null 2&gt;&amp;1 &amp;&amp; echo &#34;  基本功能: ✓&#34; || echo &#34;  基本功能: ✗&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">                ;;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            sed)
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">                echo &#34;test&#34; | sed &#39;s/test/replace/&#39; &gt;/dev/null 2&gt;&amp;1 &amp;&amp; echo &#34;  基本功能: ✓&#34; || echo &#34;  基本功能: ✗&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">                ;;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            gawk)
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">                echo &#34;1 2 3&#34; | awk &#39;{print $1}&#39; &gt;/dev/null 2&gt;&amp;1 &amp;&amp; echo &#34;  基本功能: ✓&#34; || echo &#34;  基本功能: ✗&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">                ;;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            diff)
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">                echo &#34;test1&#34; &gt; file1.txt &amp;&amp; echo &#34;test2&#34; &gt; file2.txt
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">                diff file1.txt file2.txt &gt;/dev/null 2&gt;&amp;1 &amp;&amp; echo &#34;  基本功能: ✓&#34; || echo &#34;  基本功能: ✗&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">                rm -f file1.txt file2.txt
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">                ;;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            find)
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">                find /usr -maxdepth 1 -name bin &gt;/dev/null 2&gt;&amp;1 &amp;&amp; echo &#34;  基本功能: ✓&#34; || echo &#34;  基本功能: ✗&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">                ;;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            file)
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">                file /bin/sh &gt;/dev/null 2&gt;&amp;1 &amp;&amp; echo &#34;  基本功能: ✓&#34; || echo &#34;  基本功能: ✗&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">                ;;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            tar)
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">                echo &#34;test&#34; &gt; test.txt &amp;&amp; tar -cf test.tar test.txt &gt;/dev/null 2&gt;&amp;1 &amp;&amp; echo &#34;  基本功能: ✓&#34; || echo &#34;  基本功能: ✗&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">                rm -f test.txt test.tar
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">                ;;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            gzip)
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">                echo &#34;test&#34; &gt; test.txt &amp;&amp; gzip test.txt &amp;&amp; gunzip test.txt.gz &gt;/dev/null 2&gt;&amp;1 &amp;&amp; echo &#34;  基本功能: ✓&#34; || echo &#34;  基本功能: ✗&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">                rm -f test.txt test.txt.gz
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">                ;;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            patch)
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">                echo &#34;基本功能检查跳过&#34;  # patch需要特殊测试文件
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">                ;;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            wget)
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">                wget --version &gt;/dev/null 2&gt;&amp;1 &amp;&amp; echo &#34;  版本检查: ✓&#34; || echo &#34;  版本检查: ✗&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">                ;;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            curl)
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">                curl --version &gt;/dev/null 2&gt;&amp;1 &amp;&amp; echo &#34;  版本检查: ✓&#34; || echo &#34;  版本检查: ✗&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">                ;;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            less)
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">                echo &#34;test&#34; | less -F &gt;/dev/null 2&gt;&amp;1 &amp;&amp; echo &#34;  基本功能: ✓&#34; || echo &#34;  基本功能: ✗&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">                ;;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        esac
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        passed=$((passed + 1))
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    else
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        echo &#34;✗ 未找到&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    fi
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">done
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">echo &#34;&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">echo &#34;=== 验证结果 ===&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">echo &#34;通过: $passed/$total&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">if [ $passed -eq $total ]; then
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    echo &#34;✓ 所有基本工具都已正确安装&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    exit 0
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">else
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    echo &#34;✗ 部分工具安装失败&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    exit 1
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">fi
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">EOF</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>chmod +x $LFS/verify_basic_utils.sh
+</span></span></code></pre></div><h2 id="-常见问题">🚨 常见问题</h2>
+<h3 id="编译失败">编译失败</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># 检查常见问题：</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 1. 依赖库</span>
+</span></span><span style="display:flex;"><span>echo <span style="color:#e6db74">&#34;检查依赖...&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">for</span> tool in grep sed gawk; <span style="color:#66d9ef">do</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> <span style="color:#f92672">[</span> -x <span style="color:#e6db74">&#34;/usr/bin/</span>$tool<span style="color:#e6db74">&#34;</span> <span style="color:#f92672">]</span>; <span style="color:#66d9ef">then</span>
+</span></span><span style="display:flex;"><span>        ldd <span style="color:#e6db74">&#34;/usr/bin/</span>$tool<span style="color:#e6db74">&#34;</span> 2&gt;/dev/null <span style="color:#f92672">||</span> echo <span style="color:#e6db74">&#34;</span>$tool<span style="color:#e6db74"> 静态链接&#34;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">fi</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">done</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 2. 环境变量</span>
+</span></span><span style="display:flex;"><span>echo $PATH
+</span></span><span style="display:flex;"><span>echo $LFS_TGT
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 3. 源码完整性</span>
+</span></span><span style="display:flex;"><span>ls -la $LFS/sources/grep-* $LFS/sources/sed-*
+</span></span></code></pre></div><h3 id="功能异常">功能异常</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># 测试工具功能</span>
+</span></span><span style="display:flex;"><span>echo <span style="color:#e6db74">&#34;测试grep...&#34;</span>
+</span></span><span style="display:flex;"><span>echo <span style="color:#e6db74">&#34;hello world&#34;</span> | grep <span style="color:#e6db74">&#34;world&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>echo -e <span style="color:#e6db74">&#34;\n测试sed...&#34;</span>
+</span></span><span style="display:flex;"><span>echo <span style="color:#e6db74">&#34;hello world&#34;</span> | sed <span style="color:#e6db74">&#39;s/world/universe/&#39;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>echo -e <span style="color:#e6db74">&#34;\n测试awk...&#34;</span>
+</span></span><span style="display:flex;"><span>echo <span style="color:#e6db74">&#34;1 2 3&#34;</span> | awk <span style="color:#e6db74">&#39;{print $2}&#39;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>echo -e <span style="color:#e6db74">&#34;\n测试find...&#34;</span>
+</span></span><span style="display:flex;"><span>find /usr/bin -name <span style="color:#e6db74">&#34;grep&#34;</span> 2&gt;/dev/null
+</span></span></code></pre></div><h3 id="网络工具问题">网络工具问题</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># 测试网络工具</span>
+</span></span><span style="display:flex;"><span>echo <span style="color:#e6db74">&#34;测试wget...&#34;</span>
+</span></span><span style="display:flex;"><span>wget --version
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>echo -e <span style="color:#e6db74">&#34;\n测试curl...&#34;</span>
+</span></span><span style="display:flex;"><span>curl --version
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 测试网络连接</span>
+</span></span><span style="display:flex;"><span>echo -e <span style="color:#e6db74">&#34;\n测试网络连接...&#34;</span>
+</span></span><span style="display:flex;"><span>ping -c <span style="color:#ae81ff">1</span> 8.8.8.8 &gt;/dev/null 2&gt;&amp;<span style="color:#ae81ff">1</span> <span style="color:#f92672">&amp;&amp;</span> echo <span style="color:#e6db74">&#34;网络连接正常&#34;</span> <span style="color:#f92672">||</span> echo <span style="color:#e6db74">&#34;网络连接异常&#34;</span>
+</span></span></code></pre></div><h2 id="-工具统计">📊 工具统计</h2>
+<h3 id="工具大小统计">工具大小统计</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># 统计工具大小</span>
+</span></span><span style="display:flex;"><span>echo <span style="color:#e6db74">&#34;=== 基本工具大小统计 ===&#34;</span>
+</span></span><span style="display:flex;"><span>echo <span style="color:#e6db74">&#34;工具 | 大小&#34;</span>
+</span></span><span style="display:flex;"><span>echo <span style="color:#e6db74">&#34;----|-----&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">for</span> tool in grep sed gawk diff find file tar gzip patch wget curl less; <span style="color:#66d9ef">do</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> <span style="color:#f92672">[</span> -x <span style="color:#e6db74">&#34;/usr/bin/</span>$tool<span style="color:#e6db74">&#34;</span> <span style="color:#f92672">]</span>; <span style="color:#66d9ef">then</span>
+</span></span><span style="display:flex;"><span>        size<span style="color:#f92672">=</span><span style="color:#66d9ef">$(</span>ls -lh <span style="color:#e6db74">&#34;/usr/bin/</span>$tool<span style="color:#e6db74">&#34;</span> | awk <span style="color:#e6db74">&#39;{print $5}&#39;</span><span style="color:#66d9ef">)</span>
+</span></span><span style="display:flex;"><span>        printf <span style="color:#e6db74">&#34;%-8s | %s\n&#34;</span> <span style="color:#e6db74">&#34;</span>$tool<span style="color:#e6db74">&#34;</span> <span style="color:#e6db74">&#34;</span>$size<span style="color:#e6db74">&#34;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">fi</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">done</span>
+</span></span></code></pre></div><h2 id="-相关资源">📚 相关资源</h2>
+<ul>
+<li><a href="http://www.linuxfromscratch.org/lfs/view/stable/chapter06/chapter06.html">LFS官方文档 - 基本工具</a></li>
+<li><a href="https://www.gnu.org/software/">GNU工具文档</a></li>
+<li><a href="https://curl.se/docs/">网络工具文档</a></li>
+</ul>
+<hr>
+<p><em>最近更新: {{ .Lastmod.Format &ldquo;2006-01-02&rdquo; }}</em></p>
+</div>
+    
+<nav class="pager" aria-label="文章导航">
+  
+  <a href="/wiki/lfs/basic-system/system-tools/" data-press>
+    <span class="dir">← 上一篇</span>系统配置工具
+  </a>
+  
+  
+  <a href="/wiki/lfs/basic-system/core-components/" class="is-next" data-press>
+    <span class="dir">下一篇 →</span>核心系统组件
+  </a>
+  
+</nav>
+
+
+    
+
+  </article>
+  
+</div>
+
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+      <div class="footer-links">
+        
+        <a href="https://github.com/makkichan947" target="_blank" rel="noopener" title="Github" data-press>Github</a>
+        
+        <a href="mailto:yakumakki947@hotmail.com" target="_blank" rel="noopener" title="Email" data-press>Email</a>
+        
+        <a href="https://x.com/Makki_Yaku947" target="_blank" rel="noopener" title="Twitter" data-press>Twitter</a>
+        
+        <a href="https://www.twitch.tv/u/makkichan947" target="_blank" rel="noopener" title="Twitch" data-press>Twitch</a>
+        
+      </div>
+      <p>&copy; 2026 Yaku Makki</p>
+      <p>Powered by <a href="https://gohugo.io" target="_blank" rel="noopener">Hugo</a> · Makki Theme</p>
+      
+      <div class="stats">
+        <span>访客 <span id="busuanzi_value_site_uv"></span></span>
+        <span>访问 <span id="busuanzi_value_site_pv"></span></span>
+        <span>本页 <span id="busuanzi_value_page_pv"></span></span>
+      </div>
+      
+    </div>
+  </footer>
+
+  <button class="back-to-top" id="back-to-top" type="button" aria-label="回到顶部" data-press>
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 19V5"/><path d="M5 12l7-7 7 7"/></svg>
+  </button>
+
+  
+  <script src="/js/main.min.2e977141114ec7890ffee2c35e08034683543cfe8ef98dd4af5effb3b37a3345.js" integrity="sha256-LpdxQRFOx4kP/uLDXggDRoNUPP6O&#43;Y3Ur17/s7N6M0U=" defer></script>
+  
+  
+  <script src="/js/search.min.b2d6ba6610ce24454bc1436dc521dcfd878b2583ad9f65f77aadedaaa1e1a54c.js" integrity="sha256-sta6ZhDOJEVLwUNtxSHc/YeLJYOtn2X3eq3tqqHhpUw=" defer></script>
+  
+
+  
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+  
+
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/katex.min.js" crossorigin="anonymous"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/contrib/auto-render.min.js" crossorigin="anonymous"></script>
+</body>
+</html>

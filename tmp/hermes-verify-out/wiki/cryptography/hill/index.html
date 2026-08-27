@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>希尔密码详解 · Yaku Makki</title>
+  <meta name="description" content="个人小巢">
+  <meta name="theme-color" content="#0a0a0f">
+  <script>document.documentElement.classList.add('js');</script>
+
+  <link rel="icon" href="/avatar/avatar.jpg" type="image/jpeg">
+
+  
+  <link rel="stylesheet" href="/css/main.min.b64e4527cc255b367461135391e39e321a5d86fc97defca99c7afda308ada007.css" integrity="sha256-tk5FJ8wlWzZ0YRNTkeOeMhpdhvyX3vypnHr9owitoAc=">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/katex.min.css" crossorigin="anonymous">
+</head>
+<body>
+  <a class="skip-link" href="#main">跳到内容</a>
+
+  <div class="scene" aria-hidden="true">
+    <div class="scene-sky"></div>
+    <div class="scene-stars"></div>
+    <div class="scene-sun-halo"></div>
+    <div class="scene-sun"></div>
+    <div class="scene-mountains scene-mountains-far"></div>
+    <div class="scene-mountains scene-mountains-near"></div>
+    <div class="scene-horizon"></div>
+    <div class="scene-floor"></div>
+    <div class="scene-scanlines"></div>
+  </div>
+
+  <nav class="navbar" aria-label="主导航">
+    <div class="nav-inner">
+      <a class="logo" href="/" data-press>
+        <img class="logo-avatar" src="/avatar/avatar.jpg" alt="" width="34" height="34">
+        <span class="logo-text">Yaku Makki</span>
+      </a>
+      <div class="nav-menu-wrap">
+        <span class="nav-tick" aria-hidden="true"></span>
+        <ul class="nav-menu">
+          
+          <li>
+            <a href="/" data-press>首页</a>
+          </li>
+          
+          <li>
+            <a href="/post/" data-press>博客</a>
+          </li>
+          
+          <li>
+            <a href="/wiki/" data-press>维基</a>
+          </li>
+          
+          <li>
+            <a href="/tags/" data-press>标签</a>
+          </li>
+          
+          <li>
+            <a href="/about/" data-press>关于</a>
+          </li>
+          
+          
+          <li>
+            <button id="search-toggle" class="search-toggle" type="button" title="搜索 (Ctrl+K 或 /)" aria-haspopup="dialog" aria-expanded="false" data-press>搜索</button>
+          </li>
+          
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  
+  <div class="sheet-scrim" id="sheet-scrim"></div>
+  <section class="sheet" id="search-sheet" role="dialog" aria-modal="true" aria-label="搜索" aria-hidden="true">
+    <div class="sheet-panel" id="sheet-panel">
+      <div class="sheet-handle" id="sheet-handle" role="presentation" aria-hidden="true"></div>
+      <div class="sheet-body">
+        <div class="search-field">
+          <input id="search-input" type="search" placeholder="搜索文章和 Wiki…"
+                 autocomplete="off" spellcheck="false" aria-controls="search-results">
+          <span class="search-key" aria-hidden="true">/</span>
+        </div>
+        <div id="search-results" class="search-results" role="listbox" aria-label="搜索结果"></div>
+      </div>
+    </div>
+  </section>
+  
+
+  <main class="main" id="main">
+    
+<header class="page-head">
+  <nav class="crumb" aria-label="面包屑">
+    <a href="/" data-press>首页</a>
+    <span class="sep">/</span>
+    <a href="/wiki/" data-press>维基</a>
+    
+    
+    <span class="sep">/</span>
+    <a href="/wiki/cryptography/" data-press>密码学基础</a>
+    
+    
+  </nav>
+  <h1>希尔密码详解</h1>
+  
+</header>
+
+<div class="wiki-layout">
+  <article class="article">
+    <div class="article-content"><h1 id="希尔密码详解">希尔密码详解</h1>
+<p>希尔密码（Hill Cipher）是一种基于线性代数的多字母替换密码，由Lester S. Hill于1929年发明，是第一个真正意义上的多字母密码系统。</p>
+<h2 id="数学基础">数学基础</h2>
+<h3 id="线性代数基础">线性代数基础</h3>
+<p>希尔密码基于矩阵理论和模运算：</p>
+<p>设明文分组为向量 $\mathbf{p} = \begin{pmatrix} p_1 \ p_2 \ \vdots \ p_n \end{pmatrix}$
+密钥矩阵为 $K_{n \times n}$
+密文向量 $\mathbf{c} = K \mathbf{p} \mod 26$</p>
+<h2 id="密钥矩阵要求">密钥矩阵要求</h2>
+<h3 id="可逆性条件">可逆性条件</h3>
+<p>密钥矩阵必须在模26下可逆：</p>
+<p>$$\det(K) \not\equiv 0 \pmod{26}$$
+$$\gcd(\det(K), 26) = 1$$</p>
+<h2 id="加密过程">加密过程</h2>
+<h3 id="明文分组">明文分组</h3>
+<p>将明文分成n个字母一组。</p>
+<h3 id="向量表示">向量表示</h3>
+<p>转换为数字向量：</p>
+<pre tabindex="0"><code>H=7, E=4  →  [7, 4]
+L=11, L=11 → [11, 11]
+</code></pre><h3 id="矩阵乘法">矩阵乘法</h3>
+<p>设密钥矩阵 $K = \begin{pmatrix} a &amp; b \ c &amp; d \end{pmatrix}$</p>
+<p>密文计算：
+$$\begin{pmatrix} c_1 \ c_2 \end{pmatrix} = \begin{pmatrix} a &amp; b \ c &amp; d \end{pmatrix} \begin{pmatrix} p_1 \ p_2 \end{pmatrix} \mod 26$$</p>
+<h2 id="密码分析">密码分析</h2>
+<h3 id="已知明文攻击">已知明文攻击</h3>
+<p>如果攻击者获得足够多的明密文对，可以求解线性方程组。</p>
+<h3 id="唯密文攻击">唯密文攻击</h3>
+<p>希尔密码可以抵抗唯密文攻击，但存在线性性质弱点。</p>
+<h2 id="编程实现">编程实现</h2>
+<h3 id="python实现">Python实现</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#f92672">import</span> numpy <span style="color:#66d9ef">as</span> np
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">class</span> <span style="color:#a6e22e">HillCipher</span>:
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">__init__</span>(self, key_matrix):
+</span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>K <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>array(key_matrix)
+</span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>n <span style="color:#f92672">=</span> self<span style="color:#f92672">.</span>K<span style="color:#f92672">.</span>shape[<span style="color:#ae81ff">0</span>]
+</span></span><span style="display:flex;"><span>        
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e"># 验证矩阵可逆性</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> <span style="color:#f92672">not</span> self<span style="color:#f92672">.</span>is_invertible():
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">raise</span> <span style="color:#a6e22e">ValueError</span>(<span style="color:#e6db74">&#34;密钥矩阵不可逆&#34;</span>)
+</span></span><span style="display:flex;"><span>        
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e"># 计算逆矩阵</span>
+</span></span><span style="display:flex;"><span>        self<span style="color:#f92672">.</span>K_inv <span style="color:#f92672">=</span> self<span style="color:#f92672">.</span>matrix_inverse()
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">is_invertible</span>(self):
+</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#34;&#34;&#34;检查矩阵在模26下是否可逆&#34;&#34;&#34;</span>
+</span></span><span style="display:flex;"><span>        det <span style="color:#f92672">=</span> int(np<span style="color:#f92672">.</span>round(np<span style="color:#f92672">.</span>linalg<span style="color:#f92672">.</span>det(self<span style="color:#f92672">.</span>K)))
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> self<span style="color:#f92672">.</span>gcd(det <span style="color:#f92672">%</span> <span style="color:#ae81ff">26</span>, <span style="color:#ae81ff">26</span>) <span style="color:#f92672">==</span> <span style="color:#ae81ff">1</span>
+</span></span><span style="display:flex;"><span>    
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">def</span> <span style="color:#a6e22e">matrix_inverse</span>(self):
+</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#34;&#34;&#34;计算模26下的逆矩阵&#34;&#34;&#34;</span>
+</span></span><span style="display:flex;"><span>        det <span style="color:#f92672">=</span> int(np<span style="color:#f92672">.</span>round(np<span style="color:#f92672">.</span>linalg<span style="color:#f92672">.</span>det(self<span style="color:#f92672">.</span>K)))
+</span></span><span style="display:flex;"><span>        det_inv <span style="color:#f92672">=</span> self<span style="color:#f92672">.</span>mod_inverse(det <span style="color:#f92672">%</span> <span style="color:#ae81ff">26</span>, <span style="color:#ae81ff">26</span>)
+</span></span><span style="display:flex;"><span>        
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e"># 伴随矩阵</span>
+</span></span><span style="display:flex;"><span>        adjugate <span style="color:#f92672">=</span> np<span style="color:#f92672">.</span>round(np<span style="color:#f92672">.</span>linalg<span style="color:#f92672">.</span>inv(self<span style="color:#f92672">.</span>K) <span style="color:#f92672">*</span> det)<span style="color:#f92672">.</span>astype(int)
+</span></span><span style="display:flex;"><span>        
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e"># 模26逆矩阵</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> (det_inv <span style="color:#f92672">*</span> adjugate) <span style="color:#f92672">%</span> <span style="color:#ae81ff">26</span>
+</span></span></code></pre></div><h2 id="历史意义">历史意义</h2>
+<p>希尔密码标志着密码学从手工时代向数学时代的转变。</p>
+<h2 id="现代应用">现代应用</h2>
+<p>主要用于教育目的，帮助理解线性代数在密码学中的应用。</p>
+</div>
+    
+<nav class="pager" aria-label="文章导航">
+  
+  <a href="/wiki/cryptography/enigma/" data-press>
+    <span class="dir">← 上一篇</span>Enigma机详解
+  </a>
+  
+  
+  <a href="/wiki/cryptography/vigenere/" class="is-next" data-press>
+    <span class="dir">下一篇 →</span>维吉尼亚密码详解
+  </a>
+  
+</nav>
+
+
+    
+<div class="comments">
+  <h2 class="comments-title">评论</h2>
+  <div id="utterances"></div>
+  <script>
+    (function () {
+      if (window.location.protocol === 'file:') return;
+      var s = document.createElement('script');
+      s.src = 'https://utteranc.es/client.js';
+      s.async = true;
+      s.setAttribute('repo', "makkichan947/makkichan947.github.io");
+      s.setAttribute('issue-term', "pathname");
+      s.setAttribute('theme', "github-dark");
+      s.setAttribute('crossorigin', 'anonymous');
+      document.getElementById('utterances').appendChild(s);
+    })();
+  </script>
+</div>
+
+
+  </article>
+  
+</div>
+
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+      <div class="footer-links">
+        
+        <a href="https://github.com/makkichan947" target="_blank" rel="noopener" title="Github" data-press>Github</a>
+        
+        <a href="mailto:yakumakki947@hotmail.com" target="_blank" rel="noopener" title="Email" data-press>Email</a>
+        
+        <a href="https://x.com/Makki_Yaku947" target="_blank" rel="noopener" title="Twitter" data-press>Twitter</a>
+        
+        <a href="https://www.twitch.tv/u/makkichan947" target="_blank" rel="noopener" title="Twitch" data-press>Twitch</a>
+        
+      </div>
+      <p>&copy; 2026 Yaku Makki</p>
+      <p>Powered by <a href="https://gohugo.io" target="_blank" rel="noopener">Hugo</a> · Makki Theme</p>
+      
+      <div class="stats">
+        <span>访客 <span id="busuanzi_value_site_uv"></span></span>
+        <span>访问 <span id="busuanzi_value_site_pv"></span></span>
+        <span>本页 <span id="busuanzi_value_page_pv"></span></span>
+      </div>
+      
+    </div>
+  </footer>
+
+  <button class="back-to-top" id="back-to-top" type="button" aria-label="回到顶部" data-press>
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 19V5"/><path d="M5 12l7-7 7 7"/></svg>
+  </button>
+
+  
+  <script src="/js/main.min.2e977141114ec7890ffee2c35e08034683543cfe8ef98dd4af5effb3b37a3345.js" integrity="sha256-LpdxQRFOx4kP/uLDXggDRoNUPP6O&#43;Y3Ur17/s7N6M0U=" defer></script>
+  
+  
+  <script src="/js/search.min.b2d6ba6610ce24454bc1436dc521dcfd878b2583ad9f65f77aadedaaa1e1a54c.js" integrity="sha256-sta6ZhDOJEVLwUNtxSHc/YeLJYOtn2X3eq3tqqHhpUw=" defer></script>
+  
+
+  
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+  
+
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/katex.min.js" crossorigin="anonymous"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/contrib/auto-render.min.js" crossorigin="anonymous"></script>
+</body>
+</html>

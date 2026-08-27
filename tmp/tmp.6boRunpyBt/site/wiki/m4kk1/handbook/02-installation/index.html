@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>第 2 章 安装与运行 · Yaku Makki</title>
+  <meta name="description" content="构建环境、编译与 QEMU 运行">
+  <meta name="theme-color" content="#0a0a0f">
+  <script>document.documentElement.classList.add('js');</script>
+
+  <link rel="icon" href="/avatar/avatar.jpg" type="image/jpeg">
+
+  
+  <link rel="stylesheet" href="/css/main.min.b64e4527cc255b367461135391e39e321a5d86fc97defca99c7afda308ada007.css" integrity="sha256-tk5FJ8wlWzZ0YRNTkeOeMhpdhvyX3vypnHr9owitoAc=">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/katex.min.css" crossorigin="anonymous">
+</head>
+<body>
+  <a class="skip-link" href="#main">跳到内容</a>
+
+  <div class="scene" aria-hidden="true">
+    <div class="scene-sky"></div>
+    <div class="scene-stars"></div>
+    <div class="scene-sun-halo"></div>
+    <div class="scene-sun"></div>
+    <div class="scene-mountains scene-mountains-far"></div>
+    <div class="scene-mountains scene-mountains-near"></div>
+    <div class="scene-horizon"></div>
+    <div class="scene-floor"></div>
+    <div class="scene-scanlines"></div>
+  </div>
+
+  <nav class="navbar" aria-label="主导航">
+    <div class="nav-inner">
+      <a class="logo" href="/" data-press>
+        <img class="logo-avatar" src="/avatar/avatar.jpg" alt="" width="34" height="34">
+        <span class="logo-text">Yaku Makki</span>
+      </a>
+      <div class="nav-menu-wrap">
+        <span class="nav-tick" aria-hidden="true"></span>
+        <ul class="nav-menu">
+          
+          <li>
+            <a href="/" data-press>首页</a>
+          </li>
+          
+          <li>
+            <a href="/post/" data-press>博客</a>
+          </li>
+          
+          <li>
+            <a href="/wiki/" data-press>维基</a>
+          </li>
+          
+          <li>
+            <a href="/tags/" data-press>标签</a>
+          </li>
+          
+          <li>
+            <a href="/about/" data-press>关于</a>
+          </li>
+          
+          
+          <li>
+            <button id="search-toggle" class="search-toggle" type="button" title="搜索 (Ctrl+K 或 /)" aria-haspopup="dialog" aria-expanded="false" data-press>搜索</button>
+          </li>
+          
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  
+  <div class="sheet-scrim" id="sheet-scrim"></div>
+  <section class="sheet" id="search-sheet" role="dialog" aria-modal="true" aria-label="搜索" aria-hidden="true">
+    <div class="sheet-panel" id="sheet-panel">
+      <div class="sheet-handle" id="sheet-handle" role="presentation" aria-hidden="true"></div>
+      <div class="sheet-body">
+        <div class="search-field">
+          <input id="search-input" type="search" placeholder="搜索文章和 Wiki…"
+                 autocomplete="off" spellcheck="false" aria-controls="search-results">
+          <span class="search-key" aria-hidden="true">/</span>
+        </div>
+        <div id="search-results" class="search-results" role="listbox" aria-label="搜索结果"></div>
+      </div>
+    </div>
+  </section>
+  
+
+  <main class="main" id="main">
+    
+<header class="page-head">
+  <nav class="crumb" aria-label="面包屑">
+    <a href="/" data-press>首页</a>
+    <span class="sep">/</span>
+    <a href="/wiki/" data-press>维基</a>
+    
+    
+    <span class="sep">/</span>
+    <a href="/wiki/m4kk1/handbook/" data-press>系统手册</a>
+    
+    
+  </nav>
+  <h1>第 2 章 安装与运行</h1>
+  <p>构建环境、编译与 QEMU 运行</p>
+</header>
+
+<div class="wiki-layout">
+  <article class="article">
+    <div class="article-content"><h2 id="21-环境要求">2.1 环境要求</h2>
+<table>
+	<thead>
+			<tr>
+					<th>工具</th>
+					<th>版本要求</th>
+					<th>用途</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>GCC</td>
+					<td>支持 <code>-m32</code></td>
+					<td>编译 C 代码</td>
+			</tr>
+			<tr>
+					<td>NASM</td>
+					<td>≥ 2.0</td>
+					<td>汇编入口和 GDT/IDT</td>
+			</tr>
+			<tr>
+					<td>GNU ld</td>
+					<td>支持 <code>-m elf_i386</code></td>
+					<td>链接内核和 ELF</td>
+			</tr>
+			<tr>
+					<td>grub-mkrescue</td>
+					<td>GRUB 2.0+</td>
+					<td>创建可引导 ISO</td>
+			</tr>
+			<tr>
+					<td>QEMU</td>
+					<td>≥ 4.0</td>
+					<td>模拟运行和测试</td>
+			</tr>
+			<tr>
+					<td>xxd</td>
+					<td>任意</td>
+					<td>二进制到 C 数组转换</td>
+			</tr>
+	</tbody>
+</table>
+<h3 id="ubuntudebian-安装">Ubuntu/Debian 安装</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>sudo apt install build-essential nasm grub-pc-bin grub-common <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span>                 xorriso qemu-system-x86 xxd
+</span></span></code></pre></div><h2 id="22-构建">2.2 构建</h2>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>git clone https://github.com/makkichan947/M4KK1.git
+</span></span><span style="display:flex;"><span>cd M4KK1
+</span></span><span style="display:flex;"><span>bash tools/build/build_krn.sh
+</span></span></code></pre></div><p>构建过程：</p>
+<ol>
+<li>读取 <code>VERSION</code> 文件</li>
+<li>编译内核 C 源文件（<code>-m32 -ffreestanding -nostdlib</code>）</li>
+<li>汇编 NASM 入口文件</li>
+<li>构建 M4SH 用户空间 ELF</li>
+<li>构建 Login ELF 和 Init ELF</li>
+<li>通过 <code>xxd -i</code> 将 ELF 嵌入内核</li>
+<li>链接生成 <code>m4kk1.krn</code></li>
+<li>通过 <code>grub-mkrescue</code> 创建可引导 ISO</li>
+</ol>
+<h2 id="23-在-qemu-中运行">2.3 在 QEMU 中运行</h2>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>qemu-system-x86_64 -cdrom m4kk1-test.iso -serial stdio
+</span></span></code></pre></div><blockquote>
+<p>虽然 QEMU 使用 x86_64 系统配置，但内核本身是 32-bit i386。</p>
+</blockquote>
+<h3 id="调试模式">调试模式</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>qemu-system-x86_64 -cdrom m4kk1-test.iso -serial stdio -d cpu_reset
+</span></span></code></pre></div><p>QEMU 监控快捷键：<code>Ctrl+Alt+2</code></p>
+<h2 id="24-启动后操作">2.4 启动后操作</h2>
+<p>系统启动后显示登录提示：</p>
+<pre tabindex="0"><code>M4KK1 login: root
+Password: 123456
+</code></pre><p>默认用户：<code>root</code>，默认密码：<code>123456</code></p>
+<h2 id="25-输出产物">2.5 输出产物</h2>
+<table>
+	<thead>
+			<tr>
+					<th>产物</th>
+					<th>路径</th>
+					<th>大小</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>内核二进制</td>
+					<td><code>m4kk1.krn</code></td>
+					<td>~680 KB</td>
+			</tr>
+			<tr>
+					<td>M4SH ELF</td>
+					<td><code>m4sh/m4sh.elf</code></td>
+					<td>~290 KB</td>
+			</tr>
+			<tr>
+					<td>ISO</td>
+					<td><code>iso/m4kk1_*.iso</code></td>
+					<td>~33 MB</td>
+			</tr>
+	</tbody>
+</table>
+<h2 id="26-常见问题">2.6 常见问题</h2>
+<h3 id="-m32-不支持"><code>-m32</code> 不支持</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>sudo apt install gcc-multilib
+</span></span></code></pre></div><h3 id="qemu-无串口输出">QEMU 无串口输出</h3>
+<p>确保使用 <code>-serial stdio</code> 参数。</p>
+<h3 id="内核启动时-panic">内核启动时 Panic</h3>
+<p>检查 <code>sys/src/init/linker.ld</code> 中的内存布局，确保堆和栈不重叠。</p>
+</div>
+    
+<nav class="pager" aria-label="文章导航">
+  
+  <a href="/wiki/m4kk1/handbook/03-basics/" data-press>
+    <span class="dir">← 上一篇</span>第 3 章 基础使用
+  </a>
+  
+  
+  <a href="/wiki/m4kk1/handbook/01-introduction/" class="is-next" data-press>
+    <span class="dir">下一篇 →</span>第 1 章 引言
+  </a>
+  
+</nav>
+
+
+    
+<div class="comments">
+  <h2 class="comments-title">评论</h2>
+  <div id="utterances"></div>
+  <script>
+    (function () {
+      if (window.location.protocol === 'file:') return;
+      var s = document.createElement('script');
+      s.src = 'https://utteranc.es/client.js';
+      s.async = true;
+      s.setAttribute('repo', "makkichan947/makkichan947.github.io");
+      s.setAttribute('issue-term', "pathname");
+      s.setAttribute('theme', "github-dark");
+      s.setAttribute('crossorigin', 'anonymous');
+      document.getElementById('utterances').appendChild(s);
+    })();
+  </script>
+</div>
+
+
+  </article>
+  
+  <aside class="toc" aria-label="目录">
+    <p class="toc-title">目录</p>
+    <nav id="TableOfContents">
+  <ul>
+    <li><a href="#21-环境要求">2.1 环境要求</a>
+      <ul>
+        <li><a href="#ubuntudebian-安装">Ubuntu/Debian 安装</a></li>
+      </ul>
+    </li>
+    <li><a href="#22-构建">2.2 构建</a></li>
+    <li><a href="#23-在-qemu-中运行">2.3 在 QEMU 中运行</a>
+      <ul>
+        <li><a href="#调试模式">调试模式</a></li>
+      </ul>
+    </li>
+    <li><a href="#24-启动后操作">2.4 启动后操作</a></li>
+    <li><a href="#25-输出产物">2.5 输出产物</a></li>
+    <li><a href="#26-常见问题">2.6 常见问题</a>
+      <ul>
+        <li><a href="#-m32-不支持"><code>-m32</code> 不支持</a></li>
+        <li><a href="#qemu-无串口输出">QEMU 无串口输出</a></li>
+        <li><a href="#内核启动时-panic">内核启动时 Panic</a></li>
+      </ul>
+    </li>
+  </ul>
+</nav>
+  </aside>
+  
+</div>
+
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+      <div class="footer-links">
+        
+        <a href="https://github.com/makkichan947" target="_blank" rel="noopener" title="Github" data-press>Github</a>
+        
+        <a href="mailto:yakumakki947@hotmail.com" target="_blank" rel="noopener" title="Email" data-press>Email</a>
+        
+        <a href="https://x.com/Makki_Yaku947" target="_blank" rel="noopener" title="Twitter" data-press>Twitter</a>
+        
+        <a href="https://www.twitch.tv/u/makkichan947" target="_blank" rel="noopener" title="Twitch" data-press>Twitch</a>
+        
+      </div>
+      <p>&copy; 2026 Yaku Makki</p>
+      <p>Powered by <a href="https://gohugo.io" target="_blank" rel="noopener">Hugo</a> · Makki Theme</p>
+      
+      <div class="stats">
+        <span>访客 <span id="busuanzi_value_site_uv"></span></span>
+        <span>访问 <span id="busuanzi_value_site_pv"></span></span>
+        <span>本页 <span id="busuanzi_value_page_pv"></span></span>
+      </div>
+      
+    </div>
+  </footer>
+
+  <button class="back-to-top" id="back-to-top" type="button" aria-label="回到顶部" data-press>
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 19V5"/><path d="M5 12l7-7 7 7"/></svg>
+  </button>
+
+  
+  <script src="/js/main.min.2e977141114ec7890ffee2c35e08034683543cfe8ef98dd4af5effb3b37a3345.js" integrity="sha256-LpdxQRFOx4kP/uLDXggDRoNUPP6O&#43;Y3Ur17/s7N6M0U=" defer></script>
+  
+  
+  <script src="/js/search.min.b2d6ba6610ce24454bc1436dc521dcfd878b2583ad9f65f77aadedaaa1e1a54c.js" integrity="sha256-sta6ZhDOJEVLwUNtxSHc/YeLJYOtn2X3eq3tqqHhpUw=" defer></script>
+  
+
+  
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+  
+
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/katex.min.js" crossorigin="anonymous"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/contrib/auto-render.min.js" crossorigin="anonymous"></script>
+</body>
+</html>

@@ -1,0 +1,539 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>第 5 章 内核 · Yaku Makki</title>
+  <meta name="description" content="Y4KU 宏内核：进程、系统调用、定时器、内存与信号">
+  <meta name="theme-color" content="#0a0a0f">
+  <script>document.documentElement.classList.add('js');</script>
+
+  <link rel="icon" href="/avatar/avatar.jpg" type="image/jpeg">
+
+  
+  <link rel="stylesheet" href="/css/main.min.b64e4527cc255b367461135391e39e321a5d86fc97defca99c7afda308ada007.css" integrity="sha256-tk5FJ8wlWzZ0YRNTkeOeMhpdhvyX3vypnHr9owitoAc=">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/katex.min.css" crossorigin="anonymous">
+</head>
+<body>
+  <a class="skip-link" href="#main">跳到内容</a>
+
+  <div class="scene" aria-hidden="true">
+    <div class="scene-sky"></div>
+    <div class="scene-stars"></div>
+    <div class="scene-sun-halo"></div>
+    <div class="scene-sun"></div>
+    <div class="scene-mountains scene-mountains-far"></div>
+    <div class="scene-mountains scene-mountains-near"></div>
+    <div class="scene-horizon"></div>
+    <div class="scene-floor"></div>
+    <div class="scene-scanlines"></div>
+  </div>
+
+  <nav class="navbar" aria-label="主导航">
+    <div class="nav-inner">
+      <a class="logo" href="/" data-press>
+        <img class="logo-avatar" src="/avatar/avatar.jpg" alt="" width="34" height="34">
+        <span class="logo-text">Yaku Makki</span>
+      </a>
+      <div class="nav-menu-wrap">
+        <span class="nav-tick" aria-hidden="true"></span>
+        <ul class="nav-menu">
+          
+          <li>
+            <a href="/" data-press>首页</a>
+          </li>
+          
+          <li>
+            <a href="/post/" data-press>博客</a>
+          </li>
+          
+          <li>
+            <a href="/wiki/" data-press>维基</a>
+          </li>
+          
+          <li>
+            <a href="/tags/" data-press>标签</a>
+          </li>
+          
+          <li>
+            <a href="/about/" data-press>关于</a>
+          </li>
+          
+          
+          <li>
+            <button id="search-toggle" class="search-toggle" type="button" title="搜索 (Ctrl+K 或 /)" aria-haspopup="dialog" aria-expanded="false" data-press>搜索</button>
+          </li>
+          
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  
+  <div class="sheet-scrim" id="sheet-scrim"></div>
+  <section class="sheet" id="search-sheet" role="dialog" aria-modal="true" aria-label="搜索" aria-hidden="true">
+    <div class="sheet-panel" id="sheet-panel">
+      <div class="sheet-handle" id="sheet-handle" role="presentation" aria-hidden="true"></div>
+      <div class="sheet-body">
+        <div class="search-field">
+          <input id="search-input" type="search" placeholder="搜索文章和 Wiki…"
+                 autocomplete="off" spellcheck="false" aria-controls="search-results">
+          <span class="search-key" aria-hidden="true">/</span>
+        </div>
+        <div id="search-results" class="search-results" role="listbox" aria-label="搜索结果"></div>
+      </div>
+    </div>
+  </section>
+  
+
+  <main class="main" id="main">
+    
+<header class="page-head">
+  <nav class="crumb" aria-label="面包屑">
+    <a href="/" data-press>首页</a>
+    <span class="sep">/</span>
+    <a href="/wiki/" data-press>维基</a>
+    
+    
+    <span class="sep">/</span>
+    <a href="/wiki/m4kk1/handbook/" data-press>系统手册</a>
+    
+    
+  </nav>
+  <h1>第 5 章 内核</h1>
+  <p>Y4KU 宏内核：进程、系统调用、定时器、内存与信号</p>
+</header>
+
+<div class="wiki-layout">
+  <article class="article">
+    <div class="article-content"><h2 id="51-内核概述">5.1 内核概述</h2>
+<p>Y4KU 是 M4KK1 的宏内核，运行于 i386 保护模式。</p>
+<table>
+	<thead>
+			<tr>
+					<th>属性</th>
+					<th>值</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>名称</td>
+					<td>Y4KU (Yaku Kernel Universe)</td>
+			</tr>
+			<tr>
+					<td>架构</td>
+					<td>i386 (32-bit x86)</td>
+			</tr>
+			<tr>
+					<td>引导</td>
+					<td>GRUB multiboot</td>
+			</tr>
+			<tr>
+					<td>语言</td>
+					<td>Freestanding C + NASM 汇编</td>
+			</tr>
+			<tr>
+					<td>内存模型</td>
+					<td>单地址空间（无 MMU）</td>
+			</tr>
+			<tr>
+					<td>特权级</td>
+					<td>全部 Ring 0</td>
+			</tr>
+			<tr>
+					<td>调度频率</td>
+					<td>PIT 定时器 1000 Hz</td>
+			</tr>
+	</tbody>
+</table>
+<h3 id="源代码结构">源代码结构</h3>
+<pre tabindex="0"><code>sys/src/
+├── kernel/        # 内核核心 (kmain.c, process.c, syscall.c, signal.c, ...)
+├── arch/m4kk1/    # 架构相关 (gdt.c, idt.c, timer.c)
+├── drivers/       # 驱动 (console.c)
+├── fs/            # 文件系统 (vfs.c, procfs.c, yafs/)
+├── mm/            # 内存管理 (memory.c)
+├── lib/           # 工具库 (string.c, debug.c)
+└── include/       # 头文件
+</code></pre><h2 id="52-进程模型">5.2 进程模型</h2>
+<h3 id="进程控制块">进程控制块</h3>
+<p>每个进程由 <code>mkrn_process_t</code> 表示，包含 PID、PPID、状态标签位掩码、寄存器上下文、文件描述符表等。</p>
+<h3 id="状态标签-state-tag">状态标签 (State Tag)</h3>
+<p>使用 <code>uint64_t</code> 位掩码表示进程状态，支持组合状态：</p>
+<table>
+	<thead>
+			<tr>
+					<th>标签</th>
+					<th>位</th>
+					<th>说明</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td><code>SCHED_READY</code></td>
+					<td>0</td>
+					<td>就绪</td>
+			</tr>
+			<tr>
+					<td><code>SCHED_RUNNING</code></td>
+					<td>1</td>
+					<td>运行中</td>
+			</tr>
+			<tr>
+					<td><code>SCHED_SLEEPING</code></td>
+					<td>2</td>
+					<td>睡眠</td>
+			</tr>
+			<tr>
+					<td><code>WAIT_FS</code></td>
+					<td>8</td>
+					<td>等待文件系统</td>
+			</tr>
+			<tr>
+					<td><code>WAIT_PIPE</code></td>
+					<td>9</td>
+					<td>等待管道</td>
+			</tr>
+			<tr>
+					<td><code>WAIT_TIMER</code></td>
+					<td>10</td>
+					<td>等待定时器</td>
+			</tr>
+			<tr>
+					<td><code>ZOMBIE</code></td>
+					<td>12</td>
+					<td>僵尸进程</td>
+			</tr>
+	</tbody>
+</table>
+<h3 id="进程生命周期">进程生命周期</h3>
+<pre tabindex="0"><code>创建 → 就绪 → 运行 → 睡眠/停止 → 就绪 → 退出 → 僵尸
+</code></pre><h3 id="调度器">调度器</h3>
+<p>协作式轮转调度，遍历进程列表选择第一个 <code>SCHED_READY</code> 进程运行。</p>
+<h2 id="53-系统调用">5.3 系统调用</h2>
+<p>M4KK1 支持两套系统调用 ABI：</p>
+<h3 id="int-0x80兼容路径">int 0x80（兼容路径）</h3>
+<pre tabindex="0"><code>%eax = 系统调用号, %ebx/%ecx/%edx = 参数
+返回值: %eax
+</code></pre><h3 id="int-0x4dm4kk1-原生路径">int 0x4D（M4KK1 原生路径）</h3>
+<p>系统调用号格式: <code>0x4D00XXXX</code></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-c" data-lang="c"><span style="display:flex;"><span><span style="color:#75715e">// 包装函数
+</span></span></span><span style="display:flex;"><span><span style="color:#a6e22e">m4k_sc0</span>(n)          <span style="color:#75715e">// 0 参数
+</span></span></span><span style="display:flex;"><span><span style="color:#a6e22e">m4k_sc1</span>(n, a)       <span style="color:#75715e">// 1 参数
+</span></span></span><span style="display:flex;"><span><span style="color:#a6e22e">m4k_sc2</span>(n, a, b)    <span style="color:#75715e">// 2 参数
+</span></span></span><span style="display:flex;"><span><span style="color:#a6e22e">m4k_sc3</span>(n, a, b, c) <span style="color:#75715e">// 3 参数
+</span></span></span><span style="display:flex;"><span><span style="color:#a6e22e">m4k_sc4</span>(n, a,b,c,d) <span style="color:#75715e">// 4 参数 (使用 esi)
+</span></span></span></code></pre></div><h3 id="主要系统调用">主要系统调用</h3>
+<table>
+	<thead>
+			<tr>
+					<th>编号</th>
+					<th>函数</th>
+					<th>功能</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td><code>0x4D000001</code></td>
+					<td><code>m4k_exit</code></td>
+					<td>退出进程</td>
+			</tr>
+			<tr>
+					<td><code>0x4D000002</code></td>
+					<td><code>m4k_spawn</code></td>
+					<td>创建进程</td>
+			</tr>
+			<tr>
+					<td><code>0x4D000003</code></td>
+					<td><code>m4k_waitpid</code></td>
+					<td>等待进程</td>
+			</tr>
+			<tr>
+					<td><code>0x4D000004</code></td>
+					<td><code>m4k_getpid</code></td>
+					<td>获取 PID</td>
+			</tr>
+			<tr>
+					<td><code>0x4D000005</code></td>
+					<td><code>m4k_kill</code></td>
+					<td>发送信号</td>
+			</tr>
+			<tr>
+					<td><code>0x4D000007</code></td>
+					<td><code>m4k_fork_status</code></td>
+					<td>选择性状态继承</td>
+			</tr>
+			<tr>
+					<td><code>0x4D000008</code></td>
+					<td><code>m4k_setns</code></td>
+					<td>设置命名空间</td>
+			</tr>
+	</tbody>
+</table>
+<h2 id="54-定时器与-rtc">5.4 定时器与 RTC</h2>
+<h3 id="pit-定时器">PIT 定时器</h3>
+<ul>
+<li>通道 0，模式 3（方波），1000 Hz</li>
+<li>内核 API: <code>mkrn_timer_init()</code>、<code>mkrn_timer_get_ticks()</code>、<code>mkrn_timer_wait()</code> 等</li>
+</ul>
+<h3 id="rtc-cmos">RTC (CMOS)</h3>
+<ul>
+<li>通过 CMOS RAM（端口 <code>0x70</code>/<code>0x71</code>）读取/设置实时时钟</li>
+<li>支持 BCD 自动转换</li>
+</ul>
+<h3 id="闹钟系统">闹钟系统</h3>
+<p>最大 256 个闹钟，支持一次性或周期性触发。</p>
+<h2 id="55-内存管理">5.5 内存管理</h2>
+<h3 id="物理内存分配器">物理内存分配器</h3>
+<p>伙伴系统 (Buddy System)，最小 4 KB 块，最大阶 4（64 KB）。</p>
+<table>
+	<thead>
+			<tr>
+					<th>函数</th>
+					<th>说明</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td><code>mkrn_memory_init(mb_info)</code></td>
+					<td>从 multiboot 信息初始化</td>
+			</tr>
+			<tr>
+					<td><code>mkrn_memory_alloc_page()</code></td>
+					<td>分配一页</td>
+			</tr>
+			<tr>
+					<td><code>mkrn_memory_free_page(addr)</code></td>
+					<td>释放一页</td>
+			</tr>
+	</tbody>
+</table>
+<h3 id="内核堆">内核堆</h3>
+<ul>
+<li>位置: 内核 BSS 段末尾</li>
+<li>大小: 4 MB（硬编码在 <code>linker.ld</code>）</li>
+</ul>
+<h3 id="链接脚本">链接脚本</h3>
+<pre tabindex="0"><code class="language-lds" data-lang="lds">. = 0x100000;       // 加载地址 1 MB
+.text : { *(.text) }
+.rodata : { *(.rodata) }
+.data : { *(.data) }
+.bss : { *(.bss) }
+_heap_start = .;
+. += 4M;            // 4 MB 堆
+_heap_end = .;
+_kernel_stack = . + 16K;  // 16 KB 内核栈
+</code></pre><h3 id="限制">限制</h3>
+<ul>
+<li>无分页（物理地址 == 虚拟地址）</li>
+<li>无 MMU 内存保护</li>
+<li>无页缓存</li>
+<li>无交换</li>
+</ul>
+<h2 id="56-信号">5.6 信号</h2>
+<p>10 个信号的定义：</p>
+<table>
+	<thead>
+			<tr>
+					<th>信号</th>
+					<th>编号</th>
+					<th>默认动作</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>SIGABRT</td>
+					<td>1</td>
+					<td>终止 + 核心转储</td>
+			</tr>
+			<tr>
+					<td>SIGKILL</td>
+					<td>2</td>
+					<td>立即终止（PID 1 免疫）</td>
+			</tr>
+			<tr>
+					<td>SIGTERM</td>
+					<td>3</td>
+					<td>优雅终止</td>
+			</tr>
+			<tr>
+					<td>SIGSTOP</td>
+					<td>4</td>
+					<td>暂停执行</td>
+			</tr>
+			<tr>
+					<td>SIGCONT</td>
+					<td>5</td>
+					<td>恢复执行</td>
+			</tr>
+			<tr>
+					<td>SIGTRAP</td>
+					<td>6</td>
+					<td>调试追踪</td>
+			</tr>
+			<tr>
+					<td>SIGCHLD</td>
+					<td>7</td>
+					<td>子进程状态变化</td>
+			</tr>
+			<tr>
+					<td>SIGPIPE</td>
+					<td>8</td>
+					<td>管道断裂</td>
+			</tr>
+			<tr>
+					<td>SIGUSR1</td>
+					<td>9</td>
+					<td>用户自定义 1</td>
+			</tr>
+			<tr>
+					<td>SIGUSR2</td>
+					<td>10</td>
+					<td>用户自定义 2</td>
+			</tr>
+	</tbody>
+</table>
+<p>信号不排队，同一信号号在进程中已挂起时，后续发送无效。</p>
+<h2 id="57-命名空间">5.7 命名空间</h2>
+<p>每个进程持有 <code>struct m4k_namespace</code>，定义其私有文件系统视图：</p>
+<ul>
+<li>每个进程 16 个挂载点</li>
+<li>支持 bind mount、只读挂载</li>
+<li>路径解析优先级: 进程命名空间 → 全局 VFS 根</li>
+</ul>
+</div>
+    
+<nav class="pager" aria-label="文章导航">
+  
+  <a href="/wiki/m4kk1/handbook/06-filesystems/" data-press>
+    <span class="dir">← 上一篇</span>第 6 章 文件系统
+  </a>
+  
+  
+  <a href="/wiki/m4kk1/handbook/04-system-administration/" class="is-next" data-press>
+    <span class="dir">下一篇 →</span>第 4 章 系统管理
+  </a>
+  
+</nav>
+
+
+    
+<div class="comments">
+  <h2 class="comments-title">评论</h2>
+  <div id="utterances"></div>
+  <script>
+    (function () {
+      if (window.location.protocol === 'file:') return;
+      var s = document.createElement('script');
+      s.src = 'https://utteranc.es/client.js';
+      s.async = true;
+      s.setAttribute('repo', "makkichan947/makkichan947.github.io");
+      s.setAttribute('issue-term', "pathname");
+      s.setAttribute('theme', "github-dark");
+      s.setAttribute('crossorigin', 'anonymous');
+      document.getElementById('utterances').appendChild(s);
+    })();
+  </script>
+</div>
+
+
+  </article>
+  
+  <aside class="toc" aria-label="目录">
+    <p class="toc-title">目录</p>
+    <nav id="TableOfContents">
+  <ul>
+    <li><a href="#51-内核概述">5.1 内核概述</a>
+      <ul>
+        <li><a href="#源代码结构">源代码结构</a></li>
+      </ul>
+    </li>
+    <li><a href="#52-进程模型">5.2 进程模型</a>
+      <ul>
+        <li><a href="#进程控制块">进程控制块</a></li>
+        <li><a href="#状态标签-state-tag">状态标签 (State Tag)</a></li>
+        <li><a href="#进程生命周期">进程生命周期</a></li>
+        <li><a href="#调度器">调度器</a></li>
+      </ul>
+    </li>
+    <li><a href="#53-系统调用">5.3 系统调用</a>
+      <ul>
+        <li><a href="#int-0x80兼容路径">int 0x80（兼容路径）</a></li>
+        <li><a href="#int-0x4dm4kk1-原生路径">int 0x4D（M4KK1 原生路径）</a></li>
+        <li><a href="#主要系统调用">主要系统调用</a></li>
+      </ul>
+    </li>
+    <li><a href="#54-定时器与-rtc">5.4 定时器与 RTC</a>
+      <ul>
+        <li><a href="#pit-定时器">PIT 定时器</a></li>
+        <li><a href="#rtc-cmos">RTC (CMOS)</a></li>
+        <li><a href="#闹钟系统">闹钟系统</a></li>
+      </ul>
+    </li>
+    <li><a href="#55-内存管理">5.5 内存管理</a>
+      <ul>
+        <li><a href="#物理内存分配器">物理内存分配器</a></li>
+        <li><a href="#内核堆">内核堆</a></li>
+        <li><a href="#链接脚本">链接脚本</a></li>
+        <li><a href="#限制">限制</a></li>
+      </ul>
+    </li>
+    <li><a href="#56-信号">5.6 信号</a></li>
+    <li><a href="#57-命名空间">5.7 命名空间</a></li>
+  </ul>
+</nav>
+  </aside>
+  
+</div>
+
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+      <div class="footer-links">
+        
+        <a href="https://github.com/makkichan947" target="_blank" rel="noopener" title="Github" data-press>Github</a>
+        
+        <a href="mailto:yakumakki947@hotmail.com" target="_blank" rel="noopener" title="Email" data-press>Email</a>
+        
+        <a href="https://x.com/Makki_Yaku947" target="_blank" rel="noopener" title="Twitter" data-press>Twitter</a>
+        
+        <a href="https://www.twitch.tv/u/makkichan947" target="_blank" rel="noopener" title="Twitch" data-press>Twitch</a>
+        
+      </div>
+      <p>&copy; 2026 Yaku Makki</p>
+      <p>Powered by <a href="https://gohugo.io" target="_blank" rel="noopener">Hugo</a> · Makki Theme</p>
+      
+      <div class="stats">
+        <span>访客 <span id="busuanzi_value_site_uv"></span></span>
+        <span>访问 <span id="busuanzi_value_site_pv"></span></span>
+        <span>本页 <span id="busuanzi_value_page_pv"></span></span>
+      </div>
+      
+    </div>
+  </footer>
+
+  <button class="back-to-top" id="back-to-top" type="button" aria-label="回到顶部" data-press>
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 19V5"/><path d="M5 12l7-7 7 7"/></svg>
+  </button>
+
+  
+  <script src="/js/main.min.2e977141114ec7890ffee2c35e08034683543cfe8ef98dd4af5effb3b37a3345.js" integrity="sha256-LpdxQRFOx4kP/uLDXggDRoNUPP6O&#43;Y3Ur17/s7N6M0U=" defer></script>
+  
+  
+  <script src="/js/search.min.b2d6ba6610ce24454bc1436dc521dcfd878b2583ad9f65f77aadedaaa1e1a54c.js" integrity="sha256-sta6ZhDOJEVLwUNtxSHc/YeLJYOtn2X3eq3tqqHhpUw=" defer></script>
+  
+
+  
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+  
+
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/katex.min.js" crossorigin="anonymous"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/contrib/auto-render.min.js" crossorigin="anonymous"></script>
+</body>
+</html>

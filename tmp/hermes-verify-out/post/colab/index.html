@@ -1,0 +1,335 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Colab Unsloth SFT 快速训练！ · Yaku Makki</title>
+  <meta name="description" content="个人小巢">
+  <meta name="theme-color" content="#0a0a0f">
+  <script>document.documentElement.classList.add('js');</script>
+
+  <link rel="icon" href="/avatar/avatar.jpg" type="image/jpeg">
+
+  
+  <link rel="stylesheet" href="/css/main.min.b64e4527cc255b367461135391e39e321a5d86fc97defca99c7afda308ada007.css" integrity="sha256-tk5FJ8wlWzZ0YRNTkeOeMhpdhvyX3vypnHr9owitoAc=">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/katex.min.css" crossorigin="anonymous">
+</head>
+<body>
+  <a class="skip-link" href="#main">跳到内容</a>
+
+  <div class="scene" aria-hidden="true">
+    <div class="scene-sky"></div>
+    <div class="scene-stars"></div>
+    <div class="scene-sun-halo"></div>
+    <div class="scene-sun"></div>
+    <div class="scene-mountains scene-mountains-far"></div>
+    <div class="scene-mountains scene-mountains-near"></div>
+    <div class="scene-horizon"></div>
+    <div class="scene-floor"></div>
+    <div class="scene-scanlines"></div>
+  </div>
+
+  <nav class="navbar" aria-label="主导航">
+    <div class="nav-inner">
+      <a class="logo" href="/" data-press>
+        <img class="logo-avatar" src="/avatar/avatar.jpg" alt="" width="34" height="34">
+        <span class="logo-text">Yaku Makki</span>
+      </a>
+      <div class="nav-menu-wrap">
+        <span class="nav-tick" aria-hidden="true"></span>
+        <ul class="nav-menu">
+          
+          <li>
+            <a href="/" data-press>首页</a>
+          </li>
+          
+          <li>
+            <a href="/post/" data-press>博客</a>
+          </li>
+          
+          <li>
+            <a href="/wiki/" data-press>维基</a>
+          </li>
+          
+          <li>
+            <a href="/tags/" data-press>标签</a>
+          </li>
+          
+          <li>
+            <a href="/about/" data-press>关于</a>
+          </li>
+          
+          
+          <li>
+            <button id="search-toggle" class="search-toggle" type="button" title="搜索 (Ctrl+K 或 /)" aria-haspopup="dialog" aria-expanded="false" data-press>搜索</button>
+          </li>
+          
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  
+  <div class="sheet-scrim" id="sheet-scrim"></div>
+  <section class="sheet" id="search-sheet" role="dialog" aria-modal="true" aria-label="搜索" aria-hidden="true">
+    <div class="sheet-panel" id="sheet-panel">
+      <div class="sheet-handle" id="sheet-handle" role="presentation" aria-hidden="true"></div>
+      <div class="sheet-body">
+        <div class="search-field">
+          <input id="search-input" type="search" placeholder="搜索文章和 Wiki…"
+                 autocomplete="off" spellcheck="false" aria-controls="search-results">
+          <span class="search-key" aria-hidden="true">/</span>
+        </div>
+        <div id="search-results" class="search-results" role="listbox" aria-label="搜索结果"></div>
+      </div>
+    </div>
+  </section>
+  
+
+  <main class="main" id="main">
+    
+<article class="article">
+  <header class="article-head" data-reveal>
+    <h1>Colab Unsloth SFT 快速训练！</h1>
+    <div class="meta">
+      <time datetime="2026-05-19T23:49:18&#43;08:00">2026-05-19</time>
+      <span>3 分钟阅读</span>
+      <span>465 字</span>
+      <a class="tag" href="/tags/ai/" data-press>AI</a><a class="tag" href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%A7%91%E5%AD%A6/" data-press>计算机科学</a>
+    </div>
+  </header>
+  <div class="article-content" data-reveal data-reveal-delay="60"><h1 id="序言">序言</h1>
+<p>大部分人的GPU都没有训练AI的显存要求，而谷歌Colab完全可以解决这一点，谷歌Colab可以让你免费使用谷歌的服务器4个小时左右来进行训练；并且这是一个Jupyter Notebook环境。</p>
+<p>这是它的地址： <a href="https://colab.research.google.com/">https://colab.research.google.com/</a></p>
+<p>这是Unsloth的训练笔记本： <a href="https://colab.research.google.com/drive/1Ys44kVvmeZtnICzWz0xgpRnrIOjZAuxp">https://colab.research.google.com/drive/1Ys44kVvmeZtnICzWz0xgpRnrIOjZAuxp</a></p>
+<h1 id="准备工作">准备工作</h1>
+<p>谷歌Colab可以直接通过谷歌账号登录，登录完毕后打开上述 Unsloth 笔记本，点击「Copy to Drive」保存到你自己的云盘，避免官方版本更新导致你的修改丢失。</p>
+<h2 id="修改代码">修改代码</h2>
+<p>首先先不要急着运行运行时，先修改一下笔记本的代码，因为Unsloth 的官方笔记本是通用模板，你需要根据自己的需求修改两处核心内容：<strong>模型</strong> 和 <strong>数据集</strong>。</p>
+<h3 id="模型下载">模型下载</h3>
+<p>首先，修改第二个代码框的这一部分：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>model, tokenizer <span style="color:#f92672">=</span> FastLanguageModel<span style="color:#f92672">.</span>from_pretrained(
+</span></span><span style="display:flex;"><span>    model_name <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;unsloth/Meta-Llama-3.1-8B&#34;</span>, <span style="color:#75715e"># 修改这里</span>
+</span></span><span style="display:flex;"><span>    max_seq_length <span style="color:#f92672">=</span> max_seq_length,
+</span></span><span style="display:flex;"><span>    dtype <span style="color:#f92672">=</span> dtype,
+</span></span><span style="display:flex;"><span>    load_in_4bit <span style="color:#f92672">=</span> load_in_4bit,
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># token = &#34;hf_...&#34;, # use one if using gated models like meta-llama/Llama-2-7b-hf</span>
+</span></span><span style="display:flex;"><span>)
+</span></span></code></pre></div><p>将需要修改的部分修改为你要使用的模型，可以直接使用Hugging Face库名。</p>
+<blockquote>
+<p>btw：如果模型是 gated（需要申请权限），请在 Hugging Face 获取 Access Token 并填入 token 参数。</p>
+</blockquote>
+<h3 id="数据集准备">数据集准备</h3>
+<p>数据集的修改是这一步中最关键也最容易出错的地方。笔记本默认使用 <code>yahma/alpaca-cleaned</code>，但如果你要用自己的数据，就必须修改 <code>formatting_prompts_func</code>。</p>
+<p><strong>示例：使用弱智吧数据集 (<code>LooksJuicy/ruozhiba</code>)</strong></p>
+<p>这个数据集只有两个字段：<code>instruction</code> 和 <code>output</code>，没有单独的 <code>input</code> 字段。</p>
+<p>原模板要求三个字段，所以我们需要调整映射关系——将 <code>instruction</code> 放入 <code>input</code> 位置，而 <code>instruction</code> 字段留空（也可以填入通用指令）。</p>
+<p>修改后的代码如下：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span>alpaca_prompt <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;&#34;&#34;Below is an instruction that describes a task, paired with an input that provides further context. Write a response that appropriately completes the request.
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">### Instruction:
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">{}</span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">### Input:
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">{}</span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">### Response:
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">{}</span><span style="color:#e6db74">&#34;&#34;&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>EOS_TOKEN <span style="color:#f92672">=</span> tokenizer<span style="color:#f92672">.</span>eos_token  <span style="color:#75715e"># 必须加上，否则生成会无限继续</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">formatting_prompts_func</span>(examples):
+</span></span><span style="display:flex;"><span>    instructions <span style="color:#f92672">=</span> examples[<span style="color:#e6db74">&#34;instruction&#34;</span>]
+</span></span><span style="display:flex;"><span>    outputs      <span style="color:#f92672">=</span> examples[<span style="color:#e6db74">&#34;output&#34;</span>]
+</span></span><span style="display:flex;"><span>    texts <span style="color:#f92672">=</span> []
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">for</span> instruction, output <span style="color:#f92672">in</span> zip(instructions, outputs):
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e"># 将 instruction 放入 input，instruction 字段留空</span>
+</span></span><span style="display:flex;"><span>        text <span style="color:#f92672">=</span> alpaca_prompt<span style="color:#f92672">.</span>format(<span style="color:#e6db74">&#34;&#34;</span>, instruction, output) <span style="color:#f92672">+</span> EOS_TOKEN
+</span></span><span style="display:flex;"><span>        texts<span style="color:#f92672">.</span>append(text)
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> {<span style="color:#e6db74">&#34;text&#34;</span>: texts}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">from</span> datasets <span style="color:#f92672">import</span> load_dataset
+</span></span><span style="display:flex;"><span>dataset <span style="color:#f92672">=</span> load_dataset(<span style="color:#e6db74">&#34;LooksJuicy/ruozhiba&#34;</span>, split<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;train&#34;</span>)
+</span></span><span style="display:flex;"><span>dataset <span style="color:#f92672">=</span> dataset<span style="color:#f92672">.</span>map(formatting_prompts_func, batched<span style="color:#f92672">=</span><span style="color:#66d9ef">True</span>)
+</span></span></code></pre></div><blockquote>
+<p>btw：如果你的数据集格式复杂（比如有 system、history 等多轮对话结构），强烈建议借助 ChatGPT 或 Kimi 等 AI 辅助写解析代码。大多数 SFT 数据集本质上都是把“输入”映射成“输出”，关键是按模型期望的 prompt template 拼装。</p>
+</blockquote>
+<h3 id="修改上传部分">修改上传部分</h3>
+<p>修改笔记本中的 <code>Saving, loading finetuned models</code> 部分，它们提供了三种保存方式：</p>
+<table>
+	<thead>
+			<tr>
+					<th>方式</th>
+					<th>说明</th>
+					<th>适用场景</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td><code>merged_16bit</code></td>
+					<td>合并 LoRA 权重，导出为完整 16bit 模型</td>
+					<td>通用部署、后续训练</td>
+			</tr>
+			<tr>
+					<td><code>merged_4bit</code></td>
+					<td>合并后量化为 4bit</td>
+					<td>低显存推理</td>
+			</tr>
+			<tr>
+					<td><code>lora</code></td>
+					<td>仅保存 LoRA 适配器权重</td>
+					<td>极速上传、与基座模型分开存储</td>
+			</tr>
+	</tbody>
+</table>
+<p>如果你愿意可以使用Inference部分进行推理，现在可以直接跳到 Saving to float16 for VLLM 部分。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#75715e"># Merge to 16bit</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">if</span> <span style="color:#66d9ef">False</span>: model<span style="color:#f92672">.</span>save_pretrained_merged(<span style="color:#e6db74">&#34;model&#34;</span>, tokenizer, save_method <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;merged_16bit&#34;</span>,)
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">if</span> <span style="color:#66d9ef">False</span>: model<span style="color:#f92672">.</span>push_to_hub_merged(<span style="color:#e6db74">&#34;hf/model&#34;</span>, tokenizer, save_method <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;merged_16bit&#34;</span>, token <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;&#34;</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Merge to 4bit</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">if</span> <span style="color:#66d9ef">False</span>: model<span style="color:#f92672">.</span>save_pretrained_merged(<span style="color:#e6db74">&#34;model&#34;</span>, tokenizer, save_method <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;merged_4bit&#34;</span>,)
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">if</span> <span style="color:#66d9ef">False</span>: model<span style="color:#f92672">.</span>push_to_hub_merged(<span style="color:#e6db74">&#34;hf/model&#34;</span>, tokenizer, save_method <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;merged_4bit&#34;</span>, token <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;&#34;</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Just LoRA adapters</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">if</span> <span style="color:#66d9ef">False</span>: model<span style="color:#f92672">.</span>save_pretrained_merged(<span style="color:#e6db74">&#34;model&#34;</span>, tokenizer, save_method <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;lora&#34;</span>,)
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">if</span> <span style="color:#66d9ef">False</span>: model<span style="color:#f92672">.</span>push_to_hub_merged(<span style="color:#e6db74">&#34;hf/model&#34;</span>, tokenizer, save_method <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;lora&#34;</span>, token <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;&#34;</span>)
+</span></span></code></pre></div><p>16bit那里可以保存为16bit模型，4bit则是4位模型，你也可以只存储lora适配器，但需要上传到单独的库，否则会发生冲突</p>
+<p>将hf/model改为 你的用户名/模型名 的格式，例如：<code>safe049/llama-3-ruozhiba</code></p>
+<p>将token内的值设置为你的Hugging Face Token的值，请确保你的token有访问和写入权限</p>
+<p>将你要导出的部分的False改为True即可上传</p>
+<p>加入要上传16bit而不保存至colab服务器内，代码如下：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#75715e"># Merge to 16bit</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">if</span> <span style="color:#66d9ef">False</span>: model<span style="color:#f92672">.</span>save_pretrained_merged(<span style="color:#e6db74">&#34;model&#34;</span>, tokenizer, save_method <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;merged_16bit&#34;</span>,)
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">if</span> <span style="color:#66d9ef">True</span>: model<span style="color:#f92672">.</span>push_to_hub_merged(<span style="color:#e6db74">&#34;hf/model&#34;</span>, tokenizer, save_method <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;merged_16bit&#34;</span>, token <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;&#34;</span>)
+</span></span></code></pre></div><p>你还可以保存为GGUF，对于低显存显卡，这是必要的</p>
+<p>在GGUF / llama.cpp Conversion部分的修改与完整模型的上传类似，修改模型名与token，这里我建议上传16bit GGUF与q4_k_m GGUF，修改后代码如下：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#75715e"># Save to 8bit Q8_0</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">if</span> <span style="color:#66d9ef">False</span>: model<span style="color:#f92672">.</span>save_pretrained_gguf(<span style="color:#e6db74">&#34;model&#34;</span>, tokenizer,)
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Remember to go to https://huggingface.co/settings/tokens for a token!</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># And change hf to your username!</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">if</span> <span style="color:#66d9ef">False</span>: model<span style="color:#f92672">.</span>push_to_hub_gguf(<span style="color:#e6db74">&#34;hf/model&#34;</span>, tokenizer, token <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;&#34;</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Save to 16bit GGUF</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">if</span> <span style="color:#66d9ef">False</span>: model<span style="color:#f92672">.</span>save_pretrained_gguf(<span style="color:#e6db74">&#34;model&#34;</span>, tokenizer, quantization_method <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;f16&#34;</span>)
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">if</span> <span style="color:#66d9ef">True</span>: model<span style="color:#f92672">.</span>push_to_hub_gguf(<span style="color:#e6db74">&#34;hf/model&#34;</span>, tokenizer, quantization_method <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;f16&#34;</span>, token <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;&#34;</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Save to q4_k_m GGUF</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">if</span> <span style="color:#66d9ef">False</span>: model<span style="color:#f92672">.</span>save_pretrained_gguf(<span style="color:#e6db74">&#34;model&#34;</span>, tokenizer, quantization_method <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;q4_k_m&#34;</span>)
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">if</span> <span style="color:#66d9ef">True</span>: model<span style="color:#f92672">.</span>push_to_hub_gguf(<span style="color:#e6db74">&#34;hf/model&#34;</span>, tokenizer, quantization_method <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;q4_k_m&#34;</span>, token <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;&#34;</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Save to multiple GGUF options - much faster if you want multiple!</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">if</span> <span style="color:#66d9ef">False</span>:
+</span></span><span style="display:flex;"><span>    model<span style="color:#f92672">.</span>push_to_hub_gguf(
+</span></span><span style="display:flex;"><span>        <span style="color:#e6db74">&#34;hf/model&#34;</span>, <span style="color:#75715e"># Change hf to your username!</span>
+</span></span><span style="display:flex;"><span>        tokenizer,
+</span></span><span style="display:flex;"><span>        quantization_method <span style="color:#f92672">=</span> [<span style="color:#e6db74">&#34;q4_k_m&#34;</span>, <span style="color:#e6db74">&#34;q8_0&#34;</span>, <span style="color:#e6db74">&#34;q5_k_m&#34;</span>,],
+</span></span><span style="display:flex;"><span>        token <span style="color:#f92672">=</span> <span style="color:#e6db74">&#34;&#34;</span>,
+</span></span><span style="display:flex;"><span>    )
+</span></span></code></pre></div><p>现在所有代码修改都完毕了，可以开始训练</p>
+<h1 id="训练">训练</h1>
+<p>一切准备就绪后，按顺序运行所有代码框：</p>
+<ol>
+<li><strong>安装依赖</strong>：自动完成 Unsloth 及其依赖的安装</li>
+<li><strong>加载模型</strong>：下载你指定的基座模型</li>
+<li><strong>加载数据集</strong>：下载并格式化你的数据集</li>
+<li><strong>配置训练参数</strong>：根据需要调整学习率、epoch、batch size 等</li>
+<li><strong>执行训练</strong>：<code>trainer_stats = trainer.train()</code></li>
+</ol>
+<blockquote>
+<p>⚠️ <strong>实时监控 Loss</strong>：训练开始后，留意 Loss 曲线。如果 Loss 长时间不再下降甚至反弹，说明模型可能已经过拟合，可以提前终止该单元格——训练状态仍然会被保存，不会丢失。</p>
+</blockquote>
+<p>训练完成后，你可以先在 <code>Inference</code> 部分加载微调后的模型进行快速测试，确保效果符合预期。</p>
+<p>最后，依次运行保存和上传部分的代码，把模型推送到 Hugging Face 仓库，然后我们就完事了</p>
+<h1 id="总结">总结</h1>
+<p>Unsloth可以让你在小显存的GPU上快速训练AI模型，他还支持更多的训练方式，如DPO和DeepSeek的GRPO模式</p>
+<p>Colab 的免费版对网络环境有一定要求（需要能访问 Google 服务），且会话有时限，建议在稳定的网络下进行训练。如果你有更复杂的训练任务，也可以考虑 Colab Pro 或 Pro+，获得更好的 GPU（如 V100、A100）和更长的运行时间</p>
+</div>
+  
+<nav class="pager" aria-label="文章导航">
+  
+  <a href="/post/whyblackarch/" data-press>
+    <span class="dir">← 上一篇</span>为什么我开始使用BlackArch作为我的网安发行版
+  </a>
+  
+  
+  <a href="/post/neko/" class="is-next" data-press>
+    <span class="dir">下一篇 →</span>豪猫
+  </a>
+  
+</nav>
+
+
+  
+<div class="comments">
+  <h2 class="comments-title">评论</h2>
+  <div id="utterances"></div>
+  <script>
+    (function () {
+      if (window.location.protocol === 'file:') return;
+      var s = document.createElement('script');
+      s.src = 'https://utteranc.es/client.js';
+      s.async = true;
+      s.setAttribute('repo', "makkichan947/makkichan947.github.io");
+      s.setAttribute('issue-term', "pathname");
+      s.setAttribute('theme', "github-dark");
+      s.setAttribute('crossorigin', 'anonymous');
+      document.getElementById('utterances').appendChild(s);
+    })();
+  </script>
+</div>
+
+
+</article>
+
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+      <div class="footer-links">
+        
+        <a href="https://github.com/makkichan947" target="_blank" rel="noopener" title="Github" data-press>Github</a>
+        
+        <a href="mailto:yakumakki947@hotmail.com" target="_blank" rel="noopener" title="Email" data-press>Email</a>
+        
+        <a href="https://x.com/Makki_Yaku947" target="_blank" rel="noopener" title="Twitter" data-press>Twitter</a>
+        
+        <a href="https://www.twitch.tv/u/makkichan947" target="_blank" rel="noopener" title="Twitch" data-press>Twitch</a>
+        
+      </div>
+      <p>&copy; 2026 Yaku Makki</p>
+      <p>Powered by <a href="https://gohugo.io" target="_blank" rel="noopener">Hugo</a> · Makki Theme</p>
+      
+      <div class="stats">
+        <span>访客 <span id="busuanzi_value_site_uv"></span></span>
+        <span>访问 <span id="busuanzi_value_site_pv"></span></span>
+        <span>本页 <span id="busuanzi_value_page_pv"></span></span>
+      </div>
+      
+    </div>
+  </footer>
+
+  <button class="back-to-top" id="back-to-top" type="button" aria-label="回到顶部" data-press>
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 19V5"/><path d="M5 12l7-7 7 7"/></svg>
+  </button>
+
+  
+  <script src="/js/main.min.2e977141114ec7890ffee2c35e08034683543cfe8ef98dd4af5effb3b37a3345.js" integrity="sha256-LpdxQRFOx4kP/uLDXggDRoNUPP6O&#43;Y3Ur17/s7N6M0U=" defer></script>
+  
+  
+  <script src="/js/search.min.b2d6ba6610ce24454bc1436dc521dcfd878b2583ad9f65f77aadedaaa1e1a54c.js" integrity="sha256-sta6ZhDOJEVLwUNtxSHc/YeLJYOtn2X3eq3tqqHhpUw=" defer></script>
+  
+
+  
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+  
+
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/katex.min.js" crossorigin="anonymous"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/contrib/auto-render.min.js" crossorigin="anonymous"></script>
+</body>
+</html>

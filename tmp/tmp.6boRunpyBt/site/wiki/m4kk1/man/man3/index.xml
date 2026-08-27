@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+	<channel>
+		<title>库函数 (man3) on Yaku Makki</title>
+		<link>https://makkichan947.github.io/wiki/m4kk1/man/man3/</link>
+		<description>Recent content in 库函数 (man3) on Yaku Makki</description>
+		<generator>Hugo</generator>
+		<language>zh</language>
+		
+		
+		
+		
+			<lastBuildDate>Sat, 08 Aug 2026 14:03:08 +0800</lastBuildDate>
+		
+			<atom:link href="https://makkichan947.github.io/wiki/m4kk1/man/man3/index.xml" rel="self" type="application/rss+xml" />
+			<item>
+				<title>musr_getgrnam</title>
+				<link>https://makkichan947.github.io/wiki/m4kk1/man/man3/musr_getgrnam/</link>
+				<pubDate>Sat, 08 Aug 2026 14:03:08 +0800</pubDate>
+				<guid>https://makkichan947.github.io/wiki/m4kk1/man/man3/musr_getgrnam/</guid>
+				<description>&lt;h2 id=&#34;名称&#34;&gt;名称&lt;/h2&gt;&#xA;&lt;p&gt;musr_getgrnam — 按组名查找组数据库条目&lt;/p&gt;&#xA;&lt;h2 id=&#34;概要&#34;&gt;概要&lt;/h2&gt;&#xA;&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;&#34;&gt;&lt;code class=&#34;language-c&#34; data-lang=&#34;c&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;#include&lt;/span&gt; &lt;span style=&#34;color:#75715e&#34;&gt;&amp;lt;m4k/grp.h&amp;gt;&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&#xA;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;int&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;musr_getgrnam&lt;/span&gt;(&lt;span style=&#34;color:#66d9ef&#34;&gt;const&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;char&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt;name, &lt;span style=&#34;color:#66d9ef&#34;&gt;group_entry_t&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt;out);&#xA;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;描述&#34;&gt;描述&lt;/h2&gt;&#xA;&lt;p&gt;在 &lt;code&gt;/export/cfg/groups.db&lt;/code&gt; 中查找匹配组名的条目，结果写入 &lt;code&gt;out&lt;/code&gt;。&lt;/p&gt;&#xA;&lt;h2 id=&#34;返回值&#34;&gt;返回值&lt;/h2&gt;&#xA;&lt;p&gt;成功返回 0，未找到返回负的 &lt;code&gt;M4K_ENOENT&lt;/code&gt;。&lt;/p&gt;&#xA;&lt;h2 id=&#34;参见&#34;&gt;参见&lt;/h2&gt;&#xA;&lt;p&gt;&lt;a href=&#34;musr_getpwnam/&#34;&gt;musr_getpwnam(3)&lt;/a&gt;、&lt;a href=&#34;musr_getpwuid/&#34;&gt;musr_getpwuid(3)&lt;/a&gt;&lt;/p&gt;</description>
+			</item>
+			<item>
+				<title>musr_getpwnam</title>
+				<link>https://makkichan947.github.io/wiki/m4kk1/man/man3/musr_getpwnam/</link>
+				<pubDate>Sat, 08 Aug 2026 14:03:08 +0800</pubDate>
+				<guid>https://makkichan947.github.io/wiki/m4kk1/man/man3/musr_getpwnam/</guid>
+				<description>&lt;h2 id=&#34;名称&#34;&gt;名称&lt;/h2&gt;&#xA;&lt;p&gt;musr_getpwnam — 按用户名查找用户数据库条目&lt;/p&gt;&#xA;&lt;h2 id=&#34;概要&#34;&gt;概要&lt;/h2&gt;&#xA;&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;&#34;&gt;&lt;code class=&#34;language-c&#34; data-lang=&#34;c&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;#include&lt;/span&gt; &lt;span style=&#34;color:#75715e&#34;&gt;&amp;lt;m4k/pwd.h&amp;gt;&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&#xA;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;int&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;musr_getpwnam&lt;/span&gt;(&lt;span style=&#34;color:#66d9ef&#34;&gt;const&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;char&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt;name, &lt;span style=&#34;color:#66d9ef&#34;&gt;passwd_entry_t&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt;out);&#xA;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;描述&#34;&gt;描述&lt;/h2&gt;&#xA;&lt;p&gt;在 &lt;code&gt;/export/cfg/passwd.db&lt;/code&gt; 中查找匹配用户名的条目，结果写入 &lt;code&gt;out&lt;/code&gt;。&lt;/p&gt;&#xA;&lt;h2 id=&#34;返回值&#34;&gt;返回值&lt;/h2&gt;&#xA;&lt;p&gt;成功返回 0，未找到返回负的 &lt;code&gt;M4K_ENOENT&lt;/code&gt;。&lt;/p&gt;&#xA;&lt;h2 id=&#34;参见&#34;&gt;参见&lt;/h2&gt;&#xA;&lt;p&gt;&lt;a href=&#34;musr_getpwuid/&#34;&gt;musr_getpwuid(3)&lt;/a&gt;、&lt;a href=&#34;musr_getgrnam/&#34;&gt;musr_getgrnam(3)&lt;/a&gt;&lt;/p&gt;</description>
+			</item>
+			<item>
+				<title>musr_getpwuid</title>
+				<link>https://makkichan947.github.io/wiki/m4kk1/man/man3/musr_getpwuid/</link>
+				<pubDate>Sat, 08 Aug 2026 14:03:08 +0800</pubDate>
+				<guid>https://makkichan947.github.io/wiki/m4kk1/man/man3/musr_getpwuid/</guid>
+				<description>&lt;h2 id=&#34;名称&#34;&gt;名称&lt;/h2&gt;&#xA;&lt;p&gt;musr_getpwuid — 按 UID 查找用户数据库条目&lt;/p&gt;&#xA;&lt;h2 id=&#34;概要&#34;&gt;概要&lt;/h2&gt;&#xA;&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;&#34;&gt;&lt;code class=&#34;language-c&#34; data-lang=&#34;c&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;#include&lt;/span&gt; &lt;span style=&#34;color:#75715e&#34;&gt;&amp;lt;m4k/pwd.h&amp;gt;&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&#xA;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;int&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;musr_getpwuid&lt;/span&gt;(&lt;span style=&#34;color:#66d9ef&#34;&gt;uid_t&lt;/span&gt; uid, &lt;span style=&#34;color:#66d9ef&#34;&gt;passwd_entry_t&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt;out);&#xA;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;描述&#34;&gt;描述&lt;/h2&gt;&#xA;&lt;p&gt;在 &lt;code&gt;/export/cfg/passwd.db&lt;/code&gt; 中查找匹配 UID 的条目，结果写入 &lt;code&gt;out&lt;/code&gt;。&lt;/p&gt;&#xA;&lt;h2 id=&#34;返回值&#34;&gt;返回值&lt;/h2&gt;&#xA;&lt;p&gt;成功返回 0，未找到返回负的 &lt;code&gt;M4K_ENOENT&lt;/code&gt;。&lt;/p&gt;&#xA;&lt;h2 id=&#34;参见&#34;&gt;参见&lt;/h2&gt;&#xA;&lt;p&gt;&lt;a href=&#34;musr_getpwnam/&#34;&gt;musr_getpwnam(3)&lt;/a&gt;、&lt;a href=&#34;musr_getgrnam/&#34;&gt;musr_getgrnam(3)&lt;/a&gt;&lt;/p&gt;</description>
+			</item>
+	</channel>
+</rss>

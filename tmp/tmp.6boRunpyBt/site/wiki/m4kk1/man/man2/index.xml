@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+	<channel>
+		<title>系统调用 (man2) on Yaku Makki</title>
+		<link>https://makkichan947.github.io/wiki/m4kk1/man/man2/</link>
+		<description>Recent content in 系统调用 (man2) on Yaku Makki</description>
+		<generator>Hugo</generator>
+		<language>zh</language>
+		
+		
+		
+		
+			<lastBuildDate>Sat, 08 Aug 2026 14:03:07 +0800</lastBuildDate>
+		
+			<atom:link href="https://makkichan947.github.io/wiki/m4kk1/man/man2/index.xml" rel="self" type="application/rss+xml" />
+			<item>
+				<title>m4k_get_session_list</title>
+				<link>https://makkichan947.github.io/wiki/m4kk1/man/man2/m4k_get_session_list/</link>
+				<pubDate>Sat, 08 Aug 2026 14:03:07 +0800</pubDate>
+				<guid>https://makkichan947.github.io/wiki/m4kk1/man/man2/m4k_get_session_list/</guid>
+				<description>&lt;h2 id=&#34;名称&#34;&gt;名称&lt;/h2&gt;&#xA;&lt;p&gt;m4k_get_session_list — 获取会话列表&lt;/p&gt;&#xA;&lt;h2 id=&#34;概要&#34;&gt;概要&lt;/h2&gt;&#xA;&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;&#34;&gt;&lt;code class=&#34;language-c&#34; data-lang=&#34;c&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;#include&lt;/span&gt; &lt;span style=&#34;color:#75715e&#34;&gt;&amp;lt;m4k/syscall.h&amp;gt;&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&#xA;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;int&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;m4k_get_session_list&lt;/span&gt;(&lt;span style=&#34;color:#66d9ef&#34;&gt;void&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt;buf, &lt;span style=&#34;color:#66d9ef&#34;&gt;int&lt;/span&gt; max);&#xA;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;描述&#34;&gt;描述&lt;/h2&gt;&#xA;&lt;p&gt;获取当前所有活跃登录会话的列表。每个会话包含 TTY、UID、登录时间和用户名。&lt;/p&gt;&#xA;&lt;h2 id=&#34;返回值&#34;&gt;返回值&lt;/h2&gt;&#xA;&lt;p&gt;成功返回会话数量，失败返回负的 &lt;code&gt;M4K_E*&lt;/code&gt; 错误码。&lt;/p&gt;&#xA;&lt;h2 id=&#34;参见&#34;&gt;参见&lt;/h2&gt;&#xA;&lt;p&gt;&lt;a href=&#34;m4k_register_session/&#34;&gt;m4k_register_session(2)&lt;/a&gt;、&lt;a href=&#34;../man1/who/&#34;&gt;who(1)&lt;/a&gt;&lt;/p&gt;</description>
+			</item>
+			<item>
+				<title>m4k_register_session</title>
+				<link>https://makkichan947.github.io/wiki/m4kk1/man/man2/m4k_register_session/</link>
+				<pubDate>Sat, 08 Aug 2026 14:03:07 +0800</pubDate>
+				<guid>https://makkichan947.github.io/wiki/m4kk1/man/man2/m4k_register_session/</guid>
+				<description>&lt;h2 id=&#34;名称&#34;&gt;名称&lt;/h2&gt;&#xA;&lt;p&gt;m4k_register_session — 注册登录会话&lt;/p&gt;&#xA;&lt;h2 id=&#34;概要&#34;&gt;概要&lt;/h2&gt;&#xA;&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;&#34;&gt;&lt;code class=&#34;language-c&#34; data-lang=&#34;c&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;#include&lt;/span&gt; &lt;span style=&#34;color:#75715e&#34;&gt;&amp;lt;m4k/syscall.h&amp;gt;&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&#xA;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;int&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;m4k_register_session&lt;/span&gt;(&lt;span style=&#34;color:#66d9ef&#34;&gt;const&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;char&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt;tty, &lt;span style=&#34;color:#66d9ef&#34;&gt;uid_t&lt;/span&gt; uid, &lt;span style=&#34;color:#66d9ef&#34;&gt;const&lt;/span&gt; &lt;span style=&#34;color:#66d9ef&#34;&gt;char&lt;/span&gt; &lt;span style=&#34;color:#f92672&#34;&gt;*&lt;/span&gt;username);&#xA;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;描述&#34;&gt;描述&lt;/h2&gt;&#xA;&lt;p&gt;在 &lt;code&gt;/sys/sessions/&lt;/code&gt; 中注册一个新的登录会话，用于 &lt;code&gt;who&lt;/code&gt; 和 &lt;code&gt;userlog&lt;/code&gt; 命令。&lt;/p&gt;&#xA;&lt;h2 id=&#34;返回值&#34;&gt;返回值&lt;/h2&gt;&#xA;&lt;p&gt;成功返回 0，失败返回负的 &lt;code&gt;M4K_E*&lt;/code&gt; 错误码。&lt;/p&gt;&#xA;&lt;h2 id=&#34;参见&#34;&gt;参见&lt;/h2&gt;&#xA;&lt;p&gt;&lt;a href=&#34;m4k_get_session_list/&#34;&gt;m4k_get_session_list(2)&lt;/a&gt;、&lt;a href=&#34;../man1/who/&#34;&gt;who(1)&lt;/a&gt;&lt;/p&gt;</description>
+			</item>
+			<item>
+				<title>m4k_setgid</title>
+				<link>https://makkichan947.github.io/wiki/m4kk1/man/man2/m4k_setgid/</link>
+				<pubDate>Sat, 08 Aug 2026 14:03:07 +0800</pubDate>
+				<guid>https://makkichan947.github.io/wiki/m4kk1/man/man2/m4k_setgid/</guid>
+				<description>&lt;h2 id=&#34;名称&#34;&gt;名称&lt;/h2&gt;&#xA;&lt;p&gt;m4k_setgid — 设置组 ID&lt;/p&gt;&#xA;&lt;h2 id=&#34;概要&#34;&gt;概要&lt;/h2&gt;&#xA;&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;&#34;&gt;&lt;code class=&#34;language-c&#34; data-lang=&#34;c&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;#include&lt;/span&gt; &lt;span style=&#34;color:#75715e&#34;&gt;&amp;lt;m4k/syscall.h&amp;gt;&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&#xA;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;int&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;m4k_setgid&lt;/span&gt;(&lt;span style=&#34;color:#66d9ef&#34;&gt;gid_t&lt;/span&gt; gid);&#xA;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;描述&#34;&gt;描述&lt;/h2&gt;&#xA;&lt;p&gt;设置调用进程的实际 GID 和有效 GID。&lt;/p&gt;&#xA;&lt;h2 id=&#34;返回值&#34;&gt;返回值&lt;/h2&gt;&#xA;&lt;p&gt;成功返回 0，失败返回负的 &lt;code&gt;M4K_E*&lt;/code&gt; 错误码。&lt;/p&gt;&#xA;&lt;h2 id=&#34;错误&#34;&gt;错误&lt;/h2&gt;&#xA;&lt;ul&gt;&#xA;&lt;li&gt;&lt;code&gt;M4K_EPERM&lt;/code&gt; — 调用者无权限&lt;/li&gt;&#xA;&lt;/ul&gt;&#xA;&lt;h2 id=&#34;参见&#34;&gt;参见&lt;/h2&gt;&#xA;&lt;p&gt;&lt;a href=&#34;m4k_setuid/&#34;&gt;m4k_setuid(2)&lt;/a&gt;、&lt;a href=&#34;../man2/m4k_getgid/&#34;&gt;m4k_getgid(2)&lt;/a&gt;&lt;/p&gt;</description>
+			</item>
+			<item>
+				<title>m4k_setuid</title>
+				<link>https://makkichan947.github.io/wiki/m4kk1/man/man2/m4k_setuid/</link>
+				<pubDate>Sat, 08 Aug 2026 14:03:07 +0800</pubDate>
+				<guid>https://makkichan947.github.io/wiki/m4kk1/man/man2/m4k_setuid/</guid>
+				<description>&lt;h2 id=&#34;名称&#34;&gt;名称&lt;/h2&gt;&#xA;&lt;p&gt;m4k_setuid — 设置用户 ID&lt;/p&gt;&#xA;&lt;h2 id=&#34;概要&#34;&gt;概要&lt;/h2&gt;&#xA;&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;&#34;&gt;&lt;code class=&#34;language-c&#34; data-lang=&#34;c&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;#include&lt;/span&gt; &lt;span style=&#34;color:#75715e&#34;&gt;&amp;lt;m4k/syscall.h&amp;gt;&lt;/span&gt;&lt;span style=&#34;color:#75715e&#34;&gt;&#xA;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&lt;span style=&#34;color:#66d9ef&#34;&gt;int&lt;/span&gt; &lt;span style=&#34;color:#a6e22e&#34;&gt;m4k_setuid&lt;/span&gt;(&lt;span style=&#34;color:#66d9ef&#34;&gt;uid_t&lt;/span&gt; uid);&#xA;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;描述&#34;&gt;描述&lt;/h2&gt;&#xA;&lt;p&gt;设置调用进程的实际 UID 和有效 UID。&lt;/p&gt;&#xA;&lt;h2 id=&#34;返回值&#34;&gt;返回值&lt;/h2&gt;&#xA;&lt;p&gt;成功返回 0，失败返回负的 &lt;code&gt;M4K_E*&lt;/code&gt; 错误码。&lt;/p&gt;&#xA;&lt;h2 id=&#34;错误&#34;&gt;错误&lt;/h2&gt;&#xA;&lt;ul&gt;&#xA;&lt;li&gt;&lt;code&gt;M4K_EPERM&lt;/code&gt; — 调用者无权限（非 root 且不是目标 UID）&lt;/li&gt;&#xA;&lt;/ul&gt;&#xA;&lt;h2 id=&#34;参见&#34;&gt;参见&lt;/h2&gt;&#xA;&lt;p&gt;&lt;a href=&#34;../man2/m4k_getuid/&#34;&gt;m4k_getuid(2)&lt;/a&gt;、&lt;a href=&#34;m4k_setgid/&#34;&gt;m4k_setgid(2)&lt;/a&gt;&lt;/p&gt;</description>
+			</item>
+	</channel>
+</rss>

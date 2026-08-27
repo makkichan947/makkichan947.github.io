@@ -1,0 +1,679 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>软件包下载 · Yaku Makki</title>
+  <meta name="description" content="下载LFS构建所需的所有源码包">
+  <meta name="theme-color" content="#0a0a0f">
+  <script>document.documentElement.classList.add('js');</script>
+
+  <link rel="icon" href="/avatar/avatar.jpg" type="image/jpeg">
+
+  
+  <link rel="stylesheet" href="/css/main.min.b64e4527cc255b367461135391e39e321a5d86fc97defca99c7afda308ada007.css" integrity="sha256-tk5FJ8wlWzZ0YRNTkeOeMhpdhvyX3vypnHr9owitoAc=">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/katex.min.css" crossorigin="anonymous">
+</head>
+<body>
+  <a class="skip-link" href="#main">跳到内容</a>
+
+  <div class="scene" aria-hidden="true">
+    <div class="scene-sky"></div>
+    <div class="scene-stars"></div>
+    <div class="scene-sun-halo"></div>
+    <div class="scene-sun"></div>
+    <div class="scene-mountains scene-mountains-far"></div>
+    <div class="scene-mountains scene-mountains-near"></div>
+    <div class="scene-horizon"></div>
+    <div class="scene-floor"></div>
+    <div class="scene-scanlines"></div>
+  </div>
+
+  <nav class="navbar" aria-label="主导航">
+    <div class="nav-inner">
+      <a class="logo" href="/" data-press>
+        <img class="logo-avatar" src="/avatar/avatar.jpg" alt="" width="34" height="34">
+        <span class="logo-text">Yaku Makki</span>
+      </a>
+      <div class="nav-menu-wrap">
+        <span class="nav-tick" aria-hidden="true"></span>
+        <ul class="nav-menu">
+          
+          <li>
+            <a href="/" data-press>首页</a>
+          </li>
+          
+          <li>
+            <a href="/post/" data-press>博客</a>
+          </li>
+          
+          <li>
+            <a href="/wiki/" data-press>维基</a>
+          </li>
+          
+          <li>
+            <a href="/tags/" data-press>标签</a>
+          </li>
+          
+          <li>
+            <a href="/about/" data-press>关于</a>
+          </li>
+          
+          
+          <li>
+            <button id="search-toggle" class="search-toggle" type="button" title="搜索 (Ctrl+K 或 /)" aria-haspopup="dialog" aria-expanded="false" data-press>搜索</button>
+          </li>
+          
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  
+  <div class="sheet-scrim" id="sheet-scrim"></div>
+  <section class="sheet" id="search-sheet" role="dialog" aria-modal="true" aria-label="搜索" aria-hidden="true">
+    <div class="sheet-panel" id="sheet-panel">
+      <div class="sheet-handle" id="sheet-handle" role="presentation" aria-hidden="true"></div>
+      <div class="sheet-body">
+        <div class="search-field">
+          <input id="search-input" type="search" placeholder="搜索文章和 Wiki…"
+                 autocomplete="off" spellcheck="false" aria-controls="search-results">
+          <span class="search-key" aria-hidden="true">/</span>
+        </div>
+        <div id="search-results" class="search-results" role="listbox" aria-label="搜索结果"></div>
+      </div>
+    </div>
+  </section>
+  
+
+  <main class="main" id="main">
+    
+<header class="page-head">
+  <nav class="crumb" aria-label="面包屑">
+    <a href="/" data-press>首页</a>
+    <span class="sep">/</span>
+    <a href="/wiki/" data-press>维基</a>
+    
+    
+    <span class="sep">/</span>
+    <a href="/wiki/lfs/preparation/" data-press>第一部分：准备工作</a>
+    
+    
+  </nav>
+  <h1>软件包下载</h1>
+  <p>下载LFS构建所需的所有源码包</p>
+</header>
+
+<div class="wiki-layout">
+  <article class="article">
+    <div class="article-content"><h1 id="软件包下载">软件包下载</h1>
+<p>LFS构建需要下载大量的源码包。本章将介绍如何下载、验证和管理这些软件包，确保构建过程的顺利进行。</p>
+<h2 id="-包列表概述">📦 包列表概述</h2>
+<h3 id="lfs-113-所需包">LFS 11.3 所需包</h3>
+<p>LFS 11.3 版本需要大约70个软件包，包括：</p>
+<ul>
+<li><strong>基础工具</strong>：Binutils, GCC, Glibc, Make等</li>
+<li><strong>系统库</strong>：Ncurses, Readline, Zlib等</li>
+<li><strong>核心工具</strong>：Coreutils, Util-linux, E2fsprogs等</li>
+<li><strong>网络工具</strong>：Openssl, Curl, Wget等</li>
+<li><strong>文档工具</strong>：Man-pages, Texinfo等</li>
+</ul>
+<h3 id="包分类">包分类</h3>
+<table>
+	<thead>
+			<tr>
+					<th>类别</th>
+					<th>数量</th>
+					<th>描述</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>工具链</td>
+					<td>~15</td>
+					<td>编译器、链接器、汇编器</td>
+			</tr>
+			<tr>
+					<td>基础工具</td>
+					<td>~20</td>
+					<td>系统核心工具</td>
+			</tr>
+			<tr>
+					<td>库文件</td>
+					<td>~15</td>
+					<td>系统库和依赖</td>
+			</tr>
+			<tr>
+					<td>文档</td>
+					<td>~5</td>
+					<td>手册页和文档</td>
+			</tr>
+			<tr>
+					<td>其他</td>
+					<td>~15</td>
+					<td>网络工具、压缩工具等</td>
+			</tr>
+	</tbody>
+</table>
+<h2 id="-下载方法">🔗 下载方法</h2>
+<h3 id="官方下载脚本">官方下载脚本</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># 创建下载目录</span>
+</span></span><span style="display:flex;"><span>mkdir -pv $LFS/sources
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 设置正确的权限</span>
+</span></span><span style="display:flex;"><span>chown -v lfs:lfs $LFS/sources
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 切换到lfs用户</span>
+</span></span><span style="display:flex;"><span>su - lfs
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 下载wget-list文件</span>
+</span></span><span style="display:flex;"><span>cd $LFS/sources
+</span></span><span style="display:flex;"><span>wget http://www.linuxfromscratch.org/lfs/view/stable/wget-list
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 下载md5sums文件（用于验证）</span>
+</span></span><span style="display:flex;"><span>wget http://www.linuxfromscratch.org/lfs/view/stable/md5sums
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 使用wget批量下载</span>
+</span></span><span style="display:flex;"><span>wget --input-file<span style="color:#f92672">=</span>wget-list --continue --directory-prefix<span style="color:#f92672">=</span>$LFS/sources
+</span></span></code></pre></div><h3 id="手动下载重要包">手动下载重要包</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># 如果网络问题，可以手动下载关键包</span>
+</span></span><span style="display:flex;"><span>cd $LFS/sources
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Binutils</span>
+</span></span><span style="display:flex;"><span>wget https://ftp.gnu.org/gnu/binutils/binutils-2.40.tar.xz
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># GCC</span>
+</span></span><span style="display:flex;"><span>wget https://ftp.gnu.org/gnu/gcc/gcc-12.2.0/gcc-12.2.0.tar.xz
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Glibc</span>
+</span></span><span style="display:flex;"><span>wget https://ftp.gnu.org/gnu/glibc/glibc-2.37.tar.xz
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Linux内核</span>
+</span></span><span style="display:flex;"><span>wget https://www.kernel.org/pub/linux/kernel/v6.x/linux-6.1.11.tar.xz
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 其他重要包</span>
+</span></span><span style="display:flex;"><span>wget https://ftp.gnu.org/gnu/gmp/gmp-6.2.1.tar.xz
+</span></span><span style="display:flex;"><span>wget https://ftp.gnu.org/gnu/mpfr/mpfr-4.2.0.tar.xz
+</span></span><span style="display:flex;"><span>wget https://ftp.gnu.org/gnu/mpc/mpc-1.3.1.tar.xz
+</span></span></code></pre></div><h3 id="国内镜像源">国内镜像源</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># 使用国内镜像加速下载</span>
+</span></span><span style="display:flex;"><span>cd $LFS/sources
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 清华大学镜像</span>
+</span></span><span style="display:flex;"><span>wget -c https://mirrors.tuna.tsinghua.edu.cn/lfs/lfs-packages/11.3/binutils-2.40.tar.xz
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 中科大镜像</span>
+</span></span><span style="display:flex;"><span>wget -c https://mirrors.ustc.edu.cn/lfs/lfs-packages/11.3/gcc-12.2.0.tar.xz
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 批量下载脚本（使用国内镜像）</span>
+</span></span><span style="display:flex;"><span>cat &gt; download_lfs_packages.sh <span style="color:#e6db74">&lt;&lt; &#39;EOF&#39;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">#!/bin/bash
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74"># LFS包下载脚本（国内镜像）
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">MIRRORS=(
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    &#34;https://mirrors.tuna.tsinghua.edu.cn/lfs/lfs-packages/11.3/&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    &#34;https://mirrors.ustc.edu.cn/lfs/lfs-packages/11.3/&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    &#34;https://mirrors.huaweicloud.com/lfs/lfs-packages/11.3/&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">)
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">PACKAGES=(
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    &#34;binutils-2.40.tar.xz&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    &#34;gcc-12.2.0.tar.xz&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    &#34;glibc-2.37.tar.xz&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    &#34;linux-6.1.11.tar.xz&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    &#34;gmp-6.2.1.tar.xz&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    &#34;mpfr-4.2.0.tar.xz&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    &#34;mpc-1.3.1.tar.xz&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    # 添加更多包...
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">)
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">download_package() {
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    local package=$1
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    local success=0
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    for mirror in &#34;${MIRRORS[@]}&#34;; do
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        echo &#34;尝试从 $mirror 下载 $package...&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        if wget -c &#34;$mirror$package&#34; -O &#34;$package&#34;; then
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            echo &#34;$package 下载成功&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            success=1
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            break
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        else
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            echo &#34;$package 从 $mirror 下载失败，尝试下一个镜像&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        fi
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    done
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    if [ $success -eq 0 ]; then
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        echo &#34;ERROR: $package 下载失败&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        return 1
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    fi
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    return 0
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">}
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74"># 下载所有包
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">for package in &#34;${PACKAGES[@]}&#34;; do
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    if [ ! -f &#34;$package&#34; ]; then
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        download_package &#34;$package&#34; || exit 1
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    else
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        echo &#34;$package 已存在，跳过&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    fi
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">done
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">echo &#34;所有包下载完成&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">EOF</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>chmod +x download_lfs_packages.sh
+</span></span><span style="display:flex;"><span>./download_lfs_packages.sh
+</span></span></code></pre></div><h2 id="-包验证">🔐 包验证</h2>
+<h3 id="md5校验和验证">MD5校验和验证</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># 验证下载的包</span>
+</span></span><span style="display:flex;"><span>cd $LFS/sources
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 使用md5sum验证</span>
+</span></span><span style="display:flex;"><span>md5sum -c md5sums
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 或者逐个验证</span>
+</span></span><span style="display:flex;"><span>md5sum binutils-2.40.tar.xz
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 比较输出与md5sums文件中的值</span>
+</span></span></code></pre></div><h3 id="sha256验证">SHA256验证</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># 如果有SHA256校验和文件</span>
+</span></span><span style="display:flex;"><span>wget http://www.linuxfromscratch.org/lfs/view/stable/sha256sums
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 使用sha256sum验证</span>
+</span></span><span style="display:flex;"><span>sha256sum -c sha256sums
+</span></span></code></pre></div><h3 id="gpg签名验证">GPG签名验证</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># 下载GPG签名文件</span>
+</span></span><span style="display:flex;"><span>wget https://ftp.gnu.org/gnu/binutils/binutils-2.40.tar.xz.sig
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 导入GPG密钥</span>
+</span></span><span style="display:flex;"><span>gpg --keyserver keyserver.ubuntu.com --recv-keys <span style="color:#f92672">[</span>密钥ID<span style="color:#f92672">]</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 验证签名</span>
+</span></span><span style="display:flex;"><span>gpg --verify binutils-2.40.tar.xz.sig binutils-2.40.tar.xz
+</span></span></code></pre></div><h2 id="-包管理">📁 包管理</h2>
+<h3 id="包清单管理">包清单管理</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># 创建包清单</span>
+</span></span><span style="display:flex;"><span>cd $LFS/sources
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 生成已下载包的清单</span>
+</span></span><span style="display:flex;"><span>ls -1 *.tar.* | sort &gt; package_inventory.txt
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 生成包大小统计</span>
+</span></span><span style="display:flex;"><span>du -sh *.tar.* | sort -h &gt; package_sizes.txt
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 生成包类型统计</span>
+</span></span><span style="display:flex;"><span>ls -1 *.tar.* | sed <span style="color:#e6db74">&#39;s/.*\.//&#39;</span> | sort | uniq -c &gt; package_types.txt
+</span></span></code></pre></div><h3 id="包备份和恢复">包备份和恢复</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># 创建包备份</span>
+</span></span><span style="display:flex;"><span>cd $LFS
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 压缩所有源码包</span>
+</span></span><span style="display:flex;"><span>tar -czf sources_backup.tar.gz sources/
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 备份到外部存储</span>
+</span></span><span style="display:flex;"><span>cp sources_backup.tar.gz /path/to/external/drive/
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 从备份恢复</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># tar -xzf /path/to/backup/sources_backup.tar.gz -C $LFS/</span>
+</span></span></code></pre></div><h3 id="增量下载">增量下载</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># 检查缺失的包</span>
+</span></span><span style="display:flex;"><span>cd $LFS/sources
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 比较本地包与wget-list</span>
+</span></span><span style="display:flex;"><span>comm -23 &lt;<span style="color:#f92672">(</span>sort wget-list | sed <span style="color:#e6db74">&#39;s|.*/||&#39;</span><span style="color:#f92672">)</span> &lt;<span style="color:#f92672">(</span>ls *.tar.* | sort<span style="color:#f92672">)</span> &gt; missing_packages.txt
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 下载缺失的包</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">if</span> <span style="color:#f92672">[</span> -s missing_packages.txt <span style="color:#f92672">]</span>; <span style="color:#66d9ef">then</span>
+</span></span><span style="display:flex;"><span>    echo <span style="color:#e6db74">&#34;发现缺失的包，正在下载...&#34;</span>
+</span></span><span style="display:flex;"><span>    wget --input-file<span style="color:#f92672">=</span>missing_packages.txt --continue
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">else</span>
+</span></span><span style="display:flex;"><span>    echo <span style="color:#e6db74">&#34;所有包都已下载&#34;</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">fi</span>
+</span></span></code></pre></div><h2 id="-包组织">🗂️ 包组织</h2>
+<h3 id="按阶段组织包">按阶段组织包</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># 创建阶段目录</span>
+</span></span><span style="display:flex;"><span>cd $LFS/sources
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>mkdir -p toolchain base_system system_libs documentation networking
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 移动包到对应目录</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 工具链包</span>
+</span></span><span style="display:flex;"><span>mv binutils-* gcc-* glibc-* gmp-* mpfr-* mpc-* toolchain/
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 基础系统包</span>
+</span></span><span style="display:flex;"><span>mv coreutils-* util-linux-* e2fsprogs-* base_system/
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 系统库</span>
+</span></span><span style="display:flex;"><span>mv ncurses-* readline-* zlib-* system_libs/
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 网络工具</span>
+</span></span><span style="display:flex;"><span>mv openssl-* curl-* wget-* networking/
+</span></span></code></pre></div><h3 id="包依赖图">包依赖图</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># 生成包依赖关系图（简化版）</span>
+</span></span><span style="display:flex;"><span>cat &gt; package_dependencies.dot <span style="color:#e6db74">&lt;&lt; &#39;EOF&#39;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">digraph LFS_Dependencies {
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    rankdir=LR;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    // 工具链阶段
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    binutils -&gt; gcc
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    gmp -&gt; gcc
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    mpfr -&gt; gcc
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    mpc -&gt; gcc
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    gcc -&gt; glibc
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    // 基础工具阶段
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    glibc -&gt; coreutils
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    glibc -&gt; util_linux
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    coreutils -&gt; bash
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    util_linux -&gt; e2fsprogs
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    // 系统库阶段
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    glibc -&gt; ncurses
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    ncurses -&gt; readline
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    glibc -&gt; zlib
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    // 网络工具阶段
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    openssl -&gt; curl
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    zlib -&gt; curl
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    curl -&gt; wget
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">}
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">EOF</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 生成可视化图（需要graphviz）</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># dot -Tpng package_dependencies.dot -o dependencies.png</span>
+</span></span></code></pre></div><h2 id="-高级下载技巧">🚀 高级下载技巧</h2>
+<h3 id="并行下载">并行下载</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># 使用aria2进行并行下载</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 安装aria2</span>
+</span></span><span style="display:flex;"><span>sudo pacman -S aria2  <span style="color:#75715e"># Arch</span>
+</span></span><span style="display:flex;"><span>sudo apt install aria2  <span style="color:#75715e"># Ubuntu</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 创建aria2下载列表</span>
+</span></span><span style="display:flex;"><span>cat &gt; lfs_packages.txt <span style="color:#e6db74">&lt;&lt; &#39;EOF&#39;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">https://ftp.gnu.org/gnu/binutils/binutils-2.40.tar.xz
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">https://ftp.gnu.org/gnu/gcc/gcc-12.2.0/gcc-12.2.0.tar.xz
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">https://ftp.gnu.org/gnu/glibc/glibc-2.37.tar.xz
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74"># 添加更多URL...
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">EOF</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 并行下载（10个连接）</span>
+</span></span><span style="display:flex;"><span>aria2c -i lfs_packages.txt -j <span style="color:#ae81ff">10</span> -d $LFS/sources
+</span></span></code></pre></div><h3 id="断点续传和重试">断点续传和重试</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># 创建智能下载脚本</span>
+</span></span><span style="display:flex;"><span>cat &gt; smart_download.sh <span style="color:#e6db74">&lt;&lt; &#39;EOF&#39;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">#!/bin/bash
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74"># 智能下载脚本，支持断点续传和重试
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">URL=$1
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">OUTPUT=$2
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">MAX_RETRIES=3
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">RETRY_DELAY=5
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">for ((i=1; i&lt;=MAX_RETRIES; i++)); do
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    echo &#34;尝试下载 $URL (第 $i 次)...&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    if wget -c &#34;$URL&#34; -O &#34;$OUTPUT&#34;; then
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        echo &#34;下载成功: $OUTPUT&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        exit 0
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    else
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        echo &#34;下载失败，$RETRY_DELAY 秒后重试...&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        sleep $RETRY_DELAY
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    fi
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">done
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">echo &#34;ERROR: 下载失败，已达到最大重试次数&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">exit 1
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">EOF</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>chmod +x smart_download.sh
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 使用智能下载</span>
+</span></span><span style="display:flex;"><span>./smart_download.sh https://ftp.gnu.org/gnu/binutils/binutils-2.40.tar.xz binutils-2.40.tar.xz
+</span></span></code></pre></div><h3 id="代理设置">代理设置</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># 设置wget代理</span>
+</span></span><span style="display:flex;"><span>export http_proxy<span style="color:#f92672">=</span>http://proxy.example.com:8080
+</span></span><span style="display:flex;"><span>export https_proxy<span style="color:#f92672">=</span>http://proxy.example.com:8080
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 或者在wgetrc中设置</span>
+</span></span><span style="display:flex;"><span>echo <span style="color:#e6db74">&#34;http_proxy = http://proxy.example.com:8080&#34;</span> &gt;&gt; ~/.wgetrc
+</span></span><span style="display:flex;"><span>echo <span style="color:#e6db74">&#34;https_proxy = http://proxy.example.com:8080&#34;</span> &gt;&gt; ~/.wgetrc
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 使用代理下载</span>
+</span></span><span style="display:flex;"><span>wget --proxy<span style="color:#f92672">=</span>on http://www.linuxfromscratch.org/lfs/view/stable/wget-list
+</span></span></code></pre></div><h2 id="-下载监控">📊 下载监控</h2>
+<h3 id="下载进度监控">下载进度监控</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># 实时监控下载进度</span>
+</span></span><span style="display:flex;"><span>watch -n <span style="color:#ae81ff">5</span> <span style="color:#e6db74">&#39;ls -lh $LFS/sources/*.tar.* | tail -10&#39;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 下载统计</span>
+</span></span><span style="display:flex;"><span>cat &gt; download_stats.sh <span style="color:#e6db74">&lt;&lt; &#39;EOF&#39;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">#!/bin/bash
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74"># 下载统计脚本
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">SOURCES_DIR=$LFS/sources
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">echo &#34;=== LFS包下载统计 ===&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">echo &#34;总包数量: $(ls $SOURCES_DIR/*.tar.* 2&gt;/dev/null | wc -l)&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">echo &#34;总大小: $(du -sh $SOURCES_DIR 2&gt;/dev/null | cut -f1)&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">echo &#34;&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">echo &#34;包类型分布:&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">ls $SOURCES_DIR/*.tar.* 2&gt;/dev/null | sed &#39;s/.*\.//&#39; | sort | uniq -c | sort -nr
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">echo &#34;&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">echo &#34;最大包:&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">ls -lh $SOURCES_DIR/*.tar.* 2&gt;/dev/null | sort -k5 -hr | head -5
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">echo &#34;&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">echo &#34;下载完成率:&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">total=$(wc -l &lt; wget-list 2&gt;/dev/null || echo &#34;0&#34;)
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">downloaded=$(ls $SOURCES_DIR/*.tar.* 2&gt;/dev/null | wc -l)
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">echo &#34;$downloaded / $total ($(echo &#34;scale=2; $downloaded*100/$total&#34; | bc -l)%)&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">EOF</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>chmod +x download_stats.sh
+</span></span><span style="display:flex;"><span>./download_stats.sh
+</span></span></code></pre></div><h3 id="自动化下载管理">自动化下载管理</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># 创建下载管理脚本</span>
+</span></span><span style="display:flex;"><span>cat &gt; download_manager.sh <span style="color:#e6db74">&lt;&lt; &#39;EOF&#39;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">#!/bin/bash
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74"># LFS下载管理器
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">set -e
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">SOURCES_DIR=$LFS/sources
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">LOG_FILE=$SOURCES_DIR/download.log
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">log() {
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    echo &#34;$(date &#39;+%Y-%m-%d %H:%M:%S&#39;) - $*&#34; | tee -a &#34;$LOG_FILE&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">}
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74"># 检查网络连接
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">check_network() {
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    if ! ping -c 1 google.com &gt;/dev/null 2&gt;&amp;1; then
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        log &#34;ERROR: 网络连接失败&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        exit 1
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    fi
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">}
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74"># 下载单个包
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">download_package() {
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    local url=$1
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    local filename=$(basename &#34;$url&#34;)
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    if [ -f &#34;$SOURCES_DIR/$filename&#34; ]; then
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        log &#34;包已存在: $filename&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        return 0
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    fi
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    log &#34;下载: $filename&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    if wget -c &#34;$url&#34; -O &#34;$SOURCES_DIR/$filename&#34; --timeout=30 --tries=3; then
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        log &#34;成功: $filename&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        return 0
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    else
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        log &#34;失败: $filename&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        return 1
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    fi
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">}
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74"># 主下载函数
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">main() {
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    log &#34;开始LFS包下载&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    check_network
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    mkdir -p &#34;$SOURCES_DIR&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    # 下载wget-list
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    if [ ! -f &#34;$SOURCES_DIR/wget-list&#34; ]; then
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        log &#34;下载wget-list...&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        download_package &#34;http://www.linuxfromscratch.org/lfs/view/stable/wget-list&#34; || exit 1
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    fi
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    # 下载md5sums
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    if [ ! -f &#34;$SOURCES_DIR/md5sums&#34; ]; then
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        log &#34;下载md5sums...&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        download_package &#34;http://www.linuxfromscratch.org/lfs/view/stable/md5sums&#34; || exit 1
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    fi
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    # 批量下载包
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    local success_count=0
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    local total_count=0
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    while read -r url; do
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        [ -z &#34;$url&#34; ] &amp;&amp; continue
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        [ &#34;${url:0:1}&#34; = &#34;#&#34; ] &amp;&amp; continue
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        total_count=$((total_count + 1))
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        if download_package &#34;$url&#34;; then
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            success_count=$((success_count + 1))
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        fi
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        # 显示进度
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        echo -ne &#34;\r进度: $success_count/$total_count&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    done &lt; &#34;$SOURCES_DIR/wget-list&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    echo &#34;&#34; # 新行
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    # 验证下载
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    log &#34;验证下载的包...&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    cd &#34;$SOURCES_DIR&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    if md5sum -c md5sums &gt;/dev/null 2&gt;&amp;1; then
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        log &#34;所有包验证通过&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    else
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        log &#34;WARNING: 部分包验证失败，请检查&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    fi
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    log &#34;下载完成: $success_count/$total_count 成功&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">}
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">main &#34;$@&#34;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">EOF</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>chmod +x download_manager.sh
+</span></span><span style="display:flex;"><span>./download_manager.sh
+</span></span></code></pre></div><h2 id="-常见问题">🚨 常见问题</h2>
+<h3 id="网络问题">网络问题</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># 如果遇到网络超时，增加超时时间</span>
+</span></span><span style="display:flex;"><span>wget --timeout<span style="color:#f92672">=</span><span style="color:#ae81ff">60</span> --tries<span style="color:#f92672">=</span><span style="color:#ae81ff">5</span> http://example.com/package.tar.xz
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 使用不同的镜像源</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 修改wget-list中的URL为国内镜像</span>
+</span></span><span style="display:flex;"><span>sed -i <span style="color:#e6db74">&#39;s|https://ftp.gnu.org|https://mirrors.tuna.tsinghua.edu.cn|g&#39;</span> wget-list
+</span></span></code></pre></div><h3 id="磁盘空间不足">磁盘空间不足</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># 检查可用空间</span>
+</span></span><span style="display:flex;"><span>df -h $LFS
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 如果空间不足，清理不需要的文件</span>
+</span></span><span style="display:flex;"><span>rm -rf $LFS/sources/temp/*
+</span></span></code></pre></div><h3 id="包损坏">包损坏</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># 重新下载损坏的包</span>
+</span></span><span style="display:flex;"><span>cd $LFS/sources
+</span></span><span style="display:flex;"><span>md5sum -c md5sums | grep FAILED
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 删除并重新下载失败的包</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># rm failed_package.tar.xz</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># wget [URL]</span>
+</span></span></code></pre></div><h2 id="-相关资源">📚 相关资源</h2>
+<ul>
+<li><a href="http://www.linuxfromscratch.org/lfs/view/stable/chapter03/chapter03.html">LFS官方文档 - 包下载</a></li>
+<li><a href="http://www.linuxfromscratch.org/lfs/view/stable/wget-list">LFS wget-list</a></li>
+<li><a href="http://www.linuxfromscratch.org/lfs/view/stable/md5sums">LFS md5sums</a></li>
+</ul>
+<hr>
+<p><em>最近更新: {{ .Lastmod.Format &ldquo;2006-01-02&rdquo; }}</em></p>
+</div>
+    
+<nav class="pager" aria-label="文章导航">
+  
+  <a href="/wiki/lfs/preparation/directory-layout/" data-press>
+    <span class="dir">← 上一篇</span>目录结构规划
+  </a>
+  
+  
+  <a href="/wiki/lfs/preparation/partitions/" class="is-next" data-press>
+    <span class="dir">下一篇 →</span>分区和文件系统
+  </a>
+  
+</nav>
+
+
+    
+
+  </article>
+  
+</div>
+
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+      <div class="footer-links">
+        
+        <a href="https://github.com/makkichan947" target="_blank" rel="noopener" title="Github" data-press>Github</a>
+        
+        <a href="mailto:yakumakki947@hotmail.com" target="_blank" rel="noopener" title="Email" data-press>Email</a>
+        
+        <a href="https://x.com/Makki_Yaku947" target="_blank" rel="noopener" title="Twitter" data-press>Twitter</a>
+        
+        <a href="https://www.twitch.tv/u/makkichan947" target="_blank" rel="noopener" title="Twitch" data-press>Twitch</a>
+        
+      </div>
+      <p>&copy; 2026 Yaku Makki</p>
+      <p>Powered by <a href="https://gohugo.io" target="_blank" rel="noopener">Hugo</a> · Makki Theme</p>
+      
+      <div class="stats">
+        <span>访客 <span id="busuanzi_value_site_uv"></span></span>
+        <span>访问 <span id="busuanzi_value_site_pv"></span></span>
+        <span>本页 <span id="busuanzi_value_page_pv"></span></span>
+      </div>
+      
+    </div>
+  </footer>
+
+  <button class="back-to-top" id="back-to-top" type="button" aria-label="回到顶部" data-press>
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 19V5"/><path d="M5 12l7-7 7 7"/></svg>
+  </button>
+
+  
+  <script src="/js/main.min.2e977141114ec7890ffee2c35e08034683543cfe8ef98dd4af5effb3b37a3345.js" integrity="sha256-LpdxQRFOx4kP/uLDXggDRoNUPP6O&#43;Y3Ur17/s7N6M0U=" defer></script>
+  
+  
+  <script src="/js/search.min.b2d6ba6610ce24454bc1436dc521dcfd878b2583ad9f65f77aadedaaa1e1a54c.js" integrity="sha256-sta6ZhDOJEVLwUNtxSHc/YeLJYOtn2X3eq3tqqHhpUw=" defer></script>
+  
+
+  
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+  
+
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/katex.min.js" crossorigin="anonymous"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/contrib/auto-render.min.js" crossorigin="anonymous"></script>
+</body>
+</html>

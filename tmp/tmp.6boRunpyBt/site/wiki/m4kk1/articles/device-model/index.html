@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>设备模型 · Yaku Makki</title>
+  <meta name="description" content="物理/逻辑分离的双层设备模型">
+  <meta name="theme-color" content="#0a0a0f">
+  <script>document.documentElement.classList.add('js');</script>
+
+  <link rel="icon" href="/avatar/avatar.jpg" type="image/jpeg">
+
+  
+  <link rel="stylesheet" href="/css/main.min.b64e4527cc255b367461135391e39e321a5d86fc97defca99c7afda308ada007.css" integrity="sha256-tk5FJ8wlWzZ0YRNTkeOeMhpdhvyX3vypnHr9owitoAc=">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/katex.min.css" crossorigin="anonymous">
+</head>
+<body>
+  <a class="skip-link" href="#main">跳到内容</a>
+
+  <div class="scene" aria-hidden="true">
+    <div class="scene-sky"></div>
+    <div class="scene-stars"></div>
+    <div class="scene-sun-halo"></div>
+    <div class="scene-sun"></div>
+    <div class="scene-mountains scene-mountains-far"></div>
+    <div class="scene-mountains scene-mountains-near"></div>
+    <div class="scene-horizon"></div>
+    <div class="scene-floor"></div>
+    <div class="scene-scanlines"></div>
+  </div>
+
+  <nav class="navbar" aria-label="主导航">
+    <div class="nav-inner">
+      <a class="logo" href="/" data-press>
+        <img class="logo-avatar" src="/avatar/avatar.jpg" alt="" width="34" height="34">
+        <span class="logo-text">Yaku Makki</span>
+      </a>
+      <div class="nav-menu-wrap">
+        <span class="nav-tick" aria-hidden="true"></span>
+        <ul class="nav-menu">
+          
+          <li>
+            <a href="/" data-press>首页</a>
+          </li>
+          
+          <li>
+            <a href="/post/" data-press>博客</a>
+          </li>
+          
+          <li>
+            <a href="/wiki/" data-press>维基</a>
+          </li>
+          
+          <li>
+            <a href="/tags/" data-press>标签</a>
+          </li>
+          
+          <li>
+            <a href="/about/" data-press>关于</a>
+          </li>
+          
+          
+          <li>
+            <button id="search-toggle" class="search-toggle" type="button" title="搜索 (Ctrl+K 或 /)" aria-haspopup="dialog" aria-expanded="false" data-press>搜索</button>
+          </li>
+          
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  
+  <div class="sheet-scrim" id="sheet-scrim"></div>
+  <section class="sheet" id="search-sheet" role="dialog" aria-modal="true" aria-label="搜索" aria-hidden="true">
+    <div class="sheet-panel" id="sheet-panel">
+      <div class="sheet-handle" id="sheet-handle" role="presentation" aria-hidden="true"></div>
+      <div class="sheet-body">
+        <div class="search-field">
+          <input id="search-input" type="search" placeholder="搜索文章和 Wiki…"
+                 autocomplete="off" spellcheck="false" aria-controls="search-results">
+          <span class="search-key" aria-hidden="true">/</span>
+        </div>
+        <div id="search-results" class="search-results" role="listbox" aria-label="搜索结果"></div>
+      </div>
+    </div>
+  </section>
+  
+
+  <main class="main" id="main">
+    
+<header class="page-head">
+  <nav class="crumb" aria-label="面包屑">
+    <a href="/" data-press>首页</a>
+    <span class="sep">/</span>
+    <a href="/wiki/" data-press>维基</a>
+    
+    
+    <span class="sep">/</span>
+    <a href="/wiki/m4kk1/articles/" data-press>专题文章</a>
+    
+    
+  </nav>
+  <h1>设备模型</h1>
+  <p>物理/逻辑分离的双层设备模型</p>
+</header>
+
+<div class="wiki-layout">
+  <article class="article">
+    <div class="article-content"><h2 id="双层架构">双层架构</h2>
+<p>M4KK1 采用物理/逻辑分离的双层设备模型:</p>
+<h3 id="物理层-device">物理层 <code>/device</code></h3>
+<p>物理设备发现与枚举层，负责:</p>
+<ul>
+<li>枚举总线上的设备</li>
+<li>报告设备类型、厂商、功能</li>
+<li>管理设备电源状态</li>
+</ul>
+<h3 id="逻辑层-dev">逻辑层 <code>/dev</code></h3>
+<p>逻辑设备节点层，提供:</p>
+<ul>
+<li>用户空间可访问的设备文件</li>
+<li>标准 I/O 接口（open/read/write/close）</li>
+<li>设备抽象（console、null、zero）</li>
+</ul>
+<h2 id="当前设备">当前设备</h2>
+<h3 id="console">console</h3>
+<ul>
+<li>路径: <code>/dev/console</code></li>
+<li>后端: 串口 COM1 (0x3F8)</li>
+<li>配置: 38400 8N1，无流控</li>
+<li>提供阻塞和非阻塞读取</li>
+</ul>
+<h3 id="null">null</h3>
+<ul>
+<li>路径: <code>/dev/null</code></li>
+<li>行为: 丢弃所有写入数据</li>
+<li>读取: 返回 EOF (0 字节)</li>
+</ul>
+<h3 id="zero">zero</h3>
+<ul>
+<li>路径: <code>/dev/zero</code></li>
+<li>行为: 读取时返回无限 <code>\0</code> 字节</li>
+<li>写入: 丢弃</li>
+</ul>
+<h2 id="串口控制台详情">串口控制台详情</h2>
+<p>文件: <code>sys/src/drivers/console.c</code></p>
+<h3 id="uart-寄存器">UART 寄存器</h3>
+<table>
+	<thead>
+			<tr>
+					<th>端口偏移</th>
+					<th>功能</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>+0</td>
+					<td>数据寄存器 (R/W)</td>
+			</tr>
+			<tr>
+					<td>+1</td>
+					<td>中断使能寄存器</td>
+			</tr>
+			<tr>
+					<td>+5</td>
+					<td>线路状态寄存器</td>
+			</tr>
+			<tr>
+					<td>+5 bit 6</td>
+					<td>发送保持寄存器空 (THR)</td>
+			</tr>
+			<tr>
+					<td>+5 bit 0</td>
+					<td>数据就绪 (DR)</td>
+			</tr>
+	</tbody>
+</table>
+<h3 id="核心实现">核心实现</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-c" data-lang="c"><span style="display:flex;"><span><span style="color:#75715e">// 发送字符 (忙等待直到 THR 为空)
+</span></span></span><span style="display:flex;"><span><span style="color:#66d9ef">void</span> <span style="color:#a6e22e">ser_putc</span>(<span style="color:#66d9ef">char</span> c) {
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">while</span> (<span style="color:#f92672">!</span>(<span style="color:#a6e22e">inb</span>(PORT <span style="color:#f92672">+</span> <span style="color:#ae81ff">5</span>) <span style="color:#f92672">&amp;</span> <span style="color:#ae81ff">0x20</span>));
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">outb</span>(PORT, c);
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// 非阻塞读取 (-1 = 无数据)
+</span></span></span><span style="display:flex;"><span><span style="color:#66d9ef">int</span> <span style="color:#a6e22e">ser_getc</span>(<span style="color:#66d9ef">void</span>) {
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> (<span style="color:#a6e22e">inb</span>(PORT <span style="color:#f92672">+</span> <span style="color:#ae81ff">5</span>) <span style="color:#f92672">&amp;</span> <span style="color:#ae81ff">0x01</span>)
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> <span style="color:#a6e22e">inb</span>(PORT);
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> <span style="color:#f92672">-</span><span style="color:#ae81ff">1</span>;
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><h2 id="驱动开发路线图">驱动开发路线图</h2>
+<table>
+	<thead>
+			<tr>
+					<th>驱动</th>
+					<th>优先级</th>
+					<th>依赖</th>
+			</tr>
+	</thead>
+	<tbody>
+			<tr>
+					<td>PS/2 键盘</td>
+					<td>高</td>
+					<td>IRQ1 处理</td>
+			</tr>
+			<tr>
+					<td>帧缓冲 (VBE/VESA)</td>
+					<td>高</td>
+					<td>点阵字体</td>
+			</tr>
+			<tr>
+					<td>ATA/PATA</td>
+					<td>中</td>
+					<td>块缓存</td>
+			</tr>
+			<tr>
+					<td>AHCI</td>
+					<td>中</td>
+					<td>ATA 完成</td>
+			</tr>
+			<tr>
+					<td>NE2000 / RTL8139</td>
+					<td>低</td>
+					<td>lwIP 集成</td>
+			</tr>
+	</tbody>
+</table>
+</div>
+    
+<nav class="pager" aria-label="文章导航">
+  
+  <a href="/wiki/m4kk1/articles/shell-m4sh/" data-press>
+    <span class="dir">← 上一篇</span>M4SH Shell 设计与实现
+  </a>
+  
+  
+</nav>
+
+
+    
+<div class="comments">
+  <h2 class="comments-title">评论</h2>
+  <div id="utterances"></div>
+  <script>
+    (function () {
+      if (window.location.protocol === 'file:') return;
+      var s = document.createElement('script');
+      s.src = 'https://utteranc.es/client.js';
+      s.async = true;
+      s.setAttribute('repo', "makkichan947/makkichan947.github.io");
+      s.setAttribute('issue-term', "pathname");
+      s.setAttribute('theme', "github-dark");
+      s.setAttribute('crossorigin', 'anonymous');
+      document.getElementById('utterances').appendChild(s);
+    })();
+  </script>
+</div>
+
+
+  </article>
+  
+  <aside class="toc" aria-label="目录">
+    <p class="toc-title">目录</p>
+    <nav id="TableOfContents">
+  <ul>
+    <li><a href="#双层架构">双层架构</a>
+      <ul>
+        <li><a href="#物理层-device">物理层 <code>/device</code></a></li>
+        <li><a href="#逻辑层-dev">逻辑层 <code>/dev</code></a></li>
+      </ul>
+    </li>
+    <li><a href="#当前设备">当前设备</a>
+      <ul>
+        <li><a href="#console">console</a></li>
+        <li><a href="#null">null</a></li>
+        <li><a href="#zero">zero</a></li>
+      </ul>
+    </li>
+    <li><a href="#串口控制台详情">串口控制台详情</a>
+      <ul>
+        <li><a href="#uart-寄存器">UART 寄存器</a></li>
+        <li><a href="#核心实现">核心实现</a></li>
+      </ul>
+    </li>
+    <li><a href="#驱动开发路线图">驱动开发路线图</a></li>
+  </ul>
+</nav>
+  </aside>
+  
+</div>
+
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+      <div class="footer-links">
+        
+        <a href="https://github.com/makkichan947" target="_blank" rel="noopener" title="Github" data-press>Github</a>
+        
+        <a href="mailto:yakumakki947@hotmail.com" target="_blank" rel="noopener" title="Email" data-press>Email</a>
+        
+        <a href="https://x.com/Makki_Yaku947" target="_blank" rel="noopener" title="Twitter" data-press>Twitter</a>
+        
+        <a href="https://www.twitch.tv/u/makkichan947" target="_blank" rel="noopener" title="Twitch" data-press>Twitch</a>
+        
+      </div>
+      <p>&copy; 2026 Yaku Makki</p>
+      <p>Powered by <a href="https://gohugo.io" target="_blank" rel="noopener">Hugo</a> · Makki Theme</p>
+      
+      <div class="stats">
+        <span>访客 <span id="busuanzi_value_site_uv"></span></span>
+        <span>访问 <span id="busuanzi_value_site_pv"></span></span>
+        <span>本页 <span id="busuanzi_value_page_pv"></span></span>
+      </div>
+      
+    </div>
+  </footer>
+
+  <button class="back-to-top" id="back-to-top" type="button" aria-label="回到顶部" data-press>
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 19V5"/><path d="M5 12l7-7 7 7"/></svg>
+  </button>
+
+  
+  <script src="/js/main.min.2e977141114ec7890ffee2c35e08034683543cfe8ef98dd4af5effb3b37a3345.js" integrity="sha256-LpdxQRFOx4kP/uLDXggDRoNUPP6O&#43;Y3Ur17/s7N6M0U=" defer></script>
+  
+  
+  <script src="/js/search.min.b2d6ba6610ce24454bc1436dc521dcfd878b2583ad9f65f77aadedaaa1e1a54c.js" integrity="sha256-sta6ZhDOJEVLwUNtxSHc/YeLJYOtn2X3eq3tqqHhpUw=" defer></script>
+  
+
+  
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+  
+
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/katex.min.js" crossorigin="anonymous"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/contrib/auto-render.min.js" crossorigin="anonymous"></script>
+</body>
+</html>

@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Linux From Scratch (LFS) · Yaku Makki</title>
+  <meta name="description" content="从零开始构建自己的Linux系统">
+  <meta name="theme-color" content="#0a0a0f">
+  <script>document.documentElement.classList.add('js');</script>
+
+  <link rel="icon" href="/avatar/avatar.jpg" type="image/jpeg">
+
+  
+  <link rel="stylesheet" href="/css/main.min.b64e4527cc255b367461135391e39e321a5d86fc97defca99c7afda308ada007.css" integrity="sha256-tk5FJ8wlWzZ0YRNTkeOeMhpdhvyX3vypnHr9owitoAc=">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/katex.min.css" crossorigin="anonymous">
+</head>
+<body>
+  <a class="skip-link" href="#main">跳到内容</a>
+
+  <div class="scene" aria-hidden="true">
+    <div class="scene-sky"></div>
+    <div class="scene-stars"></div>
+    <div class="scene-sun-halo"></div>
+    <div class="scene-sun"></div>
+    <div class="scene-mountains scene-mountains-far"></div>
+    <div class="scene-mountains scene-mountains-near"></div>
+    <div class="scene-horizon"></div>
+    <div class="scene-floor"></div>
+    <div class="scene-scanlines"></div>
+  </div>
+
+  <nav class="navbar" aria-label="主导航">
+    <div class="nav-inner">
+      <a class="logo" href="/" data-press>
+        <img class="logo-avatar" src="/avatar/avatar.jpg" alt="" width="34" height="34">
+        <span class="logo-text">Yaku Makki</span>
+      </a>
+      <div class="nav-menu-wrap">
+        <span class="nav-tick" aria-hidden="true"></span>
+        <ul class="nav-menu">
+          
+          <li>
+            <a href="/" data-press>首页</a>
+          </li>
+          
+          <li>
+            <a href="/post/" data-press>博客</a>
+          </li>
+          
+          <li>
+            <a href="/wiki/" data-press>维基</a>
+          </li>
+          
+          <li>
+            <a href="/tags/" data-press>标签</a>
+          </li>
+          
+          <li>
+            <a href="/about/" data-press>关于</a>
+          </li>
+          
+          
+          <li>
+            <button id="search-toggle" class="search-toggle" type="button" title="搜索 (Ctrl+K 或 /)" aria-haspopup="dialog" aria-expanded="false" data-press>搜索</button>
+          </li>
+          
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  
+  <div class="sheet-scrim" id="sheet-scrim"></div>
+  <section class="sheet" id="search-sheet" role="dialog" aria-modal="true" aria-label="搜索" aria-hidden="true">
+    <div class="sheet-panel" id="sheet-panel">
+      <div class="sheet-handle" id="sheet-handle" role="presentation" aria-hidden="true"></div>
+      <div class="sheet-body">
+        <div class="search-field">
+          <input id="search-input" type="search" placeholder="搜索文章和 Wiki…"
+                 autocomplete="off" spellcheck="false" aria-controls="search-results">
+          <span class="search-key" aria-hidden="true">/</span>
+        </div>
+        <div id="search-results" class="search-results" role="listbox" aria-label="搜索结果"></div>
+      </div>
+    </div>
+  </section>
+  
+
+  <main class="main" id="main">
+    
+<header class="page-head">
+  <h1>Linux From Scratch (LFS)</h1>
+  <p>从零开始构建自己的Linux系统</p>
+</header>
+
+
+<div class="article article-content"><h1 id="linux-from-scratch-lfs">Linux From Scratch (LFS)</h1>
+<p>Linux From Scratch (LFS) 是一个项目，教你如何从零开始构建自己的Linux系统。这不仅仅是安装软件，更是一场深入操作系统底层的学习之旅。</p>
+<h2 id="-学习目标">🎯 学习目标</h2>
+<p>通过LFS，你将学会：</p>
+<ul>
+<li>系统如何从无到有构建</li>
+<li>每个组件的作用和依赖关系</li>
+<li>软件编译和安装的原理</li>
+<li>系统配置和优化的方法</li>
+</ul>
+<h2 id="-前置知识">📋 前置知识</h2>
+<p>在开始LFS之前，你需要了解：</p>
+<ul>
+<li>基本命令行操作</li>
+<li>C/C++编译过程</li>
+<li>文件系统概念</li>
+<li>软件包管理基础</li>
+</ul>
+<h2 id="-环境准备">🛠️ 环境准备</h2>
+<h3 id="宿主系统要求">宿主系统要求</h3>
+<ul>
+<li>Linux发行版（推荐Arch Linux或Ubuntu）</li>
+<li>至少10GB可用磁盘空间</li>
+<li>2GB以上内存</li>
+<li>互联网连接</li>
+</ul>
+<h3 id="必要工具">必要工具</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># Arch Linux</span>
+</span></span><span style="display:flex;"><span>sudo pacman -S base-devel
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># Ubuntu/Debian</span>
+</span></span><span style="display:flex;"><span>sudo apt-get install build-essential
+</span></span></code></pre></div><h2 id="-lfs版本选择">📖 LFS版本选择</h2>
+<p>推荐从最新稳定版开始：</p>
+<ul>
+<li>LFS版本：11.3（最新稳定版）</li>
+<li>预计用时：20-40小时</li>
+<li>难度：中高级</li>
+</ul>
+<h2 id="-课程结构">📚 课程结构</h2>
+<h3 id="第一部分准备工作"><a href="./preparation/">第一部分：准备工作</a></h3>
+<ul>
+<li><a href="./preparation/host-system/">宿主系统配置</a></li>
+<li><a href="./preparation/partitions/">分区和文件系统</a></li>
+<li><a href="./preparation/packages/">软件包下载</a></li>
+<li><a href="./preparation/directory-layout/">目录结构规划</a></li>
+<li><a href="./preparation/environment/">环境变量设置</a></li>
+</ul>
+<h3 id="第二部分临时工具链"><a href="./toolchain/">第二部分：临时工具链</a></h3>
+<ul>
+<li><a href="./toolchain/cross-compiler/">交叉编译器构建</a></li>
+<li><a href="./toolchain/temporary-c-library/">临时C库</a></li>
+<li><a href="./toolchain/binutils/">Binutils工具链</a></li>
+<li><a href="./toolchain/gcc/">GCC编译器</a></li>
+<li><a href="./toolchain/testing/">临时工具链测试</a></li>
+</ul>
+<h3 id="第三部分基本系统构建"><a href="./basic-system/">第三部分：基本系统构建</a></h3>
+<ul>
+<li><a href="./basic-system/base-tools/">基础工具安装</a></li>
+<li><a href="./basic-system/core-components/">核心系统组件</a></li>
+<li><a href="./basic-system/system-libraries/">系统库构建</a></li>
+<li><a href="./basic-system/basic-utilities/">基本命令行工具</a></li>
+<li><a href="./basic-system/system-tools/">系统配置工具</a></li>
+</ul>
+<h3 id="第四部分引导和内核"><a href="./bootloader-kernel/">第四部分：引导和内核</a></h3>
+<ul>
+<li><a href="./bootloader-kernel/grub/">GRUB引导加载器</a></li>
+<li><a href="./bootloader-kernel/linux-kernel/">Linux内核编译</a></li>
+<li><a href="./bootloader-kernel/boot-configuration/">系统引导配置</a></li>
+<li><a href="./bootloader-kernel/kernel-modules/">内核模块管理</a></li>
+<li><a href="./bootloader-kernel/device-filesystem/">设备文件系统</a></li>
+</ul>
+<h3 id="第五部分系统配置"><a href="./system-configuration/">第五部分：系统配置</a></h3>
+<ul>
+<li><a href="./system-configuration/network/">网络配置</a></li>
+<li><a href="./system-configuration/systemd/">系统服务</a></li>
+<li><a href="./system-configuration/users/">用户管理</a></li>
+<li><a href="./system-configuration/security/">安全配置</a></li>
+<li><a href="./system-configuration/optimization/">系统优化</a></li>
+</ul>
+<h3 id="第六部分最终系统"><a href="./final-system/">第六部分：最终系统</a></h3>
+<ul>
+<li><a href="./final-system/desktop-environment/">桌面环境</a></li>
+<li><a href="./final-system/development-tools/">开发工具</a></li>
+<li><a href="./final-system/applications/">应用程序</a></li>
+<li><a href="./final-system/maintenance/">系统维护</a></li>
+<li><a href="./final-system/troubleshooting/">故障排除</a></li>
+</ul>
+<h2 id="-构建步骤概览">🚀 构建步骤概览</h2>
+<ol>
+<li><strong>准备工作</strong>：配置宿主系统，创建分区，下载源码</li>
+<li><strong>临时工具链</strong>：构建交叉编译环境和基础工具</li>
+<li><strong>基本系统</strong>：安装核心系统组件和库</li>
+<li><strong>引导和内核</strong>：配置GRUB和编译Linux内核</li>
+<li><strong>系统配置</strong>：网络、用户、服务等系统配置</li>
+<li><strong>最终系统</strong>：桌面环境、开发工具、应用软件</li>
+</ol>
+<h2 id="-学习建议">💡 学习建议</h2>
+<blockquote>
+<p>LFS不是一蹴而就的项目，建议分阶段进行。遇到问题时，多查阅文档和社区资源。</p>
+</blockquote>
+<h2 id="-相关资源">📚 相关资源</h2>
+<ul>
+<li><a href="http://www.linuxfromscratch.org/lfs/">LFS官方文档</a></li>
+<li><a href="https://lfs.linuxsir.org/">LFS中文社区</a></li>
+<li><a href="http://www.linuxfromscratch.org/blfs/">BLFS（Beyond LFS）</a></li>
+<li><a href="http://www.linuxfromscratch.org/hints/">LFS Hints</a></li>
+</ul>
+</div>
+
+
+
+<div class="card-grid">
+  
+  <article class="card" data-press data-reveal data-reveal-delay="045">
+    <h3><a href="/wiki/lfs/preparation/">第一部分：准备工作</a></h3>
+    <p><h1 id="第一部分准备工作">第一部分：准备工作</h1>
+<p>在开始构建LFS系统之前，需要进行充分的准备工作，包括宿主系统配置、分区规划、源码下载等。本部分将详细介绍这些准备步骤。</p>
+<h2 id="-章节内容">📋 章节内容</h2>
+<ul>
+<li><a href="./host-system/">宿主系统配置</a> - 配置构建环境</li>
+<li><a href="./partitions/">分区和文件系统</a> - 磁盘分区和 …</li></ul></p>
+    <div class="meta">
+      <time datetime="2025-10-28">2025-10-28</time>
+      
+    </div>
+  </article>
+  
+  <article class="card" data-press data-reveal data-reveal-delay="145">
+    <h3><a href="/wiki/lfs/toolchain/">第二部分：临时工具链</a></h3>
+    <p><h1 id="第二部分临时工具链">第二部分：临时工具链</h1>
+<p>临时工具链是LFS构建过程中最关键的一步，它为后续的基本系统构建提供必要的编译工具。本部分将详细介绍如何构建一个独立的临时工具链。</p>
+<h2 id="-章节内容">📋 章节内容</h2>
+<ul>
+<li><a href="./cross-compiler/">交叉编译器构建</a> - Binutils和GCC的交叉 …</li></ul></p>
+    <div class="meta">
+      <time datetime="2025-10-28">2025-10-28</time>
+      
+    </div>
+  </article>
+  
+  <article class="card" data-press data-reveal data-reveal-delay="245">
+    <h3><a href="/wiki/lfs/basic-system/">第三部分：基本系统构建</a></h3>
+    <p><h1 id="第三部分基本系统构建">第三部分：基本系统构建</h1>
+<p>基本系统构建是LFS最核心的部分，包括安装所有必要的工具和库来创建一个可用的Linux系统。本部分将详细介绍如何构建基本系统的各个组件。</p>
+<h2 id="-章节内容">📋 章节内容</h2>
+<ul>
+<li><a href="./base-tools/">基础工具安装</a> - 核心命令行工具</li>
+<li><a href="./system-libraries/">系统库构 …</a></li></ul></p>
+    <div class="meta">
+      <time datetime="2025-10-28">2025-10-28</time>
+      
+    </div>
+  </article>
+  
+</div>
+
+
+
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+      <div class="footer-links">
+        
+        <a href="https://github.com/makkichan947" target="_blank" rel="noopener" title="Github" data-press>Github</a>
+        
+        <a href="mailto:yakumakki947@hotmail.com" target="_blank" rel="noopener" title="Email" data-press>Email</a>
+        
+        <a href="https://x.com/Makki_Yaku947" target="_blank" rel="noopener" title="Twitter" data-press>Twitter</a>
+        
+        <a href="https://www.twitch.tv/u/makkichan947" target="_blank" rel="noopener" title="Twitch" data-press>Twitch</a>
+        
+      </div>
+      <p>&copy; 2026 Yaku Makki</p>
+      <p>Powered by <a href="https://gohugo.io" target="_blank" rel="noopener">Hugo</a> · Makki Theme</p>
+      
+      <div class="stats">
+        <span>访客 <span id="busuanzi_value_site_uv"></span></span>
+        <span>访问 <span id="busuanzi_value_site_pv"></span></span>
+        <span>本页 <span id="busuanzi_value_page_pv"></span></span>
+      </div>
+      
+    </div>
+  </footer>
+
+  <button class="back-to-top" id="back-to-top" type="button" aria-label="回到顶部" data-press>
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 19V5"/><path d="M5 12l7-7 7 7"/></svg>
+  </button>
+
+  
+  <script src="/js/main.min.2e977141114ec7890ffee2c35e08034683543cfe8ef98dd4af5effb3b37a3345.js" integrity="sha256-LpdxQRFOx4kP/uLDXggDRoNUPP6O&#43;Y3Ur17/s7N6M0U=" defer></script>
+  
+  
+  <script src="/js/search.min.b2d6ba6610ce24454bc1436dc521dcfd878b2583ad9f65f77aadedaaa1e1a54c.js" integrity="sha256-sta6ZhDOJEVLwUNtxSHc/YeLJYOtn2X3eq3tqqHhpUw=" defer></script>
+  
+
+  
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+  
+
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/katex.min.js" crossorigin="anonymous"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/contrib/auto-render.min.js" crossorigin="anonymous"></script>
+</body>
+</html>

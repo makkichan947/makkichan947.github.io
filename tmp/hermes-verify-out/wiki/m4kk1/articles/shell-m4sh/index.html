@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>M4SH Shell 设计与实现 · Yaku Makki</title>
+  <meta name="description" content="系统的 init 进程与 40&#43; 内置命令">
+  <meta name="theme-color" content="#0a0a0f">
+  <script>document.documentElement.classList.add('js');</script>
+
+  <link rel="icon" href="/avatar/avatar.jpg" type="image/jpeg">
+
+  
+  <link rel="stylesheet" href="/css/main.min.b64e4527cc255b367461135391e39e321a5d86fc97defca99c7afda308ada007.css" integrity="sha256-tk5FJ8wlWzZ0YRNTkeOeMhpdhvyX3vypnHr9owitoAc=">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/katex.min.css" crossorigin="anonymous">
+</head>
+<body>
+  <a class="skip-link" href="#main">跳到内容</a>
+
+  <div class="scene" aria-hidden="true">
+    <div class="scene-sky"></div>
+    <div class="scene-stars"></div>
+    <div class="scene-sun-halo"></div>
+    <div class="scene-sun"></div>
+    <div class="scene-mountains scene-mountains-far"></div>
+    <div class="scene-mountains scene-mountains-near"></div>
+    <div class="scene-horizon"></div>
+    <div class="scene-floor"></div>
+    <div class="scene-scanlines"></div>
+  </div>
+
+  <nav class="navbar" aria-label="主导航">
+    <div class="nav-inner">
+      <a class="logo" href="/" data-press>
+        <img class="logo-avatar" src="/avatar/avatar.jpg" alt="" width="34" height="34">
+        <span class="logo-text">Yaku Makki</span>
+      </a>
+      <div class="nav-menu-wrap">
+        <span class="nav-tick" aria-hidden="true"></span>
+        <ul class="nav-menu">
+          
+          <li>
+            <a href="/" data-press>首页</a>
+          </li>
+          
+          <li>
+            <a href="/post/" data-press>博客</a>
+          </li>
+          
+          <li>
+            <a href="/wiki/" data-press>维基</a>
+          </li>
+          
+          <li>
+            <a href="/tags/" data-press>标签</a>
+          </li>
+          
+          <li>
+            <a href="/about/" data-press>关于</a>
+          </li>
+          
+          
+          <li>
+            <button id="search-toggle" class="search-toggle" type="button" title="搜索 (Ctrl+K 或 /)" aria-haspopup="dialog" aria-expanded="false" data-press>搜索</button>
+          </li>
+          
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  
+  <div class="sheet-scrim" id="sheet-scrim"></div>
+  <section class="sheet" id="search-sheet" role="dialog" aria-modal="true" aria-label="搜索" aria-hidden="true">
+    <div class="sheet-panel" id="sheet-panel">
+      <div class="sheet-handle" id="sheet-handle" role="presentation" aria-hidden="true"></div>
+      <div class="sheet-body">
+        <div class="search-field">
+          <input id="search-input" type="search" placeholder="搜索文章和 Wiki…"
+                 autocomplete="off" spellcheck="false" aria-controls="search-results">
+          <span class="search-key" aria-hidden="true">/</span>
+        </div>
+        <div id="search-results" class="search-results" role="listbox" aria-label="搜索结果"></div>
+      </div>
+    </div>
+  </section>
+  
+
+  <main class="main" id="main">
+    
+<header class="page-head">
+  <nav class="crumb" aria-label="面包屑">
+    <a href="/" data-press>首页</a>
+    <span class="sep">/</span>
+    <a href="/wiki/" data-press>维基</a>
+    
+    
+    <span class="sep">/</span>
+    <a href="/wiki/m4kk1/articles/" data-press>专题文章</a>
+    
+    
+  </nav>
+  <h1>M4SH Shell 设计与实现</h1>
+  <p>系统的 init 进程与 40&#43; 内置命令</p>
+</header>
+
+<div class="wiki-layout">
+  <article class="article">
+    <div class="article-content"><h2 id="概述">概述</h2>
+<p>M4SH (M4KK1 Shell) 是系统的 init 进程（PID 1），提供交互式命令行环境。它由 <code>m4sh/core/m4sh_main.c</code>（578 行）实现，是一个完全自包含的 freestanding C 程序。</p>
+<h2 id="架构">架构</h2>
+<pre tabindex="0"><code>init (PID 1)
+  └── /bin/login ─── 登录会话管理
+       └── /bin/m4sh ─── Shell (40+ 内置命令)
+            ├── coreutils/  ─── 文件、进程、文本、管理工具
+            ├── lib/        ─── 密码和组数据库
+            ├── core/       ─── Shell 主循环、正则引擎
+            └── login/      ─── 独立登录 ELF
+</code></pre><h2 id="启动流程">启动流程</h2>
+<pre tabindex="0"><code>_start()
+  ├── ser_puts(欢迎信息)
+  ├── cwd_init()                     // 初始化工作目录
+  ├── m4k_geteuid() == 0?
+  │     ├── musr_boot_setup()        // 首次启动设置
+  │     └── musr_cmd_login()         // 登录循环
+  ├── render_line()                  // 首次提示符
+  └── while(1) {
+        musr_at_check_jobs()
+        ser_getc()                   // 读取按键
+        handle_key(ch)               // 处理按键
+        render_line()                // 更新显示
+      }
+</code></pre><h2 id="命令行编辑">命令行编辑</h2>
+<p>M4SH 支持字符逐个回显的行编辑模式，包括:</p>
+<ul>
+<li>字符追加和退格删除</li>
+<li>Tab 命令名补全（从命令表匹配）</li>
+<li>上下键历史导航（最多 16 条）</li>
+<li>Ctrl+C 取消、Ctrl+D 退出</li>
+</ul>
+<h2 id="引号处理">引号处理</h2>
+<p>引号解析在三个层面发生:</p>
+<ol>
+<li><strong>命令列表分割</strong> (<code>execute_command_list</code>): 在分割 <code>;</code> <code>&amp;&amp;</code> <code>||</code> 时跳过引号内容</li>
+<li><strong>管道解析</strong> (<code>run_pipeline</code>): 在分割 <code>|</code> 时跳过引号内容</li>
+<li><strong>Token 化</strong> (<code>tokenize_quoted</code>): 将参数字符串解析为 argv 数组</li>
+</ol>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-c" data-lang="c"><span style="display:flex;"><span><span style="color:#75715e">// 单引号: 逐字保留内容
+</span></span></span><span style="display:flex;"><span><span style="color:#66d9ef">if</span> (<span style="color:#f92672">*</span>p <span style="color:#f92672">==</span> <span style="color:#e6db74">&#39;\&#39;&#39;</span>) {
+</span></span><span style="display:flex;"><span>    p<span style="color:#f92672">++</span>;
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">while</span> (<span style="color:#f92672">*</span>p <span style="color:#f92672">&amp;&amp;</span> <span style="color:#f92672">*</span>p <span style="color:#f92672">!=</span> <span style="color:#e6db74">&#39;\&#39;&#39;</span>) <span style="color:#f92672">*</span>out<span style="color:#f92672">++</span> <span style="color:#f92672">=</span> <span style="color:#f92672">*</span>p<span style="color:#f92672">++</span>;
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span><span style="color:#75715e">// 双引号: 支持 \&#34; \\ \$ 转义
+</span></span></span><span style="display:flex;"><span><span style="color:#66d9ef">else</span> <span style="color:#66d9ef">if</span> (<span style="color:#f92672">*</span>p <span style="color:#f92672">==</span> <span style="color:#e6db74">&#39;&#34;&#39;</span>) {
+</span></span><span style="display:flex;"><span>    p<span style="color:#f92672">++</span>;
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">while</span> (<span style="color:#f92672">*</span>p <span style="color:#f92672">&amp;&amp;</span> <span style="color:#f92672">*</span>p <span style="color:#f92672">!=</span> <span style="color:#e6db74">&#39;&#34;&#39;</span>) {
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> (<span style="color:#f92672">*</span>p <span style="color:#f92672">==</span> <span style="color:#e6db74">&#39;\\&#39;</span> <span style="color:#f92672">&amp;&amp;</span> (p[<span style="color:#ae81ff">1</span>] <span style="color:#f92672">==</span> <span style="color:#e6db74">&#39;&#34;&#39;</span> <span style="color:#f92672">||</span> p[<span style="color:#ae81ff">1</span>] <span style="color:#f92672">==</span> <span style="color:#e6db74">&#39;\\&#39;</span> <span style="color:#f92672">||</span> p[<span style="color:#ae81ff">1</span>] <span style="color:#f92672">==</span> <span style="color:#e6db74">&#39;$&#39;</span>))
+</span></span><span style="display:flex;"><span>            p<span style="color:#f92672">++</span>;
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">*</span>out<span style="color:#f92672">++</span> <span style="color:#f92672">=</span> <span style="color:#f92672">*</span>p<span style="color:#f92672">++</span>;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><h2 id="管道实现">管道实现</h2>
+<p>使用 <code>musr_sc_pipe()</code> 和 <code>musr_sc_dup2()</code> 实现，最多 8 个管道段。<code>out_fd</code> 抽象层使输出重定向到文件或管道。</p>
+<h2 id="环境变量">环境变量</h2>
+<ul>
+<li>最多 16 个变量，每个名值最大 128 字节</li>
+<li>展开语法: <code>$VAR</code> 和 <code>${VAR}</code></li>
+<li>单引号内不展开变量</li>
+<li>通过 <code>export PATH=/bin:/usr/bin</code> 设置</li>
+</ul>
+<h2 id="命令注册">命令注册</h2>
+<p>命令表定义在 <code>musr_cmd_table[]</code> 中：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-c" data-lang="c"><span style="display:flex;"><span><span style="color:#66d9ef">musr_cmd_t</span> musr_cmd_table[] <span style="color:#f92672">=</span> {
+</span></span><span style="display:flex;"><span>    {<span style="color:#e6db74">&#34;help&#34;</span>,   musr_cmd_help,   <span style="color:#e6db74">&#34;Show this help&#34;</span>},
+</span></span><span style="display:flex;"><span>    {<span style="color:#e6db74">&#34;echo&#34;</span>,   musr_cmd_echo,   <span style="color:#e6db74">&#34;Print arguments&#34;</span>},
+</span></span><span style="display:flex;"><span>    {<span style="color:#e6db74">&#34;grep&#34;</span>,   musr_cmd_grep,   <span style="color:#e6db74">&#34;Search text&#34;</span>},
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// ... 40+ 命令
+</span></span></span><span style="display:flex;"><span>    {NULL, NULL, NULL}
+</span></span><span style="display:flex;"><span>};
+</span></span></code></pre></div><h2 id="运行时支持">运行时支持</h2>
+<ul>
+<li>无动态堆分配（固定大小的全局缓冲区）</li>
+<li>输出通过 <code>out_fd</code> 抽象层（支持串口和文件描述符）</li>
+<li>内置字符串函数（无 libc）</li>
+<li>单个主头文件 <code>m4sh/m4sh.h</code>（750 行）</li>
+</ul>
+</div>
+    
+<nav class="pager" aria-label="文章导航">
+  
+  <a href="/wiki/m4kk1/articles/user-identity/" data-press>
+    <span class="dir">← 上一篇</span>用户身份模型
+  </a>
+  
+  
+  <a href="/wiki/m4kk1/articles/device-model/" class="is-next" data-press>
+    <span class="dir">下一篇 →</span>设备模型
+  </a>
+  
+</nav>
+
+
+    
+<div class="comments">
+  <h2 class="comments-title">评论</h2>
+  <div id="utterances"></div>
+  <script>
+    (function () {
+      if (window.location.protocol === 'file:') return;
+      var s = document.createElement('script');
+      s.src = 'https://utteranc.es/client.js';
+      s.async = true;
+      s.setAttribute('repo', "makkichan947/makkichan947.github.io");
+      s.setAttribute('issue-term', "pathname");
+      s.setAttribute('theme', "github-dark");
+      s.setAttribute('crossorigin', 'anonymous');
+      document.getElementById('utterances').appendChild(s);
+    })();
+  </script>
+</div>
+
+
+  </article>
+  
+  <aside class="toc" aria-label="目录">
+    <p class="toc-title">目录</p>
+    <nav id="TableOfContents">
+  <ul>
+    <li><a href="#概述">概述</a></li>
+    <li><a href="#架构">架构</a></li>
+    <li><a href="#启动流程">启动流程</a></li>
+    <li><a href="#命令行编辑">命令行编辑</a></li>
+    <li><a href="#引号处理">引号处理</a></li>
+    <li><a href="#管道实现">管道实现</a></li>
+    <li><a href="#环境变量">环境变量</a></li>
+    <li><a href="#命令注册">命令注册</a></li>
+    <li><a href="#运行时支持">运行时支持</a></li>
+  </ul>
+</nav>
+  </aside>
+  
+</div>
+
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+      <div class="footer-links">
+        
+        <a href="https://github.com/makkichan947" target="_blank" rel="noopener" title="Github" data-press>Github</a>
+        
+        <a href="mailto:yakumakki947@hotmail.com" target="_blank" rel="noopener" title="Email" data-press>Email</a>
+        
+        <a href="https://x.com/Makki_Yaku947" target="_blank" rel="noopener" title="Twitter" data-press>Twitter</a>
+        
+        <a href="https://www.twitch.tv/u/makkichan947" target="_blank" rel="noopener" title="Twitch" data-press>Twitch</a>
+        
+      </div>
+      <p>&copy; 2026 Yaku Makki</p>
+      <p>Powered by <a href="https://gohugo.io" target="_blank" rel="noopener">Hugo</a> · Makki Theme</p>
+      
+      <div class="stats">
+        <span>访客 <span id="busuanzi_value_site_uv"></span></span>
+        <span>访问 <span id="busuanzi_value_site_pv"></span></span>
+        <span>本页 <span id="busuanzi_value_page_pv"></span></span>
+      </div>
+      
+    </div>
+  </footer>
+
+  <button class="back-to-top" id="back-to-top" type="button" aria-label="回到顶部" data-press>
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 19V5"/><path d="M5 12l7-7 7 7"/></svg>
+  </button>
+
+  
+  <script src="/js/main.min.2e977141114ec7890ffee2c35e08034683543cfe8ef98dd4af5effb3b37a3345.js" integrity="sha256-LpdxQRFOx4kP/uLDXggDRoNUPP6O&#43;Y3Ur17/s7N6M0U=" defer></script>
+  
+  
+  <script src="/js/search.min.b2d6ba6610ce24454bc1436dc521dcfd878b2583ad9f65f77aadedaaa1e1a54c.js" integrity="sha256-sta6ZhDOJEVLwUNtxSHc/YeLJYOtn2X3eq3tqqHhpUw=" defer></script>
+  
+
+  
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+  
+
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/katex.min.js" crossorigin="anonymous"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/contrib/auto-render.min.js" crossorigin="anonymous"></script>
+</body>
+</html>

@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>默认的Hyprland · Yaku Makki</title>
+  <meta name="description" content="个人小巢">
+  <meta name="theme-color" content="#0a0a0f">
+  <script>document.documentElement.classList.add('js');</script>
+
+  <link rel="icon" href="/avatar/avatar.jpg" type="image/jpeg">
+
+  
+  <link rel="stylesheet" href="/css/main.min.b64e4527cc255b367461135391e39e321a5d86fc97defca99c7afda308ada007.css" integrity="sha256-tk5FJ8wlWzZ0YRNTkeOeMhpdhvyX3vypnHr9owitoAc=">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/katex.min.css" crossorigin="anonymous">
+</head>
+<body>
+  <a class="skip-link" href="#main">跳到内容</a>
+
+  <div class="scene" aria-hidden="true">
+    <div class="scene-sky"></div>
+    <div class="scene-stars"></div>
+    <div class="scene-sun-halo"></div>
+    <div class="scene-sun"></div>
+    <div class="scene-mountains scene-mountains-far"></div>
+    <div class="scene-mountains scene-mountains-near"></div>
+    <div class="scene-horizon"></div>
+    <div class="scene-floor"></div>
+    <div class="scene-scanlines"></div>
+  </div>
+
+  <nav class="navbar" aria-label="主导航">
+    <div class="nav-inner">
+      <a class="logo" href="/" data-press>
+        <img class="logo-avatar" src="/avatar/avatar.jpg" alt="" width="34" height="34">
+        <span class="logo-text">Yaku Makki</span>
+      </a>
+      <div class="nav-menu-wrap">
+        <span class="nav-tick" aria-hidden="true"></span>
+        <ul class="nav-menu">
+          
+          <li>
+            <a href="/" data-press>首页</a>
+          </li>
+          
+          <li>
+            <a href="/post/" data-press>博客</a>
+          </li>
+          
+          <li>
+            <a href="/wiki/" data-press>维基</a>
+          </li>
+          
+          <li>
+            <a href="/tags/" data-press>标签</a>
+          </li>
+          
+          <li>
+            <a href="/about/" data-press>关于</a>
+          </li>
+          
+          
+          <li>
+            <button id="search-toggle" class="search-toggle" type="button" title="搜索 (Ctrl+K 或 /)" aria-haspopup="dialog" aria-expanded="false" data-press>搜索</button>
+          </li>
+          
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  
+  <div class="sheet-scrim" id="sheet-scrim"></div>
+  <section class="sheet" id="search-sheet" role="dialog" aria-modal="true" aria-label="搜索" aria-hidden="true">
+    <div class="sheet-panel" id="sheet-panel">
+      <div class="sheet-handle" id="sheet-handle" role="presentation" aria-hidden="true"></div>
+      <div class="sheet-body">
+        <div class="search-field">
+          <input id="search-input" type="search" placeholder="搜索文章和 Wiki…"
+                 autocomplete="off" spellcheck="false" aria-controls="search-results">
+          <span class="search-key" aria-hidden="true">/</span>
+        </div>
+        <div id="search-results" class="search-results" role="listbox" aria-label="搜索结果"></div>
+      </div>
+    </div>
+  </section>
+  
+
+  <main class="main" id="main">
+    
+<header class="page-head">
+  <nav class="crumb" aria-label="面包屑">
+    <a href="/" data-press>首页</a>
+    <span class="sep">/</span>
+    <a href="/wiki/" data-press>维基</a>
+    
+    
+    <span class="sep">/</span>
+    <a href="/wiki/hyprland/" data-press>Hyprland</a>
+    
+    
+  </nav>
+  <h1>默认的Hyprland</h1>
+  
+</header>
+
+<div class="wiki-layout">
+  <article class="article">
+    <div class="article-content"><p>当您第一次安装 Hyprland 时，它会创建一个默认的配置文件，提供基本的窗口管理功能。</p>
+<h2 id="默认配置文件位置">默认配置文件位置</h2>
+<p>默认配置文件位于 <code>~/.config/hypr/hyprland.conf</code>，如果该文件不存在，Hyprland 会使用内置的默认配置。</p>
+<h2 id="默认配置内容">默认配置内容</h2>
+<h3 id="程序定义">程序定义</h3>
+<p>默认配置中定义了以下变量：</p>
+<pre tabindex="0"><code class="language-conf" data-lang="conf">$terminal = alacritty
+$fileManager = dolphin
+$menu = rofi -show drun
+$browser = firefox
+$lock = swaylock
+$editor = kate
+$screenshot = grim
+</code></pre><h3 id="自动启动">自动启动</h3>
+<pre tabindex="0"><code class="language-conf" data-lang="conf">exec-once = swayidle &amp; swaybg
+exec-once = fcitx5 --replace -d
+</code></pre><h3 id="环境变量">环境变量</h3>
+<pre tabindex="0"><code class="language-conf" data-lang="conf">env = XCURSOR_SIZE,24
+env = HYPRCURSOR_SIZE,24
+</code></pre><h3 id="外观和感觉">外观和感觉</h3>
+<pre tabindex="0"><code class="language-conf" data-lang="conf">general {
+    gaps_in = 5
+    gaps_out = 10
+    border_size = 1
+    col.active_border = rgba(33ccffee)
+    col.inactive_border = rgba(595959aa)
+    resize_on_border = true
+    allow_tearing = false
+    layout = dwindle
+}
+
+decoration {
+    rounding = 10
+    rounding_power = 2
+    active_opacity = 1.0
+    inactive_opacity = 0.8
+    shadow {
+        enabled = true
+        range = 3
+        render_power = 2
+        color = rgba(000000aa)
+    }
+    blur {
+        enabled = false
+        size = 3
+        passes = 1
+        vibrancy = 0.0
+        ignore_opacity = true
+    }
+}
+</code></pre><h3 id="动画">动画</h3>
+<pre tabindex="0"><code class="language-conf" data-lang="conf">animations {
+    enabled = true
+    animation = windows, 1, 2, default
+    animation = windowsIn, 1, 2, default
+    animation = windowsOut, 1, 2, default
+    animation = border, 1, 5, default
+    animation = fade, 1, 2, default
+}
+</code></pre><h3 id="输入设置">输入设置</h3>
+<pre tabindex="0"><code class="language-conf" data-lang="conf">input {
+    kb_layout = us
+    kb_variant =
+    kb_model =
+    kb_options =
+    kb_rules =
+    follow_mouse = 1
+    sensitivity = 0
+    touchpad {
+        natural_scroll = false
+    }
+}
+</code></pre><h3 id="快捷键">快捷键</h3>
+<pre tabindex="0"><code class="language-conf" data-lang="conf">$mainMod = SUPER
+
+# 基本操作
+bind = $mainMod, RETURN, exec, $terminal
+bind = $mainMod, C, killactive,
+bind = $mainMod, M, exit,
+bind = $mainMod, L, exec, $lock,
+bind = $mainMod, E, exec, $fileManager
+bind = $mainMod, V, togglefloating,
+bind = $mainMod, R, exec, $menu
+
+# 工作区导航
+bind = $mainMod, 1, workspace, 1
+bind = $mainMod, 2, workspace, 2
+bind = $mainMod, 3, workspace, 3
+bind = $mainMod, 4, workspace, 4
+bind = $mainMod, 5, workspace, 5
+bind = $mainMod, 6, workspace, 6
+bind = $mainMod, 7, workspace, 7
+bind = $mainMod, 8, workspace, 8
+bind = $mainMod, 9, workspace, 9
+bind = $mainMod, 0, workspace, 10
+
+bind = $mainMod SHIFT, 1, movetoworkspace, 1
+bind = $mainMod SHIFT, 2, movetoworkspace, 2
+bind = $mainMod SHIFT, 3, movetoworkspace, 3
+bind = $mainMod SHIFT, 4, movetoworkspace, 4
+bind = $mainMod SHIFT, 5, movetoworkspace, 5
+bind = $mainMod SHIFT, 6, movetoworkspace, 6
+bind = $mainMod SHIFT, 7, movetoworkspace, 7
+bind = $mainMod SHIFT, 8, movetoworkspace, 8
+bind = $mainMod SHIFT, 9, movetoworkspace, 9
+bind = $mainMod SHIFT, 0, movetoworkspace, 10
+
+# 窗口调整
+bind = $mainMod, left, movefocus, l
+bind = $mainMod, right, movefocus, r
+bind = $mainMod, up, movefocus, u
+bind = $mainMod, down, movefocus, d
+
+# 特殊工作区
+bind = $mainMod, S, togglespecialworkspace, magic
+bind = $mainMod SHIFT, S, movetoworkspace, special:magic
+
+# 多媒体键
+bindel = ,XF86AudioRaiseVolume, exec, wpctl set-volume -l 1 @DEFAULT_AUDIO_SINK@ 5%+
+bindel = ,XF86AudioLowerVolume, exec, wpctl set-volume @DEFAULT_AUDIO_SINK@ 5%-
+bindel = ,XF86AudioMute, exec, wpctl set-mute @DEFAULT_AUDIO_SINK@ toggle
+bindel = ,XF86MonBrightnessUp, exec, brightnessctl set 5%+
+bindel = ,XF86MonBrightnessDown, exec, brightnessctl set 5%-
+</code></pre><h2 id="自定义默认配置">自定义默认配置</h2>
+<p>您可以通过以下步骤自定义默认配置：</p>
+<ol>
+<li>复制默认配置到 <code>~/.config/hypr/hyprland.conf</code></li>
+<li>编辑配置文件</li>
+<li>保存并重新启动 Hyprland</li>
+</ol>
+<h2 id="配置建议">配置建议</h2>
+<h3 id="1-自定义程序定义">1. 自定义程序定义</h3>
+<p>修改程序定义以使用您喜欢的应用程序：</p>
+<pre tabindex="0"><code class="language-conf" data-lang="conf">$terminal = ghostty  # 替换为您喜欢的终端
+$fileManager = nautilus  # 替换为您喜欢的文件管理器
+$menu = rofi -show drun  # 替换为您喜欢的应用启动器
+</code></pre><h3 id="2-优化快捷键">2. 优化快捷键</h3>
+<p>根据您的使用习惯调整快捷键：</p>
+<pre tabindex="0"><code class="language-conf" data-lang="conf"># 使用 Alt 键作为主修饰符
+$mainMod = ALT
+
+# 自定义终端快捷键
+bind = $mainMod, T, exec, $terminal
+</code></pre><h3 id="3-调整外观">3. 调整外观</h3>
+<p>修改窗口外观以符合您的喜好：</p>
+<pre tabindex="0"><code class="language-conf" data-lang="conf">decoration {
+    rounding = 15  # 增大圆角
+    active_opacity = 0.95  # 调整透明度
+    inactive_opacity = 0.7  # 调整透明度
+    shadow {
+        color = rgba(1a0b1aac)  # 调整阴影颜色
+    }
+}
+</code></pre><h3 id="4-启用模糊效果">4. 启用模糊效果</h3>
+<pre tabindex="0"><code class="language-conf" data-lang="conf">decoration {
+    blur {
+        enabled = true
+        size = 5
+        passes = 2
+        vibrancy = 0.2
+    }
+}
+</code></pre><h2 id="验证配置">验证配置</h2>
+<p>使用以下命令验证配置文件的语法：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>hyprctl reload
+</span></span></code></pre></div><p>如果配置文件有错误，会在终端中显示。</p>
+<h2 id="学习资源">学习资源</h2>
+<ul>
+<li><a href="https://wiki.hypr.land/Configuring">Hyprland 官方配置文档</a></li>
+<li><a href="https://wiki.hypr.land/Configuring/Variables">Hyprland 变量列表</a></li>
+<li><a href="https://wiki.hypr.land/Configuring/Binds">Hyprland 快捷键文档</a></li>
+</ul>
+</div>
+    
+<nav class="pager" aria-label="文章导航">
+  
+  <a href="/wiki/hyprland/beforewestart/" data-press>
+    <span class="dir">← 上一篇</span>开始之前的准备
+  </a>
+  
+  
+  <a href="/wiki/hyprland/ecosystems/" class="is-next" data-press>
+    <span class="dir">下一篇 →</span>Hyprland的生态系统
+  </a>
+  
+</nav>
+
+
+    
+<div class="comments">
+  <h2 class="comments-title">评论</h2>
+  <div id="utterances"></div>
+  <script>
+    (function () {
+      if (window.location.protocol === 'file:') return;
+      var s = document.createElement('script');
+      s.src = 'https://utteranc.es/client.js';
+      s.async = true;
+      s.setAttribute('repo', "makkichan947/makkichan947.github.io");
+      s.setAttribute('issue-term', "pathname");
+      s.setAttribute('theme', "github-dark");
+      s.setAttribute('crossorigin', 'anonymous');
+      document.getElementById('utterances').appendChild(s);
+    })();
+  </script>
+</div>
+
+
+  </article>
+  
+</div>
+
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+      <div class="footer-links">
+        
+        <a href="https://github.com/makkichan947" target="_blank" rel="noopener" title="Github" data-press>Github</a>
+        
+        <a href="mailto:yakumakki947@hotmail.com" target="_blank" rel="noopener" title="Email" data-press>Email</a>
+        
+        <a href="https://x.com/Makki_Yaku947" target="_blank" rel="noopener" title="Twitter" data-press>Twitter</a>
+        
+        <a href="https://www.twitch.tv/u/makkichan947" target="_blank" rel="noopener" title="Twitch" data-press>Twitch</a>
+        
+      </div>
+      <p>&copy; 2026 Yaku Makki</p>
+      <p>Powered by <a href="https://gohugo.io" target="_blank" rel="noopener">Hugo</a> · Makki Theme</p>
+      
+      <div class="stats">
+        <span>访客 <span id="busuanzi_value_site_uv"></span></span>
+        <span>访问 <span id="busuanzi_value_site_pv"></span></span>
+        <span>本页 <span id="busuanzi_value_page_pv"></span></span>
+      </div>
+      
+    </div>
+  </footer>
+
+  <button class="back-to-top" id="back-to-top" type="button" aria-label="回到顶部" data-press>
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 19V5"/><path d="M5 12l7-7 7 7"/></svg>
+  </button>
+
+  
+  <script src="/js/main.min.2e977141114ec7890ffee2c35e08034683543cfe8ef98dd4af5effb3b37a3345.js" integrity="sha256-LpdxQRFOx4kP/uLDXggDRoNUPP6O&#43;Y3Ur17/s7N6M0U=" defer></script>
+  
+  
+  <script src="/js/search.min.b2d6ba6610ce24454bc1436dc521dcfd878b2583ad9f65f77aadedaaa1e1a54c.js" integrity="sha256-sta6ZhDOJEVLwUNtxSHc/YeLJYOtn2X3eq3tqqHhpUw=" defer></script>
+  
+
+  
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+  
+
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/katex.min.js" crossorigin="anonymous"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/contrib/auto-render.min.js" crossorigin="anonymous"></script>
+</body>
+</html>

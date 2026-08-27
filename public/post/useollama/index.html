@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="zh">
-<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1417&amp;path=livereload" data-no-instant defer></script>
+<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <title>使用Ollama本地部署大语言模型 · Yaku Makki</title>
@@ -224,35 +224,35 @@
 <p>配合向量数据库（如Chroma），将个人文档嵌入后，用Ollama做检索增强生成，实现私有化智能问答系统——数据永远不出本地。</p>
 <h2 id="与其他方案的对比">与其他方案的对比</h2>
 <table>
-	<thead>
-			<tr>
-					<th>方案</th>
-					<th>优点</th>
-					<th>缺点</th>
-			</tr>
-	</thead>
-	<tbody>
-			<tr>
-					<td><strong>Ollama</strong></td>
-					<td>安装简单、模型丰富、API标准</td>
-					<td>定制性不如llama.cpp灵活</td>
-			</tr>
-			<tr>
-					<td><strong>llama.cpp</strong></td>
-					<td>极致轻量、支持CPU推理</td>
-					<td>需要编译，缺乏统一管理</td>
-			</tr>
-			<tr>
-					<td><strong>text-generation-webui</strong></td>
-					<td>图形界面、功能全面</td>
-					<td>依赖多，启动慢</td>
-			</tr>
-			<tr>
-					<td><strong>vLLM</strong></td>
-					<td>高吞吐，适合服务部署</td>
-					<td>配置复杂，侧重生产环境</td>
-			</tr>
-	</tbody>
+  <thead>
+      <tr>
+          <th>方案</th>
+          <th>优点</th>
+          <th>缺点</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td><strong>Ollama</strong></td>
+          <td>安装简单、模型丰富、API标准</td>
+          <td>定制性不如llama.cpp灵活</td>
+      </tr>
+      <tr>
+          <td><strong>llama.cpp</strong></td>
+          <td>极致轻量、支持CPU推理</td>
+          <td>需要编译，缺乏统一管理</td>
+      </tr>
+      <tr>
+          <td><strong>text-generation-webui</strong></td>
+          <td>图形界面、功能全面</td>
+          <td>依赖多，启动慢</td>
+      </tr>
+      <tr>
+          <td><strong>vLLM</strong></td>
+          <td>高吞吐，适合服务部署</td>
+          <td>配置复杂，侧重生产环境</td>
+      </tr>
+  </tbody>
 </table>
 <p>对我这种既要效率又要掌控感的用户来说，Ollama恰好站在了“易用”和“可控”的平衡点上。</p>
 <h2 id="一些踩坑经验">一些踩坑经验</h2>

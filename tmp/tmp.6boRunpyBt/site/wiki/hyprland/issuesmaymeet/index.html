@@ -1,0 +1,575 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>常见问题 · Yaku Makki</title>
+  <meta name="description" content="个人小巢">
+  <meta name="theme-color" content="#0a0a0f">
+  <script>document.documentElement.classList.add('js');</script>
+
+  <link rel="icon" href="/avatar/avatar.jpg" type="image/jpeg">
+
+  
+  <link rel="stylesheet" href="/css/main.min.b64e4527cc255b367461135391e39e321a5d86fc97defca99c7afda308ada007.css" integrity="sha256-tk5FJ8wlWzZ0YRNTkeOeMhpdhvyX3vypnHr9owitoAc=">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/katex.min.css" crossorigin="anonymous">
+</head>
+<body>
+  <a class="skip-link" href="#main">跳到内容</a>
+
+  <div class="scene" aria-hidden="true">
+    <div class="scene-sky"></div>
+    <div class="scene-stars"></div>
+    <div class="scene-sun-halo"></div>
+    <div class="scene-sun"></div>
+    <div class="scene-mountains scene-mountains-far"></div>
+    <div class="scene-mountains scene-mountains-near"></div>
+    <div class="scene-horizon"></div>
+    <div class="scene-floor"></div>
+    <div class="scene-scanlines"></div>
+  </div>
+
+  <nav class="navbar" aria-label="主导航">
+    <div class="nav-inner">
+      <a class="logo" href="/" data-press>
+        <img class="logo-avatar" src="/avatar/avatar.jpg" alt="" width="34" height="34">
+        <span class="logo-text">Yaku Makki</span>
+      </a>
+      <div class="nav-menu-wrap">
+        <span class="nav-tick" aria-hidden="true"></span>
+        <ul class="nav-menu">
+          
+          <li>
+            <a href="/" data-press>首页</a>
+          </li>
+          
+          <li>
+            <a href="/post/" data-press>博客</a>
+          </li>
+          
+          <li>
+            <a href="/wiki/" data-press>维基</a>
+          </li>
+          
+          <li>
+            <a href="/tags/" data-press>标签</a>
+          </li>
+          
+          <li>
+            <a href="/about/" data-press>关于</a>
+          </li>
+          
+          
+          <li>
+            <button id="search-toggle" class="search-toggle" type="button" title="搜索 (Ctrl+K 或 /)" aria-haspopup="dialog" aria-expanded="false" data-press>搜索</button>
+          </li>
+          
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  
+  <div class="sheet-scrim" id="sheet-scrim"></div>
+  <section class="sheet" id="search-sheet" role="dialog" aria-modal="true" aria-label="搜索" aria-hidden="true">
+    <div class="sheet-panel" id="sheet-panel">
+      <div class="sheet-handle" id="sheet-handle" role="presentation" aria-hidden="true"></div>
+      <div class="sheet-body">
+        <div class="search-field">
+          <input id="search-input" type="search" placeholder="搜索文章和 Wiki…"
+                 autocomplete="off" spellcheck="false" aria-controls="search-results">
+          <span class="search-key" aria-hidden="true">/</span>
+        </div>
+        <div id="search-results" class="search-results" role="listbox" aria-label="搜索结果"></div>
+      </div>
+    </div>
+  </section>
+  
+
+  <main class="main" id="main">
+    
+<header class="page-head">
+  <nav class="crumb" aria-label="面包屑">
+    <a href="/" data-press>首页</a>
+    <span class="sep">/</span>
+    <a href="/wiki/" data-press>维基</a>
+    
+    
+    <span class="sep">/</span>
+    <a href="/wiki/hyprland/" data-press>Hyprland</a>
+    
+    
+  </nav>
+  <h1>常见问题</h1>
+  
+</header>
+
+<div class="wiki-layout">
+  <article class="article">
+    <div class="article-content"><h2 id="hyprland-常见问题及解决方法">Hyprland 常见问题及解决方法</h2>
+<p>在使用 Hyprland 的过程中，您可能会遇到一些常见问题。下面我将介绍这些问题及其解决方法。</p>
+<h3 id="1-hyprland-无法启动">1. Hyprland 无法启动</h3>
+<h4 id="问题描述">问题描述</h4>
+<p>尝试启动 Hyprland 时，系统无法进入 Hyprland 桌面环境。</p>
+<h4 id="可能原因">可能原因</h4>
+<ul>
+<li>配置文件语法错误</li>
+<li>依赖项缺失</li>
+<li>系统不满足要求</li>
+</ul>
+<h4 id="解决方法">解决方法</h4>
+<ol>
+<li>
+<p>检查配置文件语法：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>hyprctl reload
+</span></span></code></pre></div><p>如果配置文件有错误，会在终端中显示。</p>
+</li>
+<li>
+<p>检查依赖项：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>pacman -Qs wlroots wayland-protocols pixman libxkbcommon libinput libdisplay-info
+</span></span></code></pre></div><p>确保所有依赖项都已安装。</p>
+</li>
+<li>
+<p>检查系统日志：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>journalctl -xe
+</span></span></code></pre></div><p>查看详细的错误信息。</p>
+</li>
+</ol>
+<h3 id="2-窗口显示异常">2. 窗口显示异常</h3>
+<h4 id="问题描述-1">问题描述</h4>
+<p>窗口显示不正常，如窗口边框缺失、窗口位置错误等。</p>
+<h4 id="可能原因-1">可能原因</h4>
+<ul>
+<li>配置文件中的窗口设置不正确</li>
+<li>窗口规则冲突</li>
+</ul>
+<h4 id="解决方法-1">解决方法</h4>
+<ol>
+<li>
+<p>检查 <code>hyprland.conf</code> 中的窗口设置：</p>
+<pre tabindex="0"><code class="language-conf" data-lang="conf">general {
+    gaps_in = 3
+    gaps_out = 10
+    border_size = 2
+}
+</code></pre></li>
+<li>
+<p>检查窗口规则：</p>
+<pre tabindex="0"><code class="language-conf" data-lang="conf">windowrule = float,class:^(kitty)$
+</code></pre></li>
+<li>
+<p>重新加载配置：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>hyprctl reload
+</span></span></code></pre></div></li>
+</ol>
+<h3 id="3-快捷键不工作">3. 快捷键不工作</h3>
+<h4 id="问题描述-2">问题描述</h4>
+<p>配置的快捷键无法正常工作。</p>
+<h4 id="可能原因-2">可能原因</h4>
+<ul>
+<li>快捷键冲突</li>
+<li>快捷键语法错误</li>
+<li>修饰键设置错误</li>
+</ul>
+<h4 id="解决方法-2">解决方法</h4>
+<ol>
+<li>
+<p>检查快捷键语法：</p>
+<pre tabindex="0"><code class="language-conf" data-lang="conf">bind = $mainMod, Q, exec, $terminal
+</code></pre></li>
+<li>
+<p>检查修饰键设置：</p>
+<pre tabindex="0"><code class="language-conf" data-lang="conf">$mainMod = SUPER
+</code></pre></li>
+<li>
+<p>检查快捷键冲突：</p>
+<ul>
+<li>确保没有其他应用程序占用相同的快捷键</li>
+<li>使用 <code>hyprctl binds</code> 查看当前绑定的快捷键</li>
+</ul>
+</li>
+</ol>
+<h3 id="4-输入法无法使用">4. 输入法无法使用</h3>
+<h4 id="问题描述-3">问题描述</h4>
+<p>输入法无法正常工作，无法输入中文。</p>
+<h4 id="可能原因-3">可能原因</h4>
+<ul>
+<li>输入法未启动</li>
+<li>输入法配置错误</li>
+<li>环境变量未设置</li>
+</ul>
+<h4 id="解决方法-3">解决方法</h4>
+<ol>
+<li>
+<p>检查输入法是否启动：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>ps aux | grep fcitx5
+</span></span></code></pre></div></li>
+<li>
+<p>检查自动启动配置：</p>
+<pre tabindex="0"><code class="language-conf" data-lang="conf">exec-once = fcitx5 --replace -d
+</code></pre></li>
+<li>
+<p>设置环境变量：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>export GTK_IM_MODULE<span style="color:#f92672">=</span>fcitx
+</span></span><span style="display:flex;"><span>export QT_IM_MODULE<span style="color:#f92672">=</span>fcitx
+</span></span><span style="display:flex;"><span>export XMODIFIERS<span style="color:#f92672">=</span>@im<span style="color:#f92672">=</span>fcitx
+</span></span></code></pre></div></li>
+</ol>
+<h3 id="5-壁纸无法显示">5. 壁纸无法显示</h3>
+<h4 id="问题描述-4">问题描述</h4>
+<p>Hyprpaper 无法显示壁纸。</p>
+<h4 id="可能原因-4">可能原因</h4>
+<ul>
+<li>壁纸文件路径错误</li>
+<li>Hyprpaper 未启动</li>
+<li>配置文件错误</li>
+</ul>
+<h4 id="解决方法-4">解决方法</h4>
+<ol>
+<li>
+<p>检查壁纸文件路径：</p>
+<pre tabindex="0"><code class="language-conf" data-lang="conf">preload = ~/.config/background.png
+wallpaper = eDP-1, ~/.config/background.png
+</code></pre></li>
+<li>
+<p>检查 Hyprpaper 是否启动：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>ps aux | grep hyprpaper
+</span></span></code></pre></div></li>
+<li>
+<p>检查自动启动配置：</p>
+<pre tabindex="0"><code class="language-conf" data-lang="conf">exec-once = hyprpaper
+</code></pre></li>
+</ol>
+<h3 id="6-锁屏无法工作">6. 锁屏无法工作</h3>
+<h4 id="问题描述-5">问题描述</h4>
+<p>Hyprlock 无法正常锁屏。</p>
+<h4 id="可能原因-5">可能原因</h4>
+<ul>
+<li>Hyprlock 未启动</li>
+<li>配置文件错误</li>
+<li>权限问题</li>
+</ul>
+<h4 id="解决方法-5">解决方法</h4>
+<ol>
+<li>
+<p>检查 Hyprlock 是否启动：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>ps aux | grep hyprlock
+</span></span></code></pre></div></li>
+<li>
+<p>检查配置文件：</p>
+<pre tabindex="0"><code class="language-conf" data-lang="conf">general {
+    lock_cmd = pidof hyprlock || hyprlock
+    unlock_cmd = loginctl unlock-session $XDG_SESSION_ID
+}
+</code></pre></li>
+<li>
+<p>检查权限：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>ls -l ~/.config/hypr/hyprlock.conf
+</span></span></code></pre></div></li>
+</ol>
+<h3 id="7-状态栏不显示">7. 状态栏不显示</h3>
+<h4 id="问题描述-6">问题描述</h4>
+<p>Waybar 无法正常显示。</p>
+<h4 id="可能原因-6">可能原因</h4>
+<ul>
+<li>Waybar 未启动</li>
+<li>配置文件错误</li>
+<li>模块配置错误</li>
+</ul>
+<h4 id="解决方法-6">解决方法</h4>
+<ol>
+<li>
+<p>检查 Waybar 是否启动：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>ps aux | grep waybar
+</span></span></code></pre></div></li>
+<li>
+<p>检查配置文件：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>waybar --config ~/.config/waybar/config
+</span></span></code></pre></div></li>
+<li>
+<p>检查模块配置：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-json" data-lang="json"><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;modules-left&#34;</span>: [<span style="color:#e6db74">&#34;custom/arch&#34;</span>, <span style="color:#e6db74">&#34;hyprland/window&#34;</span>],
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;modules-center&#34;</span>: [<span style="color:#e6db74">&#34;hyprland/workspaces&#34;</span>],
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;modules-right&#34;</span>: [<span style="color:#e6db74">&#34;clock&#34;</span>]
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div></li>
+</ol>
+<h3 id="8-通知不显示">8. 通知不显示</h3>
+<h4 id="问题描述-7">问题描述</h4>
+<p>Mako 无法显示通知。</p>
+<h4 id="可能原因-7">可能原因</h4>
+<ul>
+<li>Mako 未启动</li>
+<li>配置文件错误</li>
+<li>通知权限问题</li>
+</ul>
+<h4 id="解决方法-7">解决方法</h4>
+<ol>
+<li>
+<p>检查 Mako 是否启动：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>ps aux | grep mako
+</span></span></code></pre></div></li>
+<li>
+<p>检查配置文件：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>mako --config ~/.config/mako/config
+</span></span></code></pre></div></li>
+<li>
+<p>测试通知：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>notify-send <span style="color:#e6db74">&#34;测试通知&#34;</span> <span style="color:#e6db74">&#34;这是一条测试通知&#34;</span>
+</span></span></code></pre></div></li>
+</ol>
+<h3 id="9-音量控制不工作">9. 音量控制不工作</h3>
+<h4 id="问题描述-8">问题描述</h4>
+<p>音量控制快捷键无法正常工作。</p>
+<h4 id="可能原因-8">可能原因</h4>
+<ul>
+<li>wpctl 未安装</li>
+<li>音频设备未正确配置</li>
+<li>快捷键配置错误</li>
+</ul>
+<h4 id="解决方法-8">解决方法</h4>
+<ol>
+<li>
+<p>检查 wpctl 是否安装：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>pacman -Qs wireplumber
+</span></span></code></pre></div></li>
+<li>
+<p>检查音频设备：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>wpctl status
+</span></span></code></pre></div></li>
+<li>
+<p>检查快捷键配置：</p>
+<pre tabindex="0"><code class="language-conf" data-lang="conf">bindel = ,XF86AudioRaiseVolume, exec, wpctl set-volume -l 1 @DEFAULT_AUDIO_SINK@ 5%+
+</code></pre></li>
+</ol>
+<h3 id="10-亮度控制不工作">10. 亮度控制不工作</h3>
+<h4 id="问题描述-9">问题描述</h4>
+<p>亮度控制快捷键无法正常工作。</p>
+<h4 id="可能原因-9">可能原因</h4>
+<ul>
+<li>brightnessctl 未安装</li>
+<li>亮度设备未正确配置</li>
+<li>快捷键配置错误</li>
+</ul>
+<h4 id="解决方法-9">解决方法</h4>
+<ol>
+<li>
+<p>检查 brightnessctl 是否安装：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>pacman -Qs brightnessctl
+</span></span></code></pre></div></li>
+<li>
+<p>检查亮度设备：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>brightnessctl -l
+</span></span></code></pre></div></li>
+<li>
+<p>检查快捷键配置：</p>
+<pre tabindex="0"><code class="language-conf" data-lang="conf">bindel = ,XF86MonBrightnessUp, exec, brightnessctl -e4 -n2 set 5%+
+</code></pre></li>
+</ol>
+<h3 id="11-触摸板手势不工作">11. 触摸板手势不工作</h3>
+<h4 id="问题描述-10">问题描述</h4>
+<p>触摸板手势无法正常工作。</p>
+<h4 id="可能原因-10">可能原因</h4>
+<ul>
+<li>触摸板驱动未正确配置</li>
+<li>手势配置错误</li>
+<li>libinput 设置问题</li>
+</ul>
+<h4 id="解决方法-10">解决方法</h4>
+<ol>
+<li>
+<p>检查触摸板驱动：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>xinput list
+</span></span></code></pre></div></li>
+<li>
+<p>检查手势配置：</p>
+<pre tabindex="0"><code class="language-conf" data-lang="conf">gesture = 3, horizontal, workspace
+</code></pre></li>
+<li>
+<p>检查 libinput 设置：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>libinput list-devices
+</span></span></code></pre></div></li>
+</ol>
+<h3 id="12-多显示器配置问题">12. 多显示器配置问题</h3>
+<h4 id="问题描述-11">问题描述</h4>
+<p>多显示器配置不正确，如显示器位置错误、分辨率错误等。</p>
+<h4 id="可能原因-11">可能原因</h4>
+<ul>
+<li>显示器配置错误</li>
+<li>显示器连接问题</li>
+<li>驱动问题</li>
+</ul>
+<h4 id="解决方法-11">解决方法</h4>
+<ol>
+<li>
+<p>检查显示器配置：</p>
+<pre tabindex="0"><code class="language-conf" data-lang="conf">monitor = eDP-1,1920x1080@60,0x0,1
+monitor = HDMI-1,1920x1080@60,1920x0,1
+</code></pre></li>
+<li>
+<p>检查显示器连接：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>hyprctl monitors
+</span></span></code></pre></div></li>
+<li>
+<p>重新配置显示器：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>hyprctl keyword monitor <span style="color:#e6db74">&#34;eDP-1,1920x1080@60,0x0,1&#34;</span>
+</span></span></code></pre></div></li>
+</ol>
+<h3 id="13-性能问题">13. 性能问题</h3>
+<h4 id="问题描述-12">问题描述</h4>
+<p>Hyprland 运行缓慢，卡顿。</p>
+<h4 id="可能原因-12">可能原因</h4>
+<ul>
+<li>硬件不满足要求</li>
+<li>配置过于复杂</li>
+<li>后台进程过多</li>
+</ul>
+<h4 id="解决方法-12">解决方法</h4>
+<ol>
+<li>
+<p>检查硬件：</p>
+<ul>
+<li>确保显卡驱动正确安装</li>
+<li>确保系统有足够的内存</li>
+</ul>
+</li>
+<li>
+<p>简化配置：</p>
+<ul>
+<li>减少动画效果</li>
+<li>减少模糊效果</li>
+<li>减少阴影效果</li>
+</ul>
+</li>
+<li>
+<p>检查后台进程：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>ps aux
+</span></span></code></pre></div></li>
+</ol>
+<h3 id="14-应用程序兼容性问题">14. 应用程序兼容性问题</h3>
+<h4 id="问题描述-13">问题描述</h4>
+<p>某些应用程序无法在 Hyprland 上正常运行。</p>
+<h4 id="可能原因-13">可能原因</h4>
+<ul>
+<li>应用程序不支持 Wayland</li>
+<li>XWayland 配置问题</li>
+<li>应用程序依赖问题</li>
+</ul>
+<h4 id="解决方法-13">解决方法</h4>
+<ol>
+<li>
+<p>检查应用程序是否支持 Wayland：</p>
+<ul>
+<li>查看应用程序文档</li>
+<li>尝试使用 XWayland</li>
+</ul>
+</li>
+<li>
+<p>检查 XWayland 配置：</p>
+<pre tabindex="0"><code class="language-conf" data-lang="conf">xwayland {
+    force_zero_scaling = true
+}
+</code></pre></li>
+<li>
+<p>使用环境变量强制使用 XWayland：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>export WAYLAND_DISPLAY<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;&#34;</span>
+</span></span></code></pre></div></li>
+</ol>
+<h3 id="15-获取帮助">15. 获取帮助</h3>
+<p>如果您遇到以上未列出的问题，可以通过以下方式获取帮助：</p>
+<ul>
+<li><a href="https://wiki.hypr.land/">Hyprland 官方 Wiki</a></li>
+<li><a href="https://github.com/hyprwm/Hyprland">Hyprland GitHub 仓库</a></li>
+<li><a href="https://discord.gg/hQ9XvMUjjr">Hyprland Discord 社区</a></li>
+<li><a href="https://bbs.archlinux.org/">Arch Linux 论坛</a></li>
+</ul>
+<h3 id="总结">总结</h3>
+<p>在使用 Hyprland 的过程中，遇到问题是正常的。通过理解问题的原因和解决方法，您可以更快地解决问题，提高使用体验。如果问题仍然无法解决，不要犹豫，寻求社区的帮助。</p>
+</div>
+    
+<nav class="pager" aria-label="文章导航">
+  
+  <a href="/wiki/hyprland/waybar/" data-press>
+    <span class="dir">← 上一篇</span>Waybar 配置详解
+  </a>
+  
+  
+</nav>
+
+
+    
+<div class="comments">
+  <h2 class="comments-title">评论</h2>
+  <div id="utterances"></div>
+  <script>
+    (function () {
+      if (window.location.protocol === 'file:') return;
+      var s = document.createElement('script');
+      s.src = 'https://utteranc.es/client.js';
+      s.async = true;
+      s.setAttribute('repo', "makkichan947/makkichan947.github.io");
+      s.setAttribute('issue-term', "pathname");
+      s.setAttribute('theme', "github-dark");
+      s.setAttribute('crossorigin', 'anonymous');
+      document.getElementById('utterances').appendChild(s);
+    })();
+  </script>
+</div>
+
+
+  </article>
+  
+</div>
+
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+      <div class="footer-links">
+        
+        <a href="https://github.com/makkichan947" target="_blank" rel="noopener" title="Github" data-press>Github</a>
+        
+        <a href="mailto:yakumakki947@hotmail.com" target="_blank" rel="noopener" title="Email" data-press>Email</a>
+        
+        <a href="https://x.com/Makki_Yaku947" target="_blank" rel="noopener" title="Twitter" data-press>Twitter</a>
+        
+        <a href="https://www.twitch.tv/u/makkichan947" target="_blank" rel="noopener" title="Twitch" data-press>Twitch</a>
+        
+      </div>
+      <p>&copy; 2026 Yaku Makki</p>
+      <p>Powered by <a href="https://gohugo.io" target="_blank" rel="noopener">Hugo</a> · Makki Theme</p>
+      
+      <div class="stats">
+        <span>访客 <span id="busuanzi_value_site_uv"></span></span>
+        <span>访问 <span id="busuanzi_value_site_pv"></span></span>
+        <span>本页 <span id="busuanzi_value_page_pv"></span></span>
+      </div>
+      
+    </div>
+  </footer>
+
+  <button class="back-to-top" id="back-to-top" type="button" aria-label="回到顶部" data-press>
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 19V5"/><path d="M5 12l7-7 7 7"/></svg>
+  </button>
+
+  
+  <script src="/js/main.min.2e977141114ec7890ffee2c35e08034683543cfe8ef98dd4af5effb3b37a3345.js" integrity="sha256-LpdxQRFOx4kP/uLDXggDRoNUPP6O&#43;Y3Ur17/s7N6M0U=" defer></script>
+  
+  
+  <script src="/js/search.min.b2d6ba6610ce24454bc1436dc521dcfd878b2583ad9f65f77aadedaaa1e1a54c.js" integrity="sha256-sta6ZhDOJEVLwUNtxSHc/YeLJYOtn2X3eq3tqqHhpUw=" defer></script>
+  
+
+  
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+  
+
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/katex.min.js" crossorigin="anonymous"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/contrib/auto-render.min.js" crossorigin="anonymous"></script>
+</body>
+</html>

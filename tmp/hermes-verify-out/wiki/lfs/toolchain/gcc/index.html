@@ -1,0 +1,673 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>GCC编译器 · Yaku Makki</title>
+  <meta name="description" content="构建GNU编译器集合">
+  <meta name="theme-color" content="#0a0a0f">
+  <script>document.documentElement.classList.add('js');</script>
+
+  <link rel="icon" href="/avatar/avatar.jpg" type="image/jpeg">
+
+  
+  <link rel="stylesheet" href="/css/main.min.b64e4527cc255b367461135391e39e321a5d86fc97defca99c7afda308ada007.css" integrity="sha256-tk5FJ8wlWzZ0YRNTkeOeMhpdhvyX3vypnHr9owitoAc=">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/katex.min.css" crossorigin="anonymous">
+</head>
+<body>
+  <a class="skip-link" href="#main">跳到内容</a>
+
+  <div class="scene" aria-hidden="true">
+    <div class="scene-sky"></div>
+    <div class="scene-stars"></div>
+    <div class="scene-sun-halo"></div>
+    <div class="scene-sun"></div>
+    <div class="scene-mountains scene-mountains-far"></div>
+    <div class="scene-mountains scene-mountains-near"></div>
+    <div class="scene-horizon"></div>
+    <div class="scene-floor"></div>
+    <div class="scene-scanlines"></div>
+  </div>
+
+  <nav class="navbar" aria-label="主导航">
+    <div class="nav-inner">
+      <a class="logo" href="/" data-press>
+        <img class="logo-avatar" src="/avatar/avatar.jpg" alt="" width="34" height="34">
+        <span class="logo-text">Yaku Makki</span>
+      </a>
+      <div class="nav-menu-wrap">
+        <span class="nav-tick" aria-hidden="true"></span>
+        <ul class="nav-menu">
+          
+          <li>
+            <a href="/" data-press>首页</a>
+          </li>
+          
+          <li>
+            <a href="/post/" data-press>博客</a>
+          </li>
+          
+          <li>
+            <a href="/wiki/" data-press>维基</a>
+          </li>
+          
+          <li>
+            <a href="/tags/" data-press>标签</a>
+          </li>
+          
+          <li>
+            <a href="/about/" data-press>关于</a>
+          </li>
+          
+          
+          <li>
+            <button id="search-toggle" class="search-toggle" type="button" title="搜索 (Ctrl+K 或 /)" aria-haspopup="dialog" aria-expanded="false" data-press>搜索</button>
+          </li>
+          
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  
+  <div class="sheet-scrim" id="sheet-scrim"></div>
+  <section class="sheet" id="search-sheet" role="dialog" aria-modal="true" aria-label="搜索" aria-hidden="true">
+    <div class="sheet-panel" id="sheet-panel">
+      <div class="sheet-handle" id="sheet-handle" role="presentation" aria-hidden="true"></div>
+      <div class="sheet-body">
+        <div class="search-field">
+          <input id="search-input" type="search" placeholder="搜索文章和 Wiki…"
+                 autocomplete="off" spellcheck="false" aria-controls="search-results">
+          <span class="search-key" aria-hidden="true">/</span>
+        </div>
+        <div id="search-results" class="search-results" role="listbox" aria-label="搜索结果"></div>
+      </div>
+    </div>
+  </section>
+  
+
+  <main class="main" id="main">
+    
+<header class="page-head">
+  <nav class="crumb" aria-label="面包屑">
+    <a href="/" data-press>首页</a>
+    <span class="sep">/</span>
+    <a href="/wiki/" data-press>维基</a>
+    
+    
+    <span class="sep">/</span>
+    <a href="/wiki/lfs/toolchain/" data-press>第二部分：临时工具链</a>
+    
+    
+  </nav>
+  <h1>GCC编译器</h1>
+  <p>构建GNU编译器集合</p>
+</header>
+
+<div class="wiki-layout">
+  <article class="article">
+    <div class="article-content"><h1 id="gcc编译器">GCC编译器</h1>
+<p>GCC（GNU Compiler Collection）是GNU项目的编译器集合，支持多种编程语言。本章将详细介绍如何在LFS系统中构建GCC编译器。</p>
+<h2 id="-gcc概述">🎯 GCC概述</h2>
+<h3 id="gcc组件">GCC组件</h3>
+<p>GCC包含以下主要组件：</p>
+<ul>
+<li><strong>gcc</strong>：C语言编译器</li>
+<li><strong>g++</strong>：C++语言编译器</li>
+<li><strong>gfortran</strong>：Fortran语言编译器</li>
+<li><strong>gccgo</strong>：Go语言编译器</li>
+<li><strong>libgcc</strong>：GCC运行时库</li>
+<li><strong>libstdc++</strong>：C++标准库</li>
+<li><strong>libgomp</strong>：OpenMP运行时库</li>
+</ul>
+<h3 id="在lfs中的作用">在LFS中的作用</h3>
+<p>GCC在LFS构建中的作用：</p>
+<ol>
+<li><strong>核心编译器</strong>：编译所有C/C++源码</li>
+<li><strong>交叉编译</strong>：生成目标平台的可执行代码</li>
+<li><strong>库支持</strong>：提供标准库和运行时支持</li>
+<li><strong>多语言支持</strong>：支持多种编程语言</li>
+</ol>
+<h2 id="-构建gcc">🛠️ 构建GCC</h2>
+<h3 id="准备工作">准备工作</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># 切换到lfs用户</span>
+</span></span><span style="display:flex;"><span>su - lfs
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 创建构建目录</span>
+</span></span><span style="display:flex;"><span>mkdir -pv $LFS/sources/gcc_build
+</span></span><span style="display:flex;"><span>cd $LFS/sources/gcc_build
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 解压GCC源码</span>
+</span></span><span style="display:flex;"><span>tar -xf $LFS/sources/gcc-12.2.0.tar.xz
+</span></span><span style="display:flex;"><span>cd gcc-12.2.0
+</span></span></code></pre></div><h3 id="应用依赖包">应用依赖包</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># 解压和应用GCC依赖</span>
+</span></span><span style="display:flex;"><span>tar -xf $LFS/sources/mpfr-4.2.0.tar.xz
+</span></span><span style="display:flex;"><span>mv -v mpfr-4.2.0 mpfr
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>tar -xf $LFS/sources/gmp-6.2.1.tar.xz
+</span></span><span style="display:flex;"><span>mv -v gmp-6.2.1 gmp
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>tar -xf $LFS/sources/mpc-1.3.1.tar.xz
+</span></span><span style="display:flex;"><span>mv -v mpc-1.3.1 mpc
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 验证依赖</span>
+</span></span><span style="display:flex;"><span>ls -la mpfr gmp mpc
+</span></span></code></pre></div><h3 id="创建构建目录">创建构建目录</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># 创建独立的构建目录</span>
+</span></span><span style="display:flex;"><span>mkdir -v build
+</span></span><span style="display:flex;"><span>cd build
+</span></span></code></pre></div><h3 id="配置gcc">配置GCC</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># 配置GCC</span>
+</span></span><span style="display:flex;"><span>../configure <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span>    --target<span style="color:#f92672">=</span>$LFS_TGT <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span>    --prefix<span style="color:#f92672">=</span>/usr <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span>    --with-glibc-version<span style="color:#f92672">=</span>2.37 <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span>    --with-sysroot<span style="color:#f92672">=</span>$LFS <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span>    --with-newlib <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span>    --without-headers <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span>    --enable-default-pie <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span>    --enable-default-ssp <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span>    --disable-nls <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span>    --disable-shared <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span>    --disable-multilib <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span>    --disable-threads <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span>    --disable-libatomic <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span>    --disable-libgomp <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span>    --disable-libquadmath <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span>    --disable-libssp <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span>    --disable-libvtv <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span>    --disable-libstdcxx <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span>    --enable-languages<span style="color:#f92672">=</span>c,c++
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 配置选项详解：</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># --target=$LFS_TGT         : 目标平台</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># --prefix=/usr             : 安装目录</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># --with-glibc-version=2.37 : Glibc版本</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># --with-sysroot=$LFS       : 系统根目录</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># --with-newlib             : 使用newlib（第一遍）</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># --without-headers         : 不使用头文件（第一遍）</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># --enable-default-pie      : 启用PIE</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># --enable-default-ssp      : 启用栈保护</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># --disable-nls             : 禁用本地化</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># --disable-shared          : 禁用共享库（第一遍）</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># --disable-multilib        : 禁用多库支持</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># --enable-languages=c,c++  : 启用C/C++语言</span>
+</span></span></code></pre></div><h3 id="编译gcc">编译GCC</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># 编译GCC第一遍</span>
+</span></span><span style="display:flex;"><span>make $LFS_MAKEFLAGS
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 编译过程监控</span>
+</span></span><span style="display:flex;"><span>echo <span style="color:#e6db74">&#34;GCC编译开始: </span><span style="color:#66d9ef">$(</span>date<span style="color:#66d9ef">)</span><span style="color:#e6db74">&#34;</span>
+</span></span><span style="display:flex;"><span>make $LFS_MAKEFLAGS 2&gt;&amp;<span style="color:#ae81ff">1</span> | tee gcc_build.log &amp;
+</span></span><span style="display:flex;"><span>BUILD_PID<span style="color:#f92672">=</span>$!
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 等待编译完成</span>
+</span></span><span style="display:flex;"><span>wait $BUILD_PID
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 检查编译结果</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">if</span> <span style="color:#f92672">[</span> -f gcc/gcc <span style="color:#f92672">]</span> <span style="color:#f92672">&amp;&amp;</span> <span style="color:#f92672">[</span> -f g++/g++ <span style="color:#f92672">]</span>; <span style="color:#66d9ef">then</span>
+</span></span><span style="display:flex;"><span>    echo <span style="color:#e6db74">&#34;GCC第一遍编译成功&#34;</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">else</span>
+</span></span><span style="display:flex;"><span>    echo <span style="color:#e6db74">&#34;GCC第一遍编译失败&#34;</span>
+</span></span><span style="display:flex;"><span>    exit <span style="color:#ae81ff">1</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">fi</span>
+</span></span></code></pre></div><h3 id="安装gcc">安装GCC</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># 安装GCC第一遍</span>
+</span></span><span style="display:flex;"><span>make install
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 创建必要的符号链接</span>
+</span></span><span style="display:flex;"><span>ln -sv gcc $LFS/usr/bin/cc
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 验证GCC安装</span>
+</span></span><span style="display:flex;"><span>$LFS_TGT-gcc --version
+</span></span><span style="display:flex;"><span>$LFS_TGT-g++ --version
+</span></span></code></pre></div><h2 id="-gcc第二遍编译">🔄 GCC第二遍编译</h2>
+<h3 id="重新配置gcc">重新配置GCC</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># 清理构建目录</span>
+</span></span><span style="display:flex;"><span>cd $LFS/sources/gcc_build/gcc-12.2.0
+</span></span><span style="display:flex;"><span>rm -rf build
+</span></span><span style="display:flex;"><span>mkdir -v build
+</span></span><span style="display:flex;"><span>cd build
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 配置GCC第二遍（完整版本）</span>
+</span></span><span style="display:flex;"><span>../configure <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span>    --target<span style="color:#f92672">=</span>$LFS_TGT <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span>    --prefix<span style="color:#f92672">=</span>/usr <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span>    --with-glibc-version<span style="color:#f92672">=</span>2.37 <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span>    --with-sysroot<span style="color:#f92672">=</span>$LFS <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span>    --enable-default-pie <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span>    --enable-default-ssp <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span>    --disable-nls <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span>    --disable-multilib <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span>    --disable-libatomic <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span>    --disable-libgomp <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span>    --disable-libquadmath <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span>    --disable-libssp <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span>    --disable-libvtv <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span>    --enable-languages<span style="color:#f92672">=</span>c,c++ <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span>    --enable-shared <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span>    --enable-threads<span style="color:#f92672">=</span>posix
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 主要变化：</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># - 移除了 --with-newlib 和 --without-headers</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># - 启用了 --enable-shared 和 --enable-threads</span>
+</span></span></code></pre></div><h3 id="编译gcc第二遍">编译GCC第二遍</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># 编译GCC第二遍</span>
+</span></span><span style="display:flex;"><span>make $LFS_MAKEFLAGS
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 安装GCC第二遍</span>
+</span></span><span style="display:flex;"><span>make install
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 验证最终GCC</span>
+</span></span><span style="display:flex;"><span>$LFS_TGT-gcc --version
+</span></span><span style="display:flex;"><span>$LFS_TGT-gcc -v  <span style="color:#75715e"># 显示详细配置信息</span>
+</span></span></code></pre></div><h2 id="-gcc功能测试">🧪 GCC功能测试</h2>
+<h3 id="基本编译测试">基本编译测试</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># 创建测试程序</span>
+</span></span><span style="display:flex;"><span>cat &gt; $LFS/gcc_test.c <span style="color:#e6db74">&lt;&lt; &#39;EOF&#39;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">#include &lt;stdio.h&gt;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">#include &lt;stdlib.h&gt;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">#define TEST_VALUE 42
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">int main(int argc, char *argv[]) {
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    printf(&#34;GCC编译测试开始\n&#34;);
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    // 测试基本数据类型
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    int i = TEST_VALUE;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    float f = 3.14159f;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    double d = 2.718281828;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    char c = &#39;A&#39;;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    printf(&#34;整数: %d\n&#34;, i);
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    printf(&#34;浮点: %.2f\n&#34;, f);
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    printf(&#34;双精度: %.9f\n&#34;, d);
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    printf(&#34;字符: %c\n&#34;, c);
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    // 测试条件编译
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">#ifdef __GNUC__
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    printf(&#34;使用GCC编译器\n&#34;);
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">#endif
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    // 测试循环
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    for(int j = 0; j &lt; 3; j++) {
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        printf(&#34;循环测试 %d\n&#34;, j + 1);
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    }
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    printf(&#34;GCC编译测试完成\n&#34;);
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    return EXIT_SUCCESS;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">}
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">EOF</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 编译测试程序</span>
+</span></span><span style="display:flex;"><span>$LFS_TGT-gcc $LFS/gcc_test.c -o $LFS/gcc_test
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 检查编译结果</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">if</span> <span style="color:#f92672">[</span> -x $LFS/gcc_test <span style="color:#f92672">]</span>; <span style="color:#66d9ef">then</span>
+</span></span><span style="display:flex;"><span>    echo <span style="color:#e6db74">&#34;GCC编译测试成功&#34;</span>
+</span></span><span style="display:flex;"><span>    $LFS_TGT-readelf -l $LFS/gcc_test | grep <span style="color:#e6db74">&#34;interpreter&#34;</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">else</span>
+</span></span><span style="display:flex;"><span>    echo <span style="color:#e6db74">&#34;GCC编译测试失败&#34;</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">fi</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 清理</span>
+</span></span><span style="display:flex;"><span>rm -f $LFS/gcc_test.c $LFS/gcc_test
+</span></span></code></pre></div><h3 id="c编译测试">C++编译测试</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># 创建C++测试程序</span>
+</span></span><span style="display:flex;"><span>cat &gt; $LFS/gpp_test.cpp <span style="color:#e6db74">&lt;&lt; &#39;EOF&#39;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">#include &lt;iostream&gt;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">#include &lt;string&gt;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">#include &lt;vector&gt;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">#include &lt;memory&gt;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">class TestClass {
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">private:
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    std::string name;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    int value;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">public:
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    TestClass(std::string n, int v) : name(n), value(v) {}
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    void display() {
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        std::cout &lt;&lt; &#34;名称: &#34; &lt;&lt; name &lt;&lt; &#34;, 值: &#34; &lt;&lt; value &lt;&lt; std::endl;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    }
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">};
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">int main() {
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    std::cout &lt;&lt; &#34;C++编译测试开始&#34; &lt;&lt; std::endl;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    // 测试智能指针
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    auto obj = std::make_unique&lt;TestClass&gt;(&#34;测试对象&#34;, 123);
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    obj-&gt;display();
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    // 测试STL容器
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    std::vector&lt;int&gt; numbers = {1, 2, 3, 4, 5};
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    std::cout &lt;&lt; &#34;向量大小: &#34; &lt;&lt; numbers.size() &lt;&lt; std::endl;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    // 测试范围循环
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    for(int num : numbers) {
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        std::cout &lt;&lt; num &lt;&lt; &#34; &#34;;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    }
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    std::cout &lt;&lt; std::endl;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    std::cout &lt;&lt; &#34;C++编译测试完成&#34; &lt;&lt; std::endl;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    return 0;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">}
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">EOF</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 编译C++程序</span>
+</span></span><span style="display:flex;"><span>$LFS_TGT-g++ $LFS/gpp_test.cpp -o $LFS/gpp_test
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 检查编译结果</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">if</span> <span style="color:#f92672">[</span> -x $LFS/gpp_test <span style="color:#f92672">]</span>; <span style="color:#66d9ef">then</span>
+</span></span><span style="display:flex;"><span>    echo <span style="color:#e6db74">&#34;C++编译测试成功&#34;</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">else</span>
+</span></span><span style="display:flex;"><span>    echo <span style="color:#e6db74">&#34;C++编译测试失败&#34;</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">fi</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 清理</span>
+</span></span><span style="display:flex;"><span>rm -f $LFS/gpp_test.cpp $LFS/gpp_test
+</span></span></code></pre></div><h3 id="优化选项测试">优化选项测试</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># 测试不同优化级别</span>
+</span></span><span style="display:flex;"><span>cat &gt; $LFS/optimization_test.c <span style="color:#e6db74">&lt;&lt; &#39;EOF&#39;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">#include &lt;stdio.h&gt;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">#include &lt;time.h&gt;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">#define ITERATIONS 1000000
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">int main() {
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    clock_t start = clock();
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    long sum = 0;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    for(long i = 0; i &lt; ITERATIONS; i++) {
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        sum += i * i;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    }
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    clock_t end = clock();
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    double time_spent = (double)(end - start) / CLOCKS_PER_SEC;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    printf(&#34;计算结果: %ld\n&#34;, sum);
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    printf(&#34;执行时间: %.3f秒\n&#34;, time_spent);
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    return 0;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">}
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">EOF</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 编译不同优化级别</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">for</span> opt in O0 O1 O2 O3 Os; <span style="color:#66d9ef">do</span>
+</span></span><span style="display:flex;"><span>    echo <span style="color:#e6db74">&#34;测试优化级别: -</span>$opt<span style="color:#e6db74">&#34;</span>
+</span></span><span style="display:flex;"><span>    $LFS_TGT-gcc -$opt $LFS/optimization_test.c -o $LFS/opt_test_$opt
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> <span style="color:#f92672">[</span> -x $LFS/opt_test_$opt <span style="color:#f92672">]</span>; <span style="color:#66d9ef">then</span>
+</span></span><span style="display:flex;"><span>        echo <span style="color:#e6db74">&#34;✓ 优化级别 -</span>$opt<span style="color:#e6db74"> 编译成功&#34;</span>
+</span></span><span style="display:flex;"><span>        <span style="color:#75715e"># 显示文件大小</span>
+</span></span><span style="display:flex;"><span>        ls -lh $LFS/opt_test_$opt | awk <span style="color:#e6db74">&#39;{print &#34;文件大小:&#34;, $5}&#39;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">else</span>
+</span></span><span style="display:flex;"><span>        echo <span style="color:#e6db74">&#34;✗ 优化级别 -</span>$opt<span style="color:#e6db74"> 编译失败&#34;</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">fi</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">done</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 清理</span>
+</span></span><span style="display:flex;"><span>rm -f $LFS/optimization_test.c $LFS/opt_test_*
+</span></span></code></pre></div><h2 id="-gcc配置分析">📊 GCC配置分析</h2>
+<h3 id="编译器特性检查">编译器特性检查</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># 检查GCC支持的特性</span>
+</span></span><span style="display:flex;"><span>$LFS_TGT-gcc -dumpspecs | head -20
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 检查预定义宏</span>
+</span></span><span style="display:flex;"><span>echo <span style="color:#e6db74">&#34;#include &lt;stdio.h&gt;&#34;</span> &gt; test_macros.c
+</span></span><span style="display:flex;"><span>echo <span style="color:#e6db74">&#34;int main() { return 0; }&#34;</span> &gt;&gt; test_macros.c
+</span></span><span style="display:flex;"><span>$LFS_TGT-gcc -E -dM test_macros.c | grep -E <span style="color:#e6db74">&#34;(GNUC|STDC|unix|linux)&#34;</span> | head -10
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 清理</span>
+</span></span><span style="display:flex;"><span>rm -f test_macros.c
+</span></span></code></pre></div><h3 id="库和头文件检查">库和头文件检查</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># 检查GCC安装的库</span>
+</span></span><span style="display:flex;"><span>find $LFS/usr/lib -name <span style="color:#e6db74">&#34;*gcc*&#34;</span> -type f | head -10
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 检查头文件</span>
+</span></span><span style="display:flex;"><span>find $LFS/usr/include -name <span style="color:#e6db74">&#34;*gcc*&#34;</span> -type f 2&gt;/dev/null <span style="color:#f92672">||</span> echo <span style="color:#e6db74">&#34;无GCC专用头文件&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 检查C++标准库</span>
+</span></span><span style="display:flex;"><span>ls -la $LFS/usr/lib/libstdc++*
+</span></span></code></pre></div><h2 id="-gcc调试和分析">🔧 GCC调试和分析</h2>
+<h3 id="编译过程分析">编译过程分析</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># 详细编译过程</span>
+</span></span><span style="display:flex;"><span>cat &gt; $LFS/debug_compile.c <span style="color:#e6db74">&lt;&lt; &#39;EOF&#39;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">#include &lt;stdio.h&gt;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">int main() {
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    printf(&#34;GCC调试测试\n&#34;);
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    return 0;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">}
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">EOF</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 显示编译各阶段</span>
+</span></span><span style="display:flex;"><span>echo <span style="color:#e6db74">&#34;=== 预处理阶段 ===&#34;</span>
+</span></span><span style="display:flex;"><span>$LFS_TGT-gcc -E $LFS/debug_compile.c | head -20
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>echo -e <span style="color:#e6db74">&#34;\n=== 编译阶段（汇编）===&#34;</span>
+</span></span><span style="display:flex;"><span>$LFS_TGT-gcc -S $LFS/debug_compile.c
+</span></span><span style="display:flex;"><span>cat debug_compile.s | head -20
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>echo -e <span style="color:#e6db74">&#34;\n=== 汇编阶段（目标文件）===&#34;</span>
+</span></span><span style="display:flex;"><span>$LFS_TGT-gcc -c $LFS/debug_compile.c
+</span></span><span style="display:flex;"><span>$LFS_TGT-objdump -d debug_compile.o | head -20
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>echo -e <span style="color:#e6db74">&#34;\n=== 链接阶段（可执行文件）===&#34;</span>
+</span></span><span style="display:flex;"><span>$LFS_TGT-gcc $LFS/debug_compile.c -o debug_compile
+</span></span><span style="display:flex;"><span>$LFS_TGT-readelf -l debug_compile | grep <span style="color:#e6db74">&#34;program interpreter&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 清理</span>
+</span></span><span style="display:flex;"><span>rm -f $LFS/debug_compile.c debug_compile.s debug_compile.o debug_compile
+</span></span></code></pre></div><h3 id="性能分析">性能分析</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># 编译时间测试</span>
+</span></span><span style="display:flex;"><span>cat &gt; $LFS/performance_test.c <span style="color:#e6db74">&lt;&lt; &#39;EOF&#39;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">#include &lt;stdio.h&gt;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">#include &lt;stdlib.h&gt;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">#define SIZE 1000
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">int main() {
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    double **matrix = malloc(SIZE * sizeof(double*));
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    for(int i = 0; i &lt; SIZE; i++) {
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        matrix[i] = malloc(SIZE * sizeof(double));
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        for(int j = 0; j &lt; SIZE; j++) {
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            matrix[i][j] = i * j * 1.0;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        }
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    }
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    double sum = 0;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    for(int i = 0; i &lt; SIZE; i++) {
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        for(int j = 0; j &lt; SIZE; j++) {
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">            sum += matrix[i][j];
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        }
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">        free(matrix[i]);
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    }
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    free(matrix);
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    printf(&#34;矩阵求和结果: %.0f\n&#34;, sum);
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    return 0;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">}
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">EOF</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 测试不同编译选项的性能</span>
+</span></span><span style="display:flex;"><span>echo <span style="color:#e6db74">&#34;=== GCC编译性能测试 ===&#34;</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">for</span> opt in O0 O1 O2 O3; <span style="color:#66d9ef">do</span>
+</span></span><span style="display:flex;"><span>    echo <span style="color:#e6db74">&#34;编译选项: -</span>$opt<span style="color:#e6db74">&#34;</span>
+</span></span><span style="display:flex;"><span>    time $LFS_TGT-gcc -$opt $LFS/performance_test.c -o perf_test_$opt -lm
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e"># 显示文件大小</span>
+</span></span><span style="display:flex;"><span>    size<span style="color:#f92672">=</span><span style="color:#66d9ef">$(</span>ls -lh perf_test_$opt | awk <span style="color:#e6db74">&#39;{print $5}&#39;</span><span style="color:#66d9ef">)</span>
+</span></span><span style="display:flex;"><span>    echo <span style="color:#e6db74">&#34;文件大小: </span>$size<span style="color:#e6db74">&#34;</span>
+</span></span><span style="display:flex;"><span>    echo <span style="color:#e6db74">&#34;&#34;</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">done</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 清理</span>
+</span></span><span style="display:flex;"><span>rm -f $LFS/performance_test.c perf_test_*
+</span></span></code></pre></div><h2 id="-故障排除">🚨 故障排除</h2>
+<h3 id="编译失败">编译失败</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># 检查常见问题：</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 1. 依赖库版本</span>
+</span></span><span style="display:flex;"><span>ls -la $LFS/usr/lib/libmpfr*
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 2. 头文件位置</span>
+</span></span><span style="display:flex;"><span>find $LFS/usr/include -name <span style="color:#e6db74">&#34;gmp.h&#34;</span> -o -name <span style="color:#e6db74">&#34;mpfr.h&#34;</span> -o -name <span style="color:#e6db74">&#34;mpc.h&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 3. 环境变量</span>
+</span></span><span style="display:flex;"><span>echo $PATH
+</span></span><span style="display:flex;"><span>echo $LFS_TGT
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 4. 重新配置</span>
+</span></span><span style="display:flex;"><span>cd build
+</span></span><span style="display:flex;"><span>make clean
+</span></span><span style="display:flex;"><span>../configure <span style="color:#f92672">[</span>配置选项<span style="color:#f92672">]</span>
+</span></span></code></pre></div><h3 id="链接问题">链接问题</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># 如果遇到链接错误：</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 1. 检查库文件</span>
+</span></span><span style="display:flex;"><span>find $LFS/usr/lib -name <span style="color:#e6db74">&#34;*gcc*&#34;</span> -o -name <span style="color:#e6db74">&#34;*stdc++*&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 2. 检查动态链接器</span>
+</span></span><span style="display:flex;"><span>ls -la $LFS/lib/ld-linux*
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 3. 验证库依赖</span>
+</span></span><span style="display:flex;"><span>$LFS_TGT-readelf -d $LFS/usr/bin/$LFS_TGT-gcc 2&gt;/dev/null | head -10
+</span></span></code></pre></div><h3 id="测试失败">测试失败</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># 如果测试程序无法运行：</span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 1. 检查程序格式</span>
+</span></span><span style="display:flex;"><span>file $LFS/gcc_test
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 2. 检查依赖库</span>
+</span></span><span style="display:flex;"><span>$LFS_TGT-readelf -d $LFS/gcc_test 2&gt;/dev/null | grep <span style="color:#e6db74">&#34;Shared library&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 3. 验证运行时环境</span>
+</span></span><span style="display:flex;"><span>ls -la $LFS/lib/libc.so*
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 4. 简化测试</span>
+</span></span><span style="display:flex;"><span>$LFS_TGT-gcc --version
+</span></span><span style="display:flex;"><span>$LFS_TGT-gcc -print-sysroot
+</span></span></code></pre></div><h2 id="-高级特性">📈 高级特性</h2>
+<h3 id="交叉编译验证">交叉编译验证</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># 测试交叉编译功能</span>
+</span></span><span style="display:flex;"><span>cat &gt; $LFS/cross_test.c <span style="color:#e6db74">&lt;&lt; &#39;EOF&#39;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">#include &lt;stdio.h&gt;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">int main() {
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    printf(&#34;交叉编译测试成功!\n&#34;);
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    printf(&#34;目标平台: %s\n&#34;, __TARGET_ARCH__);
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">    return 0;
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">}
+</span></span></span><span style="display:flex;"><span><span style="color:#e6db74">EOF</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 交叉编译</span>
+</span></span><span style="display:flex;"><span>$LFS_TGT-gcc -D__TARGET_ARCH__<span style="color:#f92672">=</span><span style="color:#e6db74">&#34;\&#34;x86_64\&#34;&#34;</span> $LFS/cross_test.c -o $LFS/cross_test
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 验证目标文件</span>
+</span></span><span style="display:flex;"><span>$LFS_TGT-readelf -h $LFS/cross_test | grep <span style="color:#e6db74">&#34;Machine&#34;</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 清理</span>
+</span></span><span style="display:flex;"><span>rm -f $LFS/cross_test.c $LFS/cross_test
+</span></span></code></pre></div><h3 id="自定义gcc构建">自定义GCC构建</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span><span style="color:#75715e"># 构建支持更多语言的GCC</span>
+</span></span><span style="display:flex;"><span>cd $LFS/sources/gcc_build/gcc-12.2.0/build
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 重新配置（支持更多语言）</span>
+</span></span><span style="display:flex;"><span>../configure <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span>    --target<span style="color:#f92672">=</span>$LFS_TGT <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span>    --prefix<span style="color:#f92672">=</span>/usr <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span>    --with-glibc-version<span style="color:#f92672">=</span>2.37 <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span>    --with-sysroot<span style="color:#f92672">=</span>$LFS <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span>    --enable-languages<span style="color:#f92672">=</span>c,c++,fortran,go <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span>    --enable-shared <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span>    --enable-threads<span style="color:#f92672">=</span>posix <span style="color:#ae81ff">\
+</span></span></span><span style="display:flex;"><span>    --disable-multilib
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 编译（需要更多时间）</span>
+</span></span><span style="display:flex;"><span>make $LFS_MAKEFLAGS
+</span></span><span style="display:flex;"><span>make install
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#75715e"># 验证新语言支持</span>
+</span></span><span style="display:flex;"><span>$LFS_TGT-gfortran --version 2&gt;/dev/null <span style="color:#f92672">&amp;&amp;</span> echo <span style="color:#e6db74">&#34;Fortran支持: ✓&#34;</span> <span style="color:#f92672">||</span> echo <span style="color:#e6db74">&#34;Fortran支持: ✗&#34;</span>
+</span></span><span style="display:flex;"><span>$LFS_TGT-gccgo --version 2&gt;/dev/null <span style="color:#f92672">&amp;&amp;</span> echo <span style="color:#e6db74">&#34;Go支持: ✓&#34;</span> <span style="color:#f92672">||</span> echo <span style="color:#e6db74">&#34;Go支持: ✗&#34;</span>
+</span></span></code></pre></div><h2 id="-相关资源">📚 相关资源</h2>
+<ul>
+<li><a href="http://www.linuxfromscratch.org/lfs/view/stable/chapter05/gcc.html">LFS官方文档 - GCC</a></li>
+<li><a href="https://gcc.gnu.org/onlinedocs/">GCC官方文档</a></li>
+<li><a href="https://gcc.gnu.org/onlinedocs/gcc/Optimize-Options.html">GCC优化选项</a></li>
+</ul>
+<hr>
+<p><em>最近更新: {{ .Lastmod.Format &ldquo;2006-01-02&rdquo; }}</em></p>
+</div>
+    
+<nav class="pager" aria-label="文章导航">
+  
+  <a href="/wiki/lfs/toolchain/testing/" data-press>
+    <span class="dir">← 上一篇</span>临时工具链测试
+  </a>
+  
+  
+  <a href="/wiki/lfs/toolchain/binutils/" class="is-next" data-press>
+    <span class="dir">下一篇 →</span>Binutils工具链
+  </a>
+  
+</nav>
+
+
+    
+
+  </article>
+  
+</div>
+
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+      <div class="footer-links">
+        
+        <a href="https://github.com/makkichan947" target="_blank" rel="noopener" title="Github" data-press>Github</a>
+        
+        <a href="mailto:yakumakki947@hotmail.com" target="_blank" rel="noopener" title="Email" data-press>Email</a>
+        
+        <a href="https://x.com/Makki_Yaku947" target="_blank" rel="noopener" title="Twitter" data-press>Twitter</a>
+        
+        <a href="https://www.twitch.tv/u/makkichan947" target="_blank" rel="noopener" title="Twitch" data-press>Twitch</a>
+        
+      </div>
+      <p>&copy; 2026 Yaku Makki</p>
+      <p>Powered by <a href="https://gohugo.io" target="_blank" rel="noopener">Hugo</a> · Makki Theme</p>
+      
+      <div class="stats">
+        <span>访客 <span id="busuanzi_value_site_uv"></span></span>
+        <span>访问 <span id="busuanzi_value_site_pv"></span></span>
+        <span>本页 <span id="busuanzi_value_page_pv"></span></span>
+      </div>
+      
+    </div>
+  </footer>
+
+  <button class="back-to-top" id="back-to-top" type="button" aria-label="回到顶部" data-press>
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 19V5"/><path d="M5 12l7-7 7 7"/></svg>
+  </button>
+
+  
+  <script src="/js/main.min.2e977141114ec7890ffee2c35e08034683543cfe8ef98dd4af5effb3b37a3345.js" integrity="sha256-LpdxQRFOx4kP/uLDXggDRoNUPP6O&#43;Y3Ur17/s7N6M0U=" defer></script>
+  
+  
+  <script src="/js/search.min.b2d6ba6610ce24454bc1436dc521dcfd878b2583ad9f65f77aadedaaa1e1a54c.js" integrity="sha256-sta6ZhDOJEVLwUNtxSHc/YeLJYOtn2X3eq3tqqHhpUw=" defer></script>
+  
+
+  
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+  
+
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/katex.min.js" crossorigin="anonymous"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/contrib/auto-render.min.js" crossorigin="anonymous"></script>
+</body>
+</html>

@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Hyprland · Yaku Makki</title>
+  <meta name="description" content="个人小巢">
+  <meta name="theme-color" content="#0a0a0f">
+  <script>document.documentElement.classList.add('js');</script>
+
+  <link rel="icon" href="/avatar/avatar.jpg" type="image/jpeg">
+
+  
+  <link rel="stylesheet" href="/css/main.min.b64e4527cc255b367461135391e39e321a5d86fc97defca99c7afda308ada007.css" integrity="sha256-tk5FJ8wlWzZ0YRNTkeOeMhpdhvyX3vypnHr9owitoAc=">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/katex.min.css" crossorigin="anonymous">
+</head>
+<body>
+  <a class="skip-link" href="#main">跳到内容</a>
+
+  <div class="scene" aria-hidden="true">
+    <div class="scene-sky"></div>
+    <div class="scene-stars"></div>
+    <div class="scene-sun-halo"></div>
+    <div class="scene-sun"></div>
+    <div class="scene-mountains scene-mountains-far"></div>
+    <div class="scene-mountains scene-mountains-near"></div>
+    <div class="scene-horizon"></div>
+    <div class="scene-floor"></div>
+    <div class="scene-scanlines"></div>
+  </div>
+
+  <nav class="navbar" aria-label="主导航">
+    <div class="nav-inner">
+      <a class="logo" href="/" data-press>
+        <img class="logo-avatar" src="/avatar/avatar.jpg" alt="" width="34" height="34">
+        <span class="logo-text">Yaku Makki</span>
+      </a>
+      <div class="nav-menu-wrap">
+        <span class="nav-tick" aria-hidden="true"></span>
+        <ul class="nav-menu">
+          
+          <li>
+            <a href="/" data-press>首页</a>
+          </li>
+          
+          <li>
+            <a href="/post/" data-press>博客</a>
+          </li>
+          
+          <li>
+            <a href="/wiki/" data-press>维基</a>
+          </li>
+          
+          <li>
+            <a href="/tags/" data-press>标签</a>
+          </li>
+          
+          <li>
+            <a href="/about/" data-press>关于</a>
+          </li>
+          
+          
+          <li>
+            <button id="search-toggle" class="search-toggle" type="button" title="搜索 (Ctrl+K 或 /)" aria-haspopup="dialog" aria-expanded="false" data-press>搜索</button>
+          </li>
+          
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  
+  <div class="sheet-scrim" id="sheet-scrim"></div>
+  <section class="sheet" id="search-sheet" role="dialog" aria-modal="true" aria-label="搜索" aria-hidden="true">
+    <div class="sheet-panel" id="sheet-panel">
+      <div class="sheet-handle" id="sheet-handle" role="presentation" aria-hidden="true"></div>
+      <div class="sheet-body">
+        <div class="search-field">
+          <input id="search-input" type="search" placeholder="搜索文章和 Wiki…"
+                 autocomplete="off" spellcheck="false" aria-controls="search-results">
+          <span class="search-key" aria-hidden="true">/</span>
+        </div>
+        <div id="search-results" class="search-results" role="listbox" aria-label="搜索结果"></div>
+      </div>
+    </div>
+  </section>
+  
+
+  <main class="main" id="main">
+    
+<header class="page-head">
+  <h1>Hyprland</h1>
+  
+</header>
+
+
+
+
+<div class="card-grid">
+  
+  <article class="card" data-press data-reveal data-reveal-delay="045">
+    <h3><a href="/wiki/hyprland/issuesmaymeet/">常见问题</a></h3>
+    <p><h2 id="hyprland-常见问题及解决方法">Hyprland 常见问题及解决方法</h2>
+<p>在使用 Hyprland 的过程中，您可能会遇到一些常见问题。下面我将介绍这些问题及其解决方法。</p>
+<h3 id="1-hyprland-无法启动">1. Hyprland 无法启动</h3>
+<h4 id="问题描述">问题描述</h4>
+<p>尝试启动 Hyprland 时，系统无法 …</p></p>
+    <div class="meta">
+      <time datetime="2026-02-07">2026-02-07</time>
+      
+    </div>
+  </article>
+  
+  <article class="card" data-press data-reveal data-reveal-delay="145">
+    <h3><a href="/wiki/hyprland/waybar/">Waybar 配置详解</a></h3>
+    <p><h2 id="waybar-配置详解">Waybar 配置详解</h2>
+<p>Waybar 是一个高度可定制的 Wayland 状态栏，支持 Hyprland 工作区、窗口信息等。下面我将详细解释每个配置项的功能。</p>
+<h3 id="1-基本配置">1. 基本配置</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-json" data-lang="json"><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;layer&#34;</span>: …</span></span></span></span></code></pre></div></p>
+    <div class="meta">
+      <time datetime="2026-02-07">2026-02-07</time>
+      
+    </div>
+  </article>
+  
+  <article class="card" data-press data-reveal data-reveal-delay="245">
+    <h3><a href="/wiki/hyprland/hyprland-conf/">Hyprland 配置详解</a></h3>
+    <p><h2 id="hyprland-主配置文件详解">Hyprland 主配置文件详解</h2>
+<p>Hyprland 的主配置文件是 <code>~/.config/hypr/hyprland.conf</code>，它包含了窗口管理、输入、外观等所有核心设置。下面我将详细解释每个配置项的功能。</p>
+<h3 id="1-程序定义">1. 程序定义 …</h3></p>
+    <div class="meta">
+      <time datetime="2026-02-07">2026-02-07</time>
+      
+    </div>
+  </article>
+  
+  <article class="card" data-press data-reveal data-reveal-delay="345">
+    <h3><a href="/wiki/hyprland/intosddm/">SDDM 配置</a></h3>
+    <p><h2 id="sddm-配置">SDDM 配置</h2>
+<p>SDDM（Simple Desktop Display Manager）是一个轻量级的 Wayland 和 X11 显示管理器，用于登录界面。下面我将介绍如何配置 SDDM 以配合 Hyprland 使用 …</p></p>
+    <div class="meta">
+      <time datetime="2026-02-07">2026-02-07</time>
+      
+    </div>
+  </article>
+  
+  <article class="card" data-press data-reveal data-reveal-delay="445">
+    <h3><a href="/wiki/hyprland/ecosystems/">Hyprland的生态系统</a></h3>
+    <p><p>Hyprland 有一个强大且活跃的生态系统，包含了各种工具和组件，用于增强用户体验。</p>
+<h2 id="1-状态栏">1. 状态栏</h2>
+<h3 id="waybar">Waybar</h3>
+<p>Waybar 是一个高度可定制的 Wayland 状态栏，支持 Hyprland 工作区、窗口信息等。 …</p></p>
+    <div class="meta">
+      <time datetime="2026-02-01">2026-02-01</time>
+      
+    </div>
+  </article>
+  
+  <article class="card" data-press data-reveal data-reveal-delay="545">
+    <h3><a href="/wiki/hyprland/defaultwm/">默认的Hyprland</a></h3>
+    <p><p>当您第一次安装 Hyprland 时，它会创建一个默认的配置文件，提供基本的窗口管理功能。</p>
+<h2 id="默认配置文件位置">默认配置文件位置</h2>
+<p>默认配置文件位于 <code>~/.config/hypr/hyprland.conf</code>，如果该文件不存在，Hyprland …</p></p>
+    <div class="meta">
+      <time datetime="2026-02-01">2026-02-01</time>
+      
+    </div>
+  </article>
+  
+  <article class="card" data-press data-reveal data-reveal-delay="045">
+    <h3><a href="/wiki/hyprland/beforewestart/">开始之前的准备</a></h3>
+    <p><p>在开始配置 Hyprland 之前，您需要做好以下准备：</p>
+<h2 id="1-系统要求">1. 系统要求</h2>
+<p>Hyprland 是一个 Wayland 合成器，需要以下系统要求：</p>
+<ul>
+<li><strong>Linux 内核 5.16 或更高版本</strong></li>
+<li><strong>Wayland 协议支持 …</strong></li></ul></p>
+    <div class="meta">
+      <time datetime="2026-01-27">2026-01-27</time>
+      
+    </div>
+  </article>
+  
+</div>
+
+
+
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+      <div class="footer-links">
+        
+        <a href="https://github.com/makkichan947" target="_blank" rel="noopener" title="Github" data-press>Github</a>
+        
+        <a href="mailto:yakumakki947@hotmail.com" target="_blank" rel="noopener" title="Email" data-press>Email</a>
+        
+        <a href="https://x.com/Makki_Yaku947" target="_blank" rel="noopener" title="Twitter" data-press>Twitter</a>
+        
+        <a href="https://www.twitch.tv/u/makkichan947" target="_blank" rel="noopener" title="Twitch" data-press>Twitch</a>
+        
+      </div>
+      <p>&copy; 2026 Yaku Makki</p>
+      <p>Powered by <a href="https://gohugo.io" target="_blank" rel="noopener">Hugo</a> · Makki Theme</p>
+      
+      <div class="stats">
+        <span>访客 <span id="busuanzi_value_site_uv"></span></span>
+        <span>访问 <span id="busuanzi_value_site_pv"></span></span>
+        <span>本页 <span id="busuanzi_value_page_pv"></span></span>
+      </div>
+      
+    </div>
+  </footer>
+
+  <button class="back-to-top" id="back-to-top" type="button" aria-label="回到顶部" data-press>
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 19V5"/><path d="M5 12l7-7 7 7"/></svg>
+  </button>
+
+  
+  <script src="/js/main.min.2e977141114ec7890ffee2c35e08034683543cfe8ef98dd4af5effb3b37a3345.js" integrity="sha256-LpdxQRFOx4kP/uLDXggDRoNUPP6O&#43;Y3Ur17/s7N6M0U=" defer></script>
+  
+  
+  <script src="/js/search.min.b2d6ba6610ce24454bc1436dc521dcfd878b2583ad9f65f77aadedaaa1e1a54c.js" integrity="sha256-sta6ZhDOJEVLwUNtxSHc/YeLJYOtn2X3eq3tqqHhpUw=" defer></script>
+  
+
+  
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+  
+
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/katex.min.js" crossorigin="anonymous"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/contrib/auto-render.min.js" crossorigin="anonymous"></script>
+</body>
+</html>

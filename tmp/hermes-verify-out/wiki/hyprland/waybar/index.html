@@ -1,0 +1,583 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>Waybar 配置详解 · Yaku Makki</title>
+  <meta name="description" content="个人小巢">
+  <meta name="theme-color" content="#0a0a0f">
+  <script>document.documentElement.classList.add('js');</script>
+
+  <link rel="icon" href="/avatar/avatar.jpg" type="image/jpeg">
+
+  
+  <link rel="stylesheet" href="/css/main.min.b64e4527cc255b367461135391e39e321a5d86fc97defca99c7afda308ada007.css" integrity="sha256-tk5FJ8wlWzZ0YRNTkeOeMhpdhvyX3vypnHr9owitoAc=">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/katex.min.css" crossorigin="anonymous">
+</head>
+<body>
+  <a class="skip-link" href="#main">跳到内容</a>
+
+  <div class="scene" aria-hidden="true">
+    <div class="scene-sky"></div>
+    <div class="scene-stars"></div>
+    <div class="scene-sun-halo"></div>
+    <div class="scene-sun"></div>
+    <div class="scene-mountains scene-mountains-far"></div>
+    <div class="scene-mountains scene-mountains-near"></div>
+    <div class="scene-horizon"></div>
+    <div class="scene-floor"></div>
+    <div class="scene-scanlines"></div>
+  </div>
+
+  <nav class="navbar" aria-label="主导航">
+    <div class="nav-inner">
+      <a class="logo" href="/" data-press>
+        <img class="logo-avatar" src="/avatar/avatar.jpg" alt="" width="34" height="34">
+        <span class="logo-text">Yaku Makki</span>
+      </a>
+      <div class="nav-menu-wrap">
+        <span class="nav-tick" aria-hidden="true"></span>
+        <ul class="nav-menu">
+          
+          <li>
+            <a href="/" data-press>首页</a>
+          </li>
+          
+          <li>
+            <a href="/post/" data-press>博客</a>
+          </li>
+          
+          <li>
+            <a href="/wiki/" data-press>维基</a>
+          </li>
+          
+          <li>
+            <a href="/tags/" data-press>标签</a>
+          </li>
+          
+          <li>
+            <a href="/about/" data-press>关于</a>
+          </li>
+          
+          
+          <li>
+            <button id="search-toggle" class="search-toggle" type="button" title="搜索 (Ctrl+K 或 /)" aria-haspopup="dialog" aria-expanded="false" data-press>搜索</button>
+          </li>
+          
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  
+  <div class="sheet-scrim" id="sheet-scrim"></div>
+  <section class="sheet" id="search-sheet" role="dialog" aria-modal="true" aria-label="搜索" aria-hidden="true">
+    <div class="sheet-panel" id="sheet-panel">
+      <div class="sheet-handle" id="sheet-handle" role="presentation" aria-hidden="true"></div>
+      <div class="sheet-body">
+        <div class="search-field">
+          <input id="search-input" type="search" placeholder="搜索文章和 Wiki…"
+                 autocomplete="off" spellcheck="false" aria-controls="search-results">
+          <span class="search-key" aria-hidden="true">/</span>
+        </div>
+        <div id="search-results" class="search-results" role="listbox" aria-label="搜索结果"></div>
+      </div>
+    </div>
+  </section>
+  
+
+  <main class="main" id="main">
+    
+<header class="page-head">
+  <nav class="crumb" aria-label="面包屑">
+    <a href="/" data-press>首页</a>
+    <span class="sep">/</span>
+    <a href="/wiki/" data-press>维基</a>
+    
+    
+    <span class="sep">/</span>
+    <a href="/wiki/hyprland/" data-press>Hyprland</a>
+    
+    
+  </nav>
+  <h1>Waybar 配置详解</h1>
+  
+</header>
+
+<div class="wiki-layout">
+  <article class="article">
+    <div class="article-content"><h2 id="waybar-配置详解">Waybar 配置详解</h2>
+<p>Waybar 是一个高度可定制的 Wayland 状态栏，支持 Hyprland 工作区、窗口信息等。下面我将详细解释每个配置项的功能。</p>
+<h3 id="1-基本配置">1. 基本配置</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-json" data-lang="json"><span style="display:flex;"><span>{
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;layer&#34;</span>: <span style="color:#e6db74">&#34;top&#34;</span>,
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;position&#34;</span>: <span style="color:#e6db74">&#34;top&#34;</span>,
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;height&#34;</span>: <span style="color:#ae81ff">18</span>,
+</span></span><span style="display:flex;"><span>  <span style="color:#f92672">&#34;spacing&#34;</span>: <span style="color:#ae81ff">5</span>,
+</span></span></code></pre></div><p><strong>功能解释：</strong></p>
+<ul>
+<li><code>layer</code>：状态栏所在的层级（这里是 top，顶层）</li>
+<li><code>position</code>：状态栏的位置（这里是 top，顶部）</li>
+<li><code>height</code>：状态栏的高度（这里是 18 像素）</li>
+<li><code>spacing</code>：模块之间的间距（这里是 5 像素）</li>
+</ul>
+<p><strong>作用：</strong> 定义 Waybar 的基本布局和外观。</p>
+<h3 id="2-模块配置">2. 模块配置</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-json" data-lang="json"><span style="display:flex;"><span>  <span style="color:#e6db74">&#34;modules-left&#34;</span><span style="color:#960050;background-color:#1e0010">:</span> [
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#34;custom/arch&#34;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#34;hyprland/window&#34;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#34;custom/file&#34;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#34;custom/edit&#34;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#34;custom/view&#34;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#34;custom/go&#34;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#34;custom/window&#34;</span>
+</span></span><span style="display:flex;"><span>  ]<span style="color:#960050;background-color:#1e0010">,</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#e6db74">&#34;modules-center&#34;</span><span style="color:#960050;background-color:#1e0010">:</span> [
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#34;hyprland/workspaces&#34;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#34;mpd&#34;</span>
+</span></span><span style="display:flex;"><span>  ]<span style="color:#960050;background-color:#1e0010">,</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#e6db74">&#34;modules-right&#34;</span><span style="color:#960050;background-color:#1e0010">:</span> [
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#34;keyboard-state&#34;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#34;tray&#34;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#34;bluetooth&#34;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#34;network&#34;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#34;battery&#34;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#e6db74">&#34;clock&#34;</span>
+</span></span><span style="display:flex;"><span>  ]<span style="color:#960050;background-color:#1e0010">,</span>
+</span></span></code></pre></div><p><strong>功能解释：</strong></p>
+<ul>
+<li><code>modules-left</code>：左侧模块列表</li>
+<li><code>modules-center</code>：中间模块列表</li>
+<li><code>modules-right</code>：右侧模块列表</li>
+</ul>
+<p><strong>作用：</strong> 定义 Waybar 各个模块的布局和位置。</p>
+<h3 id="3-窗口信息模块">3. 窗口信息模块</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-json" data-lang="json"><span style="display:flex;"><span>  <span style="color:#e6db74">&#34;hyprland/window&#34;</span><span style="color:#960050;background-color:#1e0010">:</span> {
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;format&#34;</span>: <span style="color:#e6db74">&#34; {title}&#34;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;max-length&#34;</span>: <span style="color:#ae81ff">20</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;empty&#34;</span>: <span style="color:#e6db74">&#34; 访达&#34;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;separate-outputs&#34;</span>: <span style="color:#66d9ef">true</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;tooltip&#34;</span>: <span style="color:#66d9ef">true</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;tooltip-format&#34;</span>: <span style="color:#e6db74">&#34;当前窗口\nClass: {class}\nTitle: {title}&#34;</span>
+</span></span><span style="display:flex;"><span>  }<span style="color:#960050;background-color:#1e0010">,</span>
+</span></span></code></pre></div><p><strong>功能解释：</strong></p>
+<ul>
+<li><code>format</code>：窗口信息的显示格式（这里显示窗口标题）</li>
+<li><code>max-length</code>：窗口标题的最大长度（这里是 20 字符）</li>
+<li><code>empty</code>：没有窗口时显示的信息（这里是 &ldquo; 访达&rdquo;）</li>
+<li><code>separate-outputs</code>：是否在多显示器上显示单独的窗口信息（这里启用）</li>
+<li><code>tooltip</code>：是否显示工具提示（这里启用）</li>
+<li><code>tooltip-format</code>：工具提示的格式（显示窗口类和标题）</li>
+</ul>
+<p><strong>作用：</strong> 显示当前焦点窗口的信息。</p>
+<h3 id="4-工作区模块">4. 工作区模块</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-json" data-lang="json"><span style="display:flex;"><span>  <span style="color:#e6db74">&#34;hyprland/workspaces&#34;</span><span style="color:#960050;background-color:#1e0010">:</span> {
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;format&#34;</span>: <span style="color:#e6db74">&#34;{icon}&#34;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;format-icons&#34;</span>: {
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;1&#34;</span>: <span style="color:#e6db74">&#34;1&#34;</span>, <span style="color:#f92672">&#34;2&#34;</span>: <span style="color:#e6db74">&#34;2&#34;</span>, <span style="color:#f92672">&#34;3&#34;</span>: <span style="color:#e6db74">&#34;3&#34;</span>, <span style="color:#f92672">&#34;4&#34;</span>: <span style="color:#e6db74">&#34;4&#34;</span>, <span style="color:#f92672">&#34;5&#34;</span>: <span style="color:#e6db74">&#34;5&#34;</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;6&#34;</span>: <span style="color:#e6db74">&#34;6&#34;</span>, <span style="color:#f92672">&#34;7&#34;</span>: <span style="color:#e6db74">&#34;7&#34;</span>, <span style="color:#f92672">&#34;8&#34;</span>: <span style="color:#e6db74">&#34;8&#34;</span>, <span style="color:#f92672">&#34;9&#34;</span>: <span style="color:#e6db74">&#34;9&#34;</span>, <span style="color:#f92672">&#34;10&#34;</span>: <span style="color:#e6db74">&#34;10&#34;</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;urgent&#34;</span>: <span style="color:#e6db74">&#34;&#34;</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;active&#34;</span>: <span style="color:#e6db74">&#34;&#34;</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;default&#34;</span>: <span style="color:#e6db74">&#34;&#34;</span>
+</span></span><span style="display:flex;"><span>    },
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;tooltip&#34;</span>: <span style="color:#66d9ef">true</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;tooltip-format&#34;</span>: <span style="color:#e6db74">&#34;Workspace {name}\n{windows} 个窗口&#34;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;on-scroll-up&#34;</span>: <span style="color:#e6db74">&#34;exec hyprctl dispatch workspace e-1&#34;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;on-scroll-down&#34;</span>: <span style="color:#e6db74">&#34;exec hyprctl dispatch workspace e+1&#34;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;on-click&#34;</span>: <span style="color:#e6db74">&#34;activate&#34;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;all-outputs&#34;</span>: <span style="color:#66d9ef">false</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;sort-by-number&#34;</span>: <span style="color:#66d9ef">true</span>
+</span></span><span style="display:flex;"><span>  }<span style="color:#960050;background-color:#1e0010">,</span>
+</span></span></code></pre></div><p><strong>功能解释：</strong></p>
+<ul>
+<li><code>format</code>：工作区的显示格式（这里显示图标）</li>
+<li><code>format-icons</code>：定义工作区的图标
+<ul>
+<li>数字 1-10：对应的工作区编号</li>
+<li><code>urgent</code>：紧急状态的图标</li>
+<li><code>active</code>：激活状态的图标</li>
+<li><code>default</code>：默认状态的图标</li>
+</ul>
+</li>
+<li><code>tooltip</code>：是否显示工具提示（这里启用）</li>
+<li><code>tooltip-format</code>：工具提示的格式（显示工作区名称和窗口数量）</li>
+<li><code>on-scroll-up</code>：向上滚动事件（切换到上一个工作区）</li>
+<li><code>on-scroll-down</code>：向下滚动事件（切换到下一个工作区）</li>
+<li><code>on-click</code>：点击事件（激活工作区）</li>
+<li><code>all-outputs</code>：是否在所有显示器上显示工作区（这里禁用）</li>
+<li><code>sort-by-number</code>：是否按数字排序工作区（这里启用）</li>
+</ul>
+<p><strong>作用：</strong> 显示和管理 Hyprland 工作区。</p>
+<h3 id="5-自定义模块">5. 自定义模块</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-json" data-lang="json"><span style="display:flex;"><span>  <span style="color:#e6db74">&#34;custom/arch&#34;</span><span style="color:#960050;background-color:#1e0010">:</span> {
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;format&#34;</span>: <span style="color:#e6db74">&#34;&#34;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;tooltip&#34;</span>: <span style="color:#66d9ef">false</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;on-click&#34;</span>: <span style="color:#e6db74">&#34;&#34;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;interval&#34;</span>: <span style="color:#66d9ef">false</span>
+</span></span><span style="display:flex;"><span>  }<span style="color:#960050;background-color:#1e0010">,</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#e6db74">&#34;custom/file&#34;</span><span style="color:#960050;background-color:#1e0010">:</span> {
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;format&#34;</span>: <span style="color:#e6db74">&#34;文件&#34;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;on-click&#34;</span>: <span style="color:#e6db74">&#34;nautilus&#34;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;on-click-right&#34;</span>: <span style="color:#e6db74">&#34;ghostty -e yazi&#34;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;tooltip&#34;</span>: <span style="color:#66d9ef">false</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;class&#34;</span>: <span style="color:#e6db74">&#34;app-menu&#34;</span>
+</span></span><span style="display:flex;"><span>  }<span style="color:#960050;background-color:#1e0010">,</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#e6db74">&#34;custom/edit&#34;</span><span style="color:#960050;background-color:#1e0010">:</span> {
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;format&#34;</span>: <span style="color:#e6db74">&#34;编辑&#34;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;on-click&#34;</span>: <span style="color:#e6db74">&#34;com.vscodium.codium-insiders&#34;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;on-click-right&#34;</span>: <span style="color:#e6db74">&#34;gnome-text-editor&#34;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;tooltip&#34;</span>: <span style="color:#66d9ef">false</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;class&#34;</span>: <span style="color:#e6db74">&#34;app-menu&#34;</span>
+</span></span><span style="display:flex;"><span>  }<span style="color:#960050;background-color:#1e0010">,</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#e6db74">&#34;custom/view&#34;</span><span style="color:#960050;background-color:#1e0010">:</span> {
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;format&#34;</span>: <span style="color:#e6db74">&#34;显示&#34;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;on-click&#34;</span>: <span style="color:#e6db74">&#34;&#34;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;on-click-right&#34;</span>: <span style="color:#e6db74">&#34;&#34;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;tooltip&#34;</span>: <span style="color:#66d9ef">false</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;class&#34;</span>: <span style="color:#e6db74">&#34;app-menu&#34;</span>
+</span></span><span style="display:flex;"><span>  }<span style="color:#960050;background-color:#1e0010">,</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#e6db74">&#34;custom/go&#34;</span><span style="color:#960050;background-color:#1e0010">:</span> {
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;format&#34;</span>: <span style="color:#e6db74">&#34;前往&#34;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;on-click&#34;</span>: <span style="color:#e6db74">&#34;&#34;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;on-click-right&#34;</span>: <span style="color:#e6db74">&#34;&#34;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;tooltip&#34;</span>: <span style="color:#66d9ef">false</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;class&#34;</span>: <span style="color:#e6db74">&#34;app-menu&#34;</span>
+</span></span><span style="display:flex;"><span>  }<span style="color:#960050;background-color:#1e0010">,</span>
+</span></span><span style="display:flex;"><span>  <span style="color:#e6db74">&#34;custom/window&#34;</span><span style="color:#960050;background-color:#1e0010">:</span> {
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;format&#34;</span>: <span style="color:#e6db74">&#34;窗口&#34;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;on-click&#34;</span>: <span style="color:#e6db74">&#34;ghostty&#34;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;on-click-right&#34;</span>: <span style="color:#e6db74">&#34;&#34;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;tooltip&#34;</span>: <span style="color:#66d9ef">false</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;class&#34;</span>: <span style="color:#e6db74">&#34;app-menu&#34;</span>
+</span></span><span style="display:flex;"><span>  }<span style="color:#960050;background-color:#1e0010">,</span>
+</span></span></code></pre></div><p><strong>功能解释：</strong></p>
+<ul>
+<li><code>custom/arch</code>：显示 Arch Linux 图标</li>
+<li><code>custom/file</code>：文件菜单模块，左键点击打开 Nautilus，右键点击打开 Yazi 终端文件管理器</li>
+<li><code>custom/edit</code>：编辑菜单模块，左键点击打开 VSCodium，右键点击打开 Gnome 文本编辑器</li>
+<li><code>custom/view</code>：显示菜单模块（未定义操作）</li>
+<li><code>custom/go</code>：前往菜单模块（未定义操作）</li>
+<li><code>custom/window</code>：窗口菜单模块，左键点击打开 Ghostty 终端</li>
+</ul>
+<p><strong>作用：</strong> 提供快速访问常用应用程序的菜单。</p>
+<h3 id="6-键盘状态模块">6. 键盘状态模块</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-json" data-lang="json"><span style="display:flex;"><span>  <span style="color:#e6db74">&#34;keyboard-state&#34;</span><span style="color:#960050;background-color:#1e0010">:</span> {
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;numlock&#34;</span>: <span style="color:#66d9ef">true</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;capslock&#34;</span>: <span style="color:#66d9ef">true</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;format&#34;</span>: {
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">&#34;numlock&#34;</span>: <span style="color:#e6db74">&#34;N {icon}&#34;</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">&#34;capslock&#34;</span>: <span style="color:#e6db74">&#34;C {icon}&#34;</span>
+</span></span><span style="display:flex;"><span>    },
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;format-icons&#34;</span>: {
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">&#34;locked&#34;</span>: <span style="color:#e6db74">&#34;&#34;</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">&#34;unlocked&#34;</span>: <span style="color:#e6db74">&#34;&#34;</span>
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>  }<span style="color:#960050;background-color:#1e0010">,</span>
+</span></span></code></pre></div><p><strong>功能解释：</strong></p>
+<ul>
+<li><code>numlock</code>：是否显示 Num Lock 状态（这里启用）</li>
+<li><code>capslock</code>：是否显示 Caps Lock 状态（这里启用）</li>
+<li><code>format</code>：状态的显示格式</li>
+<li><code>format-icons</code>：锁定和解锁状态的图标</li>
+</ul>
+<p><strong>作用：</strong> 显示键盘状态（Num Lock 和 Caps Lock）。</p>
+<h3 id="7-音乐模块">7. 音乐模块</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-json" data-lang="json"><span style="display:flex;"><span>  <span style="color:#e6db74">&#34;mpd&#34;</span><span style="color:#960050;background-color:#1e0010">:</span> {
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;format&#34;</span>: <span style="color:#e6db74">&#34;  {title} - {artist} {stateIcon} [{elapsedTime:%M:%S}/{totalTime:%M:%S}] {consumeIcon}{randomIcon}{repeatIcon}{singleIcon}[{songPosition}/{queueLength}] [{volume}%]&#34;</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;format-disconnected&#34;</span>: <span style="color:#e6db74">&#34; Disconnected&#34;</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;format-stopped&#34;</span>: <span style="color:#e6db74">&#34; {consumeIcon}{randomIcon}{repeatIcon}{singleIcon}Stopped&#34;</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;unknown-tag&#34;</span>: <span style="color:#e6db74">&#34;N/A&#34;</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;interval&#34;</span>: <span style="color:#ae81ff">2</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;consume-icons&#34;</span>: {
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">&#34;on&#34;</span>: <span style="color:#e6db74">&#34; &#34;</span>
+</span></span><span style="display:flex;"><span>      },
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;random-icons&#34;</span>: {
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">&#34;on&#34;</span>: <span style="color:#e6db74">&#34; &#34;</span>
+</span></span><span style="display:flex;"><span>      },
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;repeat-icons&#34;</span>: {
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">&#34;on&#34;</span>: <span style="color:#e6db74">&#34; &#34;</span>
+</span></span><span style="display:flex;"><span>      },
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;single-icons&#34;</span>: {
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">&#34;on&#34;</span>: <span style="color:#e6db74">&#34;1 &#34;</span>
+</span></span><span style="display:flex;"><span>      },
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;state-icons&#34;</span>: {
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">&#34;paused&#34;</span>: <span style="color:#e6db74">&#34;&#34;</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">&#34;playing&#34;</span>: <span style="color:#e6db74">&#34;&#34;</span>
+</span></span><span style="display:flex;"><span>      },
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;tooltip-format&#34;</span>: <span style="color:#e6db74">&#34;MPD (connected)&#34;</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;tooltip-format-disconnected&#34;</span>: <span style="color:#e6db74">&#34;MPD (disconnected)&#34;</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;on-click&#34;</span>: <span style="color:#e6db74">&#34;mpc toggle&#34;</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;on-click-right&#34;</span>: <span style="color:#e6db74">&#34;foot -a ncmpcpp ncmpcpp&#34;</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;on-scroll-up&#34;</span>: <span style="color:#e6db74">&#34;mpc volume +2&#34;</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;on-scroll-down&#34;</span>: <span style="color:#e6db74">&#34;mpc volume -2&#34;</span>
+</span></span><span style="display:flex;"><span>    }<span style="color:#960050;background-color:#1e0010">,</span>
+</span></span></code></pre></div><p><strong>功能解释：</strong></p>
+<ul>
+<li><code>format</code>：音乐信息的显示格式（显示标题、艺术家、播放状态、时间、播放模式、音量）</li>
+<li><code>format-disconnected</code>：与 MPD 服务器断开连接时的显示格式</li>
+<li><code>format-stopped</code>：音乐停止时的显示格式</li>
+<li><code>unknown-tag</code>：未知标签时显示的内容</li>
+<li><code>interval</code>：更新间隔（这里是 2 秒）</li>
+<li><code>consume-icons</code>：消费模式的图标</li>
+<li><code>random-icons</code>：随机播放模式的图标</li>
+<li><code>repeat-icons</code>：重复播放模式的图标</li>
+<li><code>single-icons</code>：单曲循环模式的图标</li>
+<li><code>state-icons</code>：播放状态的图标</li>
+<li><code>tooltip-format</code>：工具提示的格式</li>
+<li><code>on-click</code>：左键点击事件（播放/暂停）</li>
+<li><code>on-click-right</code>：右键点击事件（打开 Ncmpcpp 音乐播放器）</li>
+<li><code>on-scroll-up</code>：向上滚动事件（增加音量）</li>
+<li><code>on-scroll-down</code>：向下滚动事件（减少音量）</li>
+</ul>
+<p><strong>作用：</strong> 显示和控制音乐播放。</p>
+<h3 id="8-蓝牙模块">8. 蓝牙模块</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-json" data-lang="json"><span style="display:flex;"><span>  <span style="color:#e6db74">&#34;bluetooth&#34;</span><span style="color:#960050;background-color:#1e0010">:</span> {
+</span></span><span style="display:flex;"><span>	<span style="color:#f92672">&#34;format&#34;</span>: <span style="color:#e6db74">&#34; {status}&#34;</span>,
+</span></span><span style="display:flex;"><span>	<span style="color:#f92672">&#34;format-connected&#34;</span>: <span style="color:#e6db74">&#34; {device_alias}&#34;</span>,
+</span></span><span style="display:flex;"><span>	<span style="color:#f92672">&#34;format-connected-battery&#34;</span>: <span style="color:#e6db74">&#34; {device_alias} {device_battery_percentage}%&#34;</span>,
+</span></span><span style="display:flex;"><span>	<span style="color:#f92672">&#34;tooltip-format&#34;</span>: <span style="color:#e6db74">&#34;{controller_alias}\t{controller_address}\n\n{num_connections} connected&#34;</span>,
+</span></span><span style="display:flex;"><span>	<span style="color:#f92672">&#34;tooltip-format-connected&#34;</span>: <span style="color:#e6db74">&#34;{controller_alias}\t{controller_address}\n\n{num_connections} connected\n\n{device_enumerate}&#34;</span>,
+</span></span><span style="display:flex;"><span>	<span style="color:#f92672">&#34;tooltip-format-enumerate-connected&#34;</span>: <span style="color:#e6db74">&#34;{device_alias}\t{device_address}&#34;</span>,
+</span></span><span style="display:flex;"><span>	<span style="color:#f92672">&#34;tooltip-format-enumerate-connected-battery&#34;</span>: <span style="color:#e6db74">&#34;{device_alias}\t{device_address}\t{device_battery_percentage}%&#34;</span>
+</span></span><span style="display:flex;"><span>  }<span style="color:#960050;background-color:#1e0010">,</span>
+</span></span></code></pre></div><p><strong>功能解释：</strong></p>
+<ul>
+<li><code>format</code>：蓝牙状态的显示格式</li>
+<li><code>format-connected</code>：蓝牙连接时的显示格式</li>
+<li><code>format-connected-battery</code>：蓝牙连接且设备有电池时的显示格式</li>
+<li><code>tooltip-format</code>：工具提示的格式</li>
+<li><code>tooltip-format-connected</code>：蓝牙连接时的工具提示格式</li>
+<li><code>tooltip-format-enumerate-connected</code>：枚举连接设备时的工具提示格式</li>
+<li><code>tooltip-format-enumerate-connected-battery</code>：枚举连接设备且有电池时的工具提示格式</li>
+</ul>
+<p><strong>作用：</strong> 显示蓝牙状态和连接的设备。</p>
+<h3 id="9-电池模块">9. 电池模块</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-json" data-lang="json"><span style="display:flex;"><span>  <span style="color:#e6db74">&#34;battery&#34;</span><span style="color:#960050;background-color:#1e0010">:</span> {
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;format&#34;</span>: <span style="color:#e6db74">&#34;{icon} {capacity}%&#34;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;format-icons&#34;</span>: [<span style="color:#e6db74">&#34;󰂎&#34;</span>, <span style="color:#e6db74">&#34;󰁺&#34;</span>, <span style="color:#e6db74">&#34;󰁻&#34;</span>, <span style="color:#e6db74">&#34;󰁼&#34;</span>, <span style="color:#e6db74">&#34;󰁽&#34;</span>, <span style="color:#e6db74">&#34;󰁾&#34;</span>, <span style="color:#e6db74">&#34;󰁿&#34;</span>, <span style="color:#e6db74">&#34;󰂀&#34;</span>, <span style="color:#e6db74">&#34;󰂁&#34;</span>, <span style="color:#e6db74">&#34;󰂂&#34;</span>, <span style="color:#e6db74">&#34;󰁹&#34;</span>],
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;format-charging&#34;</span>: <span style="color:#e6db74">&#34;󰂄 {capacity}%&#34;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;format-plugged&#34;</span>: <span style="color:#e6db74">&#34;󰚥 {capacity}%&#34;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;format-full&#34;</span>: <span style="color:#e6db74">&#34;󰁹 {capacity}%&#34;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;states&#34;</span>: {
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;warning&#34;</span>: <span style="color:#ae81ff">20</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#f92672">&#34;critical&#34;</span>: <span style="color:#ae81ff">10</span>
+</span></span><span style="display:flex;"><span>    },
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;interval&#34;</span>:<span style="color:#ae81ff">1</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;tooltip&#34;</span>: <span style="color:#66d9ef">true</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;class&#34;</span>: <span style="color:#e6db74">&#34;battery&#34;</span>
+</span></span><span style="display:flex;"><span>  }<span style="color:#960050;background-color:#1e0010">,</span>
+</span></span></code></pre></div><p><strong>功能解释：</strong></p>
+<ul>
+<li><code>format</code>：电池状态的显示格式</li>
+<li><code>format-icons</code>：电池容量的图标（从低到高）</li>
+<li><code>format-charging</code>：充电时的显示格式</li>
+<li><code>format-plugged</code>：插入电源时的显示格式</li>
+<li><code>format-full</code>：电池满时的显示格式</li>
+<li><code>states</code>：电池状态阈值</li>
+<li><code>interval</code>：更新间隔（这里是 1 秒）</li>
+<li><code>tooltip</code>：是否显示工具提示（这里启用）</li>
+<li><code>class</code>：模块的 CSS 类名</li>
+</ul>
+<p><strong>作用：</strong> 显示电池状态。</p>
+<h3 id="10-网络模块">10. 网络模块</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-json" data-lang="json"><span style="display:flex;"><span>  <span style="color:#e6db74">&#34;network&#34;</span><span style="color:#960050;background-color:#1e0010">:</span> {
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;format-wifi&#34;</span>: <span style="color:#e6db74">&#34;   {essid} ({signalStrength}%)&#34;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;format-ethernet&#34;</span>: <span style="color:#e6db74">&#34;   有线&#34;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;format-disconnected&#34;</span>: <span style="color:#e6db74">&#34;⚠   离线{ifname}&#34;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;tooltip-format&#34;</span>: <span style="color:#e6db74">&#34;{ifname}\n{essid}\n{signalStrength}% • {frequency} GHz\n{ipaddr}\n{bandwidthDownBits} ↓ • {bandwidthUpBits} ↑&#34;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;interval&#34;</span>: <span style="color:#ae81ff">10</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;on-click-right&#34;</span>: <span style="color:#e6db74">&#34;nm-connection-editor&#34;</span>,
+</span></span><span style="display:flex;"><span>  }<span style="color:#960050;background-color:#1e0010">,</span>
+</span></span></code></pre></div><p><strong>功能解释：</strong></p>
+<ul>
+<li><code>format-wifi</code>：WiFi 连接时的显示格式</li>
+<li><code>format-ethernet</code>：有线连接时的显示格式</li>
+<li><code>format-disconnected</code>：网络断开时的显示格式</li>
+<li><code>tooltip-format</code>：工具提示的格式（显示详细网络信息）</li>
+<li><code>interval</code>：更新间隔（这里是 10 秒）</li>
+<li><code>on-click-right</code>：右键点击事件（打开网络连接编辑器）</li>
+</ul>
+<p><strong>作用：</strong> 显示网络连接状态。</p>
+<h3 id="11-时钟模块">11. 时钟模块</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-json" data-lang="json"><span style="display:flex;"><span>  <span style="color:#e6db74">&#34;clock&#34;</span><span style="color:#960050;background-color:#1e0010">:</span> {
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;format&#34;</span>: <span style="color:#e6db74">&#34;󰥔 {:%H:%M:%S}&#34;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;format-alt&#34;</span>: <span style="color:#e6db74">&#34;󰃭 {:%Y-%m-%d %a}&#34;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;tooltip-format&#34;</span>: <span style="color:#e6db74">&#34;&lt;big&gt;{:%Y %B}&lt;/big&gt;\n&lt;tt&gt;&lt;small&gt;{calendar}&lt;/small&gt;&lt;/tt&gt;&#34;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;calendar&#34;</span>: {
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">&#34;mode&#34;</span>: <span style="color:#e6db74">&#34;year&#34;</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">&#34;mode-mon-col&#34;</span>: <span style="color:#ae81ff">3</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">&#34;weeks-pos&#34;</span>: <span style="color:#e6db74">&#34;right&#34;</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">&#34;on-scroll&#34;</span>: <span style="color:#ae81ff">1</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">&#34;on-click-right&#34;</span>: <span style="color:#e6db74">&#34;mode&#34;</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">&#34;format&#34;</span>: {
+</span></span><span style="display:flex;"><span>            <span style="color:#f92672">&#34;months&#34;</span>: <span style="color:#e6db74">&#34;&lt;span color=&#39;#89b4fa&#39;&gt;&lt;b&gt;{}&lt;/b&gt;&lt;/span&gt;&#34;</span>,
+</span></span><span style="display:flex;"><span>            <span style="color:#f92672">&#34;days&#34;</span>: <span style="color:#e6db74">&#34;&lt;span color=&#39;#a6e3a1&#39;&gt;&lt;b&gt;{}&lt;/b&gt;&lt;/span&gt;&#34;</span>,
+</span></span><span style="display:flex;"><span>            <span style="color:#f92672">&#34;weeks&#34;</span>: <span style="color:#e6db74">&#34;&lt;span color=&#39;#b4befe&#39;&gt;{}&lt;/span&gt;&#34;</span>,
+</span></span><span style="display:flex;"><span>            <span style="color:#f92672">&#34;weekdays&#34;</span>: <span style="color:#e6db74">&#34;&lt;span color=&#39;#cdd6f4&#39;&gt;&lt;b&gt;{}&lt;/b&gt;&lt;/span&gt;&#34;</span>,
+</span></span><span style="display:flex;"><span>            <span style="color:#f92672">&#34;today&#34;</span>: <span style="color:#e6db74">&#34;&lt;span color=&#39;#f38ba8&#39;&gt;&lt;b&gt;&lt;u&gt;{}&lt;/u&gt;&lt;/b&gt;&lt;/span&gt;&#34;</span>
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>    },
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;interval&#34;</span>: <span style="color:#ae81ff">1</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;timezone&#34;</span>: <span style="color:#e6db74">&#34;Asia/Shanghai&#34;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;actions&#34;</span>: {
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">&#34;on-click-right&#34;</span>: <span style="color:#e6db74">&#34;mode&#34;</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">&#34;on-click-middle&#34;</span>: <span style="color:#e6db74">&#34;mode&#34;</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">&#34;on-scroll-up&#34;</span>: <span style="color:#e6db74">&#34;shift_up&#34;</span>,
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">&#34;on-scroll-down&#34;</span>: <span style="color:#e6db74">&#34;shift_down&#34;</span>
+</span></span><span style="display:flex;"><span>    },
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;class&#34;</span>: <span style="color:#e6db74">&#34;clock&#34;</span>
+</span></span><span style="display:flex;"><span>  }<span style="color:#960050;background-color:#1e0010">,</span>
+</span></span></code></pre></div><p><strong>功能解释：</strong></p>
+<ul>
+<li><code>format</code>：时钟的显示格式（这里显示时:分:秒）</li>
+<li><code>format-alt</code>：时钟的备用显示格式（这里显示年-月-日 星期）</li>
+<li><code>tooltip-format</code>：工具提示的格式（显示日历）</li>
+<li><code>calendar</code>：日历配置
+<ul>
+<li><code>mode</code>：日历模式（这里是 year，年度日历）</li>
+<li><code>mode-mon-col</code>：月度日历的列数（这里是 3 列）</li>
+<li><code>weeks-pos</code>：星期的位置（这里是 right，右侧）</li>
+<li><code>on-scroll</code>：滚动事件（这里是 1，表示滚动时切换月份）</li>
+<li><code>on-click-right</code>：右键点击事件（切换模式）</li>
+<li><code>format</code>：日历的样式（设置不同部分的颜色）</li>
+</ul>
+</li>
+<li><code>interval</code>：更新间隔（这里是 1 秒）</li>
+<li><code>timezone</code>：时区（这里是 Asia/Shanghai）</li>
+<li><code>actions</code>：操作配置
+<ul>
+<li><code>on-click-right</code>：右键点击事件（切换模式）</li>
+<li><code>on-click-middle</code>：中键点击事件（切换模式）</li>
+<li><code>on-scroll-up</code>：向上滚动事件（上移）</li>
+<li><code>on-scroll-down</code>：向下滚动事件（下移）</li>
+</ul>
+</li>
+<li><code>class</code>：模块的 CSS 类名</li>
+</ul>
+<p><strong>作用：</strong> 显示时间和日历。</p>
+<h3 id="12-托盘模块">12. 托盘模块</h3>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-json" data-lang="json"><span style="display:flex;"><span>  <span style="color:#e6db74">&#34;tray&#34;</span><span style="color:#960050;background-color:#1e0010">:</span> {
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;icon-size&#34;</span>: <span style="color:#ae81ff">17</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;spacing&#34;</span>: <span style="color:#ae81ff">6</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;show-passive-items&#34;</span>: <span style="color:#66d9ef">true</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;passive-icon-color&#34;</span>: <span style="color:#e6db74">&#34;#6e738d&#34;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;active-icon-color&#34;</span>: <span style="color:#e6db74">&#34;#cdd6f4&#34;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;icon-path&#34;</span>: <span style="color:#e6db74">&#34;/usr/share/icons/Papirus-Dark/24x24/panels/&#34;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;smooth-scrolling-threshold&#34;</span>: <span style="color:#ae81ff">0</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;on-click&#34;</span>: <span style="color:#e6db74">&#34;&#34;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;on-click-middle&#34;</span>: <span style="color:#e6db74">&#34;&#34;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;on-click-right&#34;</span>: <span style="color:#e6db74">&#34;&#34;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;tooltip&#34;</span>: <span style="color:#66d9ef">true</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;tooltip-format&#34;</span>: <span style="color:#e6db74">&#34;{title}\n{class}&#34;</span>,
+</span></span><span style="display:flex;"><span>    <span style="color:#f92672">&#34;class&#34;</span>: <span style="color:#e6db74">&#34;tray&#34;</span>
+</span></span><span style="display:flex;"><span>  }
+</span></span></code></pre></div><p><strong>功能解释：</strong></p>
+<ul>
+<li><code>icon-size</code>：托盘图标的大小（这里是 17 像素）</li>
+<li><code>spacing</code>：托盘图标之间的间距（这里是 6 像素）</li>
+<li><code>show-passive-items</code>：是否显示被动项（这里启用）</li>
+<li><code>passive-icon-color</code>：被动项图标的颜色（这里是 #6e738d）</li>
+<li><code>active-icon-color</code>：激活项图标的颜色（这里是 #cdd6f4）</li>
+<li><code>icon-path</code>：图标的路径（这里是 Papirus-Dark 主题）</li>
+<li><code>smooth-scrolling-threshold</code>：平滑滚动阈值（这里是 0）</li>
+<li><code>on-click</code>：左键点击事件</li>
+<li><code>on-click-middle</code>：中键点击事件</li>
+<li><code>on-click-right</code>：右键点击事件</li>
+<li><code>tooltip</code>：是否显示工具提示（这里启用）</li>
+<li><code>tooltip-format</code>：工具提示的格式（显示标题和类名）</li>
+<li><code>class</code>：模块的 CSS 类名</li>
+</ul>
+<p><strong>作用：</strong> 显示系统托盘图标。</p>
+<h3 id="总结">总结</h3>
+<p>Waybar 提供了丰富的模块和高度可定制的配置选项，允许用户根据自己的需求创建一个完全符合个人偏好的状态栏。通过理解每个配置项的功能，您可以优化 Waybar 的布局和外观，提高工作效率。</p>
+</div>
+    
+<nav class="pager" aria-label="文章导航">
+  
+  <a href="/wiki/hyprland/hyprland-conf/" data-press>
+    <span class="dir">← 上一篇</span>Hyprland 配置详解
+  </a>
+  
+  
+  <a href="/wiki/hyprland/issuesmaymeet/" class="is-next" data-press>
+    <span class="dir">下一篇 →</span>常见问题
+  </a>
+  
+</nav>
+
+
+    
+<div class="comments">
+  <h2 class="comments-title">评论</h2>
+  <div id="utterances"></div>
+  <script>
+    (function () {
+      if (window.location.protocol === 'file:') return;
+      var s = document.createElement('script');
+      s.src = 'https://utteranc.es/client.js';
+      s.async = true;
+      s.setAttribute('repo', "makkichan947/makkichan947.github.io");
+      s.setAttribute('issue-term', "pathname");
+      s.setAttribute('theme', "github-dark");
+      s.setAttribute('crossorigin', 'anonymous');
+      document.getElementById('utterances').appendChild(s);
+    })();
+  </script>
+</div>
+
+
+  </article>
+  
+</div>
+
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+      <div class="footer-links">
+        
+        <a href="https://github.com/makkichan947" target="_blank" rel="noopener" title="Github" data-press>Github</a>
+        
+        <a href="mailto:yakumakki947@hotmail.com" target="_blank" rel="noopener" title="Email" data-press>Email</a>
+        
+        <a href="https://x.com/Makki_Yaku947" target="_blank" rel="noopener" title="Twitter" data-press>Twitter</a>
+        
+        <a href="https://www.twitch.tv/u/makkichan947" target="_blank" rel="noopener" title="Twitch" data-press>Twitch</a>
+        
+      </div>
+      <p>&copy; 2026 Yaku Makki</p>
+      <p>Powered by <a href="https://gohugo.io" target="_blank" rel="noopener">Hugo</a> · Makki Theme</p>
+      
+      <div class="stats">
+        <span>访客 <span id="busuanzi_value_site_uv"></span></span>
+        <span>访问 <span id="busuanzi_value_site_pv"></span></span>
+        <span>本页 <span id="busuanzi_value_page_pv"></span></span>
+      </div>
+      
+    </div>
+  </footer>
+
+  <button class="back-to-top" id="back-to-top" type="button" aria-label="回到顶部" data-press>
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 19V5"/><path d="M5 12l7-7 7 7"/></svg>
+  </button>
+
+  
+  <script src="/js/main.min.2e977141114ec7890ffee2c35e08034683543cfe8ef98dd4af5effb3b37a3345.js" integrity="sha256-LpdxQRFOx4kP/uLDXggDRoNUPP6O&#43;Y3Ur17/s7N6M0U=" defer></script>
+  
+  
+  <script src="/js/search.min.b2d6ba6610ce24454bc1436dc521dcfd878b2583ad9f65f77aadedaaa1e1a54c.js" integrity="sha256-sta6ZhDOJEVLwUNtxSHc/YeLJYOtn2X3eq3tqqHhpUw=" defer></script>
+  
+
+  
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+  
+
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/katex.min.js" crossorigin="anonymous"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/contrib/auto-render.min.js" crossorigin="anonymous"></script>
+</body>
+</html>

@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>SDDM 配置 · Yaku Makki</title>
+  <meta name="description" content="个人小巢">
+  <meta name="theme-color" content="#0a0a0f">
+  <script>document.documentElement.classList.add('js');</script>
+
+  <link rel="icon" href="/avatar/avatar.jpg" type="image/jpeg">
+
+  
+  <link rel="stylesheet" href="/css/main.min.b64e4527cc255b367461135391e39e321a5d86fc97defca99c7afda308ada007.css" integrity="sha256-tk5FJ8wlWzZ0YRNTkeOeMhpdhvyX3vypnHr9owitoAc=">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/katex.min.css" crossorigin="anonymous">
+</head>
+<body>
+  <a class="skip-link" href="#main">跳到内容</a>
+
+  <div class="scene" aria-hidden="true">
+    <div class="scene-sky"></div>
+    <div class="scene-stars"></div>
+    <div class="scene-sun-halo"></div>
+    <div class="scene-sun"></div>
+    <div class="scene-mountains scene-mountains-far"></div>
+    <div class="scene-mountains scene-mountains-near"></div>
+    <div class="scene-horizon"></div>
+    <div class="scene-floor"></div>
+    <div class="scene-scanlines"></div>
+  </div>
+
+  <nav class="navbar" aria-label="主导航">
+    <div class="nav-inner">
+      <a class="logo" href="/" data-press>
+        <img class="logo-avatar" src="/avatar/avatar.jpg" alt="" width="34" height="34">
+        <span class="logo-text">Yaku Makki</span>
+      </a>
+      <div class="nav-menu-wrap">
+        <span class="nav-tick" aria-hidden="true"></span>
+        <ul class="nav-menu">
+          
+          <li>
+            <a href="/" data-press>首页</a>
+          </li>
+          
+          <li>
+            <a href="/post/" data-press>博客</a>
+          </li>
+          
+          <li>
+            <a href="/wiki/" data-press>维基</a>
+          </li>
+          
+          <li>
+            <a href="/tags/" data-press>标签</a>
+          </li>
+          
+          <li>
+            <a href="/about/" data-press>关于</a>
+          </li>
+          
+          
+          <li>
+            <button id="search-toggle" class="search-toggle" type="button" title="搜索 (Ctrl+K 或 /)" aria-haspopup="dialog" aria-expanded="false" data-press>搜索</button>
+          </li>
+          
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  
+  <div class="sheet-scrim" id="sheet-scrim"></div>
+  <section class="sheet" id="search-sheet" role="dialog" aria-modal="true" aria-label="搜索" aria-hidden="true">
+    <div class="sheet-panel" id="sheet-panel">
+      <div class="sheet-handle" id="sheet-handle" role="presentation" aria-hidden="true"></div>
+      <div class="sheet-body">
+        <div class="search-field">
+          <input id="search-input" type="search" placeholder="搜索文章和 Wiki…"
+                 autocomplete="off" spellcheck="false" aria-controls="search-results">
+          <span class="search-key" aria-hidden="true">/</span>
+        </div>
+        <div id="search-results" class="search-results" role="listbox" aria-label="搜索结果"></div>
+      </div>
+    </div>
+  </section>
+  
+
+  <main class="main" id="main">
+    
+<header class="page-head">
+  <nav class="crumb" aria-label="面包屑">
+    <a href="/" data-press>首页</a>
+    <span class="sep">/</span>
+    <a href="/wiki/" data-press>维基</a>
+    
+    
+    <span class="sep">/</span>
+    <a href="/wiki/hyprland/" data-press>Hyprland</a>
+    
+    
+  </nav>
+  <h1>SDDM 配置</h1>
+  
+</header>
+
+<div class="wiki-layout">
+  <article class="article">
+    <div class="article-content"><h2 id="sddm-配置">SDDM 配置</h2>
+<p>SDDM（Simple Desktop Display Manager）是一个轻量级的 Wayland 和 X11 显示管理器，用于登录界面。下面我将介绍如何配置 SDDM 以配合 Hyprland 使用。</p>
+<h3 id="1-安装-sddm">1. 安装 SDDM</h3>
+<p>在 Arch Linux 上，您可以使用以下命令安装 SDDM：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>sudo pacman -S sddm
+</span></span></code></pre></div><h3 id="2-启用-sddm">2. 启用 SDDM</h3>
+<p>要使 SDDM 在系统启动时自动运行，您需要启用它：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-bash" data-lang="bash"><span style="display:flex;"><span>sudo systemctl enable sddm --now
+</span></span></code></pre></div><h3 id="3-配置-sddm">3. 配置 SDDM</h3>
+<p>SDDM 的主要配置文件位于 <code>/etc/sddm.conf</code>，但通常建议通过创建 <code>/etc/sddm.conf.d/</code> 目录下的配置文件来进行定制。</p>
+<h4 id="31-基本配置">3.1 基本配置</h4>
+<p>创建一个配置文件 <code>/etc/sddm.conf.d/hyprland.conf</code>：</p>
+<pre tabindex="0"><code class="language-conf" data-lang="conf">[General]
+# 启用自动登录（可选）
+# AutoLoginEnable=true
+# AutoLoginUser=your_username
+# AutoLoginSession=hyprland
+
+[Theme]
+# SDDM 主题
+Current=breeze
+
+[Users]
+# 显示的最大用户数
+MaximumUid=60000
+MinimumUid=1000
+
+[Wayland]
+# 默认的 Wayland 会话
+DefaultSession=hyprland.desktop
+
+[X11]
+# 默认的 X11 会话
+DefaultSession=hyprland.desktop
+</code></pre><p><strong>功能解释：</strong></p>
+<ul>
+<li><code>AutoLoginEnable</code>：是否启用自动登录（这里注释掉了）</li>
+<li><code>AutoLoginUser</code>：自动登录的用户名（这里注释掉了）</li>
+<li><code>AutoLoginSession</code>：自动登录的会话（这里是 hyprland）</li>
+<li><code>Current</code>：SDDM 主题（这里是 breeze）</li>
+<li><code>MaximumUid</code> 和 <code>MinimumUid</code>：显示的用户 UID 范围</li>
+<li><code>DefaultSession</code>：默认的会话（这里是 hyprland.desktop）</li>
+</ul>
+<p><strong>作用：</strong> 配置 SDDM 的基本行为。</p>
+<h3 id="4-配置-hyprland-会话">4. 配置 Hyprland 会话</h3>
+<p>SDDM 需要知道如何启动 Hyprland。您需要创建一个会话文件。</p>
+<h4 id="41-创建会话文件">4.1 创建会话文件</h4>
+<p>创建一个会话文件 <code>/usr/share/wayland-sessions/hyprland.desktop</code>：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-desktop" data-lang="desktop"><span style="display:flex;"><span><span style="color:#66d9ef">[Desktop Entry]</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">Name</span><span style="color:#f92672">=</span><span style="color:#e6db74">Hyprland</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">Comment</span><span style="color:#f92672">=</span><span style="color:#e6db74">An intelligent dynamic tiling Wayland compositor</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">Exec</span><span style="color:#f92672">=</span><span style="color:#e6db74">/usr/bin/hyprland</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">Type</span><span style="color:#f92672">=</span><span style="color:#e6db74">Application</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">Keywords</span><span style="color:#f92672">=</span><span style="color:#e6db74">tiling;wayland;compositor;</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">DesktopNames</span><span style="color:#f92672">=</span><span style="color:#e6db74">Hyprland</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">X-KDE-Wayland-Enabled</span><span style="color:#f92672">=</span><span style="color:#e6db74">true</span>
+</span></span><span style="display:flex;"><span><span style="color:#a6e22e">X-GNOME-Wayland-Enabled</span><span style="color:#f92672">=</span><span style="color:#e6db74">true</span>
+</span></span></code></pre></div><p><strong>功能解释：</strong></p>
+<ul>
+<li><code>Name</code>：会话的名称（显示在 SDDM 界面上）</li>
+<li><code>Comment</code>：会话的描述</li>
+<li><code>Exec</code>：启动 Hyprland 的命令</li>
+<li><code>Type</code>：文件类型</li>
+<li><code>Keywords</code>：关键字（用于搜索）</li>
+<li><code>DesktopNames</code>：桌面名称</li>
+<li><code>X-KDE-Wayland-Enabled</code>：是否支持 KDE Wayland</li>
+<li><code>X-GNOME-Wayland-Enabled</code>：是否支持 GNOME Wayland</li>
+</ul>
+<p><strong>作用：</strong> 告诉 SDDM 如何启动 Hyprland。</p>
+<h3 id="5-配置-sddm-主题">5. 配置 SDDM 主题</h3>
+<p>SDDM 支持多种主题，您可以根据自己的喜好选择。</p>
+<h4 id="51-安装主题">5.1 安装主题</h4>
+<p>您可以从以下地方获取 SDDM 主题：</p>
+<ul>
+<li><a href="https://store.kde.org/browse/cat/101/">SDDM 主题网站</a></li>
+<li>GitHub（搜索 &ldquo;sddm theme&rdquo;）</li>
+</ul>
+<h4 id="52-应用主题">5.2 应用主题</h4>
+<p>将主题文件解压到 <code>/usr/share/sddm/themes/</code> 目录下，然后在 <code>/etc/sddm.conf.d/hyprland.conf</code> 中修改 <code>Current</code> 字段：</p>
+<pre tabindex="0"><code class="language-conf" data-lang="conf">[Theme]
+Current=your-theme-name
+</code></pre><h3 id="6-配置-sddm-背景">6. 配置 SDDM 背景</h3>
+<h4 id="61-修改主题背景">6.1 修改主题背景</h4>
+<p>大多数 SDDM 主题允许您自定义背景。您可以查看主题的 README 文件，了解如何修改背景。</p>
+<h4 id="62-覆盖背景适用于所有主题">6.2 覆盖背景（适用于所有主题）</h4>
+<p>您可以创建一个 <code>/etc/sddm.conf.d/background.conf</code> 文件：</p>
+<pre tabindex="0"><code class="language-conf" data-lang="conf">[Theme]
+Background=/path/to/your/background/image.jpg
+</code></pre><p><strong>作用：</strong> 覆盖主题的默认背景。</p>
+<h3 id="7-常见问题">7. 常见问题</h3>
+<h4 id="71-sddm-无法启动-hyprland">7.1 SDDM 无法启动 Hyprland</h4>
+<ul>
+<li>检查 <code>Exec</code> 字段是否指向正确的 Hyprland 可执行文件</li>
+<li>检查会话文件的权限是否正确（应该是 644）</li>
+<li>检查 Hyprland 是否安装在正确的位置</li>
+</ul>
+<h4 id="72-sddm-主题不显示">7.2 SDDM 主题不显示</h4>
+<ul>
+<li>检查主题是否正确安装在 <code>/usr/share/sddm/themes/</code> 目录下</li>
+<li>检查主题的名称是否正确</li>
+<li>检查 <code>Current</code> 字段是否指向正确的主题</li>
+</ul>
+<h4 id="73-sddm-无法登录">7.3 SDDM 无法登录</h4>
+<ul>
+<li>检查用户名和密码是否正确</li>
+<li>检查用户是否有访问权限</li>
+<li>检查系统日志（使用 <code>journalctl -xe</code> 命令）</li>
+</ul>
+<h3 id="8-其他配置">8. 其他配置</h3>
+<h4 id="81-配置语言">8.1 配置语言</h4>
+<p>您可以在 <code>/etc/sddm.conf.d/language.conf</code> 中配置语言：</p>
+<pre tabindex="0"><code class="language-conf" data-lang="conf">[General]
+Language=en_US.UTF-8
+</code></pre><h4 id="82-配置键盘布局">8.2 配置键盘布局</h4>
+<p>您可以在 <code>/etc/sddm.conf.d/keyboard.conf</code> 中配置键盘布局：</p>
+<pre tabindex="0"><code class="language-conf" data-lang="conf">[Keyboard]
+Layout=us
+Variant=
+</code></pre><h4 id="83-配置时区">8.3 配置时区</h4>
+<p>您可以在 <code>/etc/sddm.conf.d/timezone.conf</code> 中配置时区：</p>
+<pre tabindex="0"><code class="language-conf" data-lang="conf">[General]
+Timezone=Asia/Shanghai
+</code></pre><h3 id="总结">总结</h3>
+<p>配置 SDDM 以配合 Hyprland 使用需要以下步骤：</p>
+<ol>
+<li>安装 SDDM</li>
+<li>启用 SDDM</li>
+<li>配置 SDDM</li>
+<li>创建 Hyprland 会话文件</li>
+<li>配置 SDDM 主题</li>
+<li>配置 SDDM 背景</li>
+</ol>
+<p>通过这些配置，您可以创建一个符合个人喜好的登录界面。</p>
+</div>
+    
+<nav class="pager" aria-label="文章导航">
+  
+  <a href="/wiki/hyprland/ecosystems/" data-press>
+    <span class="dir">← 上一篇</span>Hyprland的生态系统
+  </a>
+  
+  
+  <a href="/wiki/hyprland/hyprland-conf/" class="is-next" data-press>
+    <span class="dir">下一篇 →</span>Hyprland 配置详解
+  </a>
+  
+</nav>
+
+
+    
+<div class="comments">
+  <h2 class="comments-title">评论</h2>
+  <div id="utterances"></div>
+  <script>
+    (function () {
+      if (window.location.protocol === 'file:') return;
+      var s = document.createElement('script');
+      s.src = 'https://utteranc.es/client.js';
+      s.async = true;
+      s.setAttribute('repo', "makkichan947/makkichan947.github.io");
+      s.setAttribute('issue-term', "pathname");
+      s.setAttribute('theme', "github-dark");
+      s.setAttribute('crossorigin', 'anonymous');
+      document.getElementById('utterances').appendChild(s);
+    })();
+  </script>
+</div>
+
+
+  </article>
+  
+</div>
+
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+      <div class="footer-links">
+        
+        <a href="https://github.com/makkichan947" target="_blank" rel="noopener" title="Github" data-press>Github</a>
+        
+        <a href="mailto:yakumakki947@hotmail.com" target="_blank" rel="noopener" title="Email" data-press>Email</a>
+        
+        <a href="https://x.com/Makki_Yaku947" target="_blank" rel="noopener" title="Twitter" data-press>Twitter</a>
+        
+        <a href="https://www.twitch.tv/u/makkichan947" target="_blank" rel="noopener" title="Twitch" data-press>Twitch</a>
+        
+      </div>
+      <p>&copy; 2026 Yaku Makki</p>
+      <p>Powered by <a href="https://gohugo.io" target="_blank" rel="noopener">Hugo</a> · Makki Theme</p>
+      
+      <div class="stats">
+        <span>访客 <span id="busuanzi_value_site_uv"></span></span>
+        <span>访问 <span id="busuanzi_value_site_pv"></span></span>
+        <span>本页 <span id="busuanzi_value_page_pv"></span></span>
+      </div>
+      
+    </div>
+  </footer>
+
+  <button class="back-to-top" id="back-to-top" type="button" aria-label="回到顶部" data-press>
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 19V5"/><path d="M5 12l7-7 7 7"/></svg>
+  </button>
+
+  
+  <script src="/js/main.min.2e977141114ec7890ffee2c35e08034683543cfe8ef98dd4af5effb3b37a3345.js" integrity="sha256-LpdxQRFOx4kP/uLDXggDRoNUPP6O&#43;Y3Ur17/s7N6M0U=" defer></script>
+  
+  
+  <script src="/js/search.min.b2d6ba6610ce24454bc1436dc521dcfd878b2583ad9f65f77aadedaaa1e1a54c.js" integrity="sha256-sta6ZhDOJEVLwUNtxSHc/YeLJYOtn2X3eq3tqqHhpUw=" defer></script>
+  
+
+  
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+  
+
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/katex.min.js" crossorigin="anonymous"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/contrib/auto-render.min.js" crossorigin="anonymous"></script>
+</body>
+</html>

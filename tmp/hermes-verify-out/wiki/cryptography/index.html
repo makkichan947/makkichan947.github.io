@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <title>密码学基础 · Yaku Makki</title>
+  <meta name="description" content="从凯撒密码到现代加密算法，探索密码学的数学原理">
+  <meta name="theme-color" content="#0a0a0f">
+  <script>document.documentElement.classList.add('js');</script>
+
+  <link rel="icon" href="/avatar/avatar.jpg" type="image/jpeg">
+
+  
+  <link rel="stylesheet" href="/css/main.min.b64e4527cc255b367461135391e39e321a5d86fc97defca99c7afda308ada007.css" integrity="sha256-tk5FJ8wlWzZ0YRNTkeOeMhpdhvyX3vypnHr9owitoAc=">
+
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700&display=swap" rel="stylesheet">
+
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/katex.min.css" crossorigin="anonymous">
+</head>
+<body>
+  <a class="skip-link" href="#main">跳到内容</a>
+
+  <div class="scene" aria-hidden="true">
+    <div class="scene-sky"></div>
+    <div class="scene-stars"></div>
+    <div class="scene-sun-halo"></div>
+    <div class="scene-sun"></div>
+    <div class="scene-mountains scene-mountains-far"></div>
+    <div class="scene-mountains scene-mountains-near"></div>
+    <div class="scene-horizon"></div>
+    <div class="scene-floor"></div>
+    <div class="scene-scanlines"></div>
+  </div>
+
+  <nav class="navbar" aria-label="主导航">
+    <div class="nav-inner">
+      <a class="logo" href="/" data-press>
+        <img class="logo-avatar" src="/avatar/avatar.jpg" alt="" width="34" height="34">
+        <span class="logo-text">Yaku Makki</span>
+      </a>
+      <div class="nav-menu-wrap">
+        <span class="nav-tick" aria-hidden="true"></span>
+        <ul class="nav-menu">
+          
+          <li>
+            <a href="/" data-press>首页</a>
+          </li>
+          
+          <li>
+            <a href="/post/" data-press>博客</a>
+          </li>
+          
+          <li>
+            <a href="/wiki/" data-press>维基</a>
+          </li>
+          
+          <li>
+            <a href="/tags/" data-press>标签</a>
+          </li>
+          
+          <li>
+            <a href="/about/" data-press>关于</a>
+          </li>
+          
+          
+          <li>
+            <button id="search-toggle" class="search-toggle" type="button" title="搜索 (Ctrl+K 或 /)" aria-haspopup="dialog" aria-expanded="false" data-press>搜索</button>
+          </li>
+          
+        </ul>
+      </div>
+    </div>
+  </nav>
+
+  
+  <div class="sheet-scrim" id="sheet-scrim"></div>
+  <section class="sheet" id="search-sheet" role="dialog" aria-modal="true" aria-label="搜索" aria-hidden="true">
+    <div class="sheet-panel" id="sheet-panel">
+      <div class="sheet-handle" id="sheet-handle" role="presentation" aria-hidden="true"></div>
+      <div class="sheet-body">
+        <div class="search-field">
+          <input id="search-input" type="search" placeholder="搜索文章和 Wiki…"
+                 autocomplete="off" spellcheck="false" aria-controls="search-results">
+          <span class="search-key" aria-hidden="true">/</span>
+        </div>
+        <div id="search-results" class="search-results" role="listbox" aria-label="搜索结果"></div>
+      </div>
+    </div>
+  </section>
+  
+
+  <main class="main" id="main">
+    
+<header class="page-head">
+  <h1>密码学基础</h1>
+  <p>从凯撒密码到现代加密算法，探索密码学的数学原理</p>
+</header>
+
+
+<div class="article article-content"><h1 id="密码学基础">密码学基础</h1>
+<p>密码学是研究如何保护信息安全的学科。本章将从简单的凯撒密码开始，逐步深入到现代加密算法，并探讨其中的数学原理。</p>
+<h2 id="-学习目标">🎯 学习目标</h2>
+<p>通过本章学习，你将掌握：</p>
+<ul>
+<li>古典密码学的基本概念</li>
+<li>现代密码学的数学基础</li>
+<li>常见加密算法的原理</li>
+<li>密码学在现实中的应用</li>
+</ul>
+<h2 id="-内容概览">📚 内容概览</h2>
+<h3 id="古典密码学"><a href="./classical/">古典密码学</a></h3>
+<ul>
+<li>凯撒密码与移位加密</li>
+<li>仿射密码与线性代数</li>
+<li>替换密码与排列组合</li>
+<li>多表密码与随机性</li>
+</ul>
+<h3 id="现代密码学"><a href="./modern/">现代密码学</a></h3>
+<ul>
+<li>DES算法与Feistel网络</li>
+<li>AES算法与有限域运算</li>
+<li>RSA算法与数论基础</li>
+<li>椭圆曲线密码学</li>
+</ul>
+<h3 id="密码学数学基础"><a href="./math/">密码学数学基础</a></h3>
+<ul>
+<li>模运算与同余理论</li>
+<li>素数与欧几里得算法</li>
+<li>有限域与伽罗瓦理论</li>
+<li>椭圆曲线数学原理</li>
+</ul>
+<h2 id="-凯撒密码详解">🔐 凯撒密码详解</h2>
+<p>凯撒密码是最简单的替换密码，以下用数学语言描述：</p>
+<p>设明文字母表为 $\Sigma = {A, B, C, &hellip;, Z}$，密文字母表为 $\Sigma&rsquo; = {D, E, F, &hellip;, Z, A, B, C}$。</p>
+<p>加密函数：$E(x) = (x + 3) \mod 26$
+解密函数：$D(x) = (x - 3) \mod 26$</p>
+<h3 id="正则表达式表示">正则表达式表示</h3>
+<p>可以用正则表达式描述凯撒密码的模式：</p>
+<ul>
+<li>原文字母：<code>[A-Z]</code></li>
+<li>加密后字母：<code>[D-ZA-C]</code> （向后移3位）</li>
+</ul>
+<h2 id="-数学原理">🧮 数学原理</h2>
+<h3 id="模运算基础">模运算基础</h3>
+<p>模运算在密码学中至关重要：</p>
+<p>$(a + b) \mod m = ((a \mod m) + (b \mod m)) \mod m$</p>
+<p>$(a \times b) \mod m = ((a \mod m) \times (b \mod m)) \mod m$</p>
+<h3 id="欧几里得算法">欧几里得算法</h3>
+<p>求最大公约数：$gcd(a,b) = gcd(b, a \mod b)$</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;"><code class="language-python" data-lang="python"><span style="display:flex;"><span><span style="color:#66d9ef">def</span> <span style="color:#a6e22e">gcd</span>(a, b):
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">while</span> b <span style="color:#f92672">!=</span> <span style="color:#ae81ff">0</span>:
+</span></span><span style="display:flex;"><span>        a, b <span style="color:#f92672">=</span> b, a <span style="color:#f92672">%</span> b
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> a
+</span></span></code></pre></div><h2 id="-现代加密算法">🔑 现代加密算法</h2>
+<h3 id="aes-高级加密标准">AES (高级加密标准)</h3>
+<p>AES是一种对称加密算法，使用SPN (Substitution-Permutation Network)结构。</p>
+<p><strong>数学基础：</strong></p>
+<ul>
+<li>有限域 $GF(2^8)$ 上的运算</li>
+<li>字节代替：通过S盒实现非线性变换</li>
+<li>行移位：提供扩散效果</li>
+<li>列混合：线性变换矩阵</li>
+</ul>
+<h3 id="rsa算法">RSA算法</h3>
+<p>RSA基于数论难题：大整数分解。</p>
+<p><strong>密钥生成：</strong></p>
+<ol>
+<li>选择两个大素数 $p, q$</li>
+<li>计算 $n = p \times q$</li>
+<li>计算 $\phi(n) = (p-1)(q-1)$</li>
+<li>选择公钥 $e$，满足 $gcd(e, \phi(n)) = 1$</li>
+<li>计算私钥 $d = e^{-1} \mod \phi(n)$</li>
+</ol>
+<h2 id="-安全最佳实践">🛡️ 安全最佳实践</h2>
+<ul>
+<li>使用强密码：长度至少12位，包含多种字符类型</li>
+<li>定期更换密钥</li>
+<li>使用已验证的加密库</li>
+<li>理解加密算法的局限性</li>
+</ul>
+<h2 id="-推荐阅读">📖 推荐阅读</h2>
+<ul>
+<li>《密码学原理与实践》</li>
+<li>《Introduction to Modern Cryptography》</li>
+<li>《Applied Cryptography》</li>
+</ul>
+</div>
+
+
+
+<div class="card-grid">
+  
+  <article class="card" data-press data-reveal data-reveal-delay="045">
+    <h3><a href="/wiki/cryptography/aes/">AES算法详解</a></h3>
+    <p><h1 id="aes算法详解">AES算法详解</h1>
+<p>AES (Advanced Encryption Standard) 是美国国家标准与技术研究院 (NIST) 在2001年确立的加密标准，是目前最广泛使用的对称加密算法之一。</p>
+<h2 id="算法概述">算法概述</h2>
+<p>AES是一种迭代 …</p></p>
+    <div class="meta">
+      <time datetime="2025-10-12">2025-10-12</time>
+      
+    </div>
+  </article>
+  
+  <article class="card" data-press data-reveal data-reveal-delay="145">
+    <h3><a href="/wiki/cryptography/des/">DES算法详解</a></h3>
+    <p><h1 id="des算法详解">DES算法详解</h1>
+<p>DES (Data Encryption Standard) 是20世纪70年代美国国家标准局确立的数据加密标准，曾是广泛使用的对称加密算法。</p>
+<h2 id="算法概述">算法概述</h2>
+<p><strong>基本信息</strong>：</p>
+<ul>
+<li><strong>分组长度</strong>：64位</li>
+<li><strong>密钥长度</strong>：64位（ …</li></ul></p>
+    <div class="meta">
+      <time datetime="2025-10-12">2025-10-12</time>
+      
+    </div>
+  </article>
+  
+  <article class="card" data-press data-reveal data-reveal-delay="245">
+    <h3><a href="/wiki/cryptography/rsa/">RSA算法详解</a></h3>
+    <p><h1 id="rsa算法详解">RSA算法详解</h1>
+<p>RSA算法是目前最著名的公钥密码算法，由Ron Rivest、Adi Shamir和Leonard Adleman于1977年提出，是现代密码学的基础。</p>
+<h2 id="算法原理">算法原理</h2>
+<p>RSA基于数论中的一个重要难题：<strong>大整数分 …</strong></p></p>
+    <div class="meta">
+      <time datetime="2025-10-12">2025-10-12</time>
+      
+    </div>
+  </article>
+  
+  <article class="card" data-press data-reveal data-reveal-delay="345">
+    <h3><a href="/wiki/cryptography/vigenere/">维吉尼亚密码详解</a></h3>
+    <p><h1 id="维吉尼亚密码详解">维吉尼亚密码详解</h1>
+<p>维吉尼亚密码（Vigenère Cipher）是一种多表替换密码，由法国外交官Blaise de Vigenère于16世纪发明，是古典密码学的重要里程碑。</p>
+<h2 id="加密原理">加密原理</h2>
+<p>维吉尼亚密码是对凯撒密码的扩展，使 …</p></p>
+    <div class="meta">
+      <time datetime="2025-10-10">2025-10-10</time>
+      
+    </div>
+  </article>
+  
+  <article class="card" data-press data-reveal data-reveal-delay="445">
+    <h3><a href="/wiki/cryptography/hill/">希尔密码详解</a></h3>
+    <p><h1 id="希尔密码详解">希尔密码详解</h1>
+<p>希尔密码（Hill Cipher）是一种基于线性代数的多字母替换密码，由Lester S. Hill于1929年发明，是第一个真正意义上的多字母密码系统。</p>
+<h2 id="数学基础">数学基础</h2>
+<h3 id="线性代数基础">线性代数基础</h3>
+<p>希尔密码基于矩阵理论和模运 …</p></p>
+    <div class="meta">
+      <time datetime="2025-10-10">2025-10-10</time>
+      
+    </div>
+  </article>
+  
+  <article class="card" data-press data-reveal data-reveal-delay="545">
+    <h3><a href="/wiki/cryptography/enigma/">Enigma机详解</a></h3>
+    <p><h1 id="enigma机详解">Enigma机详解</h1>
+<p>Enigma机是二战期间德国使用的著名密码机，由Arthur Scherbius于1918年发明，是密码学史上最具传奇色彩的设备之一。</p>
+<h2 id="机器概述">机器概述</h2>
+<h3 id="基本结构">基本结构</h3>
+<p>Enigma机主要由以下部件组成：</p>
+<ul>
+<li><strong>键盘 …</strong></li></ul></p>
+    <div class="meta">
+      <time datetime="2025-10-09">2025-10-09</time>
+      
+    </div>
+  </article>
+  
+  <article class="card" data-press data-reveal data-reveal-delay="045">
+    <h3><a href="/wiki/cryptography/social_engineering/">社会工程学详解</a></h3>
+    <p><h1 id="社会工程学详解">社会工程学详解</h1>
+<p>社会工程学（Social Engineering）是利用人类心理弱点而非技术手段获取信息或访问权限的艺术。在密码学和信息安全领域，社会工程学攻击往往比技术攻击更容易成功。</p>
+<h2 id="基本概念">基本概念</h2>
+<h3 id="定义">定义</h3>
+<p>社会工程学是操纵 …</p></p>
+    <div class="meta">
+      <time datetime="2025-10-18">2025-10-18</time>
+      
+    </div>
+  </article>
+  
+</div>
+
+
+
+  </main>
+
+  <footer class="footer">
+    <div class="footer-inner">
+      <div class="footer-links">
+        
+        <a href="https://github.com/makkichan947" target="_blank" rel="noopener" title="Github" data-press>Github</a>
+        
+        <a href="mailto:yakumakki947@hotmail.com" target="_blank" rel="noopener" title="Email" data-press>Email</a>
+        
+        <a href="https://x.com/Makki_Yaku947" target="_blank" rel="noopener" title="Twitter" data-press>Twitter</a>
+        
+        <a href="https://www.twitch.tv/u/makkichan947" target="_blank" rel="noopener" title="Twitch" data-press>Twitch</a>
+        
+      </div>
+      <p>&copy; 2026 Yaku Makki</p>
+      <p>Powered by <a href="https://gohugo.io" target="_blank" rel="noopener">Hugo</a> · Makki Theme</p>
+      
+      <div class="stats">
+        <span>访客 <span id="busuanzi_value_site_uv"></span></span>
+        <span>访问 <span id="busuanzi_value_site_pv"></span></span>
+        <span>本页 <span id="busuanzi_value_page_pv"></span></span>
+      </div>
+      
+    </div>
+  </footer>
+
+  <button class="back-to-top" id="back-to-top" type="button" aria-label="回到顶部" data-press>
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 19V5"/><path d="M5 12l7-7 7 7"/></svg>
+  </button>
+
+  
+  <script src="/js/main.min.2e977141114ec7890ffee2c35e08034683543cfe8ef98dd4af5effb3b37a3345.js" integrity="sha256-LpdxQRFOx4kP/uLDXggDRoNUPP6O&#43;Y3Ur17/s7N6M0U=" defer></script>
+  
+  
+  <script src="/js/search.min.b2d6ba6610ce24454bc1436dc521dcfd878b2583ad9f65f77aadedaaa1e1a54c.js" integrity="sha256-sta6ZhDOJEVLwUNtxSHc/YeLJYOtn2X3eq3tqqHhpUw=" defer></script>
+  
+
+  
+  <script async src="https://busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+  
+
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/katex.min.js" crossorigin="anonymous"></script>
+  <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.0/dist/contrib/auto-render.min.js" crossorigin="anonymous"></script>
+</body>
+</html>

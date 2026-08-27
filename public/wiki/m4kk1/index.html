@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html lang="zh">
-<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1417&amp;path=livereload" data-no-instant defer></script>
+<head><script src="/livereload.js?mindelay=10&amp;v=2&amp;port=1313&amp;path=livereload" data-no-instant defer></script>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
   <title>M4KK1 操作系统 · Yaku Makki</title>
@@ -107,34 +107,34 @@
 </span></span><span style="display:flex;"><span>qemu-system-x86_64 -cdrom m4kk1-test.iso -serial stdio
 </span></span></code></pre></div><h2 id="关键概念">关键概念</h2>
 <table>
-	<thead>
-			<tr>
-					<th>概念</th>
-					<th>说明</th>
-			</tr>
-	</thead>
-	<tbody>
-			<tr>
-					<td>内核</td>
-					<td><strong>Y4KU</strong> 宏内核，i386 保护模式，GRUB multiboot 引导</td>
-			</tr>
-			<tr>
-					<td>用户空间</td>
-					<td><strong>M4SH</strong> 单进程 Shell（PID 1），40+ 内置命令，静态链接</td>
-			</tr>
-			<tr>
-					<td>文件系统</td>
-					<td><strong>YAFS</strong> — COW B+Tree RAM 磁盘（16 MB）</td>
-			</tr>
-			<tr>
-					<td>标准</td>
-					<td><strong>4P1</strong> — 不兼容 POSIX，无 <code>errno</code>，无 MMU</td>
-			</tr>
-			<tr>
-					<td>文档</td>
-					<td>BSD 风格手册页 + i18n（zh_CN / en_US）</td>
-			</tr>
-	</tbody>
+  <thead>
+      <tr>
+          <th>概念</th>
+          <th>说明</th>
+      </tr>
+  </thead>
+  <tbody>
+      <tr>
+          <td>内核</td>
+          <td><strong>Y4KU</strong> 宏内核，i386 保护模式，GRUB multiboot 引导</td>
+      </tr>
+      <tr>
+          <td>用户空间</td>
+          <td><strong>M4SH</strong> 单进程 Shell（PID 1），40+ 内置命令，静态链接</td>
+      </tr>
+      <tr>
+          <td>文件系统</td>
+          <td><strong>YAFS</strong> — COW B+Tree RAM 磁盘（16 MB）</td>
+      </tr>
+      <tr>
+          <td>标准</td>
+          <td><strong>4P1</strong> — 不兼容 POSIX，无 <code>errno</code>，无 MMU</td>
+      </tr>
+      <tr>
+          <td>文档</td>
+          <td>BSD 风格手册页 + i18n（zh_CN / en_US）</td>
+      </tr>
+  </tbody>
 </table>
 <h2 id="文档导航">文档导航</h2>
 <ul>

@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+	<channel>
+		<title>配置文件 (man5) on Yaku Makki</title>
+		<link>https://makkichan947.github.io/wiki/m4kk1/man/man5/</link>
+		<description>Recent content in 配置文件 (man5) on Yaku Makki</description>
+		<generator>Hugo</generator>
+		<language>zh</language>
+		
+		
+		
+		
+			<lastBuildDate>Sat, 08 Aug 2026 14:03:10 +0800</lastBuildDate>
+		
+			<atom:link href="https://makkichan947.github.io/wiki/m4kk1/man/man5/index.xml" rel="self" type="application/rss+xml" />
+			<item>
+				<title>groups.db</title>
+				<link>https://makkichan947.github.io/wiki/m4kk1/man/man5/groups.db/</link>
+				<pubDate>Sat, 08 Aug 2026 14:03:09 +0800</pubDate>
+				<guid>https://makkichan947.github.io/wiki/m4kk1/man/man5/groups.db/</guid>
+				<description>&lt;h2 id=&#34;名称&#34;&gt;名称&lt;/h2&gt;&#xA;&lt;p&gt;groups.db — M4KK1 组数据库&lt;/p&gt;&#xA;&lt;h2 id=&#34;描述&#34;&gt;描述&lt;/h2&gt;&#xA;&lt;p&gt;&lt;code&gt;/etc/groups.db&lt;/code&gt;（实际位于 &lt;code&gt;/export/cfg/groups.db&lt;/code&gt;）包含系统组信息。每一行包含由冒号分隔的字段:&lt;/p&gt;&#xA;&lt;ul&gt;&#xA;&lt;li&gt;&lt;strong&gt;groupname&lt;/strong&gt; — 组名&lt;/li&gt;&#xA;&lt;li&gt;&lt;strong&gt;gid&lt;/strong&gt; — 组 ID&lt;/li&gt;&#xA;&lt;li&gt;&lt;strong&gt;members&lt;/strong&gt; — 逗号分隔的成员列表&lt;/li&gt;&#xA;&lt;/ul&gt;&#xA;&lt;h2 id=&#34;示例&#34;&gt;示例&lt;/h2&gt;&#xA;&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;&#34;&gt;&lt;code class=&#34;language-text&#34; data-lang=&#34;text&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;prime:1001:root,testuser&#xA;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;参见&#34;&gt;参见&lt;/h2&gt;&#xA;&lt;p&gt;&lt;a href=&#34;passwd.db/&#34;&gt;passwd.db(5)&lt;/a&gt;、&lt;a href=&#34;login.conf/&#34;&gt;login.conf(5)&lt;/a&gt;&lt;/p&gt;</description>
+			</item>
+			<item>
+				<title>login.conf</title>
+				<link>https://makkichan947.github.io/wiki/m4kk1/man/man5/login.conf/</link>
+				<pubDate>Sat, 08 Aug 2026 14:03:09 +0800</pubDate>
+				<guid>https://makkichan947.github.io/wiki/m4kk1/man/man5/login.conf/</guid>
+				<description>&lt;h2 id=&#34;名称&#34;&gt;名称&lt;/h2&gt;&#xA;&lt;p&gt;login.conf — M4KK1 登录类别资源限制配置&lt;/p&gt;&#xA;&lt;h2 id=&#34;描述&#34;&gt;描述&lt;/h2&gt;&#xA;&lt;p&gt;&lt;code&gt;/export/login.conf&lt;/code&gt; 定义 BSD 风格的登录类别和资源限制。&lt;/p&gt;&#xA;&lt;h2 id=&#34;文件格式&#34;&gt;文件格式&lt;/h2&gt;&#xA;&lt;div class=&#34;highlight&#34;&gt;&lt;pre tabindex=&#34;0&#34; style=&#34;color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;-webkit-text-size-adjust:none;&#34;&gt;&lt;code class=&#34;language-text&#34; data-lang=&#34;text&#34;&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;&amp;lt;类名&amp;gt;:\&#xA;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    :&amp;lt;键&amp;gt;=&amp;lt;值&amp;gt;:\&#xA;&lt;/span&gt;&lt;/span&gt;&lt;span style=&#34;display:flex;&#34;&gt;&lt;span&gt;    :&amp;lt;键&amp;gt;=&amp;lt;值&amp;gt;:&#xA;&lt;/span&gt;&lt;/span&gt;&lt;/code&gt;&lt;/pre&gt;&lt;/div&gt;&lt;h2 id=&#34;资源键&#34;&gt;资源键&lt;/h2&gt;&#xA;&lt;ul&gt;&#xA;&lt;li&gt;&lt;strong&gt;cputime&lt;/strong&gt; — CPU 时间（秒）&lt;/li&gt;&#xA;&lt;li&gt;&lt;strong&gt;datasize&lt;/strong&gt; — 数据段 + 堆大小&lt;/li&gt;&#xA;&lt;li&gt;&lt;strong&gt;stacksize&lt;/strong&gt; — 栈大小&lt;/li&gt;&#xA;&lt;li&gt;&lt;strong&gt;maxproc&lt;/strong&gt; — 最大进程数&lt;/li&gt;&#xA;&lt;li&gt;&lt;strong&gt;openfiles&lt;/strong&gt; — 最大打开文件数&lt;/li&gt;&#xA;&lt;/ul&gt;&#xA;&lt;h2 id=&#34;参见&#34;&gt;参见&lt;/h2&gt;&#xA;&lt;p&gt;&lt;a href=&#34;passwd.db/&#34;&gt;passwd.db(5)&lt;/a&gt;、&lt;a href=&#34;groups.db/&#34;&gt;groups.db(5)&lt;/a&gt;&lt;/p&gt;</description>
+			</item>
+			<item>
+				<title>passwd.db</title>
+				<link>https://makkichan947.github.io/wiki/m4kk1/man/man5/passwd.db/</link>
+				<pubDate>Sat, 08 Aug 2026 14:03:10 +0800</pubDate>
+				<guid>https://makkichan947.github.io/wiki/m4kk1/man/man5/passwd.db/</guid>
+				<description>&lt;h2 id=&#34;名称&#34;&gt;名称&lt;/h2&gt;&#xA;&lt;p&gt;passwd.db — M4KK1 用户数据库&lt;/p&gt;&#xA;&lt;h2 id=&#34;描述&#34;&gt;描述&lt;/h2&gt;&#xA;&lt;p&gt;&lt;code&gt;/etc/passwd.db&lt;/code&gt;（实际位于 &lt;code&gt;/export/cfg/passwd.db&lt;/code&gt;）包含每个用户的账户信息。每一行包含由冒号分隔的 7 个字段:&lt;/p&gt;&#xA;&lt;ul&gt;&#xA;&lt;li&gt;&lt;strong&gt;username&lt;/strong&gt; — 用户名&lt;/li&gt;&#xA;&lt;li&gt;&lt;strong&gt;uid&lt;/strong&gt; — 用户 ID&lt;/li&gt;&#xA;&lt;li&gt;&lt;strong&gt;gid&lt;/strong&gt; — 主组 ID&lt;/li&gt;&#xA;&lt;li&gt;&lt;strong&gt;home&lt;/strong&gt; — 家目录路径&lt;/li&gt;&#xA;&lt;li&gt;&lt;strong&gt;shell&lt;/strong&gt; — 登录 Shell&lt;/li&gt;&#xA;&lt;li&gt;&lt;strong&gt;gecos&lt;/strong&gt; — 用户全名/描述&lt;/li&gt;&#xA;&lt;li&gt;&lt;strong&gt;password_hash&lt;/strong&gt; — 密码哈希（&lt;code&gt;$SHA$salt$hash&lt;/code&gt; 格式）&lt;/li&gt;&#xA;&lt;/ul&gt;&#xA;&lt;h2 id=&#34;参见&#34;&gt;参见&lt;/h2&gt;&#xA;&lt;p&gt;&lt;a href=&#34;groups.db/&#34;&gt;groups.db(5)&lt;/a&gt;、&lt;a href=&#34;login.conf/&#34;&gt;login.conf(5)&lt;/a&gt;&lt;/p&gt;</description>
+			</item>
+	</channel>
+</rss>
